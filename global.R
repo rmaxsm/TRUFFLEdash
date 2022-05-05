@@ -299,8 +299,8 @@ tpoverview <- merge(tpoverview, ptslogs[Season == max(seasons$Season), c("Player
 tpoverview <- merge(tpoverview, seasons[Season == max(seasons$Season)][, c("Player","PosRk")], by = 'Player', all.x = T)
 tpoverview <- tpoverview[, .(TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 #bug fix
-tpoverview$FPts[tpoverview$Pos == "DST"] <- tpoverview$Avg[tpoverview$Pos == "DST"]
-tpoverview$G[tpoverview$Pos == "DST"] <- 17
+tpoverview$Avg[tpoverview$Pos == "DST"] <- NA
+#tpoverview$G[tpoverview$Pos == "DST"] <- 17
 #tpoverview$[tpoverview$Pos == "DST"] <- 17
 
 #contracts table
