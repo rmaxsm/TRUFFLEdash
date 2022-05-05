@@ -17,7 +17,7 @@ tagList(
                   menuItem("Stat Center", tabName = "statcenter", icon = icon("chart-bar")),
                   menuItem("Fantasy Portal", tabName = "fantasyportal", icon = icon("facebook-f")),
                   menuItem("Cap Corner", tabName = "capcorner", icon = icon("dollar-sign")),
-                  menuItem("Record Books", tabName = "recordbooks", icon = icon("book")),
+                  menuItem("History Books", tabName = "historybooks", icon = icon("book")),
                   menuItem("Database", tabName = "database", icon = icon("database")),
                   menuItem("Rookie Draft", tabName = "draft", icon = icon("business-time"))
                   #menuItem("BYOG", tabName = "byog", icon = icon("chart-line"))
@@ -285,80 +285,94 @@ tagList(
                             
                     ), #end capcorner tab item
                     
-                    tabItem(tabName = "recordbooks",
-                            wellPanel(class = "well",
-                                      fluidRow(
-                                        column(width = 9,
-                                               h2("Record Books"),
-                                               p("*Statistics only based on statistics produced in active TRUFFLE lineups beginning with 2020 season.")
-                                        ),
-                                        column(width = 3,
-                                               br(),
-                                               selectInput("recordteams", "TRUFFLE / Team", c("TRUFFLE", unique(teams$FullName)), selected = "TRUFFLE" )
-                                        )
-                                      )),
-                            wellPanel(class = "well",
-                                      h2("Overall"),
-                                      fluidRow(
-                                        column(width = 3,
-                                               reactableOutput('recordfpts')
-                                        ),
-                                        column(width = 3,
-                                               reactableOutput('recordgames')
-                                        ),
-                                        column(width = 3,
-                                               reactableOutput('recordavg')
-                                        ),
-                                        column(width = 3,
-                                               reactableOutput('recordfd')
-                                        )
-                                      ),
-                                      h2("Passing"),
-                                      fluidRow(
-                                        column(width = 3,
-                                               reactableOutput('recordpayd')
-                                        ),
-                                        column(width = 3,
-                                               reactableOutput('recordpatd')
-                                        ),
-                                        column(width = 3,
-                                               reactableOutput('recordpaint')
-                                        ),
-                                        column(width = 3,
-                                               reactableOutput('recordpacmp')
-                                        )
-                                      ),
-                                      h2("Rushing"),
-                                      fluidRow(
-                                        column(width = 3,
-                                               reactableOutput('recordruyd')
-                                        ),
-                                        column(width = 3,
-                                               reactableOutput('recordrutd')
-                                        ),
-                                        column(width = 3,
-                                               reactableOutput('recordrufd')
-                                        ),
-                                        column(width = 3,
-                                               reactableOutput('recordfl')
-                                        )
-                                      ),
-                                      h2("Receiving"),
-                                      fluidRow(
-                                        column(width = 3,
-                                               reactableOutput('recordreyd')
-                                        ),
-                                        column(width = 3,
-                                               reactableOutput('recordretd')
-                                        ),
-                                        column(width = 3,
-                                               reactableOutput('recordrefd')
-                                        ),
-                                        column(width = 3,
-                                               reactableOutput('recordrec')
-                                        )
-                                      )
-                            )
+                    tabItem(tabName = "historybooks",
+                            
+                            navbarPage(title = HTML("<span style=color:#84A4D8>History Books</span>"),
+                                       
+                                       tabPanel("Records",
+                                                wellPanel(class = "well",
+                                                          fluidRow(
+                                                            column(width = 9,
+                                                                   h2("Record Books"),
+                                                                   p("*Statistics only based on statistics produced in active TRUFFLE lineups beginning with 2020 season.")
+                                                            ),
+                                                            column(width = 3,
+                                                                   br(),
+                                                                   selectInput("recordteams", "TRUFFLE / Team", c("TRUFFLE", unique(teams$FullName)), selected = "TRUFFLE" )
+                                                            )
+                                                          )),
+                                                wellPanel(class = "well",
+                                                          h2("Overall"),
+                                                          fluidRow(
+                                                            column(width = 3,
+                                                                   reactableOutput('recordfpts')
+                                                            ),
+                                                            column(width = 3,
+                                                                   reactableOutput('recordgames')
+                                                            ),
+                                                            column(width = 3,
+                                                                   reactableOutput('recordavg')
+                                                            ),
+                                                            column(width = 3,
+                                                                   reactableOutput('recordfd')
+                                                            )
+                                                          ),
+                                                          h2("Passing"),
+                                                          fluidRow(
+                                                            column(width = 3,
+                                                                   reactableOutput('recordpayd')
+                                                            ),
+                                                            column(width = 3,
+                                                                   reactableOutput('recordpatd')
+                                                            ),
+                                                            column(width = 3,
+                                                                   reactableOutput('recordpaint')
+                                                            ),
+                                                            column(width = 3,
+                                                                   reactableOutput('recordpacmp')
+                                                            )
+                                                          ),
+                                                          h2("Rushing"),
+                                                          fluidRow(
+                                                            column(width = 3,
+                                                                   reactableOutput('recordruyd')
+                                                            ),
+                                                            column(width = 3,
+                                                                   reactableOutput('recordrutd')
+                                                            ),
+                                                            column(width = 3,
+                                                                   reactableOutput('recordrufd')
+                                                            ),
+                                                            column(width = 3,
+                                                                   reactableOutput('recordfl')
+                                                            )
+                                                          ),
+                                                          h2("Receiving"),
+                                                          fluidRow(
+                                                            column(width = 3,
+                                                                   reactableOutput('recordreyd')
+                                                            ),
+                                                            column(width = 3,
+                                                                   reactableOutput('recordretd')
+                                                            ),
+                                                            column(width = 3,
+                                                                   reactableOutput('recordrefd')
+                                                            ),
+                                                            column(width = 3,
+                                                                   reactableOutput('recordrec')
+                                                            )
+                                                          )
+                                                )
+                                                
+                                       ),
+                                       
+                                       tabPanel("Awards",
+                                                class = "well",
+                                                reactableOutput('historybooksawards')
+                                                
+                                       ) #end tabpanel
+                                       
+                            ) #end navbarpage
                             
                     ), #end record books tab item
                     

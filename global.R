@@ -530,6 +530,8 @@ recordtmrefd <- recordbookstm[, c("TRUFFLE","Pos","Player","ReFD")][order(-ReFD)
 recordplrec <- recordbookspl[, c("Pos","Player","Rec")][order(-Rec)][1:100, ]
 recordtmrec <- recordbookstm[, c("TRUFFLE","Pos","Player","Rec")][order(-Rec)]
 
+awards <- as.data.table(read_excel("data/awards.xlsx"))
+champ <- awards[Award == "Champion"][, c("Logo", "Season", "Award", "TRUFFLE", "Winner")]
 
 #reactable column formats ----
 

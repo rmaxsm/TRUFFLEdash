@@ -1706,6 +1706,24 @@ shinyServer(function(input, output) {
         }
     })
     
+    #awards
+    output$historybooksawards <- renderReactable({
+        reactable(
+            champ,
+            columns = list(
+                Logo = colDef(cell = function(value) {
+                    img_src <- knitr::image_uri(value)
+                    image <- img(src = img_src, height = "60px", alt = value)
+                    tagList(
+                        div(style = list(display = "inline-block"), image)
+                    )
+                }),
+                TRUFFLE = trfDef
+            )
+        )
+    })
+    
+    
     #database ----
     #data hub weekly logs
     output$dhweekly <- renderReactable({
