@@ -1,0 +1,120 @@
+@import url("https://fonts.googleapis.com/css2?family=Audiowide,wght@0,400;0,700;1,400&display=swap");
+
+h2 {
+  font-size: 20px;
+  color: #84A4D8;
+  padding-top: 0px;
+}
+
+h4 {
+  font-family: "Audiowide";
+  font-weight: bold;
+  font-size: 20px;
+  color: #84A4D8;
+}
+
+hr {
+  border-top: 1px solid #000000;
+}
+
+.border-left {
+  border-left: 1px solid #BFBFBF;
+}
+
+.border-right {
+  border-right: 1px solid #BFBFBF;
+}
+
+.well {
+  background-color: #FFFFFF;
+}
+
+.navbar-static-top{
+  z-index : 0;
+}
+
+.tag {
+  color: #000000;
+}
+
+.tag.status-RR {
+  display: inline-block;
+  padding: 2px 12px;
+  border-radius: 15px;
+  font-weight: 600;
+  font-size: 12px;
+  background: #d9d2e9;
+  color: #442A4C;
+}
+
+.tag.status-FA {
+  display: inline-block;
+  padding: 2px 12px;
+  border-radius: 15px;
+  font-weight: 600;
+  font-size: 12px;
+  background: #f4cccc;
+  color: hsl(350, 45%, 30%);
+}
+
+.trf {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 15px;
+  font-weight: 600;
+  font-size: 12px;
+  width: 45px;
+}
+
+.trf.team-AFL {
+  background: #3D5B9F;
+  color: #BBE1FB;
+}
+.trf.team-CC {
+  background: #F8D199;
+  color: #9F231C;
+}
+.trf.team-CRB {
+  background: #EF857E;
+  color: #FFFFFF;
+}
+.trf.team-ELP {
+  background: #C6E5FD;
+  color: #EB672B;
+}
+.trf.team-FRR {
+  background: #AFC1DF;
+  color: #152043;
+}
+.trf.team-GF {
+  background: #CDFDD7;
+  color: #F097B3;
+}
+.trf.team-MCM {
+  background: #262627;
+  color: #C4827A;
+}
+.trf.team-MWM {
+  background: #B2E4F6;
+  color: #20507D;
+}
+.trf.team-NN {
+  background: #D24A4D;
+  color: #F3BE40;
+}
+.trf.team-VD {
+  background: #F0C3A4;
+  color: #4DAAF7;
+}
+.trf.team-WLW {
+  background: #69A2CA;
+  color: #F9DA78;
+}
+.trf.team-MAM {
+  background: #F9D58C;
+  color: #203731;
+}
+.trf.team-FA {
+  background: #D9D9D9;
+  color: #595959;
+}
