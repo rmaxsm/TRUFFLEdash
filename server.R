@@ -1074,7 +1074,7 @@ shinyServer(function(input, output) {
             font = list(color = 'black')
             ) %>% config(displayModeBar = FALSE) %>% 
             add_annotations(data = rosterbreakdown %>% select(TRUFFLE, TeamSalary) %>% unique(),
-                            x = ~TeamSalary + 10,
+                            x = 510,
                             y = ~TRUFFLE,
                             text = ~TeamSalary,
                             showarrow = FALSE)
