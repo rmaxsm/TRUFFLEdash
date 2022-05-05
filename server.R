@@ -194,7 +194,7 @@ shinyServer(function(input, output) {
                           sparkline(values, type = "bar", chartRangeMin = 0, chartRangeMax = max(weekly$FPts))
                       }),
                       Avg = avgDef,
-                      FPts = fptsDefseasonss
+                      FPts = fptsDefseasons
                   ),
                   columnGroups = list(
                       colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
