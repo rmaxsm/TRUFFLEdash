@@ -4,16 +4,19 @@ import os
 import requests
 import datetime
 import pandas as pd
-import lxml
+import re
 from bs4 import BeautifulSoup
 from pprint import pprint
 
 
 print("proof of concept on python running..?\n")
 
+#below are 'keys' of some sort from copy and pasting - unclear how they fit in left for reference
+
 #_sn:90$_ss:0$_st:1651846165170$vapi_domain:cbssports.com$dc_visit:34$_se:8$ses_id:1651842081415%3Bexp-session$_pn:7%3Bexp-session$dc_event:12%3Bexp-session$dc_region:us-east-1%3Bexp-session = os.getenv('_sn:90$_ss:0$_st:1651846165170$vapi_domain:cbssports.com$dc_visit:34$_se:8$ses_id:1651842081415%3Bexp-session$_pn:7%3Bexp-session$dc_event:12%3Bexp-session$dc_region:us-east-1%3Bexp-session')
 #_sn:90$_ss:0$_st:1651846165170$vapi_domain:cbssports.com$dc_visit:34$_se:8$ses_id:1651842081415%3Bexp-session$_pn:7%3Bexp-session$dc_event:12%3Bexp-session$dc_region:us-east-1%3Bexp-session; = os.getenv('_sn:90$_ss:0$_st:1651846165170$vapi_domain:cbssports.com$dc_visit:34$_se:8$ses_id:1651842081415%3Bexp-session$_pn:7%3Bexp-session$dc_event:12%3Bexp-session$dc_region:us-east-1%3Bexp-session;')
 
+#cookies from website (https://curlconverter.com/#python)
 cookies = {
     'ppid': 'bf794872c9de88772307c75ceb0df52d',
     'anon': 'FALSE',
@@ -59,6 +62,7 @@ cookies = {
     'fantasy_cookie': '%3A8000%3A1651844215%3Atheradicalultimatefflexperience.football.cbssports.com',
 }
 
+#headers from website (https://curlconverter.com/#python)
 headers = {
     'authority': 'theradicalultimatefflexperience.football.cbssports.com',
     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
@@ -78,52 +82,80 @@ headers = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36',
 }
 
+#where the connection is made to the truffle cbs website
 url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/team:18/period-1:f/TRUFFLEoffense/"
 response = requests.get(url, cookies=cookies, headers=headers)
 soup = BeautifulSoup(response.content, 'html.parser')
+
+#glofified switch/case statment to save minimal time and get team abbreviations
 def getTeamAbbreviation(team):
   name = team.split(" ")[0]
   if name == "East":
     return "ELP"
   else:
     return "N/A"
+
+#separates the column names
+#returns list representing the columns for tables 
 def separateColumns(row):
   allCols = []
   for i in row:
     allCols.append(i.getText())
-  allCols[1] = "Team"
+  allCols[1] = "Team"   #rename second column to team
   return allCols
+
+#takes in a single row of html and returns the stats as list (for players/dst)
 def separatePlayers(rows):
   itr = 0
   curRow = []
   for i in rows:
-    if itr == 0:
+    if itr == 0:    #first value always empty string
       curRow.append("")
-    elif itr == 1:
-      curRow.append(getTeamAbbreviation(i.getText()))
-    else:
+    elif itr == 1:    #second value convert to team abbreviation
+      curRow.append(getTeamAbbreviation(i.getText()))   
+    else:       #after first two iterations just get exact data from source
       curRow.append(i.getText())
     itr += 1
   return curRow
 
-tbl = soup.find("table", {"class": "data pinHeader borderTop"})
+#finds the outermost 'tables' containing the stats(3 off,kicker,dst in order)
+tbls =  soup.find_all("table", class_="data pinHeader borderTop")
+tblOffense = tbls[0]
+tblDefense = tbls[2]
 
-subtitle = tbl.find("tr", {"class": "subtitle"})
-combined = tbl.find_all("tr", class_="label")
-# superHeader = tbl.find("tr", {"class": "label superheader"})
-superHeader = combined[0]
+#gets the column header information as 'label'
+combined = tblOffense.find_all("tr", class_="label")
 label = combined[1]
 
+#calls function to clean column headers stored as cols (used in pandas df)
 cols = separateColumns(label)
-print(cols)
-print(separatePlayers(row1))
-allPlayers = []
-allPlayers.append(separatePlayers(row1))
-# print(len(cols) == len(separatePlayers(row1)))
 
+#store all players per team as list of lists
+allPlayers = []
+
+#regex used to find row1/2 (\d means only numbers following exact match of row)
+allRowsOffense = tblOffense.find_all("tr", class_=re.compile("row\d"))
+
+#for every player - clean the row and add to list of lists
+for i in allRowsOffense:
+  allPlayers.append(separatePlayers(i))
+
+# simlar to offense but with slightly different logic
+defRows = tblDefense.find_all("tr", {"class": re.compile("row\d")})
+for i in defRows:
+  curDef = separatePlayers(i)
+  #once defense stats are cleaned need to fill the rest of the list as empty
+  noneList = ["" for i in range(len(allPlayers[0]) - len(curDef))]
+  for j in noneList:
+    curDef.append(j)
+  allPlayers.append(curDef)
+  
+
+# print(allPlayers)
 
 df = pd.DataFrame(allPlayers, columns=cols)
 # df.columns = cols
 print(df)
-
-  
+filepath = "dre/puffinsPOC.csv"
+df.to_csv(filepath)
+# print(url)
