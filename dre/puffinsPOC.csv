@@ -1,11 +1,11 @@
-Action,Team,Player,Opp,OVP,Bye,Rost,Start,Comp,ATT,Yds,TD,Int,Att,Yds,TD,1stD,Tar,Rec,Yds,TD,1stD,Lost,Avg,Total
-,ELP,Aaron Rodgers QB | GB,TBA,---,-,98,89,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-,ELP,Mark Andrews TE | BAL ,TBA,---,-,94,83,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-,ELP,Tyreek Hill WR | MIA ,TBA,---,-,96,91,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-,ELP,Deebo Samuel WR | SF ,TBA,---,-,94,85,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-,ELP,Michael Pittman WR | IND ,TBA,---,-,91,53,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-,ELP,Mac Jones QB | NE ,TBA,---,-,70,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-,ELP,Marquise Brown WR | ARI ,TBA,---,-,89,60,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-,ELP,Clyde Edwards-Helaire RB | KC ,TBA,---,-,94,40,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-,ELP,A.J. Dillon RB | GB ,TBA,---,-,91,49,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-,ELP,49ers DST | SF ,TBA,---,-,95,90,-,0,,,,,,,,,,,,,,,
+Season,Week,TRUFFLE,Pos,Player,NFL,Opp,Comp,ATT,Yds,TD,Int,Att,Yds,TD,1stD,Tar,Rec,Yds,TD,1stD,Lost,Avg,Total
+2022,1,ELP,QB,Aaron Rodgers,GB,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,ELP,TE,Mark Andrews,BAL,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,ELP,WR,Tyreek Hill,MIA,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,ELP,WR,Deebo Samuel,SF,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,ELP,WR,Michael Pittman,IND,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,ELP,QB,Mac Jones,NE,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,ELP,WR,Marquise Brown,ARI,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,ELP,RB,Clyde Edwards-Helaire,KC,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,ELP,RB,A.J. Dillon,GB,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,ELP,DST,49ers,SF,TBA,,,,,,,,,,,,,,,,-,0

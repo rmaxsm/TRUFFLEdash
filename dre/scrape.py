@@ -11,6 +11,13 @@ from pprint import pprint
 
 print("proof of concept on python running..?\n")
 
+#CHANGE ME HARDCODINGS PLS
+
+# season = input("What YEAR is it..? ")
+season = 2022
+# week = input("What WEEK is it..? ")
+week = 1
+
 #below are 'keys' of some sort from copy and pasting - unclear how they fit in left for reference
 
 #_sn:90$_ss:0$_st:1651846165170$vapi_domain:cbssports.com$dc_visit:34$_se:8$ses_id:1651842081415%3Bexp-session$_pn:7%3Bexp-session$dc_event:12%3Bexp-session$dc_region:us-east-1%3Bexp-session = os.getenv('_sn:90$_ss:0$_st:1651846165170$vapi_domain:cbssports.com$dc_visit:34$_se:8$ses_id:1651842081415%3Bexp-session$_pn:7%3Bexp-session$dc_event:12%3Bexp-session$dc_region:us-east-1%3Bexp-session')
@@ -92,6 +99,8 @@ def getTeamAbbreviation(team):
   name = team.split(" ")[0]
   if name == "East":
     return "ELP"
+  # elif name == "Frankf":
+  #   return "FFR"
   else:
     return "N/A"
 
@@ -101,7 +110,7 @@ def separateColumns(row):
   allCols = []
   for i in row:
     allCols.append(i.getText())
-  allCols[1] = "Team"   #rename second column to team
+  allCols[1] = "TRUFFLE"
   return allCols
 
 #takes in a single row of html and returns the stats as list (for players/dst)
@@ -129,7 +138,6 @@ label = combined[1]
 
 #calls function to clean column headers stored as cols (used in pandas df)
 cols = separateColumns(label)
-print(cols)
 
 #store all players per team as list of lists
 allPlayers = []
@@ -152,11 +160,40 @@ for i in defRows:
   allPlayers.append(curDef)
   
 
-# print(allPlayers)
-
+#pandas df to represent team
 df = pd.DataFrame(allPlayers, columns=cols)
-# df.columns = cols
-print(df)
+df = df.drop(columns=["Action"])
+
+#lamba functions to split player name team and position
+getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
+getPosition = lambda y: pd.Series([i for i in y.split(" ")][-1])
+getPlayer = lambda z: pd.Series(' '.join([i for i in z.split(" ")][:-1]))
+
+#apply lambda fcts to correct columns
+playerTeam = df["Player"].apply(getNFLTeam)
+position = playerTeam[0].apply(getPosition)
+player =  playerTeam[0].apply(getPlayer)
+nfl = pd.Series(playerTeam[1])
+
+
+#add/remove columns for TRUFFLE formatting
+df = df.drop(["Bye","Rost", "Start"],axis=1)
+df["Player"] = player
+df.insert(0,"Season", season)
+df.insert(1,"Week", week)
+df.insert(3,"Pos", position[0])
+df.insert(5,"NFL", nfl)
+
+#moves defensive data - empties out old 
+compToAvg = df.iloc[[9]]["Comp"].values[0]
+df.at[9,"Avg"] = compToAvg
+df.at[9, "Comp"] = ''
+total = df.iloc[[9]]["ATT"].values[0]
+df.at[9,"Total"] = total
+df.at[9, "ATT"] = ''
+df = df.drop(["OVP"],axis=1)
+
+#stores as csv
 filepath = "dre/puffinsPOC.csv"
 df.to_csv(filepath, index=False)
-# print(url)
+
