@@ -4,6 +4,7 @@ import os
 import requests
 import datetime
 import pandas as pd
+import numpy as np
 import re
 from bs4 import BeautifulSoup
 from pprint import pprint
@@ -193,7 +194,8 @@ df.at[9,"Total"] = total
 df.at[9, "ATT"] = ''
 df = df.drop(["OVP"],axis=1)
 
+df = df.replace('', np.nan, regex = True)
 #stores as csv
 filepath = "dre/puffinsPOC.csv"
 df.to_csv(filepath, index=False)
-
+print(df)
