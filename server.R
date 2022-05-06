@@ -669,7 +669,7 @@ shinyServer(function(input, output) {
                       columnGroups = list(
                           colGroup(name = "Positional Breakdown", columns = c("QBpts", "RBpts", "WRpts", "TEpts", "DSTpts"), align = 'left'),
                           colGroup(name = "Point Source Breakdown", columns = c("Ydpts", "TDpts", "FDpts", "TOpts"), align = 'left')
-                          )
+                      )
             )
         } else {
             reactable(truffleanalysisperc[Season == input$fantasyportalseason, !c("Season")],
@@ -682,18 +682,18 @@ shinyServer(function(input, output) {
                       columns = list(
                           TRUFFLE = trfDef,
                           FPts = colDef(minWidth = 150, align = 'left',
-                                         format = colFormat(digits=1),
-                                         cell = function(value) {
-                                             width <- paste0(value / max(truffleanalysis$FPts) * 100, "%")
-                                             bar_chart(round(value,0), width = width)
-                                         }),
+                                        format = colFormat(digits=1),
+                                        cell = function(value) {
+                                            width <- paste0(value / max(truffleanalysis$FPts) * 100, "%")
+                                            bar_chart(round(value,0), width = width)
+                                        }),
                           Ydpts = colDef(class = 'border-left')
                       ),
                       columnGroups = list(
                           colGroup(name = "Positional Breakdown", columns = c("QBpts", "RBpts", "WRpts", "TEpts", "DSTpts"), align = 'left'),
                           colGroup(name = "Point Source Breakdown", columns = c("Ydpts", "TDpts", "FDpts", "TOpts"), align = 'left')
                       )
-                      )
+            )
         }
         
     })
@@ -703,72 +703,11 @@ shinyServer(function(input, output) {
     output$scboxscore <- renderReactable({
         
         if (input$scavailable == "FA") {
-        
-        reactable(weekly[Season == input$scseason &
-                             Week %in% seq(input$scweekrange[1],input$scweekrange[2]) &
-                             Pos %in% input$scpositions &
-                             TRUFFLE == "FA"
-                             ][,
-                                                         .(G = .N,
-                                                           PaCmp = sum(PaCmp),
-                                                           PaAtt = sum(PaAtt),
-                                                           PaYd = sum(PaYd),
-                                                           PaTD = sum(PaTD),
-                                                           PaInt = sum(PaInt),
-                                                           RuAtt = sum(RuAtt),
-                                                           RuYd = sum(RuYd),
-                                                           RuTD = sum(RuTD),
-                                                           RuFD = sum(RuFD),
-                                                           Tar = sum(Tar),
-                                                           Rec = sum(Rec),
-                                                           ReYd = sum(ReYd),
-                                                           ReTD = sum(ReTD),
-                                                           ReFD = sum(ReFD),
-                                                           Avg = round(mean(FPts),2),
-                                                           FPts = sum(FPts)
-                                                         ),
-                                                         by = .(TRUFFLE, Pos, Player)][order(-FPts)],
-                  paginationType = "jump",
-                  showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
-                  pageSizeOptions = c(10, 20, 50, 100),
-                  height = 'auto',
-                  filterable = F,
-                  highlight = T,
-                  borderless = T,
-                  compact = T,
-                  columns = list(
-                      TRUFFLE = trfDeffilt,
-                      Pos = posDef,
-                      Player = colDef(minWidth = 125, filterable = T),
-                      G = gDef,
-                      PaCmp = pacmpDef,
-                      PaAtt = paattDef,
-                      PaYd = paydDefNm,
-                      PaTD = patdDefNm,
-                      PaInt = paintDefNm,
-                      RuAtt = ruattDefNm,
-                      RuYd = ruydDefNm,
-                      RuTD = rutdDefNm,
-                      RuFD = rufdDefNm,
-                      Tar = tarDefNm,
-                      Rec = recDefNm,
-                      ReYd = reydDefNm,
-                      ReTD = retdDefNm,
-                      ReFD = refdDefNm,
-                      Avg = colDef(maxWidth = 65, class = "border-left"),
-                      FPts = colDef(maxWidth = 65)
-                  ),
-                  columnGroups = list(
-                      colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
-                      colGroup(name = "Rushing", columns = c("RuAtt", "RuYd", "RuTD", "RuFD"), align = 'left'),
-                      colGroup(name = "Receiving", columns = c("Tar", "Rec", "ReYd", "ReTD", "ReFD"), align = 'left')
-                  )
-        ) } else if (input$scavailable == "Owned") {
             
             reactable(weekly[Season == input$scseason &
                                  Week %in% seq(input$scweekrange[1],input$scweekrange[2]) &
                                  Pos %in% input$scpositions &
-                                 TRUFFLE %in% c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW")
+                                 TRUFFLE == "FA"
             ][,
               .(G = .N,
                 PaCmp = sum(PaCmp),
@@ -824,69 +763,130 @@ shinyServer(function(input, output) {
                 colGroup(name = "Rushing", columns = c("RuAtt", "RuYd", "RuTD", "RuFD"), align = 'left'),
                 colGroup(name = "Receiving", columns = c("Tar", "Rec", "ReYd", "ReTD", "ReFD"), align = 'left')
             )
-            )
-        } else {
-            
-            reactable(weekly[Season == input$scseason &
-                                 Week %in% seq(input$scweekrange[1],input$scweekrange[2]) &
-                                 Pos %in% input$scpositions
-            ][,
-              .(G = .N,
-                PaCmp = sum(PaCmp),
-                PaAtt = sum(PaAtt),
-                PaYd = sum(PaYd),
-                PaTD = sum(PaTD),
-                PaInt = sum(PaInt),
-                RuAtt = sum(RuAtt),
-                RuYd = sum(RuYd),
-                RuTD = sum(RuTD),
-                RuFD = sum(RuFD),
-                Tar = sum(Tar),
-                Rec = sum(Rec),
-                ReYd = sum(ReYd),
-                ReTD = sum(ReTD),
-                ReFD = sum(ReFD),
-                Avg = round(mean(FPts),2),
-                FPts = sum(FPts)
-              ),
-              by = .(TRUFFLE, Pos, Player)][order(-FPts)],
-            paginationType = "jump",
-            showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
-            pageSizeOptions = c(10, 20, 50, 100),
-            height = 'auto',
-            filterable = F,
-            highlight = T,
-            borderless = T,
-            compact = T,
-            columns = list(
-                TRUFFLE = trfDeffilt,
-                Pos = posDef,
-                Player = colDef(minWidth = 125, filterable = T),
-                G = gDef,
-                PaCmp = pacmpDef,
-                PaAtt = paattDef,
-                PaYd = paydDefNm,
-                PaTD = patdDefNm,
-                PaInt = paintDefNm,
-                RuAtt = ruattDefNm,
-                RuYd = ruydDefNm,
-                RuTD = rutdDefNm,
-                RuFD = rufdDefNm,
-                Tar = tarDefNm,
-                Rec = recDefNm,
-                ReYd = reydDefNm,
-                ReTD = retdDefNm,
-                ReFD = refdDefNm,
-                Avg = colDef(maxWidth = 65, class = "border-left"),
-                FPts = colDef(maxWidth = 65)
-            ),
-            columnGroups = list(
-                colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
-                colGroup(name = "Rushing", columns = c("RuAtt", "RuYd", "RuTD", "RuFD"), align = 'left'),
-                colGroup(name = "Receiving", columns = c("Tar", "Rec", "ReYd", "ReTD", "ReFD"), align = 'left')
-            )
-            )
-        }
+            ) } else if (input$scavailable == "Owned") {
+                
+                reactable(weekly[Season == input$scseason &
+                                     Week %in% seq(input$scweekrange[1],input$scweekrange[2]) &
+                                     Pos %in% input$scpositions &
+                                     TRUFFLE %in% c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW")
+                ][,
+                  .(G = .N,
+                    PaCmp = sum(PaCmp),
+                    PaAtt = sum(PaAtt),
+                    PaYd = sum(PaYd),
+                    PaTD = sum(PaTD),
+                    PaInt = sum(PaInt),
+                    RuAtt = sum(RuAtt),
+                    RuYd = sum(RuYd),
+                    RuTD = sum(RuTD),
+                    RuFD = sum(RuFD),
+                    Tar = sum(Tar),
+                    Rec = sum(Rec),
+                    ReYd = sum(ReYd),
+                    ReTD = sum(ReTD),
+                    ReFD = sum(ReFD),
+                    Avg = round(mean(FPts),2),
+                    FPts = sum(FPts)
+                  ),
+                  by = .(TRUFFLE, Pos, Player)][order(-FPts)],
+                paginationType = "jump",
+                showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
+                pageSizeOptions = c(10, 20, 50, 100),
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                borderless = T,
+                compact = T,
+                columns = list(
+                    TRUFFLE = trfDeffilt,
+                    Pos = posDef,
+                    Player = colDef(minWidth = 125, filterable = T),
+                    G = gDef,
+                    PaCmp = pacmpDef,
+                    PaAtt = paattDef,
+                    PaYd = paydDefNm,
+                    PaTD = patdDefNm,
+                    PaInt = paintDefNm,
+                    RuAtt = ruattDefNm,
+                    RuYd = ruydDefNm,
+                    RuTD = rutdDefNm,
+                    RuFD = rufdDefNm,
+                    Tar = tarDefNm,
+                    Rec = recDefNm,
+                    ReYd = reydDefNm,
+                    ReTD = retdDefNm,
+                    ReFD = refdDefNm,
+                    Avg = colDef(maxWidth = 65, class = "border-left"),
+                    FPts = colDef(maxWidth = 65)
+                ),
+                columnGroups = list(
+                    colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
+                    colGroup(name = "Rushing", columns = c("RuAtt", "RuYd", "RuTD", "RuFD"), align = 'left'),
+                    colGroup(name = "Receiving", columns = c("Tar", "Rec", "ReYd", "ReTD", "ReFD"), align = 'left')
+                )
+                )
+            } else {
+                
+                reactable(weekly[Season == input$scseason &
+                                     Week %in% seq(input$scweekrange[1],input$scweekrange[2]) &
+                                     Pos %in% input$scpositions
+                ][,
+                  .(G = .N,
+                    PaCmp = sum(PaCmp),
+                    PaAtt = sum(PaAtt),
+                    PaYd = sum(PaYd),
+                    PaTD = sum(PaTD),
+                    PaInt = sum(PaInt),
+                    RuAtt = sum(RuAtt),
+                    RuYd = sum(RuYd),
+                    RuTD = sum(RuTD),
+                    RuFD = sum(RuFD),
+                    Tar = sum(Tar),
+                    Rec = sum(Rec),
+                    ReYd = sum(ReYd),
+                    ReTD = sum(ReTD),
+                    ReFD = sum(ReFD),
+                    Avg = round(mean(FPts),2),
+                    FPts = sum(FPts)
+                  ),
+                  by = .(TRUFFLE, Pos, Player)][order(-FPts)],
+                paginationType = "jump",
+                showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
+                pageSizeOptions = c(10, 20, 50, 100),
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                borderless = T,
+                compact = T,
+                columns = list(
+                    TRUFFLE = trfDeffilt,
+                    Pos = posDef,
+                    Player = colDef(minWidth = 125, filterable = T),
+                    G = gDef,
+                    PaCmp = pacmpDef,
+                    PaAtt = paattDef,
+                    PaYd = paydDefNm,
+                    PaTD = patdDefNm,
+                    PaInt = paintDefNm,
+                    RuAtt = ruattDefNm,
+                    RuYd = ruydDefNm,
+                    RuTD = rutdDefNm,
+                    RuFD = rufdDefNm,
+                    Tar = tarDefNm,
+                    Rec = recDefNm,
+                    ReYd = reydDefNm,
+                    ReTD = retdDefNm,
+                    ReFD = refdDefNm,
+                    Avg = colDef(maxWidth = 65, class = "border-left"),
+                    FPts = colDef(maxWidth = 65)
+                ),
+                columnGroups = list(
+                    colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
+                    colGroup(name = "Rushing", columns = c("RuAtt", "RuYd", "RuTD", "RuFD"), align = 'left'),
+                    colGroup(name = "Receiving", columns = c("Tar", "Rec", "ReYd", "ReTD", "ReFD"), align = 'left')
+                )
+                )
+            }
         
     })
     
@@ -1055,7 +1055,7 @@ shinyServer(function(input, output) {
             x = ~Salary,
             #text = ~TeamSalary,
             hovertemplate = ~paste0('<b>',Player, '</b>',
-                                  '<br>$', Salary, ', ', Contract, 'yr'),
+                                    '<br>$', Salary, ', ', Contract, 'yr'),
             marker = list(
                 line = list(
                     color = 'white',
@@ -1072,7 +1072,7 @@ shinyServer(function(input, output) {
             yaxis = list(categoryorder = "total ascending", title = ""),
             barmode = "stack",
             font = list(color = 'black')
-            ) %>% config(displayModeBar = FALSE) %>% 
+        ) %>% config(displayModeBar = FALSE) %>% 
             add_annotations(data = rosterbreakdown %>% select(TRUFFLE, TeamSalary) %>% unique(),
                             x = 510,
                             y = ~TRUFFLE,
@@ -1708,21 +1708,115 @@ shinyServer(function(input, output) {
     
     #awards
     output$historybooksawards <- renderReactable({
-        reactable(
-            champ,
-            columns = list(
-                Logo = colDef(cell = function(value) {
-                    img_src <- knitr::image_uri(value)
-                    image <- img(src = img_src, height = "60px", alt = value)
-                    tagList(
-                        div(style = list(display = "inline-block"), image)
+        if(input$awardseason == 2020) {
+            reactable(
+                award2020,
+                sortable = FALSE,
+                showPageInfo = FALSE,
+                paginationType = "simple", defaultPageSize = 11,
+                compact = T,
+                columns = list(
+                    Season = colDef(show = FALSE),
+                    Logo = colDef(name = "", 
+                                  align="center", 
+                                  minWidth = 30, 
+                                  cell = function(value) {
+                                      img_src <- knitr::image_uri(value)
+                                      image <- img(src = img_src, height = "47px", alt = value)
+                                      tagList(
+                                          div(style = list(display = "inline-block"), image)
+                                      )
+                                  }),
+                    Award = colDef(
+                        # Show species under character names
+                        cell = function(value, index) {
+                            winner <- award2020$Winner[index]
+                            pos <- award2020$Pos[index]
+                            trf <- award2020$TRUFFLE[index]
+                            div(
+                                div(style = list(fontWeight = 600, fontSize=16, color = "#84A4D8"), value),
+                                div(style = list(fontSize = 14), paste0(winner, ", ", pos, "  —  ", trf))
+                            )
+                        }
+                    ),
+                    Winner = colDef(show = FALSE),
+                    Image = colDef(name = "", align="center", minWidth = 50, cell = function(value) {
+                        img_src <- knitr::image_uri(value)
+                        image <- img(src = img_src, height = "47px", alt = value)
+                        tagList(
+                            div(style = list(display = "inline-block"), image)
+                        )
+                    }),
+                    Pos = colDef(show = FALSE),
+                    TRUFFLE = colDef(show = FALSE)
+                )
+            ) } else {
+                reactable(
+                    award2021,
+                    sortable = FALSE,
+                    showPageInfo = FALSE,
+                    paginationType = "simple", defaultPageSize = 11,
+                    compact = T,
+                    columns = list(
+                        Season = colDef(show = FALSE),
+                        Logo = colDef(name = "", 
+                                      align="center", 
+                                      minWidth = 30, 
+                                      cell = function(value) {
+                                          img_src <- knitr::image_uri(value)
+                                          image <- img(src = img_src, height = "47px", alt = value)
+                                          tagList(
+                                              div(style = list(display = "inline-block"), image)
+                                          )
+                                      }),
+                        Award = colDef(
+                            # Show species under character names
+                            cell = function(value, index) {
+                                winner <- award2021$Winner[index]
+                                pos <- award2021$Pos[index]
+                                trf <- award2021$TRUFFLE[index]
+                                div(
+                                    div(style = list(fontWeight = 600, fontSize=16, color = "#84A4D8"), value),
+                                    div(style = list(fontSize = 14), paste0(winner, ", ", pos, "  —  ", trf))
+                                )
+                            }
+                        ),
+                        Winner = colDef(show = FALSE),
+                        Image = colDef(name = "", align="center", minWidth = 50, cell = function(value) {
+                            img_src <- knitr::image_uri(value)
+                            image <- img(src = img_src, height = "47px", alt = value)
+                            tagList(
+                                div(style = list(display = "inline-block"), image)
+                            )
+                        }),
+                        Pos = colDef(show = FALSE),
+                        TRUFFLE = colDef(show = FALSE)
                     )
-                }),
-                TRUFFLE = trfDef
-            )
-        )
+                )
+            }
     })
     
+    output$allt1 <- renderReactable({
+        reactable(allt1[Season == input$awardseason][, -"Season"],
+                  compact = T,
+                  columns = list(
+                      Pos = posDefwidenofilt,
+                      TRUFFLE = trfDef
+                  ),
+                  columnGroups = list(colGroup(name = "1st Team", columns = c("Pos", "Winner", "TRUFFLE"), align = 'left')
+                  ))
+    })
+    
+    output$allt2 <- renderReactable({
+        reactable(allt2[Season == input$awardseason][, -"Season"],
+                  compact = T,
+                  columns = list(
+                      Pos = posDefwidenofilt,
+                      TRUFFLE = trfDef
+                  ),
+                  columnGroups = list(colGroup(name = "2nd Team", columns = c("Pos", "Winner", "TRUFFLE"), align = 'left')
+                  ))
+    })
     
     #database ----
     #data hub weekly logs

@@ -531,7 +531,10 @@ recordplrec <- recordbookspl[, c("Pos","Player","Rec")][order(-Rec)][1:100, ]
 recordtmrec <- recordbookstm[, c("TRUFFLE","Pos","Player","Rec")][order(-Rec)]
 
 awards <- as.data.table(read_excel("data/awards.xlsx"))
-champ <- awards[Award == "Champion"][, c("Logo", "Season", "Award", "TRUFFLE", "Winner")]
+allt1 <- awards[Award == "1stTm"][, c("Season", "Pos", "Winner", "TRUFFLE")]
+allt2 <- awards[Award == "2ndTm"][, c("Season", "Pos", "Winner", "TRUFFLE")]
+award2020 <- awards[Award!="1stTm" & Award!="2ndTm"][Season==2020]
+award2021 <- awards[Award!="1stTm" & Award!="2ndTm"][Season==2021]
 
 #reactable column formats ----
 
@@ -602,6 +605,27 @@ posDefnarrow <- colDef(align = "center", maxWidth = 35, filterable = T, style = 
 })
 
 posDefnarrownofilt <- colDef(align = "center", maxWidth = 40, filterable = F, style = function(value) {
+  if (value == "QB") {
+    color <- QBcolor
+  } else if (value == "RB") {
+    color <- RBcolor
+  } else if (value == "WR") {
+    color <- WRcolor
+  } else if (value == "TE") {
+    color <- TEcolor
+  } else if (value == "DST") {
+    color <- DSTcolor
+  }  else if (value == "DC") {
+    color <- DCcolor
+  }  else if (grepl("IR", value)) {
+    color <- IRcolor
+  } else {
+    color <- "white"
+  }
+  list(background = color)
+})
+
+posDefwidenofilt <- colDef(align = "center", maxWidth = 80, filterable = F, style = function(value) {
   if (value == "QB") {
     color <- QBcolor
   } else if (value == "RB") {

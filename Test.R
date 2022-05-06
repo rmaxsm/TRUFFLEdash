@@ -20,3 +20,27 @@ reactable(
   )
 )
 
+data <- starwars %>%
+  select(character = name, height, mass, gender, homeworld, species)
+
+reactable(
+  awards,
+  columns = list(
+    Award = colDef(
+      # Show species under character names
+      cell = function(value, index) {
+        winner <- awards$Winner[index]
+        div(
+          div(style = list(fontWeight = 600, fontSize=14), value),
+          div(style = list(fontSize = 12), winner)
+        )
+      }
+    ),
+    Winner = colDef(show = FALSE)
+  ),
+  defaultPageSize = 6,
+  theme = reactableTheme(
+    # Vertically center cells
+    cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")
+  )
+)

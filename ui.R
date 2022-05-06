@@ -293,7 +293,7 @@ tagList(
                                                 wellPanel(class = "well",
                                                           fluidRow(
                                                             column(width = 9,
-                                                                   h2("Record Books"),
+                                                                   h2("TRUFFLE League and Franchise Records"),
                                                                    p("*Statistics only based on statistics produced in active TRUFFLE lineups beginning with 2020 season.")
                                                             ),
                                                             column(width = 3,
@@ -367,9 +367,31 @@ tagList(
                                        ),
                                        
                                        tabPanel("Awards",
-                                                class = "well",
-                                                reactableOutput('historybooksawards')
                                                 
+                                                wellPanel(class = "well",
+                                                          fluidRow(
+                                                            column(width = 9,
+                                                                   h2("Annual End Of Season TRUFFLE Awards"),
+                                                                   p("Awards and All-TRUFFLE Teams annually voted for by TRUFFLE owners.")
+                                                            ),
+                                                            column(width = 3,
+                                                                   selectInput("awardseason", "Season", unique(awards$Season), selected = max(awards$Season))
+                                                            )
+                                                          )
+                                                ),
+                                                wellPanel(class = "well",
+                                                          fluidRow(
+                                                            column(width=6,
+                                                                   h2("Award Winners"),
+                                                                   reactableOutput('historybooksawards')
+                                                            ),
+                                                            column(width=6,
+                                                                   h2("All-TRUFFLE"),
+                                                                   reactableOutput('allt1'),
+                                                                   reactableOutput('allt2')
+                                                            )
+                                                          )
+                                                )
                                        ) #end tabpanel
                                        
                             ) #end navbarpage
@@ -401,7 +423,7 @@ tagList(
                                       fluidRow(
                                         column(width=8, h2("Rookie Draft Records")),
                                         column(width=4, selectInput("draftseason", "Season", unique(draft$Season), selected = max(weekly$Season) ))
-                                        ),
+                                      ),
                                       fluidRow(
                                         column(width=4, reactableOutput('rd1')),
                                         column(width=4, reactableOutput('rd2')),
@@ -409,7 +431,7 @@ tagList(
                                       )
                             )
                             
-                            )
+                    )
                     
                     
                   )
