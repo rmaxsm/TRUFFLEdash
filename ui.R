@@ -4,7 +4,7 @@ tagList(
   
   # Define UI for application that draws a histogram
   dashboardPage(title="TRUFFLEdash", skin = "black",
-                
+                # Header & Menu Items -----
                 #customizing the header
                 dashboardHeader(title = HTML(" <span style=color:#84A4D8;font-size:24px>truffle</span><span style =color:#8C2E26;font-weight:bold;font-size:40px;font-family:'Audiowide'>dash</span>  ")),
                 
@@ -15,6 +15,7 @@ tagList(
                   menuItem("Team Portal", tabName = "teamportal", icon = icon("users")),
                   menuItem("Player Portal", tabName = "playerportal", icon = icon("user")),
                   menuItem("Stat Center", tabName = "statcenter", icon = icon("chart-bar")),
+                  menuItem("Trade Machine", tabName = "trademachine" , icon = icon("gears")),
                   menuItem("Fantasy Portal", tabName = "fantasyportal", icon = icon("facebook-f")),
                   menuItem("Cap Corner", tabName = "capcorner", icon = icon("dollar-sign")),
                   menuItem("History Books", tabName = "historybooks", icon = icon("book")),
@@ -23,14 +24,14 @@ tagList(
                   #menuItem("BYOG", tabName = "byog", icon = icon("chart-line"))
                 )
                 ),
-                
+                # Dashboard Body -----
                 dashboardBody(
                   
                   tags$head(tags$link(rel = "shortcut icon", href = "favicon.ico")),
-                  
+                  # Tab Items -----
                   #tabitems align with sidebar options
                   tabItems(
-                    
+                    # Home Page -----
                     tabItem(tabName = "home",
                             wellPanel(class = "well",
                                       fluidRow(
@@ -85,7 +86,7 @@ tagList(
                                       )
                             )
                     ),
-                    
+                    # Team Portal -----
                     tabItem(tabName = "teamportal",
                             wellPanel(
                               
@@ -166,7 +167,7 @@ tagList(
                             )
                             
                     ), #end teamportal
-                    
+                    # Player Portal -----
                     tabItem(tabName = "playerportal",
                             wellPanel(style = "background-color:#FFFFFF, padding-top:0px",
                                       selectizeInput('player',h2("Select Player:"),choices = sort(unique(weekly$Player)), selected = NULL, multiple = T)
@@ -210,7 +211,7 @@ tagList(
                             )
                             
                     ),
-                    
+                    # Stat Center -----
                     tabItem(tabName = "statcenter",
                             wellPanel(
                               fluidRow(
@@ -265,6 +266,46 @@ tagList(
                             
                     ),
                     
+                    # Trade Machine -----
+                    tabItem(tabName = "trademachine",
+                            wellPanel(class = "well",
+                                      h2("Trade Machine"),
+                                      p("An interactive, and helpful tool, designed to be a peace offering from the Commissioner for making the rules so complicated."),
+                                        ),
+                            
+                            fluidRow(
+                              column(width = 6,
+                                     wellPanel(class = "well",
+                                               selectInput("tmtm1",h2("Select Team 1:"), unique(teams$FullName), unique(teams$FullName)[1]),
+                                               reactableOutput('tmtm1')
+                                               )
+                                     ),
+                              column(width = 6,
+                                     wellPanel(class = "well",
+                                               selectInput("tmtm2",h2("Select Team 2:"), unique(teams$FullName), unique(teams$FullName)[2]),
+                                               reactableOutput('tmtm2')
+                                               )
+                                     )
+                              ),
+                            
+                            fluidRow(
+                              column(width = 6,
+                                     wellPanel(class = "well",
+                                               selectizeInput('tmtm1players',h2("Select Player(s) from Team 1:"),choices = sort(unique(tmp1$Player)), selected = NULL, multiple = T),
+                                               reactableOutput('tmpls1')
+                                     )
+                              ),
+                              column(width = 6,
+                                     wellPanel(class = "well",
+                                               selectizeInput('tmtm2players',h2("Select Player(s) from Team 2:"),choices = sort(unique(tmp2$Player)), selected = NULL, multiple = T),
+                                               reactableOutput('tmpls2')
+                                     )
+                              )
+                            )
+                            
+                    ), #end trademachine tab item
+                    
+                    # Cap Corner -----
                     tabItem(tabName = "capcorner",
                             
                             navbarPage(title = HTML("<span style=color:#84A4D8>Cap Corner</span>"),
@@ -285,6 +326,7 @@ tagList(
                             
                     ), #end capcorner tab item
                     
+                    # History Books -----
                     tabItem(tabName = "historybooks",
                             
                             navbarPage(title = HTML("<span style=color:#84A4D8>History Books</span>"),
@@ -398,6 +440,7 @@ tagList(
                             
                     ), #end record books tab item
                     
+                    # Database -----
                     tabItem(tabName = "database",
                             
                             navbarPage(title = HTML("<span style=color:#84A4D8>DataHub</span>"),
@@ -418,6 +461,7 @@ tagList(
                             
                     ), #end datahub tab item
                     
+                    # Draft -----
                     tabItem(tabName = "draft",
                             wellPanel(class = "well",
                                       fluidRow(

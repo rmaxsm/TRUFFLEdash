@@ -203,6 +203,8 @@ cleanRosters <- function(file) {
   return(file)
 }
 rosters <- cleanRosters(rosters)
+tmp1 <- rosters
+tmp2 <- rosters
 
 #file of weekly scoring across NFL
 weekly <- read_excel("data/weekly.xlsx")
@@ -667,7 +669,29 @@ posDefFooter <- colDef(align = "center", footer = "Total", maxWidth = 47, filter
   list(background = color)
 })
 
+posDefFooterNofilt <- colDef(align = "center", footer = "Total", maxWidth = 47, filterable = F, style = function(value) {
+  if (value == "QB") {
+    color <- QBcolor
+  } else if (value == "RB") {
+    color <- RBcolor
+  } else if (value == "WR") {
+    color <- WRcolor
+  } else if (value == "TE") {
+    color <- TEcolor
+  } else if (value == "DST") {
+    color <- DSTcolor
+  }  else if (value == "DC") {
+    color <- DCcolor
+  }  else if (grepl("IR", value)) {
+    color <- IRcolor
+  } else {
+    color <- "white"
+  }
+  list(background = color)
+})
+
 playerDef <- colDef(minWidth = 200, filterable = T)
+playerDefNofilt <- colDef(minWidth = 200, filterable = F)
 
 nflDef <- colDef(minWidth = 50, align = 'left')
 
