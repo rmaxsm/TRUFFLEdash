@@ -129,6 +129,7 @@ label = combined[1]
 
 #calls function to clean column headers stored as cols (used in pandas df)
 cols = separateColumns(label)
+print(cols)
 
 #store all players per team as list of lists
 allPlayers = []
@@ -157,5 +158,5 @@ df = pd.DataFrame(allPlayers, columns=cols)
 # df.columns = cols
 print(df)
 filepath = "dre/puffinsPOC.csv"
-df.to_csv(filepath)
+df.to_csv(filepath, index=False)
 # print(url)
