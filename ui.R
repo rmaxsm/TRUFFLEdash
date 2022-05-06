@@ -56,7 +56,7 @@ tagList(
                               column(width = 6,
                                      wellPanel(class = "well",
                                                h2("Season Leaders"),
-                                               reactableOutput('homepointsleaders'),
+                                               reactableOutput('homepointsleaders', height = "100%"),
                                      ))
                               
                             ),
