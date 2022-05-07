@@ -7,18 +7,31 @@ awards <- as.data.table(read_excel("data/awards.xlsx"))
 champ <- awards[Award == "Champion"][, c("Logo", "Season", "Award", "TRUFFLE", "Winner")]
 
 reactable(
-  champ,
+  teams[, c("FullName", "Owner", "Logo", "Location")],
   columns = list(
-    Logo = colDef(cell = function(value) {
-      img_src <- knitr::image_uri(value)
-      image <- img(src = img_src, height = "24px", alt = value)
-      tagList(
-       div(style = list(display = "inline-block", width = "45px"), image)
-      )
-    }),
-    TRUFFLE = trfDef
+    FullName = colDef(minWidth = 300,
+      cell = function(value, index) {
+        location <- teams$Location[index]
+        col <- teams$Primary[index]
+        div(
+          div(style = list(fontWeight = 600, fontSize=30, color = col), value),
+          div(style = list(fontSize = 12), location)
+        )
+      }
+    ),
+    Logo = colDef(name = "", 
+                  align="center", 
+                  minWidth = 80, 
+                  cell = function(value) {
+                    img_src <- knitr::image_uri(value)
+                    image <- img(src = img_src, height = "200px", alt = value)
+                    tagList(
+                      div(style = list(display = "inline-block"), image)
+                    )
+                  }),
+    Location = colDef(show = FALSE)
   )
-)
+  )
 
 data <- starwars %>%
   select(character = name, height, mass, gender, homeworld, species)

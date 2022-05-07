@@ -156,12 +156,39 @@ shinyServer(function(input, output) {
     })
     
     #team portal ----
-    #team portal team info
-    output$tmportalname <- renderText({paste(input$tmportaltm)})
-    output$tmportalabbrev <- renderText({paste(teams$Abbrev[teams$FullName == input$tmportaltm])})
-    output$tmportalowner <- renderText({paste(teams$Owner[teams$FullName == input$tmportaltm])})
-    output$tmportallocation <- renderText({paste(teams$Location[teams$FullName == input$tmportaltm])})
-    output$tmportaldivision <- renderText({paste(teams$Division[teams$FullName == input$tmportaltm])})
+    
+    #tpheader
+    output$tpheader <- renderReactable({
+        reactable(
+            teams[teams$FullName == input$tmportaltm, c("FullName", "Logo")],
+            sortable = FALSE,
+            compact = TRUE,
+            columns = list(
+                FullName = colDef(name = "Selected Team:",
+                                  headerStyle = list(color = "#84A4D8", fontSize = 14, fontWeight = 800),
+                                  minWidth = 300,
+                                  cell = function(value) {
+                                      owner <- teams$Owner[teams$FullName == input$tmportaltm]
+                                      col <- teams$Primary[teams$FullName == input$tmportaltm]
+                                      div(
+                                          div(style = list(fontWeight = 800, fontSize=26, color = col), value),
+                                          div(style = list(fontSize = 16), owner)
+                                      )
+                                  }
+                ),
+                Logo = colDef(name = "", 
+                              align="center", 
+                              minWidth = 80, 
+                              cell = function(value) {
+                                  img_src <- knitr::image_uri(value)
+                                  image <- img(src = img_src, height = "70px", alt = value)
+                                  tagList(
+                                      div(style = list(display = "inline-block"), image)
+                                  )
+                              })
+            )
+        )
+    })
     
     #team portal team logo
     output$tmlogo <- renderImage({list(
@@ -1020,29 +1047,25 @@ shinyServer(function(input, output) {
                   pagination = FALSE,
                   #height = 500,
                   highlight = T,
-                  filterable = T,
+                  filterable = F,
                   borderless = T,
                   compact = T,
                   resizable = T,
                   columns = list(
-                      Pos = posDef,
-                      Player = playerDef,
-                      Age = ageDef,
-                      Bye = byeDef,
-                      NFL = nflDef,
-                      Salary = salaryDefFooter,
+                      Pos = posDefnarrownofilt,
+                      Player = colDef(minWidth = 120),
+                      Age = colDef(minWidth =  40),
+                      Bye = colDef(minWidth =  40),
+                      NFL = colDef(minWidth =  40),
+                      Salary = salaryDefFooterTM,
                       Contract = contractDefFooter,
                       G = gDef,
-                      PosRk = colDef(minWidth = 45, align = "right"),
+                      PosRk = colDef(minWidth = 50, align = "right"),
                       ptslog = colDef(name = "PtsLog", sortable = F, cell = function(values) {
                           sparkline(values, type = "bar", chartRangeMin = 0, chartRangeMax = max(weekly$FPts))
                       }),
                       Avg = avgDef,
                       FPts = fptsDefseasons
-                  ),
-                  columnGroups = list(
-                      colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
-                      colGroup(name = "Fantasy", columns = c("G", "PosRk", "ptslog", "Avg", "FPts"), align = 'left')
                   ),
                   defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
         )

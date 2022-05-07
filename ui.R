@@ -39,7 +39,7 @@ tagList(
                                                HTML(" Welcome to <span style=color:#84A4D8;font-size:14px>truffle</span><span style =color:#8C2E26;font-weight:bold;font-size:30px;font-family:'Audiowide'>dash</span>")
                                         ),
                                         column(width = 4,
-                                               selectInput("homeseason", "Season", unique(weekly$Season), selected = max(weekly$Season) )
+                                               selectInput("homeseason", HTML("<span style=color:#84A4D8;font-size:14px>Season</span>"), unique(weekly$Season), selected = max(weekly$Season) )
                                         )
                                         ,
                                         column(width=4, align = "right",
@@ -92,37 +92,10 @@ tagList(
                               
                               sidebarLayout(
                                 sidebarPanel(
-                                  fluidRow(selectInput("tmportaltm","Select Team:",unique(teams$FullName)), style ="padding-top:10px;padding-left:10px;padding-right:10px;z-index:10000;")
+                                  fluidRow(selectInput("tmportaltm",HTML("<span style=color:#84A4D8;font-size:14px>Select Team:</span>"),unique(teams$FullName)), style ="padding-top:10px;padding-left:20px;padding-right:20px;z-index:10000;")
                                 ),
-                                mainPanel(fluidRow(
-                                  column(
-                                    
-                                    fluidRow(h1(strong(textOutput('tmportalname')))),
-                                    fluidRow(
-                                      column(
-                                        p(strong("Owner:"), textOutput('tmportalowner')),
-                                        width = 4
-                                      ),
-                                      column(
-                                        p(strong("Location:"), textOutput('tmportallocation')),
-                                        width = 4
-                                      ),
-                                      column(
-                                        p(strong("Division:"), textOutput('tmportaldivision')),
-                                        width = 4
-                                      )
-                                    )
-                                    
-                                    , width = 9),
-                                  
-                                  column(br(),
-                                         imageOutput("tmlogo", height = "40%")
-                                         , width = 3, align = 'left')
-                                  
-                                )
-                                
-                                ) #end mainPanel
-                                
+                                mainPanel(br(),
+                                  reactableOutput('tpheader'))
                                 
                               ), style = "background-color:#FFFFFF;padding-top:20px"), #end sidebarLayout
                             
@@ -269,20 +242,25 @@ tagList(
                     # Trade Machine -----
                     tabItem(tabName = "trademachine",
                             wellPanel(class = "well",
-                                      h2("Trade Machine"),
-                                      p("An interactive, and helpful tool, designed to be a peace offering from the Commissioner for making the rules so complicated."),
+                                      fluidRow(column(width = 9,
+                                                      h2("Trade Machine"),
+                                                      p("An interactive, and helpful tool, designed to be a peace offering from the Commissioner for making the rules so complicated."),),
+                                               column(width = 3,
+                                                      selectInput("tmview", "Team View", c("Overview", "Contracts", "Box Score", "Advanced", "Consistency")))
+                                               )
+                                      
                                         ),
                             
                             fluidRow(
                               column(width = 6,
                                      wellPanel(class = "well",
-                                               selectInput("tmtm1",h2("Select Team 1:"), unique(teams$FullName), unique(teams$FullName)[1]),
+                                               selectInput("tmtm1", HTML("<span style=color:#84A4D8;font-size:14px>Select Team 1:</span>"), unique(teams$FullName), unique(teams$FullName)[1]),
                                                reactableOutput('tmtm1')
                                                )
                                      ),
                               column(width = 6,
                                      wellPanel(class = "well",
-                                               selectInput("tmtm2",h2("Select Team 2:"), unique(teams$FullName), unique(teams$FullName)[2]),
+                                               selectInput("tmtm2",HTML("<span style=color:#84A4D8;font-size:14px>Select Team 2:</span>"), unique(teams$FullName), unique(teams$FullName)[2]),
                                                reactableOutput('tmtm2')
                                                )
                                      )
@@ -291,13 +269,13 @@ tagList(
                             fluidRow(
                               column(width = 6,
                                      wellPanel(class = "well",
-                                               selectizeInput('tmtm1players',h2("Select Player(s) from Team 1:"),choices = sort(unique(tmp1$Player)), selected = NULL, multiple = T),
+                                               selectizeInput('tmtm1players',HTML("<span style=color:#84A4D8;font-size:14px>Select Players from Team 1:</span>"),choices = sort(unique(tmp1$Player)), selected = NULL, multiple = T),
                                                reactableOutput('tmpls1')
                                      )
                               ),
                               column(width = 6,
                                      wellPanel(class = "well",
-                                               selectizeInput('tmtm2players',h2("Select Player(s) from Team 2:"),choices = sort(unique(tmp2$Player)), selected = NULL, multiple = T),
+                                               selectizeInput('tmtm2players',HTML("<span style=color:#84A4D8;font-size:14px>Select Players from Team 1:</span>"),choices = sort(unique(tmp2$Player)), selected = NULL, multiple = T),
                                                reactableOutput('tmpls2')
                                      )
                               )

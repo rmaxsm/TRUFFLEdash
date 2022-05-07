@@ -693,6 +693,7 @@ posDefFooterNofilt <- colDef(align = "center", footer = "Total", maxWidth = 47, 
 playerDef <- colDef(minWidth = 200, filterable = T)
 playerDefNofilt <- colDef(minWidth = 200, filterable = F)
 
+
 nflDef <- colDef(minWidth = 50, align = 'left')
 
 byeDef <- colDef(minWidth = 60, align = 'left')
@@ -736,6 +737,15 @@ salaryDefFooter <- colDef(minWidth = 175,align = 'left',
                           },
                           footer = function(values) paste0("$", sum(values))
 )
+
+salaryDefFooterTM <- colDef(minWidth = 80,align = 'left',
+                          format = colFormat(digits=0),
+                          style = function(value) {
+                            color <- ifelse(value <= 15, IRcolor, 'black')
+                            list(color = color)},
+                          footer = function(values) paste0("$", sum(values))
+)
+
 
 contractDef <- colDef(minWidth = 75, style = function(value) {
   background <- ifelse(value == 1, RBcolor,
