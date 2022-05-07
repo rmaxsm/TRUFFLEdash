@@ -309,7 +309,7 @@ tpoverview$Avg[tpoverview$Pos == "DST"] <- NA
 contracts <- rosters[, .(TRUFFLE, Pos, Player, Age, NFL, Salary, Contract)]
 contracts <- contracts[, `:=`(`'22` = Salary,
                               `'23` = ifelse(Contract > 1, Salary, 
-                                           ifelse(Contract == 1 & is.element(Player, rookierights) == F, "FA",
+                                             ifelse(Contract == 1 & is.element(Player, rookierights) == F, "FA",
                                                     ifelse(Contract == 1 & is.element(Player, rookierights) == T, "RR", "-"))),
                               `'24` = ifelse(Contract > 2, Salary,
                                              ifelse(Contract == 2 & is.element(Player, rookierights) == F, "FA",
@@ -362,12 +362,12 @@ advanced <- weekly[, .(FPts = sum(FPts),
                        Opp = sum(PaAtt + RuAtt + Tar)
 ),
 by = .(Season,TRUFFLE,Pos,Player)][, `:=`(`YdPt%` = YdPts / FPts,
-                                   `TDPt%` = TDPts / FPts,
-                                   `FDPt%` = FDPts / FPts,
-                                   `RuPt%` = RuPts / FPts,
-                                   `RePt%` = RePts / FPts,
-                                   `FPts/Touch` = round(FPts/Touch, 3),
-                                   `FPts/Opp` = round(FPts/Opp, 3)
+                                          `TDPt%` = TDPts / FPts,
+                                          `FDPt%` = FDPts / FPts,
+                                          `RuPt%` = RuPts / FPts,
+                                          `RePt%` = RePts / FPts,
+                                          `FPts/Touch` = round(FPts/Touch, 3),
+                                          `FPts/Opp` = round(FPts/Opp, 3)
 )][order(-FPts)][, c("Season","TRUFFLE","Pos","Player","FPts","Touch","Opp","FPts/Touch","FPts/Opp","YdPts","TDPts","FDPts","YdPt%","TDPt%","FDPt%","RuPts",
                      "RePts","RuPt%","RePt%")]
 
@@ -398,9 +398,9 @@ consistency <- consistencystart[, `:=` (
    by = .(Season ,TRUFFLE, Pos, Player)][order(-Avg)][, c("Season","TRUFFLE","Pos","Player","Avg","RelSD",">10 %",">20 %",">30 %","AvgPosRk","Top5 %","Top12 %","Top24 %","Top36 %", "NonStart %")]
 
 weeklytop5 <- weekly[, c("Season", "Week", "TRUFFLE", "Pos", "Player", "FPts")][order(Week,-FPts)][, .(TRUFFLE = TRUFFLE[1:5],
-        Player = Player[1:5],
-        FPts = FPts[1:5]), 
-    by = .(Season,Week, Pos)][, .(Season,Week,TRUFFLE,Pos,Player,FPts)]
+                                                                                                       Player = Player[1:5],
+                                                                                                       FPts = FPts[1:5]), 
+                                                                                                   by = .(Season,Week, Pos)][, .(Season,Week,TRUFFLE,Pos,Player,FPts)]
 
 weeklytop5qb <- weeklytop5[Pos == "QB"]
 weeklytop5rb <- weeklytop5[Pos == "RB"]
@@ -437,24 +437,24 @@ truffleanalysisperc <- fantasy[,
 
 #building the record books -----
 recordbookstm <- fantasy[,
-                       .(FPts = round(sum(FPts),1),
-                         Games = .N,
-                         Avg = round(mean(FPts),1),
-                         FD = sum(RuFD + ReFD),
-                         PaYd = sum(PaYd),
-                         PaTD = sum(PaTD),
-                         PaInt = sum(PaInt),
-                         PaCmp = sum(PaCmp),
-                         RuYd = sum(RuYd),
-                         RuTD = sum(RuTD),
-                         RuFD = sum(RuFD),
-                         FL = sum(FL),
-                         ReYd = sum(ReYd),
-                         ReTD = sum(ReTD),
-                         ReFD = sum(ReFD),
-                         Rec = sum(Rec)
+                         .(FPts = round(sum(FPts),1),
+                           Games = .N,
+                           Avg = round(mean(FPts),1),
+                           FD = sum(RuFD + ReFD),
+                           PaYd = sum(PaYd),
+                           PaTD = sum(PaTD),
+                           PaInt = sum(PaInt),
+                           PaCmp = sum(PaCmp),
+                           RuYd = sum(RuYd),
+                           RuTD = sum(RuTD),
+                           RuFD = sum(RuFD),
+                           FL = sum(FL),
+                           ReYd = sum(ReYd),
+                           ReTD = sum(ReTD),
+                           ReFD = sum(ReFD),
+                           Rec = sum(Rec)
                          ),
-                       by = .(TRUFFLE, Pos, Player)]
+                         by = .(TRUFFLE, Pos, Player)]
 
 recordbookspl <- fantasy[,
                          .(FPts = round(sum(FPts),1),
@@ -557,11 +557,11 @@ trfDef <- colDef(name = "TRF", align = 'center', maxWidth = 75,
                  cell = function(value) {
                    class <- paste0("trf team-", value)
                    htmltools::div(class = class, value)}
-                 )
+)
 trfDeffilt <- colDef(name = "TRF", align = 'center', filterable = T, maxWidth = 75, 
-                 cell = function(value) {
-                   class <- paste0("trf team-", value)
-                   htmltools::div(class = class, value)}
+                     cell = function(value) {
+                       class <- paste0("trf team-", value)
+                       htmltools::div(class = class, value)}
 )
 
 posDef <- colDef(align = "center", maxWidth = 47, filterable = T, style = function(value) {
@@ -716,14 +716,14 @@ salaryDef <- colDef(minWidth = 175,align = 'left',
 )
 
 draftsalaryDefnarrow <- colDef(minWidth = 100,align = 'left',
-                    format = colFormat(digits=0),
-                    style = function(value) {
-                      color <- ifelse(value <= 15, IRcolor, 'black')
-                      list(color = color)},
-                    cell = function(value) {
-                      width <- paste0(value / 50 * 100, "%")
-                      bar_chart(ifelse(is.na(value), "", value), width = ifelse(is.na(value), 0, width), prefix = "$")
-                    }
+                               format = colFormat(digits=0),
+                               style = function(value) {
+                                 color <- ifelse(value <= 15, IRcolor, 'black')
+                                 list(color = color)},
+                               cell = function(value) {
+                                 width <- paste0(value / 50 * 100, "%")
+                                 bar_chart(ifelse(is.na(value), "", value), width = ifelse(is.na(value), 0, width), prefix = "$")
+                               }
 )
 
 salaryDefFooter <- colDef(minWidth = 175,align = 'left',
@@ -738,12 +738,12 @@ salaryDefFooter <- colDef(minWidth = 175,align = 'left',
                           footer = function(values) paste0("$", sum(values))
 )
 
-salaryDefFooterTM <- colDef(minWidth = 80,align = 'left',
-                          format = colFormat(digits=0),
-                          style = function(value) {
-                            color <- ifelse(value <= 15, IRcolor, 'black')
-                            list(color = color)},
-                          footer = function(values) paste0("$", sum(values))
+salaryDefFooterTM <- colDef(name = "$", minWidth = 45,align = 'right',
+                            format = colFormat(digits=0, prefix = "$"),
+                            style = function(value) {
+                              color <- ifelse(value <= 15, IRcolor, 'black')
+                              list(color = color)},
+                            footer = function(values) paste0("$", sum(values))
 )
 
 
@@ -762,6 +762,14 @@ contractDefFooter <- colDef(minWidth = 75, style = function(value) {
   footer = function(values) sum(values)
 )
 
+contractDefFooternarrow <- colDef(name = "Yr", minWidth = 30, style = function(value) {
+  background <- ifelse(value == 1, RBcolor,
+                       ifelse(value == 2, TEcolor,
+                              ifelse(value == 3, WRcolor, QBcolor)))
+  list(background = background)},
+  footer = function(values) sum(values)
+)
+
 futurecolDef <- colDef(align = 'right', maxWidth = 75, cell = function(value) {
   class <- paste0("tag status-", value)
   htmltools::div(class = class, value)}
@@ -773,31 +781,30 @@ futurecolDefFooter <- colDef(align = 'right', maxWidth = 75, cell = function(val
   footer = function(values) paste0("$", sum(as.numeric(values), na.rm=T))
 )
 
+futurecolDefFooternarrow <- colDef(align = 'right', maxWidth = 60, cell = function(value) {
+  class <- paste0("tag status-", value)
+  htmltools::div(class = class, value)},
+  footer = function(values) paste0("$", sum(as.numeric(values), na.rm=T))
+)
+
 avgDef <- colDef(maxWidth = 65,
-  style = function(value) {
-    normalized <- (value) / (max(seasons$Avg,na.rm=T))
-    color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
-    list(background = color)
-  }
+                 style = function(value) {
+                   normalized <- (value) / (max(seasons$Avg,na.rm=T))
+                   color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
+                   list(background = color)
+                 }
+)
+
+avgDefnarrow <- colDef(maxWidth = 45,
+                       format = colFormat(digits = 1),
+                       style = function(value) {
+                         normalized <- (value) / (max(seasons$Avg,na.rm=T))
+                         color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
+                         list(background = color)
+                       }
 )
 
 fptsDefweekly <- colDef(maxWidth = 65, class = "border-left",
-  style = function(value) {
-    normalized <- (value) / (max(weekly$FPts[weekly$Season == max(weekly$Season)],na.rm=T))
-    color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
-    list(background = color)
-  }
-)
-
-fptsDefweeklynarrownoline <- colDef(maxWidth = 50,
-                              style = function(value) {
-                                normalized <- (value) / (max(weekly$FPts[weekly$Season == max(weekly$Season)],na.rm=T))
-                                color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
-                                list(background = color)
-                              }
-)
-
-fptsDefweeklynarrow <- colDef(maxWidth = 50, class = "border-left",
                         style = function(value) {
                           normalized <- (value) / (max(weekly$FPts[weekly$Season == max(weekly$Season)],na.rm=T))
                           color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
@@ -805,12 +812,37 @@ fptsDefweeklynarrow <- colDef(maxWidth = 50, class = "border-left",
                         }
 )
 
+fptsDefweeklynarrownoline <- colDef(maxWidth = 50,
+                                    style = function(value) {
+                                      normalized <- (value) / (max(weekly$FPts[weekly$Season == max(weekly$Season)],na.rm=T))
+                                      color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
+                                      list(background = color)
+                                    }
+)
+
+fptsDefweeklynarrow <- colDef(maxWidth = 50, class = "border-left",
+                              style = function(value) {
+                                normalized <- (value) / (max(weekly$FPts[weekly$Season == max(weekly$Season)],na.rm=T))
+                                color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
+                                list(background = color)
+                              }
+)
+
 fptsDefseasons <- colDef(maxWidth = 65,
-                       style = function(value) {
-                         normalized <- (value) / (max(seasons$FPts,na.rm=T))
-                         color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
-                         list(background = color)
-                       }
+                         style = function(value) {
+                           normalized <- (value) / (max(seasons$FPts,na.rm=T))
+                           color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
+                           list(background = color)
+                         }
+)
+
+fptsDefseasonsnarrow <- colDef(maxWidth = 50,
+                               format = colFormat(digits = 1),
+                               style = function(value) {
+                                 normalized <- (value) / (max(seasons$FPts,na.rm=T))
+                                 color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
+                                 list(background = color)
+                               }
 )
 
 FPtsstyle <- list(fontWeight = 'bold', background = fptsbackground)

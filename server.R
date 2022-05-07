@@ -1,5 +1,5 @@
 
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
     
     #sponsor logo
     output$sponsor <- renderImage({
@@ -1042,30 +1042,29 @@ shinyServer(function(input, output) {
     
     #trademachine ----
     output$tmtm1 <- renderReactable({
-        reactable(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm1]][, !"TRUFFLE"],
+        reactable(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm1]][order(match(Pos, positionorder), -Salary)][, !c("TRUFFLE", "G", "Bye", "PosRk")],
+                  selection = "multiple", onClick = "select",
                   defaultSortOrder = "desc",
+                  sortable = F,
                   pagination = FALSE,
                   #height = 500,
                   highlight = T,
                   filterable = F,
                   borderless = T,
                   compact = T,
-                  resizable = T,
+                  resizable = F,
                   columns = list(
                       Pos = posDefnarrownofilt,
-                      Player = colDef(minWidth = 120),
+                      Player = colDef(minWidth = 125),
                       Age = colDef(minWidth =  40),
-                      Bye = colDef(minWidth =  40),
                       NFL = colDef(minWidth =  40),
                       Salary = salaryDefFooterTM,
-                      Contract = contractDefFooter,
-                      G = gDef,
-                      PosRk = colDef(minWidth = 50, align = "right"),
-                      ptslog = colDef(name = "PtsLog", sortable = F, cell = function(values) {
+                      Contract = contractDefFooternarrow,
+                      ptslog = colDef(minWidth = 70, name = "PtsLog", sortable = F, cell = function(values) {
                           sparkline(values, type = "bar", chartRangeMin = 0, chartRangeMax = max(weekly$FPts))
                       }),
-                      Avg = avgDef,
-                      FPts = fptsDefseasons
+                      Avg = avgDefnarrow,
+                      FPts = fptsDefseasonsnarrow
                   ),
                   defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
         )
@@ -1074,34 +1073,28 @@ shinyServer(function(input, output) {
     })
     
     output$tmtm2 <- renderReactable({
-        reactable(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm2]][, !"TRUFFLE"],
+        reactable(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm2]][order(match(Pos, positionorder), -Salary)][, !c("TRUFFLE", "G", "Bye", "PosRk")],
+                  selection = "multiple", onClick = "select",
                   defaultSortOrder = "desc",
+                  sortable = F,
                   pagination = FALSE,
-                  #height = 500,
                   highlight = T,
-                  filterable = T,
+                  filterable = F,
                   borderless = T,
                   compact = T,
-                  resizable = T,
+                  resizable = F,
                   columns = list(
-                      Pos = posDef,
-                      Player = playerDef,
-                      Age = ageDef,
-                      Bye = byeDef,
-                      NFL = nflDef,
-                      Salary = salaryDefFooter,
-                      Contract = contractDefFooter,
-                      G = gDef,
-                      PosRk = colDef(minWidth = 45, align = "right"),
-                      ptslog = colDef(name = "PtsLog", sortable = F, cell = function(values) {
+                      Pos = posDefnarrownofilt,
+                      Player = colDef(minWidth = 125),
+                      Age = colDef(minWidth =  40),
+                      NFL = colDef(minWidth =  40),
+                      Salary = salaryDefFooterTM,
+                      Contract = contractDefFooternarrow,
+                      ptslog = colDef(minWidth = 70, name = "PtsLog", sortable = F, cell = function(values) {
                           sparkline(values, type = "bar", chartRangeMin = 0, chartRangeMax = max(weekly$FPts))
                       }),
-                      Avg = avgDef,
-                      FPts = fptsDefseasons
-                  ),
-                  columnGroups = list(
-                      colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
-                      colGroup(name = "Fantasy", columns = c("G", "PosRk", "ptslog", "Avg", "FPts"), align = 'left')
+                      Avg = avgDefnarrow,
+                      FPts = fptsDefseasonsnarrow
                   ),
                   defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
         )
@@ -1110,63 +1103,63 @@ shinyServer(function(input, output) {
     })
     
     output$tmpls1 <- renderReactable({
-        reactable(contracts[Player %in% input$tmtm1players][, !"TRUFFLE"][order(match(Pos, positionorder), -Salary)],
+        selectedtm1 <- reactive(getReactableState("tmtm1", "selected"))
+        
+        if (length(selectedtm1()) >= 1) {
+        
+        reactable(contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm1]][order(match(Pos, positionorder), -Salary)][selectedtm1(), ][, !c("TRUFFLE", "Age")],
                   defaultSortOrder = "desc",
                   pagination = FALSE,
-                  #height = 500,
+                  sortable = F,
                   filterable = F,
                   highlight = T,
                   borderless = T,
                   compact = T,
                   resizable = T,
                   columns = list(
-                      Pos = posDefFooterNofilt,
-                      Player = playerDefNofilt,
-                      Age = ageDef,
-                      NFL = nflDef,
-                      Salary = salaryDefFooter,
-                      Contract = contractDefFooter,
-                      `'22` = futurecolDefFooter,
-                      `'23` = futurecolDefFooter,
-                      `'24` = futurecolDefFooter,
-                      `'25` = futurecolDefFooter
+                      Pos = posDefnarrownofilt,
+                      Player = colDef(minWidth = 125),
+                      NFL = colDef(minWidth =  40),
+                      Salary = salaryDefFooterTM,
+                      Contract = contractDefFooternarrow,
+                      `'22` = futurecolDefFooternarrow,
+                      `'23` = futurecolDefFooternarrow,
+                      `'24` = futurecolDefFooternarrow,
+                      `'25` = futurecolDefFooternarrow
                   ),
-                  defaultColDef = colDef(footerStyle = list(fontWeight = "bold")),
-                  columnGroups = list(
-                      colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
-                      colGroup(name = "Future Seasons", columns = c("'22","'23","'24","'25"), align = 'left')
-                  )
+                  defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
         )
+        }
     })
     
     output$tmpls2 <- renderReactable({
-        reactable(contracts[Player %in% input$tmtm2players][, !"TRUFFLE"][order(match(Pos, positionorder), -Salary)],
-                  defaultSortOrder = "desc",
-                  pagination = FALSE,
-                  #height = 500,
-                  filterable = F,
-                  highlight = T,
-                  borderless = T,
-                  compact = T,
-                  resizable = T,
-                  columns = list(
-                      Pos = posDefFooterNofilt,
-                      Player = playerDefNofilt,
-                      Age = ageDef,
-                      NFL = nflDef,
-                      Salary = salaryDefFooter,
-                      Contract = contractDefFooter,
-                      `'22` = futurecolDefFooter,
-                      `'23` = futurecolDefFooter,
-                      `'24` = futurecolDefFooter,
-                      `'25` = futurecolDefFooter
-                  ),
-                  defaultColDef = colDef(footerStyle = list(fontWeight = "bold")),
-                  columnGroups = list(
-                      colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
-                      colGroup(name = "Future Seasons", columns = c("'22","'23","'24","'25"), align = 'left')
-                  )
-        )
+        selectedtm2 <- reactive(getReactableState("tmtm2", "selected"))
+        
+        if (length(selectedtm2()) >= 1) {
+            
+            reactable(contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm2]][order(match(Pos, positionorder), -Salary)][selectedtm2(), ][, !c("TRUFFLE", "Age")],
+                      defaultSortOrder = "desc",
+                      pagination = FALSE,
+                      sortable = F,
+                      filterable = F,
+                      highlight = T,
+                      borderless = T,
+                      compact = T,
+                      resizable = T,
+                      columns = list(
+                          Pos = posDefnarrownofilt,
+                          Player = colDef(minWidth = 125),
+                          NFL = colDef(minWidth =  40),
+                          Salary = salaryDefFooterTM,
+                          Contract = contractDefFooternarrow,
+                          `'22` = futurecolDefFooternarrow,
+                          `'23` = futurecolDefFooternarrow,
+                          `'24` = futurecolDefFooternarrow,
+                          `'25` = futurecolDefFooternarrow
+                      ),
+                      defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
+            )
+        }
     })
     
     #capcorner ----

@@ -248,9 +248,9 @@ tagList(
                                                column(width = 3,
                                                       selectInput("tmview", "Team View", c("Overview", "Contracts", "Box Score", "Advanced", "Consistency")))
                                                )
-                                      
+
                                         ),
-                            
+
                             fluidRow(
                               column(width = 6,
                                      wellPanel(class = "well",
@@ -265,17 +265,17 @@ tagList(
                                                )
                                      )
                               ),
-                            
+
                             fluidRow(
                               column(width = 6,
                                      wellPanel(class = "well",
-                                               selectizeInput('tmtm1players',HTML("<span style=color:#84A4D8;font-size:14px>Select Players from Team 1:</span>"),choices = sort(unique(tmp1$Player)), selected = NULL, multiple = T),
+                                               p(HTML("<span style=color:#84A4D8;font-size:14px><b>Players in Trade Team 1:</b></span>")),
                                                reactableOutput('tmpls1')
                                      )
                               ),
                               column(width = 6,
                                      wellPanel(class = "well",
-                                               selectizeInput('tmtm2players',HTML("<span style=color:#84A4D8;font-size:14px>Select Players from Team 1:</span>"),choices = sort(unique(tmp2$Player)), selected = NULL, multiple = T),
+                                               p(HTML("<span style=color:#84A4D8;font-size:14px><b>Players in Trade Team 2:</b></span>")),
                                                reactableOutput('tmpls2')
                                      )
                               )
