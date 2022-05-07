@@ -1,4 +1,6 @@
-#this is a POC script to scrape some data 
+#this is a python script. It will ask you for year and week then get all the information 
+#from cbs for each team for that week and year. Error handling is not great tbh but will do some checking
+#just input the right stuff 
 
 import os
 import requests
@@ -9,15 +11,6 @@ import re
 from bs4 import BeautifulSoup
 from pprint import pprint
 
-
-print("proof of concept on python running..?\n")
-
-#CHANGE ME HARDCODINGS PLS
-
-# season = input("What YEAR is it..? ")
-season = 2022
-# week = input("What WEEK is it..? ")
-week = 1
 
 #below are 'keys' of some sort from copy and pasting - unclear how they fit in left for reference
 
@@ -90,20 +83,36 @@ headers = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36',
 }
 
-#where the connection is made to the truffle cbs website
-url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/team:18/period-1:f/TRUFFLEoffense/"
-response = requests.get(url, cookies=cookies, headers=headers)
-soup = BeautifulSoup(response.content, 'html.parser')
 
-#glofified switch/case statment to save minimal time and get team abbreviations
+#this is the main pandas frame that will be added to throughout
+dfGlobal = pd.DataFrame()
+
+#get year and week for url/formatting
+season = input("What YEAR is it..? ")
+while(len(season) != 4):
+  print("get the year right dumbass")
+  season = input("What YEAR is it..? ")
+
+week = input("What WEEK is it..? ")
+while(len(week) >= 3):
+  print("get the week right dumbass")
+  week = input("What WEEK is it..? ")
+
+
+#get information from teams document to refer to for shortcuts ext
+teamsPd = pd.read_csv("dre/teams_copy.csv")
+
+teamsDict = {}
+for index, row in teamsPd.iterrows():
+  teamsDict[row["Logs"]] = row["Abbrev"]  
+
+#returns team abbreviation from team name
 def getTeamAbbreviation(team):
-  name = team.split(" ")[0]
-  if name == "East":
-    return "ELP"
-  # elif name == "Frankf":
-  #   return "FFR"
-  else:
-    return "N/A"
+  try:
+    return teamsDict[team]
+  except Exception as exp:
+    print("An Error Occuring while trying to get the team abbreviation for " + team)
+    return
 
 #separates the column names
 #returns list representing the columns for tables 
@@ -128,74 +137,96 @@ def separatePlayers(rows):
     itr += 1
   return curRow
 
-#finds the outermost 'tables' containing the stats(3 off,kicker,dst in order)
-tbls =  soup.find_all("table", class_="data pinHeader borderTop")
-tblOffense = tbls[0]
-tblDefense = tbls[2]
+for index, row in teamsPd.iterrows():
 
-#gets the column header information as 'label'
-combined = tblOffense.find_all("tr", class_="label")
-label = combined[1]
-
-#calls function to clean column headers stored as cols (used in pandas df)
-cols = separateColumns(label)
-
-#store all players per team as list of lists
-allPlayers = []
-
-#regex used to find row1/2 (\d means only numbers following exact match of row)
-allRowsOffense = tblOffense.find_all("tr", class_=re.compile("row\d"))
-
-#for every player - clean the row and add to list of lists
-for i in allRowsOffense:
-  allPlayers.append(separatePlayers(i))
-
-# simlar to offense but with slightly different logic
-defRows = tblDefense.find_all("tr", {"class": re.compile("row\d")})
-for i in defRows:
-  curDef = separatePlayers(i)
-  #once defense stats are cleaned need to fill the rest of the list as empty
-  noneList = ["" for i in range(len(allPlayers[0]) - len(curDef))]
-  for j in noneList:
-    curDef.append(j)
-  allPlayers.append(curDef)
+  teamNum = row["TeamNumber"]
+  #where the connection is made to the truffle cbs website
+  url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/team:{}/period-{}:f/TRUFFLEoffense/".format(teamNum,week)
+  response = requests.get(url, cookies=cookies, headers=headers)
+  soup = BeautifulSoup(response.content, 'html.parser')
+    
+  #finds the outermost 'tables' containing the stats(3 off,kicker,dst in order)
+  tbls =  soup.find_all("table", class_="data pinHeader borderTop")
+  tblOffense = tbls[0]
+  tblDefense = tbls[2]
+  
+  #gets the column header information as 'label'
+  combined = tblOffense.find_all("tr", class_="label")
+  label = combined[1]
+  
+  #calls function to clean column headers stored as cols (used in pandas df)
+  cols = separateColumns(label)
+  
+  #store all players per team as list of lists
+  allPlayers = []
+  
+  #regex used to find row1/2 (\d means only numbers following exact match of row)
+  allRowsOffense = tblOffense.find_all("tr", class_=re.compile("row\d"))
+  
+  #for every player - clean the row and add to list of lists
+  for i in allRowsOffense:
+    allPlayers.append(separatePlayers(i))
+  
+  # simlar to offense but with slightly different logic
+  defRows = tblDefense.find_all("tr", {"class": re.compile("row\d")})
+  for i in defRows:
+    curDef = separatePlayers(i)
+    #once defense stats are cleaned need to fill the rest of the list as empty
+    noneList = ["" for i in range(len(allPlayers[0]) - len(curDef))]
+    for j in noneList:
+      curDef.append(j)
+    allPlayers.append(curDef)
+    
+  #pandas df to represent team
+  df = pd.DataFrame(allPlayers, columns=cols)
+  df = df.drop(columns=["Action"])
   
 
-#pandas df to represent team
-df = pd.DataFrame(allPlayers, columns=cols)
-df = df.drop(columns=["Action"])
+  #lamba functions to split player name team and position
+  getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
+  getPosition = lambda y: pd.Series([i for i in y.split(" ")][-1])
+  getPlayer = lambda z: pd.Series(' '.join([i for i in z.split(" ")][:-1]))
 
-#lamba functions to split player name team and position
-getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
-getPosition = lambda y: pd.Series([i for i in y.split(" ")][-1])
-getPlayer = lambda z: pd.Series(' '.join([i for i in z.split(" ")][:-1]))
-
-#apply lambda fcts to correct columns
-playerTeam = df["Player"].apply(getNFLTeam)
-position = playerTeam[0].apply(getPosition)
-player =  playerTeam[0].apply(getPlayer)
-nfl = pd.Series(playerTeam[1])
+  
+  #apply lambda fcts to correct columns
+  playerTeam = df["Player"].apply(getNFLTeam)
+  position = playerTeam[0].apply(getPosition)
+  player =  playerTeam[0].apply(getPlayer)
+  nfl = pd.Series(playerTeam[1])
 
 
-#add/remove columns for TRUFFLE formatting
-df = df.drop(["Bye","Rost", "Start"],axis=1)
-df["Player"] = player
-df.insert(0,"Season", season)
-df.insert(1,"Week", week)
-df.insert(3,"Pos", position[0])
-df.insert(5,"NFL", nfl)
+  #add/remove columns for TRUFFLE formatting
+  df = df.drop(["Bye","Rost", "Start"],axis=1)
+  df["Player"] = player
+  df.insert(0,"Season", season)
+  df.insert(1,"Week", week)
+  df.insert(3,"Pos", position[0])
+  df.insert(5,"NFL", nfl)
+  
 
-#moves defensive data - empties out old 
-compToAvg = df.iloc[[9]]["Comp"].values[0]
-df.at[9,"Avg"] = compToAvg
-df.at[9, "Comp"] = ''
-total = df.iloc[[9]]["ATT"].values[0]
-df.at[9,"Total"] = total
-df.at[9, "ATT"] = ''
-df = df.drop(["OVP"],axis=1)
+  #moves defensive data - empties out old
+  finalVal = len(df.index) - 1
+  compToAvg = df.iloc[[finalVal]]["Comp"].values[0]
+  df.at[finalVal,"Avg"] = compToAvg
+  df.at[finalVal, "Comp"] = ''
+  total = df.iloc[[finalVal]]["ATT"].values[0]
+  df.at[finalVal,"Total"] = total
+  df.at[finalVal, "ATT"] = ''
+  df = df.drop(["OVP"],axis=1)
 
-df = df.replace('', np.nan, regex = True)
-#stores as csv
-filepath = "dre/puffinsPOC.csv"
-df.to_csv(filepath, index=False)
-print(df)
+  df = df.replace('', np.nan, regex = True)
+  
+  #on the first iteration we need to 'create' the main pandas table - it is naive to the size before scraping
+  if index == 0:
+    dfGlobal = df
+  else:
+    dfGlobal = pd.concat([dfGlobal,df], ignore_index=True)
+
+
+print("pandas table created")
+print(dfGlobal)
+
+# stores as csv
+filepath = "dre/combinedPOC.csv"
+dfGlobal.to_csv(filepath, index=False)
+print("stored file in location {}".format(filepath))
