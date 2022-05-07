@@ -762,12 +762,13 @@ contractDefFooter <- colDef(minWidth = 75, style = function(value) {
   footer = function(values) sum(values)
 )
 
-contractDefFooternarrow <- colDef(name = "Yr", minWidth = 30, style = function(value) {
-  background <- ifelse(value == 1, RBcolor,
-                       ifelse(value == 2, TEcolor,
-                              ifelse(value == 3, WRcolor, QBcolor)))
-  list(background = background)},
-  footer = function(values) sum(values)
+contractDefFooternarrow <- colDef(name = "Yr", minWidth = 30,
+                                  style = function(value) {
+                                    background <- ifelse(value == 1, RBcolor,
+                                                         ifelse(value == 2, TEcolor,
+                                                                ifelse(value == 3, WRcolor, QBcolor)))
+                                    list(background = background)},
+                                  footer = function(values) sum(values)
 )
 
 futurecolDef <- colDef(align = 'right', maxWidth = 75, cell = function(value) {

@@ -245,8 +245,9 @@ tagList(
                                       fluidRow(column(width = 9,
                                                       h2("Trade Machine"),
                                                       p("An interactive, and helpful tool, designed to be a peace offering from the Commissioner for making the rules so complicated."),),
-                                               column(width = 3,
-                                                      selectInput("tmview", "Team View", c("Overview", "Contracts", "Box Score", "Advanced", "Consistency")))
+                                               column(width = 3#,
+                                                      #selectInput("tmview", "Team View", c("Overview", "Contracts", "Box Score", "Advanced", "Consistency"))
+                                               )
                                                )
 
                                         ),
@@ -277,6 +278,21 @@ tagList(
                                      wellPanel(class = "well",
                                                p(HTML("<span style=color:#84A4D8;font-size:14px><b>Players in Trade Team 2:</b></span>")),
                                                reactableOutput('tmpls2')
+                                     )
+                              )
+                            ),
+
+                            fluidRow(
+                              column(width = 6,
+                                     wellPanel(class = "well",
+                                               p(HTML("<span style=color:#84A4D8;font-size:14px><b>Success?</b></span>")),
+                                               textOutput('success')
+                                     )
+                              ),
+                              column(width = 6,
+                                     wellPanel(class = "well",
+                                               p(HTML("<span style=color:#84A4D8;font-size:14px><b>Trade-Adjusted Caps:</b></span>")),
+                                               reactableOutput('newcaps')
                                      )
                               )
                             )

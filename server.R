@@ -72,7 +72,17 @@ shinyServer(function(input, output, session) {
                                          bar_chart(value, width = width)
                                      }
                       )
-                  ))
+                  ),
+                  defaultColDef = colDef(
+                      style = JS("function(rowInfo, colInfo, state) {
+      // Highlight sorted columns
+      for (let i = 0; i < state.sorted.length; i++) {
+        if (state.sorted[i].id === colInfo.id) {
+          return { background: 'rgba(0, 0, 0, 0.03)' }
+        }
+      }
+    }"))
+                  )
     })
     
     #home weekly top 5 qb
@@ -160,13 +170,13 @@ shinyServer(function(input, output, session) {
     #tpheader
     output$tpheader <- renderReactable({
         reactable(
-            teams[teams$FullName == input$tmportaltm, c("FullName", "Logo")],
+            teams[teams$FullName == input$tmportaltm, c("FullName", "Logo", "DivLogo")],
             sortable = FALSE,
             compact = TRUE,
             columns = list(
                 FullName = colDef(name = "Selected Team:",
                                   headerStyle = list(color = "#84A4D8", fontSize = 14, fontWeight = 800),
-                                  minWidth = 300,
+                                  minWidth = 250,
                                   cell = function(value) {
                                       owner <- teams$Owner[teams$FullName == input$tmportaltm]
                                       col <- teams$Primary[teams$FullName == input$tmportaltm]
@@ -176,7 +186,19 @@ shinyServer(function(input, output, session) {
                                       )
                                   }
                 ),
-                Logo = colDef(name = "", 
+                Logo = colDef(name = "",
+                              class = "border-right",
+                              align="center", 
+                              minWidth = 80, 
+                              cell = function(value) {
+                                  img_src <- knitr::image_uri(value)
+                                  image <- img(src = img_src, height = "70px", alt = value)
+                                  tagList(
+                                      div(style = list(display = "inline-block"), image)
+                                  )
+                              }),
+                DivLogo = colDef(name = "",
+                              class = "border-left",
                               align="center", 
                               minWidth = 80, 
                               cell = function(value) {
@@ -1042,7 +1064,7 @@ shinyServer(function(input, output, session) {
     
     #trademachine ----
     output$tmtm1 <- renderReactable({
-        reactable(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm1]][order(match(Pos, positionorder), -Salary)][, !c("TRUFFLE", "G", "Bye", "PosRk")],
+        reactable(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm1]][order(match(Pos, positionorder), -Salary)][Pos != "DC", !c("TRUFFLE", "G", "Bye", "PosRk")],
                   selection = "multiple", onClick = "select",
                   defaultSortOrder = "desc",
                   sortable = F,
@@ -1073,7 +1095,7 @@ shinyServer(function(input, output, session) {
     })
     
     output$tmtm2 <- renderReactable({
-        reactable(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm2]][order(match(Pos, positionorder), -Salary)][, !c("TRUFFLE", "G", "Bye", "PosRk")],
+        reactable(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm2]][order(match(Pos, positionorder), -Salary)][Pos != "DC", !c("TRUFFLE", "G", "Bye", "PosRk")],
                   selection = "multiple", onClick = "select",
                   defaultSortOrder = "desc",
                   sortable = F,
@@ -1102,8 +1124,35 @@ shinyServer(function(input, output, session) {
         #tmp2 <- rosters[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm2]]
     })
     
+    selectedtm1 <- reactive(getReactableState("tmtm1", "selected"))
+    selectedtm2 <- reactive(getReactableState("tmtm2", "selected"))
+    
+    tm1newcap <- reactive({data.frame(
+        Team = c(input$tmtm1, "joke"),
+        Butt = c("juicy", "booty")
+    )})
+    
+    test <- data.table(
+        TRF = c("AFL", "CC"),
+        Team = c("Arctic Fighting Lemurloos", "Clarkston Chuckers"),
+        Salary = c(502, 488)
+    )
+    
+    output$newcaps <- renderReactable({
+        reactable(test,
+                  columns = list(
+                      TRF = trfDef,
+                      Salary = colDef(minWidth = 75, 
+                                      format = colFormat(digits=0, prefix = "$"),
+                                      style = function(value) {
+                                          background <- ifelse(value <= 500, QBcolor, RBcolor)
+                                          list(background = background)}
+                      )
+                  )
+        )
+    })
+    
     output$tmpls1 <- renderReactable({
-        selectedtm1 <- reactive(getReactableState("tmtm1", "selected"))
         
         if (length(selectedtm1()) >= 1) {
         
@@ -1133,7 +1182,7 @@ shinyServer(function(input, output, session) {
     })
     
     output$tmpls2 <- renderReactable({
-        selectedtm2 <- reactive(getReactableState("tmtm2", "selected"))
+        
         
         if (length(selectedtm2()) >= 1) {
             
@@ -1160,6 +1209,10 @@ shinyServer(function(input, output, session) {
                       defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
             )
         }
+    })
+    
+    output$success <- renderText({
+        "Holy Shit! It actually worked"
     })
     
     #capcorner ----
@@ -1229,7 +1282,7 @@ shinyServer(function(input, output, session) {
                             showarrow = FALSE)
     })
     
-    #recordbooks ----
+    #history books ----
     #record books fantasy points
     output$recordfpts <- renderReactable({
         if (input$recordteams == "TRUFFLE") {
