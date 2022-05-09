@@ -149,7 +149,7 @@ def separatePlayers(rows):
 
 teamNum = row["TeamNumber"]
 #where the connection is made to the truffle cbs website
-url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:{}/period-{}:p/TRUFFLEoffense/?print_rows=9999".format("FLEX",week)
+url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:FLEX/period-{}:p/TRUFFLEoffense/?print_rows=9999".format(week)
 response = requests.get(url, cookies=cookies, headers=headers)
 soup = BeautifulSoup(response.content, 'html.parser')
 
@@ -207,8 +207,8 @@ print(df)
 
 
 # stores as csv
-filepath = "dre/allScoringWeeklyPOC.csv"
-df.to_csv(filepath, index=False)
-print("\nstored file in location {}".format(filepath))
+# filepath = "dre/allScoringWeeklyPOC.csv"
+# df.to_csv(filepath, index=False)
+# print("\nstored file in location {}".format(filepath))
 print("\n\nscript complete. execution time:")
 print(datetime.datetime.now() - begin_time)

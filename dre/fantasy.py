@@ -9,7 +9,6 @@ import pandas as pd
 import numpy as np
 import re
 from bs4 import BeautifulSoup
-from pprint import pprint
 
 
 #below are 'keys' of some sort from copy and pasting - unclear how they fit in left for reference
@@ -215,9 +214,6 @@ for index, row in teamsPd.iterrows():
   total = df.iloc[[finalVal]]["ATT"].values[0]
   df.at[finalVal,"Total"] = total
   df.at[finalVal, "ATT"] = ''
-  # df = df.drop(["OVP"],axis=1)
-
-  # df = df.replace('', np.nan, regex = True)
   
   #on the first iteration we need to 'create' the main pandas table - it is naive to the size before scraping
   if index == 0:
@@ -225,25 +221,33 @@ for index, row in teamsPd.iterrows():
   else:
     dfGlobal = pd.concat([dfGlobal,df], ignore_index=True)
 
+
 dfGlobal = dfGlobal.replace('', "NA", regex = True)
-# dfGlobal["FPts"] = dfGlobal["Total"]
 
 masterFile = "dre/fantasy_new_copy.csv"
 
+#read the existing csv as a pd df for error checking
 masterDf = pd.read_csv(masterFile)
+
+#reassign the columns to be equal to that of the existing csv
 dfGlobal.columns = masterDf.columns
-# years = list(str(masterDf['Season']))
+
+#combine the existing year/week combos into a list of tuples
 years = [str(i) for i in masterDf["Season"]]
 weeks = [str(i) for i in masterDf["Week"]]
-currentWeekYear = (season,week)
 allWeeksYears = list(zip(years,weeks))
 
+#use current input week year tuple as comparison
+currentWeekYear = (season,week)
 
+#if year week trying to be written already exists print error output - will not write 
 if (currentWeekYear in allWeeksYears):
   print("AN ERROR WAS ENCOUNTERED. YOU ARE TRYING TO WRITE DATA FOR WEEK {} IN SEASON {}.".format(week, season))
   print("THIS DATA ALREADY EXISTS IN THE FILE {}. DOUBLE CHECK DUMBASS.".format(masterFile))
   
+#if the data isn't in the legacy already append to it
 else:
+  #player name replacements
   dfGlobal['Player'] = dfGlobal['Player'].str.replace(r'.', '')
   dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' Jr', '')
   dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' Sr', '')
@@ -251,12 +255,14 @@ else:
   dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' III', '')
   dfGlobal['Player'] = dfGlobal['Player'].str.replace(r'Will Fuller V', 'Will Fuller')
   
-  # append data frame to CSV file
+  #add newline to end of file - fixes error of writing into last cell instead of new row
   file_object = open(masterFile, 'a')
   file_object.write('\n')
   file_object.close()
 
+  # append data frame to CSV file
   dfGlobal.to_csv(masterFile, mode='a', index=False, header=False)
+  
   print("Data appended successfully.")
   print(dfGlobal)
   print("\n\nscript complete. execution time:")
