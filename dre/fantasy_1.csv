@@ -1,0 +1,112 @@
+Season,Week,TRUFFLE,Pos,Player,NFL,Opp,Comp,ATT,Yds,TD,Int,Att,Yds,TD,1stD,Tar,Rec,Yds,TD,1stD,Lost,Avg,Total
+2022,1,AFL,RB,Boston Scott,PHI,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,AFL,RB,Joe Mixon,CIN,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,AFL,WR,Terry McLaurin,WAS,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,AFL,QB,Joe Burrow,CIN,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,AFL,WR,A.J. Brown,PHI,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,AFL,TE,George Kittle,SF,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,AFL,WR,Nico Collins,HOU,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,AFL,QB,Trey Lance,SF,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,AFL,DST,Dolphins,MIA,TBA,,,,,,,,,,,,,,,,-,0
+2022,1,CC,QB,Kirk Cousins,MIN,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CC,WR,Marvin Jones,JAC,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CC,RB,Alvin Kamara,NO,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CC,RB,Chase Edmonds,MIA,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CC,TE,Mike Gesicki,MIA,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CC,QB,Josh Allen,BUF,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CC,WR,Chase Claypool,PIT,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CC,WR,Donovan Peoples-Jones,CLE,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CC,RB,Jonathan Taylor,IND,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CC,DST,Cardinals,ARI,TBA,,,,,,,,,,,,,,,,-,0
+2022,1,CRB,QB,Ryan Tannehill,TEN,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CRB,TE,Travis Kelce,KC,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CRB,WR,Russell Gage,TB,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CRB,RB,Ronald Jones,KC,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CRB,WR,Michael Gallup,DAL,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CRB,RB,J.K. Dobbins,BAL,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CRB,WR,DeVonta Smith,PHI,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CRB,RB,Antonio Gibson,WAS,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CRB,WR,Amon-Ra St. Brown,DET,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CRB,DST,Cowboys,DAL,TBA,,,,,,,,,,,,,,,,-,0
+2022,1,ELP,QB,Aaron Rodgers,GB,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,ELP,TE,Mark Andrews,BAL,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,ELP,WR,Tyreek Hill,MIA,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,ELP,WR,Deebo Samuel,SF,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,ELP,WR,Michael Pittman,IND,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,ELP,QB,Mac Jones,NE,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,ELP,WR,Marquise Brown,ARI,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,ELP,RB,Clyde Edwards-Helaire,KC,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,ELP,RB,A.J. Dillon,GB,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,ELP,DST,49ers,SF,TBA,,,,,,,,,,,,,,,,-,0
+2022,1,FRR,RB,Christian McCaffrey,CAR,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,FRR,QB,Patrick Mahomes,KC,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,FRR,RB,Rashaad Penny,SEA,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,FRR,TE,T.J. Hockenson,DET,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,FRR,RB,D'Andre Swift,DET,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,FRR,RB,Javonte Williams,DEN,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,FRR,WR,Jaylen Waddle,MIA,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,FRR,WR,Elijah Moore,NYJ,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,FRR,WR,Ja'Marr Chase,CIN,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,FRR,DST,Chargers,LAC,TBA,,,,,,,,,,,,,,,,-,0
+2022,1,GF,QB,Russell Wilson,DEN,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,GF,QB,Derek Carr,LV,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,GF,WR,Keenan Allen,LAC,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,GF,WR,Sterling Shepard,NYG,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,GF,RB,James Conner,ARI,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,GF,WR,Kendrick Bourne,NE,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,GF,TE,Noah Fant,SEA,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,GF,RB,Michael Carter,NYJ,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,GF,WR,Amari Rodgers,GB,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,GF,DST,Patriots,NE,TBA,,,,,,,,,,,,,,,,-,0
+2022,1,MAM,QB,Justin Fields,CHI,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MAM,WR,Mike Evans,TB,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MAM,RB,Kenyan Drake,LV,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MAM,RB,Sony Michel,LAR,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MAM,TE,Dallas Goedert,PHI,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MAM,WR,Courtland Sutton,DEN,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MAM,QB,Tua Tagovailoa,MIA,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MAM,WR,Chris Godwin,TB,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MAM,RB,Chuba Hubbard,CAR,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MAM,DST,Bills,BUF,TBA,,,,,,,,,,,,,,,,-,0
+2022,1,MCM,QB,Dak Prescott,DAL,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MCM,RB,Cordarrelle Patterson,ATL,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MCM,WR,Stefon Diggs,BUF,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MCM,RB,Darrel Williams,KC,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MCM,WR,Hunter Renfrow,LV,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MCM,QB,Justin Herbert,LAC,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MCM,TE,Kyle Pitts,ATL,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MCM,DST,Buccaneers,TB,TBA,,,,,,,,,,,,,,,,-,0
+2022,1,MWM,QB,Tom Brady,TB,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MWM,WR,Cooper Kupp,LAR,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MWM,RB,Aaron Jones,GB,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MWM,TE,C.J. Uzomah,NYJ,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MWM,WR,Van Jefferson,LAR,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MWM,WR,DK Metcalf,SEA,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MWM,RB,Rhamondre Stevenson,NE,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MWM,DST,Chiefs,KC,TBA,,,,,,,,,,,,,,,,-,0
+2022,1,NN,WR,Odell Beckham Jr.,LAR,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,NN,TE,Tyler Higbee,LAR,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,NN,WR,Cole Beasley,BUF,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,NN,WR,Amari Cooper,CLE,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,NN,RB,Justin Jackson,LAC,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,NN,WR,Christian Kirk,JAC,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,NN,QB,Kyler Murray,ARI,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,NN,RB,Cam Akers,LAR,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,NN,TE,Pat Freiermuth,PIT,TBA,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,1,VD,WR,Davante Adams,LV,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,VD,RB,Derrick Henry,TEN,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,VD,TE,Dalton Schultz,DAL,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,VD,WR,Diontae Johnson,PIT,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,VD,WR,Darnell Mooney,CHI,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,VD,RB,David Montgomery,CHI,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,VD,RB,Austin Ekeler,LAC,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,VD,WR,Laviska Shenault Jr.,JAC,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,VD,QB,Zach Wilson,NYJ,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,VD,DST,Colts,IND,TBA,,,,,,,,,,,,,,,,-,0
+2022,1,WLW,QB,Carson Wentz,WAS,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,WLW,WR,Michael Thomas,NO,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,WLW,WR,D.J. Moore,CAR,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,WLW,QB,Lamar Jackson,BAL,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,WLW,RB,Najee Harris,PIT,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,WLW,WR,Tee Higgins,CIN,TBA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,WLW,WR,CeeDee Lamb,DAL,TBA,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
