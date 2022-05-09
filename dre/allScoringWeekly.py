@@ -163,7 +163,7 @@ label = combined[1]
 #calls function to clean column headers stored as cols (used in pandas df)
 cols = separateColumns(label)
 
-print(cols)
+# print(cols)
 
 #regex used to find row1/2 (\d means only numbers following exact match of row)
 allRows = tbls.find_all("tr", class_=re.compile("row\d"))
@@ -204,4 +204,10 @@ df.insert(1,"Week", week)
 df.insert(3,"Pos", position[0])
 df.insert(5,"NFL", nfl)
 
+print(df.columns)
 print(df)
+
+
+# stores as csv
+filepath = "dre/allScoringWeeklyPOC.csv"
+df.to_csv(filepath, index=False)
