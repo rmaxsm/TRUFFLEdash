@@ -44,6 +44,8 @@ greenscale <- "#57E19F"
 redscale <- "#F48E90"
 fptsbackground <- "#F2F2F2"
 fptscolor <- "#1E65D2"
+textgreen <- "#00B050"
+textred <- "#C00000"
 
 #graphing plotly palet and font
 ft <- list(
@@ -558,6 +560,7 @@ trfDef <- colDef(name = "TRF", align = 'center', maxWidth = 75,
                    class <- paste0("trf team-", value)
                    htmltools::div(class = class, value)}
 )
+
 trfDeffilt <- colDef(name = "TRF", align = 'center', filterable = T, maxWidth = 75, 
                      cell = function(value) {
                        class <- paste0("trf team-", value)
@@ -565,6 +568,27 @@ trfDeffilt <- colDef(name = "TRF", align = 'center', filterable = T, maxWidth = 
 )
 
 posDef <- colDef(align = "center", maxWidth = 47, filterable = T, style = function(value) {
+  if (value == "QB") {
+    color <- QBcolor
+  } else if (value == "RB") {
+    color <- RBcolor
+  } else if (value == "WR") {
+    color <- WRcolor
+  } else if (value == "TE") {
+    color <- TEcolor
+  } else if (value == "DST") {
+    color <- DSTcolor
+  }  else if (value == "DC") {
+    color <- DCcolor
+  }  else if (grepl("IR", value)) {
+    color <- IRcolor
+  } else {
+    color <- "white"
+  }
+  list(background = color)
+})
+
+posDefnofilt <- colDef(align = "center", maxWidth = 47, filterable = F, style = function(value) {
   if (value == "QB") {
     color <- QBcolor
   } else if (value == "RB") {

@@ -470,14 +470,14 @@ shinyServer(function(input, output, session) {
         reactable(ppbios[Player %in% input$player][order(-Salary)],
                   pagination = F,
                   height = 'auto',
-                  filterable = T,
+                  filterable = F,
                   highlight = T,
                   borderless = T,
                   compact = T,
                   resizable = T,
                   columns = list(
                       TRUFFLE = trfDef,
-                      Pos = posDef,
+                      Pos = posDefnofilt,
                       Player = colDef(minWidth = 225),
                       NFL = colDef(align = 'left'),
                       AgePH = colDef(name = "Age"),
@@ -497,7 +497,7 @@ shinyServer(function(input, output, session) {
         reactable(seasons[Player %in% input$player][order(-Season, -FPts)][, !c("NFL", "Pos","FL", "PosRk")],
                   pagination = F,
                   height = 'auto',
-                  filterable = T,
+                  filterable = F,
                   highlight = T,
                   borderless = T,
                   compact = T,
@@ -1063,13 +1063,19 @@ shinyServer(function(input, output, session) {
     })
     
     #trademachine ----
+    
+    tmoverviewtm1 <- reactive(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm1]][order(match(Pos, positionorder), -Salary)])
+    tmoverviewtm2 <- reactive(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm2]][order(match(Pos, positionorder), -Salary)])
+    contractstm1 <- reactive(contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm1]][order(match(Pos, positionorder), -Salary)][selectedtm1(), ])
+    contractstm2 <- reactive(contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm2]][order(match(Pos, positionorder), -Salary)][selectedtm2(), ])
+    
     output$tmtm1 <- renderReactable({
-        reactable(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm1]][order(match(Pos, positionorder), -Salary)][Pos != "DC", !c("TRUFFLE", "G", "Bye", "PosRk")],
+      #formatted reactable output
+        reactable(tmoverviewtm1()[,!c("TRUFFLE", "G", "Bye", "PosRk")],
                   selection = "multiple", onClick = "select",
                   defaultSortOrder = "desc",
                   sortable = F,
                   pagination = FALSE,
-                  #height = 500,
                   highlight = T,
                   filterable = F,
                   borderless = T,
@@ -1090,12 +1096,10 @@ shinyServer(function(input, output, session) {
                   ),
                   defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
         )
-        
-        #tmp1 <- rosters[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm1]]
     })
     
     output$tmtm2 <- renderReactable({
-        reactable(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm2]][order(match(Pos, positionorder), -Salary)][Pos != "DC", !c("TRUFFLE", "G", "Bye", "PosRk")],
+        reactable(tmoverviewtm2()[,!c("TRUFFLE", "G", "Bye", "PosRk")],
                   selection = "multiple", onClick = "select",
                   defaultSortOrder = "desc",
                   sortable = F,
@@ -1120,43 +1124,18 @@ shinyServer(function(input, output, session) {
                   ),
                   defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
         )
-        
-        #tmp2 <- rosters[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm2]]
     })
     
+    #storing the selections from trade machine team tables
     selectedtm1 <- reactive(getReactableState("tmtm1", "selected"))
     selectedtm2 <- reactive(getReactableState("tmtm2", "selected"))
     
-    tm1newcap <- reactive({data.frame(
-        Team = c(input$tmtm1, "joke"),
-        Butt = c("juicy", "booty")
-    )})
-    
-    test <- data.table(
-        TRF = c("AFL", "CC"),
-        Team = c("Arctic Fighting Lemurloos", "Clarkston Chuckers"),
-        Salary = c(502, 488)
-    )
-    
-    output$newcaps <- renderReactable({
-        reactable(test,
-                  columns = list(
-                      TRF = trfDef,
-                      Salary = colDef(minWidth = 75, 
-                                      format = colFormat(digits=0, prefix = "$"),
-                                      style = function(value) {
-                                          background <- ifelse(value <= 500, QBcolor, RBcolor)
-                                          list(background = background)}
-                      )
-                  )
-        )
-    })
-    
+    #outputs of the players in the trade
     output$tmpls1 <- renderReactable({
         
         if (length(selectedtm1()) >= 1) {
         
-        reactable(contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm1]][order(match(Pos, positionorder), -Salary)][selectedtm1(), ][, !c("TRUFFLE", "Age")],
+        reactable(contractstm1()[, !c("TRUFFLE", "Age")],
                   defaultSortOrder = "desc",
                   pagination = FALSE,
                   sortable = F,
@@ -1186,7 +1165,7 @@ shinyServer(function(input, output, session) {
         
         if (length(selectedtm2()) >= 1) {
             
-            reactable(contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm2]][order(match(Pos, positionorder), -Salary)][selectedtm2(), ][, !c("TRUFFLE", "Age")],
+            reactable(contractstm2()[, !c("TRUFFLE", "Age")],
                       defaultSortOrder = "desc",
                       pagination = FALSE,
                       sortable = F,
@@ -1211,8 +1190,104 @@ shinyServer(function(input, output, session) {
         }
     })
     
-    output$success <- renderText({
-        "Holy Shit! It actually worked"
+    tm1newcap <- reactive(sum(tmoverviewtm1()$Salary, na.rm = T) + sum(contractstm2()$Salary, na.rm = T) - sum(contractstm1()$Salary, na.rm =T))
+    tm2newcap <- reactive(sum(tmoverviewtm2()$Salary, na.rm = T) + sum(contractstm1()$Salary, na.rm = T) - sum(contractstm2()$Salary, na.rm =T))
+    
+
+    
+    #success field generation
+    output$tradesuccess <- renderReactable({
+      traderesult <- data.table(
+        Outcome = ifelse(tm1newcap() <= 500 & tm2newcap() <= 500,
+                         "Success!",
+                         "Trade Fails"
+        ),
+        Reason = ifelse(tm1newcap() <= 500 & tm2newcap() <= 500,
+                        "Both teams stay below the $500 salary cap.",
+                        "At least 1 of 2 teams exceeds the $500 salary cap."
+        ),
+        Icon = ifelse(tm1newcap() <= 500 & tm2newcap() <= 500,
+                      "www/graphics/tradesuccess.png",
+                      "www/graphics/tradefail.png"
+        )
+      )
+      
+      if (length(selectedtm1()) >= 1 | length(selectedtm2()) >= 1 ) {
+        reactable(traderesult,
+                  columns = list(
+                    Outcome = colDef(name = "",
+                                     #headerStyle = list(color = "#84A4D8", fontSize = 14, fontWeight = 800),
+                                     minWidth = 250,
+                                     style = function(value) {
+                                       backg <- ifelse(value == "Success!", QBcolor, RBcolor)
+                                       list(background = backg)
+                                     },
+                                     cell = function(value, index) {
+                                       reason <- traderesult$Reason
+                                       col <- ifelse(value == "Success!", textgreen, textred)
+                                       backg <- ifelse(value == "Success!", QBcolor, RBcolor)
+                                       div(
+                                         div(style = list(fontWeight = 800, fontSize=26, color = col), value),
+                                         div(style = list(fontSize = 14), reason)
+                                       )
+                                     }
+                    ),
+                    Reason = colDef(show = FALSE),
+                    Icon = colDef(name = "", align="center", minWidth = 30,
+                                  style = function(index) {
+                                    backg <- ifelse(traderesult$Outcome == "Success!", QBcolor, RBcolor)
+                                    list(background = backg)
+                                  },
+                                  cell = function(value) {
+                                    img_src <- knitr::image_uri(value)
+                                    image <- img(src = img_src, height = "50px", alt = value)
+                                    tagList(
+                                      div(style = list(display = "inline-block"), image)
+                                    )
+                                  })
+                  )
+        )
+      }
+    })
+    
+    posttrade <- reactive(data.table(
+      TRF = c(teams$Abbrev[teams$FullName == input$tmtm1], teams$Abbrev[teams$FullName == input$tmtm2 ]),
+      Team = c(input$tmtm1, input$tmtm2),
+      PlayersReceived = c(length(selectedtm2()),
+                          length(selectedtm1())),
+      Net = c(sum(contractstm2()$Salary, na.rm = T) - sum(contractstm1()$Salary, na.rm =T),
+              sum(contractstm1()$Salary, na.rm =T) - sum(contractstm2()$Salary, na.rm = T)
+      ),
+      Salary = c(tm1newcap(),
+                 tm2newcap()
+      )
+    )
+    )
+    
+    #reactable output of post trade salary caps
+    output$tradecapresults <- renderReactable({
+      #data table of the two teams involved and their adjusted salary caps, after the trade
+      reactable(posttrade(),
+                compact = T,
+                resizable = F,
+                columns = list(
+                  TRF = trfDef,
+                  PlayersReceived = colDef(name = "Players Received"),
+                  Net = colDef(name = "Net Salary", 
+                               minWidth = 50,
+                               format = colFormat(digits=0, prefix = "$"),
+                               style = function(value) {
+                                 color <- ifelse(value < 0, IRcolor, 'black')
+                                 list(color = color)}),
+                  Salary = colDef(minWidth = 50,
+                                  align = 'right',
+                                  format = colFormat(digits=0, prefix = "$"),
+                                  style = function(value) {
+                                    background <- ifelse(value <= 500, QBcolor, RBcolor)
+                                    list(background = background)}
+                  )
+                )
+      )
     })
     
     #capcorner ----
