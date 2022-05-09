@@ -1,6 +1,6 @@
-#this is a python script. It will ask you for year and week then get all the information 
-#from cbs for each team for that week and year. Error handling is not great tbh but will do some checking
-#just input the right stuff 
+#this is a python script. It will ask for the week then get all scoring data
+#it should append to a current csv file - can stay hardcoded or ask for filepath.
+#currently POC concept. 
 
 import os
 import requests
@@ -118,12 +118,11 @@ for index, row in teamsPd.iterrows():
 def getTeamAbbreviation(team):
   try:
     if(team == "W "):
-      s = "W ({}/{})".format(todays_date.month, todays_date.day)
-      return s 
+      return "W ({}/{})".format(todays_date.month, todays_date.day) 
     return teamsDict[team]
   except Exception as exp:
     print("An Error Occuring while trying to get the team abbreviation for " + team)
-    return
+    return "err"
 
 #separates the column names
 #returns list representing the columns for tables 
@@ -143,7 +142,6 @@ def separatePlayers(rows):
       curRow.append("")
     elif itr == 1:    #second value convert to team abbreviation
       curRow.append(getTeamAbbreviation(i.getText()))
-      # curRow.append(i.getText())
     else:       #after first two iterations just get exact data from source
       curRow.append(i.getText())
     itr += 1
@@ -211,3 +209,6 @@ print(df)
 # stores as csv
 filepath = "dre/allScoringWeeklyPOC.csv"
 df.to_csv(filepath, index=False)
+print("\nstored file in location {}".format(filepath))
+print("\n\nscript complete. execution time:")
+print(datetime.datetime.now() - begin_time)

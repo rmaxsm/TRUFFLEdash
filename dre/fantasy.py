@@ -231,8 +231,11 @@ dfGlobal = dfGlobal.replace('', np.nan, regex = True)
 print("pandas table created")
 print(dfGlobal)
 
+
+#check if week not in master - append if week not exist
+
 # stores as csv
-filepath = "dre/teamScoringWeek_{}.csv".format(week)
+filepath = "dre/fantasy_{}.csv".format(week)
 dfGlobal.to_csv(filepath, index=False)
 print("\nstored file in location {}".format(filepath))
 print("\n\nscript complete. execution time:")
