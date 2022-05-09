@@ -557,14 +557,20 @@ bar_chart <- function(label, width = "100%", height = "16px", fill = QBcolor, ba
 #column definitions
 trfDef <- colDef(name = "TRF", align = 'center', maxWidth = 75, 
                  cell = function(value) {
+                   teamnum <- teams$TeamNum[teams$Abbrev == value]
+                   team_url <- sprintf("https://theradicalultimatefflexperience.football.cbssports.com/teams/%s", teamnum)
                    class <- paste0("trf team-", value)
-                   htmltools::div(class = class, value)}
+                   tags$a(href = team_url, target = "_blank", class = class, value)
+                 }
 )
 
 trfDeffilt <- colDef(name = "TRF", align = 'center', filterable = T, maxWidth = 75, 
                      cell = function(value) {
+                       teamnum <- teams$TeamNum[teams$Abbrev == value]
+                       team_url <- sprintf("https://theradicalultimatefflexperience.football.cbssports.com/teams/%s", teamnum)
                        class <- paste0("trf team-", value)
-                       htmltools::div(class = class, value)}
+                       tags$a(href = team_url, target = "_blank", class = class, value)
+                     }
 )
 
 posDef <- colDef(align = "center", maxWidth = 47, filterable = T, style = function(value) {

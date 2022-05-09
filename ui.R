@@ -285,13 +285,13 @@ tagList(
                             fluidRow(
                               column(width = 6,
                                      wellPanel(class = "well",
-                                               p(HTML("<span style=color:#84A4D8;font-size:14px><b>Trade Outcome</b></span>")),
+                                               p(HTML("<span style=color:#84A4D8;font-size:14px><b>Trade Outcome:</b></span>")),
                                                reactableOutput('tradesuccess')
                                      )
                               ),
                               column(width = 6,
                                      wellPanel(class = "well",
-                                               p(HTML("<span style=color:#84A4D8;font-size:14px><b>Trade-Adjusted Caps</b></span>")),
+                                               p(HTML("<span style=color:#84A4D8;font-size:14px><b>Trade-Adjusted Salary Caps:</b></span>")),
                                                reactableOutput('tradecapresults')
                                      )
                               )
