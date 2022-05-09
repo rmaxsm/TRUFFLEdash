@@ -215,7 +215,7 @@ for index, row in teamsPd.iterrows():
   total = df.iloc[[finalVal]]["ATT"].values[0]
   df.at[finalVal,"Total"] = total
   df.at[finalVal, "ATT"] = ''
-  df = df.drop(["OVP"],axis=1)
+  # df = df.drop(["OVP"],axis=1)
 
   # df = df.replace('', np.nan, regex = True)
   
@@ -224,43 +224,40 @@ for index, row in teamsPd.iterrows():
     dfGlobal = df
   else:
     dfGlobal = pd.concat([dfGlobal,df], ignore_index=True)
-  
-  
 
-dfGlobal = dfGlobal.replace('', np.nan, regex = True)
+dfGlobal = dfGlobal.replace('', "NA", regex = True)
+# dfGlobal["FPts"] = dfGlobal["Total"]
 
-
-print("pandas table created")
-print(dfGlobal.columns)
-
-
-#check if week not in master - append if week not exist
-#need to change the player names (remove suffixes)
-
-
-# Make data frame of above data
-
-# append data frame to CSV file
 masterFile = "dre/fantasy_new_copy.csv"
-# with open(masterFile, 'w') as f:
-#     f.write('\n')
 
-# Open a file with access mode 'a'
-file_object = open(masterFile, 'a')
-file_object.write('\n')
-file_object.close()
-
-
-dfGlobal.to_csv(masterFile, mode='a', index=False, header=False)
-#  
-# # print message
-print("Data appended successfully.")
+masterDf = pd.read_csv(masterFile)
+dfGlobal.columns = masterDf.columns
+# years = list(str(masterDf['Season']))
+years = [str(i) for i in masterDf["Season"]]
+weeks = [str(i) for i in masterDf["Week"]]
+currentWeekYear = (season,week)
+allWeeksYears = list(zip(years,weeks))
 
 
+if (currentWeekYear in allWeeksYears):
+  print("AN ERROR WAS ENCOUNTERED. YOU ARE TRYING TO WRITE DATA FOR WEEK {} IN SEASON {}.".format(week, season))
+  print("THIS DATA ALREADY EXISTS IN THE FILE {}. DOUBLE CHECK DUMBASS.".format(masterFile))
+  
+else:
+  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r'.', '')
+  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' Jr', '')
+  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' Sr', '')
+  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' II', '')
+  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' III', '')
+  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r'Will Fuller V', 'Will Fuller')
+  
+  # append data frame to CSV file
+  file_object = open(masterFile, 'a')
+  file_object.write('\n')
+  file_object.close()
 
-# stores as csv
-# filepath = "dre/fantasy_{}.csv".format(week)
-# dfGlobal.to_csv(filepath, index=False)
-# print("\nstored file in location {}".format(filepath))
-# print("\n\nscript complete. execution time:")
-# print(datetime.datetime.now() - begin_time)
+  dfGlobal.to_csv(masterFile, mode='a', index=False, header=False)
+  print("Data appended successfully.")
+  print(dfGlobal)
+  print("\n\nscript complete. execution time:")
+  print(datetime.datetime.now() - begin_time)
