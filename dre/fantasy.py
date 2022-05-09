@@ -224,19 +224,43 @@ for index, row in teamsPd.iterrows():
     dfGlobal = df
   else:
     dfGlobal = pd.concat([dfGlobal,df], ignore_index=True)
+  
+  
 
 dfGlobal = dfGlobal.replace('', np.nan, regex = True)
 
 
 print("pandas table created")
-print(dfGlobal)
+print(dfGlobal.columns)
 
 
 #check if week not in master - append if week not exist
+#need to change the player names (remove suffixes)
+
+
+# Make data frame of above data
+
+# append data frame to CSV file
+masterFile = "dre/fantasy_new_copy.csv"
+# with open(masterFile, 'w') as f:
+#     f.write('\n')
+
+# Open a file with access mode 'a'
+file_object = open(masterFile, 'a')
+file_object.write('\n')
+file_object.close()
+
+
+dfGlobal.to_csv(masterFile, mode='a', index=False, header=False)
+#  
+# # print message
+print("Data appended successfully.")
+
+
 
 # stores as csv
-filepath = "dre/fantasy_{}.csv".format(week)
-dfGlobal.to_csv(filepath, index=False)
-print("\nstored file in location {}".format(filepath))
-print("\n\nscript complete. execution time:")
-print(datetime.datetime.now() - begin_time)
+# filepath = "dre/fantasy_{}.csv".format(week)
+# dfGlobal.to_csv(filepath, index=False)
+# print("\nstored file in location {}".format(filepath))
+# print("\n\nscript complete. execution time:")
+# print(datetime.datetime.now() - begin_time)
