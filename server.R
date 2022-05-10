@@ -22,30 +22,35 @@ shinyServer(function(input, output, session) {
                 resizable = T,
                 columns = list(
                   TRUFFLE = trfDef(filt = FALSE),
-                  Low = colDef(maxWidth = 60,
+                  Low = colDef(header = with_tt("Low", "Lowest weekly score"),
+                               maxWidth = 60,
                                align = 'left',
                                format = colFormat(digits=2),
                                style = function(value) {
                                  fontWeight <- ifelse(value == min(teamsfantasy$Low), 'bold', 'plain')
                                  list(fontWeight = fontWeight)
                                }),
-                  High = colDef(maxWidth = 60,
+                  High = colDef(header = with_tt("High", "Highest weekly score"),
+                                maxWidth = 60,
                                 align = 'left',
                                 format = colFormat(digits=2),
                                 style = function(value) {
                                   fontWeight <- ifelse(value == max(teamsfantasy$High), 'bold', 'plain')
                                   list(fontWeight = fontWeight)
                   }),
-                  Weekly = colDef(sortable = F,
+                  Weekly = colDef(header = with_tt("Weekly", "Weekly log of team FPts"),
+                                  sortable = F,
                                   cell = function(values) {
                                     sparkline(values,
                                               type = "bar",
                                               chartRangeMin = 0,
                                               chartRangeMax = max(teamsfantasyweekly$FPts))
                   }),
-                  Avg = colDef(maxWidth = 75,
+                  Avg = colDef(header = with_tt("Avg", "Weekly average team FPts"),
+                               maxWidth = 75,
                                align = 'left'),
-                  Total = colDef(minWidth = 150,
+                  Total = colDef(header = with_tt("Tot", "Season total team FPts"),
+                                 minWidth = 150,
                                  align = 'left',
                                  format = colFormat(digits=0),
                                  cell = function(value) {
@@ -74,21 +79,21 @@ shinyServer(function(input, output, session) {
                       Pos = posDef,
                       Player = playerDef(mW = 150,
                                          filt = T),
-                      PosRk = colDef(header = with_tt("PosRk", "Position rank by total FPts scored"),
+                      PosRk = colDef(header = with_tt("PosRk", "Seasonal position rank by total FPts"),
                                      maxWidth = 75,
                                      defaultSortOrder = "asc"),
-                      ptslogs = colDef(header = with_tt("PtsLog", "Log of FPts scored by week"),
+                      ptslogs = colDef(header = with_tt("PtsLog", "Weekly log of FPts"),
                                        sortable = F,
                                        maxWidth = 80,
                                        filterable=F,
                                        cell = function(values) {
                           sparkline(values, type = "bar", chartRangeMin = 0, chartRangeMax = max(weekly$FPts))
                       }),
-                      Avg = colDef(header = with_tt("Avg", "Average weekly FPts scored"),
+                      Avg = colDef(header = with_tt("Avg", "Weekly average FPts"),
                                    maxWidth = 50,
                                    align = 'right',
                                    filterable = F),
-                      Total = colDef(header = with_tt("Tot", "Total FPts scored"),
+                      Total = colDef(header = with_tt("Tot", "Seasonal total FPts"),
                                      filterable = F,
                                      align = 'right',
                                      maxWidth = 50)
