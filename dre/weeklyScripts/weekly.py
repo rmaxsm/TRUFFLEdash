@@ -8,6 +8,7 @@ import datetime
 import pandas as pd
 import numpy as np
 import re
+import shutil
 from bs4 import BeautifulSoup
 
 
@@ -201,13 +202,48 @@ df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=T
 
 df = df.sort_values(by=['Player','Pos'])
 
-print(df.columns)
-print(df)
+masterPath = "dre/weeklyScripts/"
+masterFile = "dre/weeklyScripts/weekly_new_copy.csv"
 
+
+#read the existing csv as a pd df for error checking
+masterDf = pd.read_csv(masterFile)
+
+#reassign the columns to be equal to that of the existing csv
+dfGlobal.columns = masterDf.columns
+
+#combine the existing year/week combos into a list of tuples
+years = [str(i) for i in masterDf["Season"]]
+weeks = [str(i) for i in masterDf["Week"]]
+allWeeksYears = list(zip(years,weeks))
+
+#if year week trying to be written already exists print error output - will not write 
+if (currentWeekYear in allWeeksYears):
+  print("AN ERROR WAS ENCOUNTERED. YOU ARE TRYING TO WRITE DATA FOR WEEK {} IN SEASON {}.".format(week, season))
+  print("THIS DATA ALREADY EXISTS IN THE FILE {}. DOUBLE CHECK DUMBASS.".format(masterFile))
+  
+#if the data isn't in the legacy already append to it
+else:
+  #create backup file
+  shutil.copyfile(masterFile, masterPath+"weekly_backup.csv")
+  
+  print(df)
+  
+  dfCleaned = df[df.Avg == "-"]
+  print(dfCleaned)
+  #add newline to end of file - fixes error of writing into last cell instead of new row
+  # file_object = open(masterFile, 'a')
+  # file_object.write('\n')
+  # file_object.close()
+  # 
+  #  # append data frame to CSV file
+  # df.to_csv(masterFile, mode='a', index=False, header=False)
+  # print("\n\nscript complete. execution time:")
+  # print(datetime.datetime.now() - begin_time)
 
 # stores as csv
-filepath = "dre/allScoringWeeklyPOC.csv"
-df.to_csv(filepath, index=False)
-print("\nstored file in location {}".format(filepath))
-print("\n\nscript complete. execution time:")
-print(datetime.datetime.now() - begin_time)
+# filepath = "dre/allScoringWeeklyPOC.csv"
+# df.to_csv(filepath, index=False)
+# print("\nstored file in location {}".format(filepath))
+# print("\n\nscript complete. execution time:")
+# print(datetime.datetime.now() - begin_time)

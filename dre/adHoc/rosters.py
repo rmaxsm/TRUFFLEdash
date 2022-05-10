@@ -230,4 +230,4 @@ dfGlobal = dfGlobal.drop(["PosTRUFFLE"], axis=1)
 # dfGlobal = dfGlobal.sort_values(by=['TRUFFLE'])
 
 print(dfGlobal)
-dfGlobal.to_csv("dre/rostersPOC.csv", index = False)
+dfGlobal.to_csv("dre/adHoc/rostersPOC.csv", index = False)

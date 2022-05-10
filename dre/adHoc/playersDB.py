@@ -216,4 +216,4 @@ df = df.drop(columns=["Action"])
 
 print(playerDb)
 
-playerDb.to_csv("dre/playerDbPOC.csv", index=False)
+playerDb.to_csv("dre/adHoc/playerDbPOC.csv", index=False)
