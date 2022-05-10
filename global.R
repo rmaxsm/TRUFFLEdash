@@ -308,8 +308,6 @@ tpoverview <- merge(tpoverview, seasons[Season == max(seasons$Season)][, c("Play
 tpoverview <- tpoverview[, .(TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 #bug fix
 tpoverview$Avg[tpoverview$Pos == "DST"] <- NA
-#tpoverview$G[tpoverview$Pos == "DST"] <- 17
-#tpoverview$[tpoverview$Pos == "DST"] <- 17
 
 #contracts table
 contracts <- rosters[, .(TRUFFLE, Pos, Player, Age, NFL, Salary, Contract)]
@@ -345,7 +343,7 @@ pointsleaders <- weekly[,
                         .(ptslogs = list(FPts),
                           Avg = round(mean(FPts),1),
                           Total = round(sum(FPts))),
-                        by = .(Season, TRUFFLE, Pos, Player)][order(-Total)][Total > 100]
+                        by = .(Season, TRUFFLE, Pos, Player)][order(-Season, match(Pos, positionorder), -Total)][, `:=`(PosRk = 1:.N), by = .(Season, Pos)][, c("Season", "TRUFFLE", "Player", "Pos", "PosRk", "ptslogs", "Avg", "Total")][order(-Total)]
 
 ppbios <- weekly[order(-Season,-Week)]
 ppbios <- ppbios[,
@@ -556,6 +554,11 @@ bar_chart <- function(label, width = "100%", height = "16px", fill = QBcolor, ba
   bar <- div(style = list(background = fill, width = width, height = height))
   chart <- div(style = list(flexGrow = 1, marginLeft = "8px", background = background), bar)
   div(style = list(display = "flex", alignItems = "center"), paste0(prefix,label), chart)
+}
+
+with_tt <- function(value, tooltip) {
+  tags$abbr(style = "text-decoration: underline; text-decoration-style: dotted; cursor: help",
+            title = tooltip, value)
 }
 
 #column definitions

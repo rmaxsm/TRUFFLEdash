@@ -12,76 +12,87 @@ shinyServer(function(input, output, session) {
     #home page ----
     #home page standings
     output$hometeamsfantasy <- renderReactable({
-        reactable(teamsfantasy[Season == input$homeseason, c("TRUFFLE", "Weekly", "Low", "High", "Avg", "Total")],
-                  defaultSortOrder = "desc",
-                  pagination = FALSE,
-                  height = 400,
-                  highlight = T,
-                  borderless = T,
-                  compact = T,
-                  resizable = T,
-                  columns = list(
-                      TRUFFLE = trfDef(filt = FALSE),
-                      Low = colDef(maxWidth = 60, align = 'left', format = colFormat(digits=2), style = function(value) {
-                          fontWeight <- ifelse(value == min(teamsfantasy$Low), 'bold', 'plain')
-                          list(fontWeight = fontWeight)
-                      }),
-                      High = colDef(maxWidth = 60, align = 'left', format = colFormat(digits=2), style = function(value) {
-                          fontWeight <- ifelse(value == max(teamsfantasy$High), 'bold', 'plain')
-                          list(fontWeight = fontWeight)
-                      }),
-                      Weekly = colDef(sortable = F, cell = function(values) {
-                          sparkline(values, type = "bar", chartRangeMin = 0, chartRangeMax = max(teamsfantasyweekly$FPts))
-                      }),
-                      Avg = colDef(maxWidth = 75, align = 'left'),
-                      Total = colDef(minWidth = 150, align = 'left',
-                                     format = colFormat(digits=1),
-                                     cell = function(value) {
-                                         width <- paste0(value / max(teamsfantasy$Total) * 100, "%")
-                                         bar_chart(value, width = width)
-                                     }
-                      )
-                  ))
+      reactable(teamsfantasy[Season == input$homeseason, c("TRUFFLE", "Weekly", "Low", "High", "Avg", "Total")],
+                defaultSortOrder = "desc",
+                pagination = FALSE,
+                height = 420,
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                resizable = T,
+                columns = list(
+                  TRUFFLE = trfDef(filt = FALSE),
+                  Low = colDef(maxWidth = 60,
+                               align = 'left',
+                               format = colFormat(digits=2),
+                               style = function(value) {
+                                 fontWeight <- ifelse(value == min(teamsfantasy$Low), 'bold', 'plain')
+                                 list(fontWeight = fontWeight)
+                               }),
+                  High = colDef(maxWidth = 60,
+                                align = 'left',
+                                format = colFormat(digits=2),
+                                style = function(value) {
+                                  fontWeight <- ifelse(value == max(teamsfantasy$High), 'bold', 'plain')
+                                  list(fontWeight = fontWeight)
+                  }),
+                  Weekly = colDef(sortable = F,
+                                  cell = function(values) {
+                                    sparkline(values,
+                                              type = "bar",
+                                              chartRangeMin = 0,
+                                              chartRangeMax = max(teamsfantasyweekly$FPts))
+                  }),
+                  Avg = colDef(maxWidth = 75,
+                               align = 'left'),
+                  Total = colDef(minWidth = 150,
+                                 align = 'left',
+                                 format = colFormat(digits=0),
+                                 cell = function(value) {
+                                   width <- paste0(value / max(teamsfantasy$Total) * 100, "%")
+                                   bar_chart(value, width = width)
+                                 }
+                  )
+                ))
     })
     
     #home page season leaders
     output$homepointsleaders <- renderReactable({
-        reactable(pointsleaders[Season == input$homeseason, c("TRUFFLE", "Pos", "Player", "ptslogs", "Avg", "Total")],
-                  height = 400,
+        reactable(pointsleaders[Season == input$homeseason, c("TRUFFLE", "Pos", "Player", "PosRk", "ptslogs", "Avg", "Total")],
+                  height = 420,
                   defaultSortOrder = "desc",
                   filterable = T,
                   showPageInfo = FALSE,
                   defaultPageSize = 10,
                   paginationType = 'jump',
                   highlight = T,
-                  borderless = T,
+                  #borderless = T,
                   compact = T,
                   resizable = T,
                   columns = list(
                       TRUFFLE = trfDef(),
                       Pos = posDef,
-                      Player = playerDef(mW = 150, filt = T),
-                      ptslogs = colDef(name = "PtsLog",sortable = F, maxWidth = 80, filterable=F, cell = function(values) {
+                      Player = playerDef(mW = 150,
+                                         filt = T),
+                      PosRk = colDef(header = with_tt("PosRk", "Position rank by total FPts scored"),
+                                     maxWidth = 75,
+                                     defaultSortOrder = "asc"),
+                      ptslogs = colDef(header = with_tt("PtsLog", "Log of FPts scored by week"),
+                                       sortable = F,
+                                       maxWidth = 80,
+                                       filterable=F,
+                                       cell = function(values) {
                           sparkline(values, type = "bar", chartRangeMin = 0, chartRangeMax = max(weekly$FPts))
                       }),
-                      Avg = colDef(maxWidth = 50, align = 'left', filterable = F),
-                      Total = colDef(filterable = F, align = 'left',
-                                     format = colFormat(digits=1),
-                                     cell = function(value) {
-                                         width <- paste0(value / max(pointsleaders$Total) * 100, "%")
-                                         bar_chart(value, width = width)
-                                     }
-                      )
-                  ),
-                  defaultColDef = colDef(
-                      style = JS("function(rowInfo, colInfo, state) {
-      // Highlight sorted columns
-      for (let i = 0; i < state.sorted.length; i++) {
-        if (state.sorted[i].id === colInfo.id) {
-          return { background: 'rgba(0, 0, 0, 0.03)' }
-        }
-      }
-    }"))
+                      Avg = colDef(header = with_tt("Avg", "Average weekly FPts scored"),
+                                   maxWidth = 50,
+                                   align = 'right',
+                                   filterable = F),
+                      Total = colDef(header = with_tt("Tot", "Total FPts scored"),
+                                     filterable = F,
+                                     align = 'right',
+                                     maxWidth = 50)
+                  )
                   )
     })
     
@@ -93,7 +104,7 @@ shinyServer(function(input, output, session) {
                   showPageInfo = FALSE,
                   pagination = F,
                   highlight = T,
-                  borderless = T,
+                  #borderless = T,
                   compact = T,
                   resizable = T,
                   columns = list(
@@ -113,7 +124,7 @@ shinyServer(function(input, output, session) {
                   showPageInfo = FALSE,
                   pagination = F,
                   highlight = T,
-                  borderless = T,
+                  #borderless = T,
                   compact = T,
                   resizable = T,
                   columns = list(
@@ -133,7 +144,7 @@ shinyServer(function(input, output, session) {
                   showPageInfo = FALSE,
                   pagination = F,
                   highlight = T,
-                  borderless = T,
+                  #borderless = T,
                   compact = T,
                   resizable = T,
                   columns = list(
@@ -153,7 +164,7 @@ shinyServer(function(input, output, session) {
                   showPageInfo = FALSE,
                   pagination = F,
                   highlight = T,
-                  borderless = T,
+                  #borderless = T,
                   compact = T,
                   resizable = T,
                   columns = list(
@@ -230,7 +241,7 @@ shinyServer(function(input, output, session) {
                   pagination = FALSE,
                   highlight = T,
                   filterable = T,
-                  borderless = T,
+                  #borderless = T,
                   compact = T,
                   resizable = T,
                   columns = list(
@@ -264,7 +275,7 @@ shinyServer(function(input, output, session) {
                   pagination = FALSE,
                   filterable = T,
                   highlight = T,
-                  borderless = T,
+                  #borderless = T,
                   compact = T,
                   resizable = T,
                   columns = list(
@@ -294,7 +305,7 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = T,
                   highlight = T,
-                  bordered = T,
+                  #borderless = T,
                   compact = T,
                   resizable = T,
                   columns = list(
@@ -361,7 +372,7 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = F,
                   highlight = T,
-                  bordered = T,
+                  #borderless = T,
                   resizable = T,
                   compact = T,
                   columns = list(
@@ -401,7 +412,7 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = F,
                   highlight = T,
-                  bordered = T,
+                  #borderless = T,
                   resizable = T,
                   compact = T,
                   columns = list(
@@ -434,7 +445,7 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = T,
                   highlight = T,
-                  bordered = T,
+                  #borderless = T,
                   compact = T,
                   resizable = T,
                   columns = list(
@@ -475,7 +486,7 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = F,
                   highlight = T,
-                  borderless = T,
+                  #borderless = T,
                   compact = T,
                   resizable = T,
                   columns = list(
@@ -502,7 +513,7 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = F,
                   highlight = T,
-                  borderless = T,
+                  #borderless = T,
                   compact = T,
                   resizable = T,
                   columns = list(
@@ -569,7 +580,7 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = F,
                   highlight = T,
-                  borderless = T,
+                  #borderless = T,
                   resizable = T,
                   compact = T,
                   columns = list(
@@ -608,7 +619,7 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = F,
                   highlight = T,
-                  borderless = T,
+                  #borderless = T,
                   resizable = T,
                   compact = T,
                   columns = list(
@@ -642,7 +653,7 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = T,
                   highlight = T,
-                  borderless = T,
+                  #borderless = T,
                   compact = T,
                   columns = list(
                       Season = seasonDef,
@@ -706,7 +717,7 @@ shinyServer(function(input, output, session) {
                       defaultSortOrder = "desc",
                       pagination = FALSE,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           TRUFFLE = trfDef(filt = FALSE),
@@ -728,7 +739,7 @@ shinyServer(function(input, output, session) {
                       defaultSortOrder = "desc",
                       pagination = FALSE,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       defaultColDef = colDef(format = colFormat(percent = T, digits = 1)),
                       columns = list(
@@ -1081,7 +1092,7 @@ shinyServer(function(input, output, session) {
                   pagination = FALSE,
                   highlight = T,
                   filterable = F,
-                  borderless = T,
+                  #borderless = T,
                   compact = T,
                   resizable = F,
                   columns = list(
@@ -1109,7 +1120,7 @@ shinyServer(function(input, output, session) {
                   pagination = FALSE,
                   highlight = T,
                   filterable = F,
-                  borderless = T,
+                  #borderless = T,
                   compact = T,
                   resizable = F,
                   columns = list(
@@ -1144,7 +1155,7 @@ shinyServer(function(input, output, session) {
                   sortable = F,
                   filterable = F,
                   highlight = T,
-                  borderless = T,
+                  #borderless = T,
                   compact = T,
                   resizable = T,
                   columns = list(
@@ -1174,7 +1185,7 @@ shinyServer(function(input, output, session) {
                       sortable = F,
                       filterable = F,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       resizable = T,
                       columns = list(
@@ -1304,7 +1315,7 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = T,
                   highlight = T,
-                  borderless = T,
+                  #borderless = T,
                   compact = T,
                   resizable = T,
                   columns = list(
@@ -1371,7 +1382,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1389,7 +1400,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1410,7 +1421,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1428,7 +1439,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1449,7 +1460,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1467,7 +1478,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1488,7 +1499,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1506,7 +1517,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1527,7 +1538,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1545,7 +1556,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1566,7 +1577,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1584,7 +1595,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1605,7 +1616,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1623,7 +1634,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1644,7 +1655,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1662,7 +1673,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1683,7 +1694,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1701,7 +1712,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1722,7 +1733,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1740,7 +1751,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1761,7 +1772,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1779,7 +1790,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1800,7 +1811,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1818,7 +1829,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1839,7 +1850,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1857,7 +1868,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1878,7 +1889,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1896,7 +1907,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1917,7 +1928,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1935,7 +1946,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1956,7 +1967,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -1974,7 +1985,7 @@ shinyServer(function(input, output, session) {
                       showPageInfo = FALSE,
                       paginationType = "simple", defaultPageSize = 5,
                       highlight = T,
-                      borderless = T,
+                      #borderless = T,
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
@@ -2238,7 +2249,7 @@ shinyServer(function(input, output, session) {
                   showPageInfo = FALSE,
                   pagination = F,
                   highlight = T,
-                  borderless = T,
+                  #borderless = T,
                   compact = T,
                   columns = list(
                       `#` = colDef(minWidth = 30, align = "right"),
@@ -2258,7 +2269,7 @@ shinyServer(function(input, output, session) {
                   showPageInfo = FALSE,
                   pagination = F,
                   highlight = T,
-                  borderless = T,
+                  #borderless = T,
                   compact = T,
                   columns = list(
                       `#` = colDef(minWidth = 30, align = "right"),
@@ -2278,7 +2289,7 @@ shinyServer(function(input, output, session) {
                   showPageInfo = FALSE,
                   pagination = F,
                   highlight = T,
-                  borderless = T,
+                  #borderless = T,
                   compact = T,
                   columns = list(
                       `#` = colDef(minWidth = 30, align = "right"),
