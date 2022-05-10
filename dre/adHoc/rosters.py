@@ -207,6 +207,13 @@ for tbl in tbls:
   dfTeam.insert(1,"Week", week)
   dfTeam.insert(3,"PosTRUFFLE", position[0])
   dfTeam.insert(5,"NFL", nfl)
+  
+  dfTeam['Player'] = dfTeam['Player'].str.replace(r'.', '', regex=True)
+  dfTeam['Player'] = dfTeam['Player'].str.replace(r' Jr', '', regex=True)
+  dfTeam['Player'] = dfTeam['Player'].str.replace(r' Sr', '', regex=True)
+  dfTeam['Player'] = dfTeam['Player'].str.replace(r' III', '', regex=True)
+  dfTeam['Player'] = dfTeam['Player'].str.replace(r' II', '', regex=True)
+  dfTeam['Player'] = dfTeam['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
 
   if counter == 0:
     dfGlobal = dfTeam

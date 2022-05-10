@@ -253,8 +253,8 @@ else:
   dfGlobal['Player'] = dfGlobal['Player'].str.replace(r'.', '', regex=True)
   dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' Jr', '', regex=True)
   dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' Sr', '', regex=True)
-  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' II', '', regex=True)
   dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' III', '', regex=True)
+  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' II', '', regex=True)
   dfGlobal['Player'] = dfGlobal['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
   
   #create backup file

@@ -196,8 +196,8 @@ df.insert(5,"NFL", nfl)
 df['Player'] = df['Player'].str.replace(r'.', '', regex=True)
 df['Player'] = df['Player'].str.replace(r' Jr', '', regex=True)
 df['Player'] = df['Player'].str.replace(r' Sr', '', regex=True)
-df['Player'] = df['Player'].str.replace(r' II', '', regex=True)
 df['Player'] = df['Player'].str.replace(r' III', '', regex=True)
+df['Player'] = df['Player'].str.replace(r' II', '', regex=True)
 df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
 
 df = df.sort_values(by=['Player','Pos'])
@@ -210,7 +210,7 @@ masterFile = "dre/weeklyScripts/weekly_new_copy.csv"
 masterDf = pd.read_csv(masterFile)
 
 #reassign the columns to be equal to that of the existing csv
-dfGlobal.columns = masterDf.columns
+# df.columns = masterDf.columns
 
 #combine the existing year/week combos into a list of tuples
 years = [str(i) for i in masterDf["Season"]]
@@ -227,10 +227,10 @@ else:
   #create backup file
   shutil.copyfile(masterFile, masterPath+"weekly_backup.csv")
   
-  print(df)
-  
+  #this line removes all avgs but fails for now until 2022 data is valid
   dfCleaned = df[df.Avg != "-"]
   print(dfCleaned)
+  
   #add newline to end of file - fixes error of writing into last cell instead of new row
   # file_object = open(masterFile, 'a')
   # file_object.write('\n')
@@ -241,9 +241,9 @@ else:
   # print("\n\nscript complete. execution time:")
   # print(datetime.datetime.now() - begin_time)
 
-# stores as csv
-# filepath = "dre/allScoringWeeklyPOC.csv"
-# df.to_csv(filepath, index=False)
-# print("\nstored file in location {}".format(filepath))
-# print("\n\nscript complete. execution time:")
-# print(datetime.datetime.now() - begin_time)
+  # stores as csv
+  filepath = "dre/weeklyScripts/allScoringWeeklyPOC.csv"
+  df.to_csv(filepath, index=False)
+  print("\nstored file in location {}".format(filepath))
+  print("\n\nscript complete. execution time:")
+  print(datetime.datetime.now() - begin_time)

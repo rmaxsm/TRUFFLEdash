@@ -161,7 +161,7 @@ Season,Week,TRUFFLE,Pos,Player,NFL,Opp,OVP,Comp,ATT,Yds,TD,Int,Att,Yds,TD,1stD,T
 2022,1,W (5/10),RB,Caleb Huntley,ATL,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,Caleb Scott,LV,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),TE,Caleb Wilson,DEN,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,W (5/10),WR,Calvin AustinI,PIT,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,W (5/10),WR,Calvin Austin,PIT,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,NN,WR,Calvin Ridley,ATL,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,NN,RB,Cam Akers,LAR,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),QB,Cam Newton,CAR,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
@@ -301,6 +301,7 @@ Season,Week,TRUFFLE,Pos,Player,NFL,Opp,OVP,Comp,ATT,Yds,TD,Int,Att,Yds,TD,1stD,T
 2022,1,W (5/10),TE,Daniel Helm,ATL,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,WLW,QB,Daniel Jones,NYG,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,Danny Amendola,HOU,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,W (5/10),WR,Danny Davis,GB,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),QB,Danny Etling,GB,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,Danny Gray,SF,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,Dante Pettis,NYG,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
@@ -500,6 +501,7 @@ Season,Week,TRUFFLE,Pos,Player,NFL,Opp,OVP,Comp,ATT,Yds,TD,Int,Att,Yds,TD,1stD,T
 2022,1,W (5/10),TE,Ian Thomas,CAR,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,Ihmir Smith-Marsette,MIN,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),TE,Irv Smith,MIN,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,W (5/10),WR,Irvin Charles,NYJ,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,Isaac Zico,ARI,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,Isaiah Coulter,CHI,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,Isaiah Ford,MIA,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
@@ -645,7 +647,7 @@ Season,Week,TRUFFLE,Pos,Player,NFL,Opp,OVP,Comp,ATT,Yds,TD,Int,Att,Yds,TD,1stD,T
 2022,1,W (5/10),WR,John Hurst,TB,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),RB,John Kelly,CLE,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),RB,John Lovett,MIA,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,W (5/10),WR,John MetchieI,HOU,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,W (5/10),WR,John Metchie,HOU,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,John Mitchell,SEA,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),TE,John Raine,ATL,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,John Ross,NYG,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
@@ -754,7 +756,7 @@ Season,Week,TRUFFLE,Pos,Player,NFL,Opp,OVP,Comp,ATT,Yds,TD,Int,Att,Yds,TD,1stD,T
 2022,1,W (5/10),RB,Kennedy Brooks,PHI,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,CC,RB,Kenneth Gainwell,PHI,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),RB,Kenneth Harper,NYG,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,W (5/10),RB,Kenneth WalkerI,SEA,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,W (5/10),RB,Kenneth Walker,SEA,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,Kenny Golladay,NYG,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),QB,Kenny Pickett,PIT,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,Kenny Stills,NO,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
@@ -805,7 +807,7 @@ Season,Week,TRUFFLE,Pos,Player,NFL,Opp,OVP,Comp,ATT,Yds,TD,Int,Att,Yds,TD,1stD,T
 2022,1,W (5/10),WR,Landen Akers,LAR,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,Landon Lenoir,CHI,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,MAM,WR,Laquon Treadwell,JAC,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,W (5/10),RB,Larry RountreeI,LAC,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,W (5/10),RB,Larry Rountree,LAC,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),RB,Latavius Murray,BAL,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,VD,WR,Laviska Shenault,JAC,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,Lawrence Cager,NYJ,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
@@ -856,7 +858,7 @@ Season,Week,TRUFFLE,Pos,Player,NFL,Opp,OVP,Comp,ATT,Yds,TD,Int,Att,Yds,TD,1stD,T
 2022,1,W (5/10),QB,Mason Rudolph,PIT,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),TE,Mason Schreck,CIN,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),RB,Mason Stokke,CAR,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,W (5/10),RB,Master TeagueI,CHI,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,W (5/10),RB,Master Teague,CHI,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,Mathew Sexton,KC,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),QB,Matt Barkley,BUF,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),RB,Matt Breida,NYG,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
@@ -1086,7 +1088,7 @@ Season,Week,TRUFFLE,Pos,Player,NFL,Opp,OVP,Comp,ATT,Yds,TD,Int,Att,Yds,TD,1stD,T
 2022,1,W (5/10),WR,Steve Ishmael,IND,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),QB,Steven Montez,DET,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,Steven Sims,PIT,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,W (5/10),RB,Stevie ScottI,DEN,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,W (5/10),RB,Stevie Scott,DEN,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,FRR,TE,TJ Hockenson,DET,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,TJ Rahming,MIA,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,TJ Simmons,TB,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
@@ -1148,7 +1150,7 @@ Season,Week,TRUFFLE,Pos,Player,NFL,Opp,OVP,Comp,ATT,Yds,TD,Int,Att,Yds,TD,1stD,T
 2022,1,CRB,TE,Travis Kelce,KC,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,Travis Toivonen,NYG,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),RB,Trayveon Williams,CIN,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,W (5/10),RB,Tre HarbisonI,CLE,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,W (5/10),RB,Tre Harbison,CLE,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,Tre Nixon,NE,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),WR,Tre Walker,BUF,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,W (5/10),TE,Tre' McKitty,LAC,TBA,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0

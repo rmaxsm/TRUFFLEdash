@@ -197,8 +197,8 @@ df.insert(3,"NFL", nfl)
 df['Player'] = df['Player'].str.replace(r'.', '', regex=True)
 df['Player'] = df['Player'].str.replace(r' Jr', '', regex=True)
 df['Player'] = df['Player'].str.replace(r' Sr', '', regex=True)
-df['Player'] = df['Player'].str.replace(r' II', '', regex=True)
 df['Player'] = df['Player'].str.replace(r' III', '', regex=True)
+df['Player'] = df['Player'].str.replace(r' II', '', regex=True)
 df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
 
 df = df.sort_values(by=['Player','Pos'])
@@ -215,7 +215,7 @@ years = [str(i) for i in masterDf["Season"]]
 #if year week trying to be written already exists print error output - will not write 
 #COMMENTED OUT BELOW IS CORRECT SYNTAX - NEED STR CONVERSTION OR IT WILL NOT WORK
 # if (str(season) in years):
-if (str(season) in years):
+if (season in years):
   print("AN ERROR WAS ENCOUNTERED. YOU ARE TRYING TO WRITE DATA SEASON {}.".format(season))
   print("THIS DATA ALREADY EXISTS IN THE FILE {}. DOUBLE CHECK DUMBASS.".format(masterFile))
   
