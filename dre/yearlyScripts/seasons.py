@@ -1,4 +1,4 @@
-#this is a python script. It will ask for the week then get all scoring data
+#this is a python script. It will ask for the year then get all scoring data
 #it should append to a current csv file - can stay hardcoded or ask for filepath.
 #currently POC concept. 
 
@@ -85,16 +85,16 @@ headers = {
 
 
 #get year and week for url/formatting
-season = input("What SEASON is it..? ")
-while(len(season) != 4):
-  print("get the SEASON right dumbass")
-  season = input("What SEASON is it..? ")
+# season = input("What SEASON is it..? ")
+# while(len(season) != 4):
+#   print("get the SEASON right dumbass")
+#   season = input("What SEASON is it..? ")
 
-week = input("What WEEK is it..? ")
-while(len(week) >= 3):
-  print("get the week right dumbass")
-  week = input("What WEEK is it..? ")
-# season = 2022
+# week = input("What WEEK is it..? ")
+# while(len(week) >= 3):
+#   print("get the week right dumbass")
+#   week = input("What WEEK is it..? ")
+season = 2021
 # week = 1
 
 
@@ -127,7 +127,7 @@ def separateColumns(row):
   allCols = []
   for i in row:
     allCols.append(i.getText())
-  allCols[1] = "TRUFFLE"
+  # allCols[1] = "TRUFFLE"
   return allCols
 
 #takes in a single row of html and returns the stats as list (for players/dst)
@@ -145,7 +145,7 @@ def separatePlayers(rows):
   return curRow
 
 #where the connection is made to the truffle cbs website
-url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:FLEX/period-{}:p/TRUFFLEoffense/?print_rows=9999".format(week)
+url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:FLEX/2021:p/TRUFFLEoffense/?print_rows=9999".format(season)
 response = requests.get(url, cookies=cookies, headers=headers)
 soup = BeautifulSoup(response.content, 'html.parser')
 
@@ -186,12 +186,11 @@ nfl = pd.Series(playerTeam[1])
 
 
 #add/remove columns for TRUFFLE formatting
-df = df.drop(["Bye","Rost", "Start"],axis=1)
+df = df.drop(["Bye","Rost", "Start", "Avail", "Opp"],axis=1)
 df["Player"] = player
 df.insert(0,"Season", season)
-df.insert(1,"Week", week)
-df.insert(3,"Pos", position[0])
-df.insert(5,"NFL", nfl)
+df.insert(1,"Pos", position[0])
+df.insert(3,"NFL", nfl)
 
 df['Player'] = df['Player'].str.replace(r'.', '', regex=True)
 df['Player'] = df['Player'].str.replace(r' Jr', '', regex=True)
@@ -202,48 +201,36 @@ df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=T
 
 df = df.sort_values(by=['Player','Pos'])
 
-masterPath = "dre/weeklyScripts/"
-masterFile = "dre/weeklyScripts/weekly_new_copy.csv"
+masterPath = "dre/yearlyScripts/"
+masterFile = "dre/yearlyScripts/seasons_new_copy.csv"
 
 
 #read the existing csv as a pd df for error checking
 masterDf = pd.read_csv(masterFile)
 
-#reassign the columns to be equal to that of the existing csv
-dfGlobal.columns = masterDf.columns
-
 #combine the existing year/week combos into a list of tuples
 years = [str(i) for i in masterDf["Season"]]
-weeks = [str(i) for i in masterDf["Week"]]
-allWeeksYears = list(zip(years,weeks))
+# weeks = [str(i) for i in masterDf["Week"]]
+# allWeeksYears = list(zip(years,weeks))
 
 #if year week trying to be written already exists print error output - will not write 
-if (currentWeekYear in allWeeksYears):
-  print("AN ERROR WAS ENCOUNTERED. YOU ARE TRYING TO WRITE DATA FOR WEEK {} IN SEASON {}.".format(week, season))
+if (season in years):
+  print("AN ERROR WAS ENCOUNTERED. YOU ARE TRYING TO WRITE DATA SEASON {}.".format(season))
   print("THIS DATA ALREADY EXISTS IN THE FILE {}. DOUBLE CHECK DUMBASS.".format(masterFile))
   
 #if the data isn't in the legacy already append to it
 else:
   #create backup file
-  shutil.copyfile(masterFile, masterPath+"weekly_backup.csv")
+  shutil.copyfile(masterFile, masterPath+"seasons_backup.csv")
   
-  print(df)
+  print(len(df.columns))
+  print(len(masterDf.columns))
+  print(df.columns)
+  print(masterDf.columns)
+  #reassign the columns to be equal to that of the existing csv
+  # dfGlobal.columns = masterDf.columns
+  #LOOK ABOVE ME LAKJASLDJAKS:LDAJSDL:KASJ
+
   
   dfCleaned = df[df.Avg != "-"]
   print(dfCleaned)
-  #add newline to end of file - fixes error of writing into last cell instead of new row
-  # file_object = open(masterFile, 'a')
-  # file_object.write('\n')
-  # file_object.close()
-  # 
-  #  # append data frame to CSV file
-  # df.to_csv(masterFile, mode='a', index=False, header=False)
-  # print("\n\nscript complete. execution time:")
-  # print(datetime.datetime.now() - begin_time)
-
-# stores as csv
-# filepath = "dre/allScoringWeeklyPOC.csv"
-# df.to_csv(filepath, index=False)
-# print("\nstored file in location {}".format(filepath))
-# print("\n\nscript complete. execution time:")
-# print(datetime.datetime.now() - begin_time)
