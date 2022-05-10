@@ -196,19 +196,19 @@ df.insert(1,"Week", week)
 df.insert(3,"Pos", position[0])
 df.insert(5,"NFL", nfl)
 
-df['Player'] = df['Player'].str.replace(r'.', '')
-df['Player'] = df['Player'].str.replace(r' Jr', '')
-df['Player'] = df['Player'].str.replace(r' Sr', '')
-df['Player'] = df['Player'].str.replace(r' II', '')
-df['Player'] = df['Player'].str.replace(r' III', '')
-df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller')
+df['Player'] = df['Player'].str.replace(r'.', '', regex=True)
+df['Player'] = df['Player'].str.replace(r' Jr', '', regex=True)
+df['Player'] = df['Player'].str.replace(r' Sr', '', regex=True)
+df['Player'] = df['Player'].str.replace(r' II', '', regex=True)
+df['Player'] = df['Player'].str.replace(r' III', '', regex=True)
+df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
 
 # print(df.columns)
 # print(df)
 
 playerDb = df[["Action", "Player", "Pos", "NFL", "TRUFFLE"]]
 playerDb = playerDb.rename(columns={"Action": "playerID"})
-playerDb = playerDb.sort_values(by=['Player'])
+playerDb = playerDb.sort_values(by=['Player','Pos'])
 
 
 #THIS DELETE REMOVES THE PLAYER ID

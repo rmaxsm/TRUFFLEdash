@@ -248,12 +248,12 @@ if (currentWeekYear in allWeeksYears):
 #if the data isn't in the legacy already append to it
 else:
   #player name replacements
-  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r'.', '')
-  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' Jr', '')
-  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' Sr', '')
-  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' II', '')
-  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' III', '')
-  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r'Will Fuller V', 'Will Fuller')
+  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r'.', '', regex=True)
+  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' Jr', '', regex=True)
+  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' Sr', '', regex=True)
+  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' II', '', regex=True)
+  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' III', '', regex=True)
+  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
   
   #add newline to end of file - fixes error of writing into last cell instead of new row
   file_object = open(masterFile, 'a')
