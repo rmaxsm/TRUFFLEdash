@@ -9,7 +9,6 @@ import pandas as pd
 import numpy as np
 import re
 from bs4 import BeautifulSoup
-from pprint import pprint
 
 
 #below are 'keys' of some sort from copy and pasting - unclear how they fit in left for reference
@@ -84,22 +83,18 @@ headers = {
 }
 
 
-
-#this is the main pandas frame that will be added to throughout
-dfGlobal = pd.DataFrame()
-
 #get year and week for url/formatting
-# season = input("What YEAR is it..? ")
-# while(len(season) != 4):
-#   print("get the year right dumbass")
-#   season = input("What YEAR is it..? ")
-# 
-# week = input("What WEEK is it..? ")
-# while(len(week) >= 3):
-#   print("get the week right dumbass")
-#   week = input("What WEEK is it..? ")
-season = 2022
-week = 1
+season = input("What YEAR is it..? ")
+while(len(season) != 4):
+  print("get the year right dumbass")
+  season = input("What YEAR is it..? ")
+
+week = input("What WEEK is it..? ")
+while(len(week) >= 3):
+  print("get the week right dumbass")
+  week = input("What WEEK is it..? ")
+# season = 2022
+# week = 1
 
 
 begin_time = datetime.datetime.now()
@@ -147,7 +142,6 @@ def separatePlayers(rows):
     itr += 1
   return curRow
 
-teamNum = row["TeamNumber"]
 #where the connection is made to the truffle cbs website
 url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:FLEX/period-{}:p/TRUFFLEoffense/?print_rows=9999".format(week)
 response = requests.get(url, cookies=cookies, headers=headers)
@@ -171,11 +165,6 @@ allPlayers = []
 #for every player - clean the row and add to list of lists
 for i in allRows:
   allPlayers.append(separatePlayers(i))
-  
-# print(allPlayers[0])
-# print(len(allPlayers[0]))
-# print(len(cols))
-
 
 #lamba functions to split player name team and position
 getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
@@ -202,13 +191,20 @@ df.insert(1,"Week", week)
 df.insert(3,"Pos", position[0])
 df.insert(5,"NFL", nfl)
 
+df['Player'] = df['Player'].str.replace(r'.', '')
+df['Player'] = df['Player'].str.replace(r' Jr', '')
+df['Player'] = df['Player'].str.replace(r' Sr', '')
+df['Player'] = df['Player'].str.replace(r' II', '')
+df['Player'] = df['Player'].str.replace(r' III', '')
+df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller')
+
 print(df.columns)
 print(df)
 
 
 # stores as csv
-# filepath = "dre/allScoringWeeklyPOC.csv"
-# df.to_csv(filepath, index=False)
-# print("\nstored file in location {}".format(filepath))
+filepath = "dre/allScoringWeeklyPOC.csv"
+df.to_csv(filepath, index=False)
+print("\nstored file in location {}".format(filepath))
 print("\n\nscript complete. execution time:")
 print(datetime.datetime.now() - begin_time)
