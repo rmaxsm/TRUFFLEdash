@@ -1,6 +1,7 @@
-#this is a python script. It will ask you for year and week then get all the information 
-#from cbs for each team for that week and year. Error handling is not great tbh but will do some checking
-#just input the right stuff 
+'''
+this is a python script. It will ask for the week/season then create 
+a csv file with the unique playerID,Player,Pos,NFL,TRUFFLE(team)
+'''
 
 import os
 import requests
@@ -83,10 +84,6 @@ headers = {
 }
 
 
-
-#this is the main pandas frame that will be added to throughout
-dfGlobal = pd.DataFrame()
-
 #get year and week for url/formatting
 season = input("What SEASON is it..? ")
 while(len(season) != 4):
@@ -97,9 +94,12 @@ week = input("What WEEK is it..? ")
 while(len(week) >= 3):
   print("get the week right dumbass")
   week = input("What WEEK is it..? ")
+# season = 2022
+# week = 1
 
 
 begin_time = datetime.datetime.now()
+todays_date = datetime.datetime.today()
 
 
 #get information from teams document to refer to for shortcuts ext
@@ -109,13 +109,16 @@ teamsDict = {}
 for index, row in teamsPd.iterrows():
   teamsDict[row["Logs"]] = row["Abbrev"]  
 
+
 #returns team abbreviation from team name
 def getTeamAbbreviation(team):
   try:
+    if(team == "W "):
+      return "W ({}/{})".format(todays_date.month, todays_date.day) 
     return teamsDict[team]
   except Exception as exp:
     print("An Error Occuring while trying to get the team abbreviation for " + team)
-    return
+    return "err"
 
 #separates the column names
 #returns list representing the columns for tables 
@@ -132,138 +135,85 @@ def separatePlayers(rows):
   curRow = []
   for i in rows:
     if itr == 0:    #first value always empty string
-      curRow.append("")
+      # curRow.append("")
+      #adding player id numbers as temp
+      test = str(i.find_all("div")[0])
+      # print(test.split("_"))
+      actionId = test.split("_")[1]
+      curRow.append(actionId.split('\"')[0])
+
     elif itr == 1:    #second value convert to team abbreviation
-      curRow.append(getTeamAbbreviation(i.getText()))   
+      curRow.append(getTeamAbbreviation(i.getText()))
     else:       #after first two iterations just get exact data from source
       curRow.append(i.getText())
     itr += 1
   return curRow
+
+#where the connection is made to the truffle cbs website
+url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:FLEX/period-{}:p/TRUFFLEoffense/?print_rows=9999".format(week)
+response = requests.get(url, cookies=cookies, headers=headers)
+soup = BeautifulSoup(response.content, 'html.parser')
+
+# complete =  soup.find("div", {"id": "sortableStats"})
+tbls =  soup.find("table", {"class":"data pinHeader"})
+combined = tbls.find_all("tr", class_="label")
+label = combined[1]
+
+#calls function to clean column headers stored as cols (used in pandas df)
+cols = separateColumns(label)
+
+
+#regex used to find row1/2 (\d means only numbers following exact match of row)
+allRows = tbls.find_all("tr", class_=re.compile("row\d"))
+
+
+allPlayers = []
+
+#for every player - clean the row and add to list of lists
+for i in allRows:
+  allPlayers.append(separatePlayers(i))
 
 #lamba functions to split player name team and position
 getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
 getPosition = lambda y: pd.Series([i for i in y.split(" ")][-1])
 getPlayer = lambda z: pd.Series(' '.join([i for i in z.split(" ")][:-1]))
 
-for index, row in teamsPd.iterrows():
+#pandas df to represent team
+df = pd.DataFrame(allPlayers, columns=cols)
 
-  teamNum = row["TeamNumber"]
-  #where the connection is made to the truffle cbs website
-  url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/team:{}/period-{}:f/TRUFFLEoffense/".format(teamNum,week)
-  response = requests.get(url, cookies=cookies, headers=headers)
-  soup = BeautifulSoup(response.content, 'html.parser')
-    
-  #finds the outermost 'tables' containing the stats(3 off,kicker,dst in order)
-  tbls =  soup.find_all("table", class_="data pinHeader borderTop")
-  tblOffense = tbls[0]
-  tblDefense = tbls[2]
-  
-  #gets the column header information as 'label'
-  combined = tblOffense.find_all("tr", class_="label")
-  label = combined[1]
-  
-  #calls function to clean column headers stored as cols (used in pandas df)
-  cols = separateColumns(label)
-  
-  #store all players per team as list of lists
-  allPlayers = []
-  
-  #regex used to find row1/2 (\d means only numbers following exact match of row)
-  allRowsOffense = tblOffense.find_all("tr", class_=re.compile("row\d"))
-  
-  #for every player - clean the row and add to list of lists
-  for i in allRowsOffense:
-    allPlayers.append(separatePlayers(i))
-  
-  # simlar to offense but with slightly different logic
-  defRows = tblDefense.find_all("tr", {"class": re.compile("row\d")})
-  for i in defRows:
-    curDef = separatePlayers(i)
-    #once defense stats are cleaned need to fill the rest of the list as empty
-    noneList = ["" for i in range(len(allPlayers[0]) - len(curDef))]
-    for j in noneList:
-      curDef.append(j)
-    allPlayers.append(curDef)
-    
-  #pandas df to represent team
-  df = pd.DataFrame(allPlayers, columns=cols)
-  df = df.drop(columns=["Action"])
-  
-  
-  #apply lambda fcts to correct columns
-  playerTeam = df["Player"].apply(getNFLTeam)
-  position = playerTeam[0].apply(getPosition)
-  player =  playerTeam[0].apply(getPlayer)
-  nfl = pd.Series(playerTeam[1])
+#apply lambda fcts to correct columns
+playerTeam = df["Player"].apply(getNFLTeam)
+position = playerTeam[0].apply(getPosition)
+player =  playerTeam[0].apply(getPlayer)
+nfl = pd.Series(playerTeam[1])
 
 
-  #add/remove columns for TRUFFLE formatting
-  df = df.drop(["Bye","Rost", "Start"],axis=1)
-  df["Player"] = player
-  df.insert(0,"Season", season)
-  df.insert(1,"Week", week)
-  df.insert(3,"Pos", position[0])
-  df.insert(5,"NFL", nfl)
-  
+#add/remove columns for TRUFFLE formatting
+df = df.drop(["Bye","Rost", "Start"],axis=1)
+df["Player"] = player
+df.insert(0,"Season", season)
+df.insert(1,"Week", week)
+df.insert(3,"Pos", position[0])
+df.insert(5,"NFL", nfl)
 
-  #moves defensive data - empties out old
-  finalVal = len(df.index) - 1
-  compToAvg = df.iloc[[finalVal]]["Comp"].values[0]
-  df.at[finalVal,"Avg"] = compToAvg
-  df.at[finalVal, "Comp"] = ''
-  total = df.iloc[[finalVal]]["ATT"].values[0]
-  df.at[finalVal,"Total"] = total
-  df.at[finalVal, "ATT"] = ''
-  
-  #on the first iteration we need to 'create' the main pandas table - it is naive to the size before scraping
-  if index == 0:
-    dfGlobal = df
-  else:
-    dfGlobal = pd.concat([dfGlobal,df], ignore_index=True)
+df['Player'] = df['Player'].str.replace(r'.', '')
+df['Player'] = df['Player'].str.replace(r' Jr', '')
+df['Player'] = df['Player'].str.replace(r' Sr', '')
+df['Player'] = df['Player'].str.replace(r' II', '')
+df['Player'] = df['Player'].str.replace(r' III', '')
+df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller')
+
+# print(df.columns)
+# print(df)
+
+playerDb = df[["Action", "Player", "Pos", "NFL", "TRUFFLE"]]
+playerDb = playerDb.rename(columns={"Action": "playerID"})
+playerDb = playerDb.sort_values(by=['Player'])
 
 
-dfGlobal = dfGlobal.replace('', "NA", regex = True)
+#THIS DELETE REMOVES THE PLAYER ID
+df = df.drop(columns=["Action"])
 
-masterFile = "dre/fantasy_new_copy.csv"
+print(playerDb)
 
-#read the existing csv as a pd df for error checking
-masterDf = pd.read_csv(masterFile)
-
-#reassign the columns to be equal to that of the existing csv
-dfGlobal.columns = masterDf.columns
-
-#combine the existing year/week combos into a list of tuples
-years = [str(i) for i in masterDf["Season"]]
-weeks = [str(i) for i in masterDf["Week"]]
-allWeeksYears = list(zip(years,weeks))
-
-#use current input week year tuple as comparison
-currentWeekYear = (season,week)
-
-#if year week trying to be written already exists print error output - will not write 
-if (currentWeekYear in allWeeksYears):
-  print("AN ERROR WAS ENCOUNTERED. YOU ARE TRYING TO WRITE DATA FOR WEEK {} IN SEASON {}.".format(week, season))
-  print("THIS DATA ALREADY EXISTS IN THE FILE {}. DOUBLE CHECK DUMBASS.".format(masterFile))
-  
-#if the data isn't in the legacy already append to it
-else:
-  #player name replacements
-  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r'.', '')
-  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' Jr', '')
-  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' Sr', '')
-  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' II', '')
-  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' III', '')
-  dfGlobal['Player'] = dfGlobal['Player'].str.replace(r'Will Fuller V', 'Will Fuller')
-  
-  #add newline to end of file - fixes error of writing into last cell instead of new row
-  file_object = open(masterFile, 'a')
-  file_object.write('\n')
-  file_object.close()
-
-  # append data frame to CSV file
-  dfGlobal.to_csv(masterFile, mode='a', index=False, header=False)
-  
-  print("Data appended successfully.")
-  print(dfGlobal)
-  print("\n\nscript complete. execution time:")
-  print(datetime.datetime.now() - begin_time)
+playerDb.to_csv("dre/playerDbPOC.csv", index=False)

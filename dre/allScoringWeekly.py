@@ -84,10 +84,10 @@ headers = {
 
 
 #get year and week for url/formatting
-season = input("What YEAR is it..? ")
+season = input("What SEASON is it..? ")
 while(len(season) != 4):
-  print("get the year right dumbass")
-  season = input("What YEAR is it..? ")
+  print("get the SEASON right dumbass")
+  season = input("What SEASON is it..? ")
 
 week = input("What WEEK is it..? ")
 while(len(week) >= 3):
@@ -113,6 +113,7 @@ for index, row in teamsPd.iterrows():
 def getTeamAbbreviation(team):
   try:
     if(team == "W "):
+      ##NEED TO CHECK IF THIS IS WHAT IS CORRECT. WANT SEASON NOT YEAR???
       return "W ({}/{})".format(todays_date.month, todays_date.day) 
     return teamsDict[team]
   except Exception as exp:
@@ -197,6 +198,8 @@ df['Player'] = df['Player'].str.replace(r' Sr', '')
 df['Player'] = df['Player'].str.replace(r' II', '')
 df['Player'] = df['Player'].str.replace(r' III', '')
 df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller')
+
+df = df.sort_values(by=['Player'])
 
 print(df.columns)
 print(df)
