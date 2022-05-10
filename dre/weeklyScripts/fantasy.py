@@ -8,6 +8,7 @@ import datetime
 import pandas as pd
 import numpy as np
 import re
+import shutil
 from bs4 import BeautifulSoup
 
 
@@ -224,7 +225,8 @@ for index, row in teamsPd.iterrows():
 
 dfGlobal = dfGlobal.replace('', "NA", regex = True)
 
-masterFile = "dre/fantasy_new_copy.csv"
+masterPath = "dre/weeklyScripts/"
+masterFile = "dre/weeklyScripts/fantasy_new_copy.csv"
 
 #read the existing csv as a pd df for error checking
 masterDf = pd.read_csv(masterFile)
@@ -255,6 +257,9 @@ else:
   dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' III', '', regex=True)
   dfGlobal['Player'] = dfGlobal['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
   
+  #create backup file
+  
+  shutil.copyfile(masterFile, masterPath+"fantasy_backup.csv")
   #add newline to end of file - fixes error of writing into last cell instead of new row
   file_object = open(masterFile, 'a')
   file_object.write('\n')
