@@ -13,15 +13,27 @@ h4 {
   color: #84A4D8;
 }
 
+a {
+  color: #424242;
+ }
+
 hr {
   border-top: 1px solid #000000;
 }
 
 .border-left {
-  border-left: 1px solid #BFBFBF;
+  border-left: 1px solid #000000;
 }
 
 .border-right {
+  border-right: 1px solid #000000;
+}
+
+.border-left-grey {
+  border-left: 1px solid #BFBFBF;
+}
+
+.border-right-grey {
   border-right: 1px solid #BFBFBF;
 }
 

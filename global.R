@@ -559,23 +559,19 @@ bar_chart <- function(label, width = "100%", height = "16px", fill = QBcolor, ba
 }
 
 #column definitions
-trfDef <- colDef(name = "TRF", align = 'center', maxWidth = 75, 
-                 cell = function(value) {
-                   teamnum <- teams$TeamNum[teams$Abbrev == value]
-                   team_url <- sprintf("https://theradicalultimatefflexperience.football.cbssports.com/teams/%s", teamnum)
-                   class <- paste0("trf team-", value)
-                   tags$a(href = team_url, target = "_blank", class = class, value)
-                 }
-)
-
-trfDeffilt <- colDef(name = "TRF", align = 'center', filterable = T, maxWidth = 75, 
-                     cell = function(value) {
-                       teamnum <- teams$TeamNum[teams$Abbrev == value]
-                       team_url <- sprintf("https://theradicalultimatefflexperience.football.cbssports.com/teams/%s", teamnum)
-                       class <- paste0("trf team-", value)
-                       tags$a(href = team_url, target = "_blank", class = class, value)
-                     }
-)
+trfDef <- function(name = "TRF", mW = 75, filt = TRUE) {
+  colDef(name = name,
+         maxWidth = mW,
+         filterable = filt,
+         align = 'center',
+         cell = function(value) {
+           teamnum <- teams$TeamNum[teams$Abbrev == value]
+           team_url <- sprintf("https://theradicalultimatefflexperience.football.cbssports.com/teams/%s", teamnum)
+           class <- paste0("trf team-", value)
+           tags$a(href = team_url, target = "_blank", class = class, value)
+         }
+  )
+}
 
 posDef <- colDef(align = "center", maxWidth = 47, filterable = T, style = function(value) {
   if (value == "QB") {
@@ -724,19 +720,16 @@ posDefFooterNofilt <- colDef(align = "center", footer = "Total", maxWidth = 47, 
   list(background = color)
 })
 
-playerDef <- colDef(minWidth = 200, filterable = T,
-                    cell = function(value) {
-                      playerid <- ids$playerID[ids$Player == value]
-                      player_url <- paste0("https://theradicalultimatefflexperience.football.cbssports.com/players/playerpage/", playerid, "/")
-                      tags$a(href = player_url, target = "_blank", value)
-                    })
-playerDefNofilt <- colDef(minWidth = 200, filterable = F,
-                          cell = function(value) {
-                            playerid <- ids$playerID[ids$Player == value]
-                            player_url <- paste0("https://theradicalultimatefflexperience.football.cbssports.com/players/playerpage/", playerid, "/")
-                            tags$a(href = player_url, target = "_blank", value)
-                          })
-
+playerDef <- function(mW = 200, filt = FALSE) {
+  colDef(minWidth = mW,
+         filterable = filt,
+         #style = list(color = 'black'),
+         cell = function(value) {
+           playerid <- ids$playerID[ids$Player == value]
+           player_url <- paste0("https://theradicalultimatefflexperience.football.cbssports.com/players/playerpage/", playerid, "/")
+           tags$a(href = player_url, target = "_blank", value)
+         })
+}
 
 nflDef <- colDef(minWidth = 50, align = 'left')
 

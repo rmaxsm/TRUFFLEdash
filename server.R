@@ -21,7 +21,7 @@ shinyServer(function(input, output, session) {
                   compact = T,
                   resizable = T,
                   columns = list(
-                      TRUFFLE = trfDef,
+                      TRUFFLE = trfDef(filt = FALSE),
                       Low = colDef(maxWidth = 60, align = 'left', format = colFormat(digits=2), style = function(value) {
                           fontWeight <- ifelse(value == min(teamsfantasy$Low), 'bold', 'plain')
                           list(fontWeight = fontWeight)
@@ -58,9 +58,9 @@ shinyServer(function(input, output, session) {
                   compact = T,
                   resizable = T,
                   columns = list(
-                      TRUFFLE = trfDef,
+                      TRUFFLE = trfDef(),
                       Pos = posDef,
-                      Player = colDef(minWidth = 150),
+                      Player = playerDef(mW = 150, filt = T),
                       ptslogs = colDef(name = "PtsLog",sortable = F, maxWidth = 80, filterable=F, cell = function(values) {
                           sparkline(values, type = "bar", chartRangeMin = 0, chartRangeMax = max(weekly$FPts))
                       }),
@@ -97,8 +97,8 @@ shinyServer(function(input, output, session) {
                   compact = T,
                   resizable = T,
                   columns = list(
-                      TRUFFLE = trfDef,
-                      Player = colDef(minWidth = 125),
+                      TRUFFLE = trfDef(filt = FALSE),
+                      Player = playerDef(mW = 125, filt = F),
                       FPts = fptsDefweeklynarrownoline
                   ),
                   columnGroups = list(colGroup(name = "QB", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
@@ -117,8 +117,8 @@ shinyServer(function(input, output, session) {
                   compact = T,
                   resizable = T,
                   columns = list(
-                      TRUFFLE = trfDef,
-                      Player = colDef(minWidth = 125),
+                      TRUFFLE = trfDef(filt = FALSE),
+                      Player = playerDef(mW = 125, filt = F),
                       FPts = fptsDefweeklynarrownoline
                   ),
                   columnGroups = list(colGroup(name = "RB", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
@@ -137,8 +137,8 @@ shinyServer(function(input, output, session) {
                   compact = T,
                   resizable = T,
                   columns = list(
-                      TRUFFLE = trfDef,
-                      Player = colDef(minWidth = 125),
+                      TRUFFLE = trfDef(filt = FALSE),
+                      Player = playerDef(mW = 125, filt = F),
                       FPts = fptsDefweeklynarrownoline
                   ),
                   columnGroups = list(colGroup(name = "WR", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
@@ -157,8 +157,8 @@ shinyServer(function(input, output, session) {
                   compact = T,
                   resizable = T,
                   columns = list(
-                      TRUFFLE = trfDef,
-                      Player = colDef(minWidth = 125),
+                      TRUFFLE = trfDef(filt = FALSE),
+                      Player = playerDef(mW = 125, filt = F),
                       FPts = fptsDefweeklynarrownoline
                   ),
                   columnGroups = list(colGroup(name = "TE", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
@@ -170,7 +170,7 @@ shinyServer(function(input, output, session) {
     #tpheader
     output$tpheader <- renderReactable({
         reactable(
-            teams[teams$FullName == input$tmportaltm, c("FullName", "Logo", "DivLogo")],
+            teams[teams$FullName == input$tmportaltm, c("FullName", "Abbrev", "Logo", "DivLogo")],
             sortable = FALSE,
             compact = TRUE,
             columns = list(
@@ -186,8 +186,9 @@ shinyServer(function(input, output, session) {
                                       )
                                   }
                 ),
+                Abbrev = trfDef(filt = FALSE, name = ""),
                 Logo = colDef(name = "",
-                              class = "border-right",
+                              class = "border-right-grey",
                               align="center", 
                               minWidth = 80, 
                               cell = function(value) {
@@ -198,7 +199,7 @@ shinyServer(function(input, output, session) {
                                   )
                               }),
                 DivLogo = colDef(name = "",
-                              class = "border-left",
+                              class = "border-left-grey",
                               align="center", 
                               minWidth = 80, 
                               cell = function(value) {
@@ -208,6 +209,10 @@ shinyServer(function(input, output, session) {
                                       div(style = list(display = "inline-block"), image)
                                   )
                               })
+            ),
+            theme = reactableTheme(
+              # Vertically center cells
+              cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")
             )
         )
     })
@@ -223,7 +228,6 @@ shinyServer(function(input, output, session) {
         reactable(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][, !"TRUFFLE"],
                   defaultSortOrder = "desc",
                   pagination = FALSE,
-                  #height = 500,
                   highlight = T,
                   filterable = T,
                   borderless = T,
@@ -231,7 +235,7 @@ shinyServer(function(input, output, session) {
                   resizable = T,
                   columns = list(
                       Pos = posDef,
-                      Player = playerDef,
+                      Player = playerDef(filt=T),
                       Age = ageDef,
                       Bye = byeDef,
                       NFL = nflDef,
@@ -258,7 +262,6 @@ shinyServer(function(input, output, session) {
         reactable(contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][, !"TRUFFLE"][order(match(Pos, positionorder), -Salary)],
                   defaultSortOrder = "desc",
                   pagination = FALSE,
-                  #height = 500,
                   filterable = T,
                   highlight = T,
                   borderless = T,
@@ -266,7 +269,7 @@ shinyServer(function(input, output, session) {
                   resizable = T,
                   columns = list(
                       Pos = posDefFooter,
-                      Player = playerDef,
+                      Player = playerDef(filt=T),
                       Age = ageDef,
                       NFL = nflDef,
                       Salary = salaryDefFooter,
@@ -291,12 +294,12 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = T,
                   highlight = T,
-                  borderless = T,
+                  bordered = T,
                   compact = T,
                   resizable = T,
                   columns = list(
                       Pos = posDef,
-                      Player = colDef(minWidth = 135),
+                      Player = playerDef(mW = 135, filt=T),
                       G = gDef,
                       PaCmp = colDef(minWidth = 53,name = "Cmp", align = 'right', class = "border-left"),
                       PaAtt = colDef(minWidth = 53,name = "Att", align = 'right'),
@@ -358,12 +361,12 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = F,
                   highlight = T,
-                  borderless = T,
+                  bordered = T,
                   resizable = T,
                   compact = T,
                   columns = list(
                       Pos = posDef,
-                      Player = colDef(minWidth = 120, filterable = T),
+                      Player = playerDef(mW = 120, filt = T),
                       FPts = fptsDefseasons,
                       Touch = colDef(minWidth = othcolwidth, align = "right", class = "border-left"),
                       Opp = colDef(minWidth = othcolwidth, align = "right"),
@@ -374,11 +377,11 @@ shinyServer(function(input, output, session) {
                       FDPts = colDef(minWidth = smallboxwidth, align = "right"),
                       RuPts = colDef(minWidth = smallboxwidth, align = "right"),
                       RePts = colDef(minWidth = smallboxwidth, align = "right"),
-                      `YdPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `TDPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `FDPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `RuPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `RePt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1))
+                      `YdPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
+                      `TDPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
+                      `FDPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
+                      `RuPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
+                      `RePt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0))
                   ),
                   columnGroups = list(
                       colGroup(name = "Volume / Efficiency", columns = c("Touch","Opp","FPts/Touch","FPts/Opp"), align = 'left'),
@@ -398,23 +401,23 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = F,
                   highlight = T,
-                  borderless = T,
+                  bordered = T,
                   resizable = T,
                   compact = T,
                   columns = list(
                       Pos = posDef,
-                      Player = colDef(minWidth = 125, filterable = T),
+                      Player = playerDef(mW = 125, filt = T),
                       Avg = avgDef,
                       RelSD = colDef(minWidth = perccolwidth, align = "right"),
                       AvgPosRk = colDef(name = "Avg",minWidth = perccolwidth, align = "right", class = "border-left"),
-                      `Top5 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `Top12 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `Top24 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `Top36 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `NonStart %` = colDef(minWidth = 70, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `>10 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `>20 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `>30 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1))
+                      `Top5 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
+                      `Top12 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
+                      `Top24 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
+                      `Top36 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
+                      `NonStart %` = colDef(minWidth = 70, align = "right", format = colFormat(percent = T, digits = 0)),
+                      `>10 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
+                      `>20 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
+                      `>30 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0))
                       
                   ),
                   columnGroups = list(
@@ -431,13 +434,13 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = T,
                   highlight = T,
-                  borderless = T,
+                  bordered = T,
                   compact = T,
                   resizable = T,
                   columns = list(
                       Week = weekDef,
                       Pos = posDef,
-                      Player = colDef(minWidth = 150),
+                      Player = playerDef(mW = 150, filt = T),
                       Opp = oppDef,
                       OpRk = oprkDef,
                       PaCmp = pacmpDef,
@@ -476,9 +479,9 @@ shinyServer(function(input, output, session) {
                   compact = T,
                   resizable = T,
                   columns = list(
-                      TRUFFLE = trfDef,
+                      TRUFFLE = trfDef(filt = FALSE),
                       Pos = posDefnofilt,
-                      Player = colDef(minWidth = 225),
+                      Player = playerDef(mW = 225),
                       NFL = colDef(align = 'left'),
                       AgePH = colDef(name = "Age"),
                       DynRk = colDef(align = 'left'),
@@ -504,7 +507,7 @@ shinyServer(function(input, output, session) {
                   resizable = T,
                   columns = list(
                       Season = seasonDef,
-                      Player = colDef(minWidth = 135),
+                      Player = playerDef(mW = 135),
                       G = gDef,
                       PaCmp = colDef(minWidth = 53,name = "Cmp", align = 'right', class = "border-left"),
                       PaAtt = colDef(minWidth = 53,name = "Att", align = 'right'),
@@ -570,7 +573,7 @@ shinyServer(function(input, output, session) {
                   resizable = T,
                   compact = T,
                   columns = list(
-                      Player = colDef(minWidth = 120),
+                      Player = playerDef(mW = 120),
                       FPts = fptsDefseasons,
                       Touch = colDef(minWidth = othcolwidth, align = "right", class = "border-left"),
                       Opp = colDef(minWidth = othcolwidth, align = "right"),
@@ -609,7 +612,7 @@ shinyServer(function(input, output, session) {
                   resizable = T,
                   compact = T,
                   columns = list(
-                      Player = colDef(minWidth = 125),
+                      Player = playerDef(mW = 125),
                       Avg = avgDef,
                       RelSD = colDef(minWidth = perccolwidth, align = "right"),
                       AvgPosRk = colDef(name = "Avg",minWidth = perccolwidth, align = "right", class = "border-left"),
@@ -644,7 +647,7 @@ shinyServer(function(input, output, session) {
                   columns = list(
                       Season = seasonDef,
                       Week = weekDef,
-                      Player = colDef(minWidth = 135),
+                      Player = playerDef(mW = 135),
                       Opp = oppDef,
                       OpRk = oprkDef,
                       PaCmp = colDef(minWidth = 50,name = "Cmp", align = 'right', class = "border-left"),
@@ -706,7 +709,7 @@ shinyServer(function(input, output, session) {
                       borderless = T,
                       compact = T,
                       columns = list(
-                          TRUFFLE = trfDef,
+                          TRUFFLE = trfDef(filt = FALSE),
                           FPts = colDef(minWidth = 150, align = 'left',
                                         format = colFormat(digits=1),
                                         cell = function(value) {
@@ -729,7 +732,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       defaultColDef = colDef(format = colFormat(percent = T, digits = 1)),
                       columns = list(
-                          TRUFFLE = trfDef,
+                          TRUFFLE = trfDef(filt = FALSE),
                           FPts = colDef(minWidth = 150, align = 'left',
                                         format = colFormat(digits=1),
                                         cell = function(value) {
@@ -783,12 +786,12 @@ shinyServer(function(input, output, session) {
             height = 'auto',
             filterable = F,
             highlight = T,
-            borderless = T,
+            bordered = T,
             compact = T,
             columns = list(
-                TRUFFLE = trfDeffilt,
+                TRUFFLE = trfDef(),
                 Pos = posDef,
-                Player = colDef(minWidth = 125, filterable = T),
+                Player = playerDef(mW = 125, filt = T),
                 G = gDef,
                 PaCmp = pacmpDef,
                 PaAtt = paattDef,
@@ -844,12 +847,12 @@ shinyServer(function(input, output, session) {
                 height = 'auto',
                 filterable = F,
                 highlight = T,
-                borderless = T,
+                bordered = T,
                 compact = T,
                 columns = list(
-                    TRUFFLE = trfDeffilt,
+                    TRUFFLE = trfDef(),
                     Pos = posDef,
-                    Player = colDef(minWidth = 125, filterable = T),
+                    Player = playerDef(mW = 125, filt = T),
                     G = gDef,
                     PaCmp = pacmpDef,
                     PaAtt = paattDef,
@@ -905,12 +908,12 @@ shinyServer(function(input, output, session) {
                 height = 'auto',
                 filterable = F,
                 highlight = T,
-                borderless = T,
+                bordered = T,
                 compact = T,
                 columns = list(
-                    TRUFFLE = trfDeffilt,
+                    TRUFFLE = trfDef(),
                     Pos = posDef,
-                    Player = colDef(minWidth = 125, filterable = T),
+                    Player = playerDef(mW = 125, filt = T),
                     G = gDef,
                     PaCmp = pacmpDef,
                     PaAtt = paattDef,
@@ -970,13 +973,13 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = F,
                   highlight = T,
-                  borderless = T,
+                  bordered = T,
                   resizable = T,
                   compact = T,
                   columns = list(
-                      TRUFFLE = trfDeffilt,
+                      TRUFFLE = trfDef(),
                       Pos = posDef,
-                      Player = colDef(minWidth = 120, filterable = T),
+                      Player = playerDef(mW = 120, filt = T),
                       Touch = colDef(minWidth = othcolwidth, align = "right", class = "border-left"),
                       Opp = colDef(minWidth = othcolwidth, align = "right"),
                       `FPts/Touch` = colDef(minWidth = 75, align = "right"),
@@ -1035,13 +1038,13 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = F,
                   highlight = T,
-                  borderless = T,
+                  bordered = T,
                   resizable = T,
                   compact = T,
                   columns = list(
-                      TRUFFLE = trfDeffilt,
+                      TRUFFLE = trfDef(),
                       Pos = posDef,
-                      Player = colDef(minWidth = 125, filterable = T),
+                      Player = playerDef(mW = 125, filt = T),
                       Avg = colDef(minWidth = perccolwidth, align = "right", class = "border-left"),
                       RelSD = colDef(minWidth = perccolwidth, align = "right"),
                       AvgPosRk = colDef(name = "Avg",minWidth = perccolwidth, align = "right", class = "border-left"),
@@ -1083,7 +1086,7 @@ shinyServer(function(input, output, session) {
                   resizable = F,
                   columns = list(
                       Pos = posDefnarrownofilt,
-                      Player = colDef(minWidth = 125),
+                      Player = playerDef(mW = 125),
                       Age = colDef(minWidth =  40),
                       NFL = colDef(minWidth =  40),
                       Salary = salaryDefFooterTM,
@@ -1111,7 +1114,7 @@ shinyServer(function(input, output, session) {
                   resizable = F,
                   columns = list(
                       Pos = posDefnarrownofilt,
-                      Player = colDef(minWidth = 125),
+                      Player = playerDef(mW = 125),
                       Age = colDef(minWidth =  40),
                       NFL = colDef(minWidth =  40),
                       Salary = salaryDefFooterTM,
@@ -1146,7 +1149,7 @@ shinyServer(function(input, output, session) {
                   resizable = T,
                   columns = list(
                       Pos = posDefnarrownofilt,
-                      Player = colDef(minWidth = 125),
+                      Player = playerDef(mW = 125),
                       NFL = colDef(minWidth =  40),
                       Salary = salaryDefFooterTM,
                       Contract = contractDefFooternarrow,
@@ -1176,7 +1179,7 @@ shinyServer(function(input, output, session) {
                       resizable = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 125),
+                          Player = playerDef(mW = 125),
                           NFL = colDef(minWidth =  40),
                           Salary = salaryDefFooterTM,
                           Contract = contractDefFooternarrow,
@@ -1271,7 +1274,7 @@ shinyServer(function(input, output, session) {
                 compact = T,
                 resizable = F,
                 columns = list(
-                  TRF = trfDef,
+                  TRF = trfDef(filt = FALSE),
                   PlayersReceived = colDef(name = "Players Received"),
                   Net = colDef(name = "Net Salary", 
                                minWidth = 50,
@@ -1305,9 +1308,9 @@ shinyServer(function(input, output, session) {
                   compact = T,
                   resizable = T,
                   columns = list(
-                      TRUFFLE = trfDef,
+                      TRUFFLE = trfDef(),
                       Pos = posDef,
-                      Player = playerDef,
+                      Player = playerDef(),
                       Age = ageDef,
                       NFL = nflDef,
                       Salary = salaryDef,
@@ -1372,7 +1375,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           FPts = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Fantasy Points", columns = c("Pos", "Player", "FPts"), align = 'left')
@@ -1390,7 +1393,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           FPts = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Fantasy Points", columns = c("Pos", "Player", "FPts"), align = 'left')
@@ -1411,7 +1414,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           Games = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Games Played", columns = c("Pos", "Player", "Games"), align = 'left')
@@ -1429,7 +1432,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           Games = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Games Played", columns = c("Pos", "Player", "Games"), align = 'left')
@@ -1450,7 +1453,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           Avg = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Average Fantasy Points", columns = c("Pos", "Player", "Avg"), align = 'left')
@@ -1468,7 +1471,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           Avg = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Average Fantasy Points", columns = c("Pos", "Player", "Avg"), align = 'left')
@@ -1489,7 +1492,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           FD = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "First Downs", columns = c("Pos", "Player", "FD"), align = 'left')
@@ -1507,7 +1510,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           FD = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "First Downs", columns = c("Pos", "Player", "FD"), align = 'left')
@@ -1528,7 +1531,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           PaYd = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Passing Yards", columns = c("Pos", "Player", "PaYd"), align = 'left')
@@ -1546,7 +1549,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           PaYd = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Passing Yards", columns = c("Pos", "Player", "PaYd"), align = 'left')
@@ -1567,7 +1570,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           PaTD = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Passing Touchdowns", columns = c("Pos", "Player", "PaTD"), align = 'left')
@@ -1585,7 +1588,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           PaTD = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Passing Touchdowns", columns = c("Pos", "Player", "PaTD"), align = 'left')
@@ -1606,7 +1609,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           PaInt = colDef(name = "Int", minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Interceptions", columns = c("Pos", "Player", "PaInt"), align = 'left')
@@ -1624,7 +1627,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           PaInt = colDef(name = "Int",minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Interceptions", columns = c("Pos", "Player", "PaInt"), align = 'left')
@@ -1645,7 +1648,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           PaCmp = colDef(name = "Cmp", minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Completions", columns = c("Pos", "Player", "PaCmp"), align = 'left')
@@ -1663,7 +1666,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           PaCmp = colDef(name = "Cmp",minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Completions", columns = c("Pos", "Player", "PaCmp"), align = 'left')
@@ -1684,7 +1687,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           RuYd = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Rushing Yards", columns = c("Pos", "Player", "RuYd"), align = 'left')
@@ -1702,7 +1705,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           RuYd = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Rushing Yards", columns = c("Pos", "Player", "RuYd"), align = 'left')
@@ -1723,7 +1726,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           RuTD = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Rushing Touchdowns", columns = c("Pos", "Player", "RuTD"), align = 'left')
@@ -1741,7 +1744,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           RuTD = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Rushing Touchdowns", columns = c("Pos", "Player", "RuTD"), align = 'left')
@@ -1762,7 +1765,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           RuFD = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Rushing First Downs", columns = c("Pos", "Player", "RuFD"), align = 'left')
@@ -1780,7 +1783,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           RuFD = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Rushing First Downs", columns = c("Pos", "Player", "RuFD"), align = 'left')
@@ -1801,7 +1804,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           FL = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Fumbles", columns = c("Pos", "Player", "FL"), align = 'left')
@@ -1819,7 +1822,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           FL = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Fumbles", columns = c("Pos", "Player", "FL"), align = 'left')
@@ -1840,7 +1843,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           ReYd = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Receiving Yards", columns = c("Pos", "Player", "ReYd"), align = 'left')
@@ -1858,7 +1861,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           ReYd = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Receiving Yards", columns = c("Pos", "Player", "ReYd"), align = 'left')
@@ -1879,7 +1882,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           ReTD = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Receiving Touchdowns", columns = c("Pos", "Player", "ReTD"), align = 'left')
@@ -1897,7 +1900,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           ReTD = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Receiving Touchdowns", columns = c("Pos", "Player", "ReTD"), align = 'left')
@@ -1918,7 +1921,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           ReFD = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Receiving First Downs", columns = c("Pos", "Player", "ReFD"), align = 'left')
@@ -1936,7 +1939,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           ReFD = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Receiving First Downs", columns = c("Pos", "Player", "ReFD"), align = 'left')
@@ -1957,7 +1960,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           Rec = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Receptions", columns = c("Pos", "Player", "Rec"), align = 'left')
@@ -1975,7 +1978,7 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       columns = list(
                           Pos = posDefnarrownofilt,
-                          Player = colDef(minWidth = 140),
+                          Player = playerDef(mW = 140),
                           Rec = colDef(minWidth = 60, align = "left")
                       ),
                       columnGroups = list(colGroup(name = "Receptions", columns = c("Pos", "Player", "Rec"), align = 'left')
@@ -2012,7 +2015,7 @@ shinyServer(function(input, output, session) {
                             trf <- award2020$TRUFFLE[index]
                             div(
                                 div(style = list(fontWeight = 600, fontSize=16, color = "#84A4D8"), value),
-                                div(style = list(fontSize = 14), paste0(winner, ", ", pos, "  —  ", trf))
+                                div(style = list(fontSize = 14), paste0(winner, ", ", pos, "  |  ", trf))
                             )
                         }
                     ),
@@ -2054,7 +2057,7 @@ shinyServer(function(input, output, session) {
                                 trf <- award2021$TRUFFLE[index]
                                 div(
                                     div(style = list(fontWeight = 600, fontSize=16, color = "#84A4D8"), value),
-                                    div(style = list(fontSize = 14), paste0(winner, ", ", pos, "  —  ", trf))
+                                    div(style = list(fontSize = 14), paste0(winner, ", ", pos, "  |  ", trf))
                                 )
                             }
                         ),
@@ -2078,7 +2081,7 @@ shinyServer(function(input, output, session) {
                   compact = T,
                   columns = list(
                       Pos = posDefwidenofilt,
-                      TRUFFLE = trfDef
+                      TRUFFLE = trfDef(filt = FALSE)
                   ),
                   columnGroups = list(colGroup(name = "1st Team", columns = c("Pos", "Winner", "TRUFFLE"), align = 'left')
                   ))
@@ -2089,7 +2092,7 @@ shinyServer(function(input, output, session) {
                   compact = T,
                   columns = list(
                       Pos = posDefwidenofilt,
-                      TRUFFLE = trfDef
+                      TRUFFLE = trfDef(filt = FALSE)
                   ),
                   columnGroups = list(colGroup(name = "2nd Team", columns = c("Pos", "Winner", "TRUFFLE"), align = 'left')
                   ))
@@ -2105,14 +2108,14 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = T,
                   highlight = T,
-                  borderless = T,
+                  bordered = T,
                   compact = T,
                   resizable = T,
                   columns = list(
                       Season = seasonDef,
                       Week = weekDef,
                       Pos = posDef,
-                      Player = colDef(minWidth = 150),
+                      Player = playerDef(mW = 150, filt = T),
                       Opp = oppDef,
                       OpRk = oprkDef,
                       PaCmp = pacmpDef,
@@ -2149,15 +2152,15 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = T,
                   highlight = T,
-                  borderless = T,
+                  bordered = T,
                   compact = T,
                   resizable = T,
                   columns = list(
                       Season = seasonDef,
                       Week = weekDef,
-                      TRUFFLE = trfDef,
+                      TRUFFLE = trfDef(),
                       Pos = posDef,
-                      Player = colDef(minWidth = 150),
+                      Player = playerDef(mW = 150, filt = T),
                       PaCmp = pacmpDef,
                       PaAtt = paattDef,
                       PaYd = paydDefWk,
@@ -2192,13 +2195,13 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = T,
                   highlight = T,
-                  borderless = T,
+                  bordered = T,
                   compact = T,
                   resizable = T,
                   columns = list(
                       Season = seasonDef,
                       Pos = posDef,
-                      Player = colDef(minWidth = 150),
+                      Player = playerDef(mW = 150, filt = T),
                       NFL = nflDef,
                       G = gDef,
                       PaCmp = pacmpDef,
@@ -2239,7 +2242,7 @@ shinyServer(function(input, output, session) {
                   compact = T,
                   columns = list(
                       `#` = colDef(minWidth = 30, align = "right"),
-                      TRF = trfDef,
+                      TRF = trfDef(filt = FALSE),
                       Player = colDef(minWidth = 150, align = "left"),
                       Pos = posDefnarrownofilt,
                       Salary = colDef(minWidth = 60, align = "right")
@@ -2259,7 +2262,7 @@ shinyServer(function(input, output, session) {
                   compact = T,
                   columns = list(
                       `#` = colDef(minWidth = 30, align = "right"),
-                      TRF = trfDef,
+                      TRF = trfDef(filt = FALSE),
                       Player = colDef(minWidth = 150, align = "left"),
                       Pos = posDefnarrownofilt,
                       Salary = colDef(minWidth = 60, align = "right")
@@ -2279,7 +2282,7 @@ shinyServer(function(input, output, session) {
                   compact = T,
                   columns = list(
                       `#` = colDef(minWidth = 30, align = "right"),
-                      TRF = trfDef,
+                      TRF = trfDef(filt = FALSE),
                       Player = colDef(minWidth = 150, align = "left"),
                       Pos = posDefnarrownofilt,
                       Salary = colDef(minWidth = 60, align = "right")
