@@ -57,6 +57,10 @@ pal <- setNames(pal, c("QB", "RB", "WR", "TE", "DST", "DC", "IR"))
 
 # Reading in and cleaning data from Excels/csvs -----
 
+#file of CBS player IDs
+ids <- read_csv("data/playerIDs.csv")
+ids$playerID <- as.character(ids$playerID)
+
 #file of TRUFFLE team info
 teams <- read_excel("data/teams.xlsx")
 
@@ -720,8 +724,18 @@ posDefFooterNofilt <- colDef(align = "center", footer = "Total", maxWidth = 47, 
   list(background = color)
 })
 
-playerDef <- colDef(minWidth = 200, filterable = T)
-playerDefNofilt <- colDef(minWidth = 200, filterable = F)
+playerDef <- colDef(minWidth = 200, filterable = T,
+                    cell = function(value) {
+                      playerid <- ids$playerID[ids$Player == value]
+                      player_url <- paste0("https://theradicalultimatefflexperience.football.cbssports.com/players/playerpage/", playerid, "/")
+                      tags$a(href = player_url, target = "_blank", value)
+                    })
+playerDefNofilt <- colDef(minWidth = 200, filterable = F,
+                          cell = function(value) {
+                            playerid <- ids$playerID[ids$Player == value]
+                            player_url <- paste0("https://theradicalultimatefflexperience.football.cbssports.com/players/playerpage/", playerid, "/")
+                            tags$a(href = player_url, target = "_blank", value)
+                          })
 
 
 nflDef <- colDef(minWidth = 50, align = 'left')
