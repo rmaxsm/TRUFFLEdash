@@ -1,6 +1,8 @@
 #this is a python script. It will ask for the year then get all scoring data
 #it should append to a current csv file - can stay hardcoded or ask for filepath.
 #currently POC concept. 
+## writes to a file but not adding at all. That needs to be implemented.
+
 
 import os
 import requests
@@ -208,13 +210,12 @@ masterFile = "dre/yearlyScripts/seasons_new_copy.csv"
 #read the existing csv as a pd df for error checking
 masterDf = pd.read_csv(masterFile)
 
-#combine the existing year/week combos into a list of tuples
 years = [str(i) for i in masterDf["Season"]]
-# weeks = [str(i) for i in masterDf["Week"]]
-# allWeeksYears = list(zip(years,weeks))
 
 #if year week trying to be written already exists print error output - will not write 
-if (season in years):
+#COMMENTED OUT BELOW IS CORRECT SYNTAX - NEED STR CONVERSTION OR IT WILL NOT WORK
+# if (str(season) in years):
+if (str(season) in years):
   print("AN ERROR WAS ENCOUNTERED. YOU ARE TRYING TO WRITE DATA SEASON {}.".format(season))
   print("THIS DATA ALREADY EXISTS IN THE FILE {}. DOUBLE CHECK DUMBASS.".format(masterFile))
   
@@ -222,15 +223,24 @@ if (season in years):
 else:
   #create backup file
   shutil.copyfile(masterFile, masterPath+"seasons_backup.csv")
-  
-  print(len(df.columns))
-  print(len(masterDf.columns))
-  print(df.columns)
-  print(masterDf.columns)
-  #reassign the columns to be equal to that of the existing csv
-  # dfGlobal.columns = masterDf.columns
-  #LOOK ABOVE ME LAKJASLDJAKS:LDAJSDL:KASJ
 
+  dfCleaned = df[df.Avg != "-"].copy()
+  avg = dfCleaned.loc[:,"Avg"].astype('float')
+  total = dfCleaned.loc[:,"Total"].astype('float')
+  dfCleaned.loc[:,"Avg"] = avg
+  dfCleaned.loc[:,"Total"] = total
+
+  gamesPlayed = round(dfCleaned["Total"] / dfCleaned["Avg"], 0)
   
-  dfCleaned = df[df.Avg != "-"]
+  dfCleaned["OVP"] = gamesPlayed
+  
+  dfCleaned.columns = masterDf.columns
+  
+  # dfCleaned = dfCleaned.replace(np.nan, 0.0, regex = True)
+  dfCleaned = dfCleaned.dropna()
+  games = dfCleaned.loc[:,"G"].astype('int')
+  dfCleaned.loc[:,"G"] = games
+
   print(dfCleaned)
+  
+  dfCleaned.to_csv("dre/yearlyScripts/seasons_2021_POC.csv", index=False)
