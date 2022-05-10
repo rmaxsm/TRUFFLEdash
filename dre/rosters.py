@@ -83,8 +83,18 @@ headers = {
 }
 
 
-season = 2022
-week = 1
+#get year and week for url/formatting
+season = input("What SEASON is it..? ")
+while(len(season) != 4):
+  print("get the SEASON right dumbass")
+  season = input("What SEASON is it..? ")
+
+week = input("What WEEK is it..? ")
+while(len(week) >= 3):
+  print("get the week right dumbass")
+  week = input("What WEEK is it..? ")
+# season = 2022
+# week = 1
 
 
 begin_time = datetime.datetime.now()
@@ -96,7 +106,7 @@ teamsPd = pd.read_csv("dre/teams_copy.csv")
 
 teamsDict = {}
 for index, row in teamsPd.iterrows():
-  teamsDict[row["Logs"]] = row["Abbrev"]  
+  teamsDict[row["FullName"]] = row["Abbrev"]  
 
 
 #returns team abbreviation from team name
@@ -111,35 +121,113 @@ def getTeamAbbreviation(team):
   
 #takes in a single row of html and returns the stats as list (for players/dst)
 def separatePlayers(rows):
+  curRow = []
+  for i in rows:
+    curRow.append(i.getText())
+  return curRow
+
+#takes in a single row of html and returns the stats as list deadcap players only
+def separatePlayersDeadCap(rows):
   itr = 0
   curRow = []
   for i in rows:
-    if itr == 0:    #first value always empty string
-      curRow.append("")
-    elif itr == 1:    #second value convert to team abbreviation
-      curRow.append(getTeamAbbreviation(i.getText()))
-    else:       #after first two iterations just get exact data from source
+    if itr == 0:
+      curRow.append("DC")
+    else:
       curRow.append(i.getText())
     itr += 1
   return curRow
+
+#separates the column names
+#returns list representing the columns for tables 
+def separateColumns(row):
+  allCols = []
+  for i in row:
+    allCols.append(i.getText())
+  allCols[1] = "Player"
+  return allCols
+
+
+getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
+getPosition = lambda y: pd.Series([i for i in y.split(" ")][-1])
+getPlayer = lambda z: pd.Series(' '.join([i for i in z.split(" ")][:-1]))
   
+
 #where the connection is made to the truffle cbs website
 url = "https://theradicalultimatefflexperience.football.cbssports.com/teams/all"
 response = requests.get(url, cookies=cookies, headers=headers)
 soup = BeautifulSoup(response.content, 'html.parser')
 
 # complete =  soup.find("div", {"id": "sortableStats"})
-# tbls =  soup.find("table", {"class":"data data3 pinHeader borderTop"})
-# counter = 0
-# for tbl in tbls:
-#   if counter == 0:
-#     counter += 1
-#   else:
-#     print(tbl)
-#     print(type(tbl))
-#     if isinstance(tbl, NavigableString):
-#       print("BINGO BANGO")
-#     print("FIRST ITER IS DONE YAY BOYS \n\n\n\n")
-#   
-#     counter += 1
+tbls =  soup.findAll("table", {"class":"data data3 pinHeader borderTop"})
+dfGlobal = pd.DataFrame()
+counter = 0
+
+for tbl in tbls:
+  # print(tbl.prettify())
+  tableRows = tbl.findAll('tr')
   
+  teamName = ""
+  cols = []
+  players = []
+  
+  for row in tableRows:
+    if row.has_attr('class') and row['class'][0] == "title":
+      # print("THIS IS THE TEAM NAME")
+      nameSplit = row.getText().split(" ")
+      nameSplit.pop()
+      teamName = ' '.join(nameSplit)
+    elif row.has_attr('class') and row['class'][0] == "label" and len(row['class']) == 1:
+      # print("THIS IS THE COLUMN HEADERS")
+      cols = separateColumns(row)
+    elif row.has_attr('class') and row['class'][0] == "playerRow" and len(row['class']) == 2:
+      # print("THESE ARE ALL THE STARTING PLAYERS")
+      players.append(separatePlayers(row))
+    elif row.has_attr('class') and row['class'][0] == "playerRow" and len(row['class']) == 3:
+      # print("THESE ARE ALL THE BENCHED PLAYERS")
+      playerName = row.find('a').getText()
+      if (playerName.split(" ")[-1] == "Cap"):
+        players.append(separatePlayersDeadCap(row))
+      else:
+        players.append(separatePlayers(row))
+
+  dfTeam = pd.DataFrame(players, columns = cols)
+  dfTeam["TRUFFLE"] = getTeamAbbreviation(teamName)
+  
+  #apply lambda fcts to correct columns
+  playerTeam = dfTeam["Player"].apply(getNFLTeam)
+  position = playerTeam[0].apply(getPosition)
+  player =  playerTeam[0].apply(getPlayer)
+  nfl = pd.Series(playerTeam[1])
+  
+  
+  #add/remove columns for TRUFFLE formatting
+  dfTeam["Player"] = player
+  dfTeam.insert(0,"Season", season)
+  dfTeam.insert(1,"Week", week)
+  dfTeam.insert(3,"PosTRUFFLE", position[0])
+  dfTeam.insert(5,"NFL", nfl)
+
+  if counter == 0:
+    dfGlobal = dfTeam
+  else:
+    dfGlobal = pd.concat([dfGlobal, dfTeam], ignore_index = True)
+  counter += 1
+  
+  
+for index, row in dfGlobal.loc[~(dfGlobal['Pos'] == dfGlobal['PosTRUFFLE'])].iterrows():
+  if row['Pos'] == "DC":
+    # print("DEAD CAP HARD CODE ASSIGN")
+    dfGlobal.at[index, 'Pos'] = "DC"
+  else:
+    # print("NEED TO ASSIGN THE Pos = PosTRUFFLE")
+    dfGlobal.at[index, 'Pos'] = row['PosTRUFFLE']
+    
+#shifting/deleting/sorting columns for formatting
+truffle = dfGlobal.pop("TRUFFLE")
+dfGlobal.insert(2,"TRUFFLE", truffle)
+dfGlobal = dfGlobal.drop(["PosTRUFFLE"], axis=1)
+# dfGlobal = dfGlobal.sort_values(by=['TRUFFLE'])
+
+print(dfGlobal)
+dfGlobal.to_csv("dre/rostersPOC.csv", index = False)
