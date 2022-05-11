@@ -562,9 +562,9 @@ with_tt <- function(value, tooltip) {
 }
 
 #column definitions
-trfDef <- function(name = "TRF", mW = 75, filt = TRUE) {
+trfDef <- function(name = "TRF", maxW = 75, filt = TRUE) {
   colDef(name = name,
-         maxWidth = mW,
+         maxWidth = maxW,
          filterable = filt,
          align = 'center',
          cell = function(value) {
@@ -576,161 +576,59 @@ trfDef <- function(name = "TRF", mW = 75, filt = TRUE) {
   )
 }
 
-posDef <- colDef(align = "center", maxWidth = 47, filterable = T, style = function(value) {
-  if (value == "QB") {
-    color <- QBcolor
-  } else if (value == "RB") {
-    color <- RBcolor
-  } else if (value == "WR") {
-    color <- WRcolor
-  } else if (value == "TE") {
-    color <- TEcolor
-  } else if (value == "DST") {
-    color <- DSTcolor
-  }  else if (value == "DC") {
-    color <- DCcolor
-  }  else if (grepl("IR", value)) {
-    color <- IRcolor
-  } else {
-    color <- "white"
-  }
-  list(background = color)
-})
-
-posDefnofilt <- colDef(align = "center", maxWidth = 47, filterable = F, style = function(value) {
-  if (value == "QB") {
-    color <- QBcolor
-  } else if (value == "RB") {
-    color <- RBcolor
-  } else if (value == "WR") {
-    color <- WRcolor
-  } else if (value == "TE") {
-    color <- TEcolor
-  } else if (value == "DST") {
-    color <- DSTcolor
-  }  else if (value == "DC") {
-    color <- DCcolor
-  }  else if (grepl("IR", value)) {
-    color <- IRcolor
-  } else {
-    color <- "white"
-  }
-  list(background = color)
-})
-
-posDefnarrow <- colDef(align = "center", maxWidth = 35, filterable = T, style = function(value) {
-  if (value == "QB") {
-    color <- QBcolor
-  } else if (value == "RB") {
-    color <- RBcolor
-  } else if (value == "WR") {
-    color <- WRcolor
-  } else if (value == "TE") {
-    color <- TEcolor
-  } else if (value == "DST") {
-    color <- DSTcolor
-  }  else if (value == "DC") {
-    color <- DCcolor
-  }  else if (grepl("IR", value)) {
-    color <- IRcolor
-  } else {
-    color <- "white"
-  }
-  list(background = color)
-})
-
-posDefnarrownofilt <- colDef(align = "center", maxWidth = 40, filterable = F, style = function(value) {
-  if (value == "QB") {
-    color <- QBcolor
-  } else if (value == "RB") {
-    color <- RBcolor
-  } else if (value == "WR") {
-    color <- WRcolor
-  } else if (value == "TE") {
-    color <- TEcolor
-  } else if (value == "DST") {
-    color <- DSTcolor
-  }  else if (value == "DC") {
-    color <- DCcolor
-  }  else if (grepl("IR", value)) {
-    color <- IRcolor
-  } else {
-    color <- "white"
-  }
-  list(background = color)
-})
-
-posDefwidenofilt <- colDef(align = "center", maxWidth = 80, filterable = F, style = function(value) {
-  if (value == "QB") {
-    color <- QBcolor
-  } else if (value == "RB") {
-    color <- RBcolor
-  } else if (value == "WR") {
-    color <- WRcolor
-  } else if (value == "TE") {
-    color <- TEcolor
-  } else if (value == "DST") {
-    color <- DSTcolor
-  }  else if (value == "DC") {
-    color <- DCcolor
-  }  else if (grepl("IR", value)) {
-    color <- IRcolor
-  } else {
-    color <- "white"
-  }
-  list(background = color)
-})
-
-posDefFooter <- colDef(align = "center", footer = "Total", maxWidth = 47, filterable = T, style = function(value) {
-  if (value == "QB") {
-    color <- QBcolor
-  } else if (value == "RB") {
-    color <- RBcolor
-  } else if (value == "WR") {
-    color <- WRcolor
-  } else if (value == "TE") {
-    color <- TEcolor
-  } else if (value == "DST") {
-    color <- DSTcolor
-  }  else if (value == "DC") {
-    color <- DCcolor
-  }  else if (grepl("IR", value)) {
-    color <- IRcolor
-  } else {
-    color <- "white"
-  }
-  list(background = color)
-})
-
-posDefFooterNofilt <- colDef(align = "center", footer = "Total", maxWidth = 47, filterable = F, style = function(value) {
-  if (value == "QB") {
-    color <- QBcolor
-  } else if (value == "RB") {
-    color <- RBcolor
-  } else if (value == "WR") {
-    color <- WRcolor
-  } else if (value == "TE") {
-    color <- TEcolor
-  } else if (value == "DST") {
-    color <- DSTcolor
-  }  else if (value == "DC") {
-    color <- DCcolor
-  }  else if (grepl("IR", value)) {
-    color <- IRcolor
-  } else {
-    color <- "white"
-  }
-  list(background = color)
-})
-
-playerDef <- function(mW = 200, filt = FALSE) {
-  colDef(minWidth = mW,
+posDef <- function(maxW = 47, filt = T, foot = "") {
+  colDef(maxWidth = maxW,
          filterable = filt,
-         #style = list(color = 'black'),
+         footer = foot,
+         align = "center",
+         style = function(value) {
+           if (value == "QB") {
+             color <- QBcolor
+           } else if (value == "RB") {
+             color <- RBcolor
+           } else if (value == "WR") {
+             color <- WRcolor
+           } else if (value == "TE") {
+             color <- TEcolor
+           } else if (value == "DST") {
+             color <- DSTcolor
+           }  else if (value == "DC") {
+             color <- DCcolor
+           }  else if (grepl("IR", value)) {
+             color <- IRcolor
+           } else {
+             color <- "white"
+           }
+           list(background = color)
+         })
+}
+
+playerDef <- function(minW = 200, filt = FALSE) {
+  colDef(minWidth = minW,
+         filterable = filt,
          cell = function(value) {
            playerid <- ids$playerID[ids$Player == value]
            player_url <- paste0("https://theradicalultimatefflexperience.football.cbssports.com/players/playerpage/", playerid, "/")
            tags$a(href = player_url, target = "_blank", value)
+         })
+}
+
+posRkDef <- function(maxW = 62, filt = F) {
+  colDef(header = with_tt("PosRk", "Seasonal position rank by total FPts"),
+         maxWidth = maxW,
+         filterable = filt,
+         align = 'right',
+         defaultSortOrder = "asc")
+}
+
+ptsLogDef <- function(maxW = 75) {
+  colDef(header = with_tt("PtsLog", "Weekly log of FPts"),
+         sortable = F,
+         align = 'right',
+         maxWidth = maxW,
+         filterable=F,
+         cell = function(values) {
+           sparkline(values, type = "bar", chartRangeMin = 0, chartRangeMax = max(weekly$FPts))
          })
 }
 
@@ -740,20 +638,36 @@ byeDef <- colDef(minWidth = 60, align = 'left')
 
 gDef <- colDef(minWidth = 50, align = 'right')
 
-ageDef <- colDef(minWidth = 75, align = 'left')
+ageDef <- colDef(minWidth = 75, align = 'right')
 
 smallcolDef <- colDef(maxWidth = 100, align = 'left')
 
-salaryDef <- colDef(minWidth = 175,align = 'left',
-                    format = colFormat(digits=0),
-                    style = function(value) {
-                      color <- ifelse(value <= 15, IRcolor, 'black')
-                      list(color = color)},
-                    cell = function(value) {
-                      width <- paste0(value / max(rosters$Salary) * 100, "%")
-                      bar_chart(ifelse(is.na(value), "", value), width = ifelse(is.na(value), 0, width), prefix = "$")
-                    }
-)
+salaryDefBar <- function(minW = 175, foot = F) {
+  colDef(minWidth = minW,
+         align = 'left',
+         format = colFormat(digits=0),
+         style = function(value) {
+           color <- ifelse(value <= 15, IRcolor, 'black')
+           list(color = color)},
+         cell = function(value) {
+           width <- paste0(value / max(rosters$Salary) * 100, "%")
+           bar_chart(ifelse(is.na(value), "", value), width = ifelse(is.na(value), 0, width), prefix = "$")
+         },
+         footer = function(values) if(foot == T) {paste0("$", sum(values))}
+  )
+}
+
+salaryDefNobar <- function(minW = 45, foot = F) {
+  colDef(minWidth = minW,
+         name = "$",
+         align = 'right',
+         format = colFormat(digits=0, prefix = "$"),
+         style = function(value) {
+           color <- ifelse(value <= 15, IRcolor, 'black')
+           list(color = color)},
+         footer = function(values) if(foot == T) {paste0("$", sum(values))}
+  )
+}
 
 draftsalaryDefnarrow <- colDef(minWidth = 100,align = 'left',
                                format = colFormat(digits=0),
