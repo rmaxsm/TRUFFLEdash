@@ -34,7 +34,7 @@ shinyServer(function(input, output, session) {
                   Low = colDef(header = with_tt("Low", "Lowest weekly score"),
                                minWidth = 50,
                                align = 'right',
-                               format = colFormat(digits=2),
+                               format = colFormat(digits=1),
                                style = function(value) {
                                  fontWeight <- ifelse(value == min(teamsfantasy$Low), 'bold', 'plain')
                                  list(fontWeight = fontWeight)
@@ -42,7 +42,7 @@ shinyServer(function(input, output, session) {
                   High = colDef(header = with_tt("High", "Highest weekly score"),
                                 minWidth = 50,
                                 align = 'right',
-                                format = colFormat(digits=2),
+                                format = colFormat(digits=1),
                                 style = function(value) {
                                   fontWeight <- ifelse(value == max(teamsfantasy$High), 'bold', 'plain')
                                   list(fontWeight = fontWeight)
@@ -78,18 +78,16 @@ shinyServer(function(input, output, session) {
                   columns = list(
                       TRUFFLE = trfDef(),
                       Pos = posDef(),
-                      Player = playerDef(minW = 140,
+                      Player = playerDef(minW = 130,
                                          filt = T),
                       PosRk = posRkDef(filt = F),
                       ptslogs = ptsLogDef(),
-                      Avg = colDef(header = with_tt("Avg", "Weekly average FPts"),
-                                   maxWidth = 50,
-                                   align = 'right',
-                                   filterable = F),
+                      Avg = avgDef(maxW = 48, col = F),
                       Total = colDef(header = with_tt("Tot", "Seasonal total FPts"),
-                                     filterable = F,
-                                     align = 'right',
-                                     maxWidth = 50)
+                                     maxWidth = 45,
+                                     format = colFormat(digits = 0),
+                                     filterable = F
+                      )
                   )
                   )
     })
@@ -108,7 +106,7 @@ shinyServer(function(input, output, session) {
                   columns = list(
                       TRUFFLE = trfDef(filt = FALSE),
                       Player = playerDef(minW = 125, filt = F),
-                      FPts = fptsDefweeklynarrownoline
+                      FPts = fptsWeekDef(maxW = 50, borderL = F)
                   ),
                   columnGroups = list(colGroup(name = "QB", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
         )
@@ -128,7 +126,7 @@ shinyServer(function(input, output, session) {
                   columns = list(
                       TRUFFLE = trfDef(filt = FALSE),
                       Player = playerDef(minW = 125, filt = F),
-                      FPts = fptsDefweeklynarrownoline
+                      FPts = fptsWeekDef(maxW = 50, borderL = F)
                   ),
                   columnGroups = list(colGroup(name = "RB", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
         )
@@ -148,7 +146,7 @@ shinyServer(function(input, output, session) {
                   columns = list(
                       TRUFFLE = trfDef(filt = FALSE),
                       Player = playerDef(minW = 125, filt = F),
-                      FPts = fptsDefweeklynarrownoline
+                      FPts = fptsWeekDef(maxW = 50, borderL = F)
                   ),
                   columnGroups = list(colGroup(name = "WR", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
         )
@@ -168,7 +166,7 @@ shinyServer(function(input, output, session) {
                   columns = list(
                       TRUFFLE = trfDef(filt = FALSE),
                       Player = playerDef(minW = 125, filt = F),
-                      FPts = fptsDefweeklynarrownoline
+                      FPts = fptsWeekDef(maxW = 50, borderL = F)
                   ),
                   columnGroups = list(colGroup(name = "TE", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
         )
@@ -235,7 +233,6 @@ shinyServer(function(input, output, session) {
                   filterable = T,
                   #borderless = T,
                   compact = T,
-                  resizable = T,
                   columns = list(
                       Pos = posDef(foot = "Total"),
                       Player = playerDef(filt=T),
@@ -243,12 +240,12 @@ shinyServer(function(input, output, session) {
                       Bye = byeDef,
                       NFL = nflDef,
                       Salary = salaryDefBar(foot = T),
-                      Contract = contractDefFooter,
+                      Contract = contractDef(foot = T),
                       G = gDef,
                       PosRk = posRkDef(filt = T),
                       ptslog = ptsLogDef(),
-                      Avg = avgDef,
-                      FPts = fptsDefseasons
+                      Avg = avgDef(),
+                      FPts = fptsSeasDef()
                   ),
                   columnGroups = list(
                       colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
@@ -267,18 +264,17 @@ shinyServer(function(input, output, session) {
                   highlight = T,
                   #borderless = T,
                   compact = T,
-                  resizable = T,
                   columns = list(
                       Pos = posDef(foot = "Total"),
                       Player = playerDef(filt=T),
                       Age = ageDef,
                       NFL = nflDef,
                       Salary = salaryDefBar(foot = T),
-                      Contract = contractDefFooter,
-                      `'22` = futurecolDefFooter,
-                      `'23` = futurecolDefFooter,
-                      `'24` = futurecolDefFooter,
-                      `'25` = futurecolDefFooter
+                      Contract = contractDef(foot = T),
+                      `'22` = futurecolDef(yr = "'22", foot = T),
+                      `'23` = futurecolDef(yr = "'23",foot = T),
+                      `'24` = futurecolDef(yr = "'24",foot = T),
+                      `'25` = futurecolDef(yr = "'25",foot = T)
                   ),
                   defaultColDef = colDef(footerStyle = list(fontWeight = "bold")),
                   columnGroups = list(
@@ -297,7 +293,6 @@ shinyServer(function(input, output, session) {
                   highlight = T,
                   #borderless = T,
                   compact = T,
-                  resizable = T,
                   columns = list(
                       Pos = posDef(),
                       Player = playerDef(minW = 135, filt=T),
@@ -340,8 +335,8 @@ shinyServer(function(input, output, session) {
                       ReFD = colDef(minWidth = 40,name = "FD", align = 'right', style = function(value) {
                           fontWeight <- ifelse(value >= 50, 'bold', 'plain')
                           list(fontWeight = fontWeight)}),
-                      Avg = avgDef,
-                      FPts = fptsDefseasons
+                      Avg = avgDef(),
+                      FPts = fptsSeasDef()
                   ),
                   columnGroups = list(
                       colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
@@ -363,26 +358,25 @@ shinyServer(function(input, output, session) {
                   filterable = F,
                   highlight = T,
                   #borderless = T,
-                  resizable = T,
                   compact = T,
                   columns = list(
                       Pos = posDef(),
                       Player = playerDef(minW = 120, filt = T),
-                      FPts = fptsDefseasons,
-                      Touch = colDef(minWidth = othcolwidth, align = "right", class = "border-left"),
-                      Opp = colDef(minWidth = othcolwidth, align = "right"),
-                      `FPts/Touch` = colDef(minWidth = 75, align = "right"),
-                      `FPts/Opp` = colDef(minWidth = 70, align = "right"),
-                      YdPts = colDef(minWidth = smallboxwidth, align = "right", class = "border-left"),
-                      TDPts = colDef(minWidth = smallboxwidth, align = "right"),
-                      FDPts = colDef(minWidth = smallboxwidth, align = "right"),
-                      RuPts = colDef(minWidth = smallboxwidth, align = "right"),
-                      RePts = colDef(minWidth = smallboxwidth, align = "right"),
-                      `YdPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
-                      `TDPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
-                      `FDPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
-                      `RuPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
-                      `RePt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0))
+                      FPts = fptsSeasDef(),
+                      Touch = tchDef,
+                      Opp = oppDef,
+                      `FPts/Touch` = fptsPtchDef,
+                      `FPts/Opp` = fptsPoppDef,
+                      YdPts = ydptsDef,
+                      TDPts = tdptsDef,
+                      FDPts = fdptsDef,
+                      RuPts = ruptsDef,
+                      RePts = reptsDef,
+                      `YdPt%` = ydptpercDef,
+                      `TDPt%` = tdptpercDef,
+                      `FDPt%` = fdptpercDef,
+                      `RuPt%` = ruptpercDef,
+                      `RePt%` = reptpercDef
                   ),
                   columnGroups = list(
                       colGroup(name = "Volume / Efficiency", columns = c("Touch","Opp","FPts/Touch","FPts/Opp"), align = 'left'),
@@ -403,12 +397,11 @@ shinyServer(function(input, output, session) {
                   filterable = F,
                   highlight = T,
                   #borderless = T,
-                  resizable = T,
                   compact = T,
                   columns = list(
                       Pos = posDef(),
                       Player = playerDef(minW = 125, filt = T),
-                      Avg = avgDef,
+                      Avg = avgDef(),
                       RelSD = colDef(minWidth = perccolwidth, align = "right"),
                       AvgPosRk = colDef(name = "Avg",minWidth = perccolwidth, align = "right", class = "border-left"),
                       `Top5 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
@@ -437,7 +430,6 @@ shinyServer(function(input, output, session) {
                   highlight = T,
                   #borderless = T,
                   compact = T,
-                  resizable = T,
                   columns = list(
                       Week = weekDef,
                       Pos = posDef(),
@@ -458,7 +450,7 @@ shinyServer(function(input, output, session) {
                       ReYd = reydDefWk,
                       ReTD = retdDefWk,
                       ReFD = refdDefWk,
-                      FPts = fptsDefweekly
+                      FPts = fptsWeekDef()
                   ),
                   columnGroups = list(
                       colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
@@ -478,17 +470,16 @@ shinyServer(function(input, output, session) {
                   highlight = T,
                   #borderless = T,
                   compact = T,
-                  resizable = T,
                   columns = list(
                       TRUFFLE = trfDef(filt = FALSE),
-                      Pos = posDef(filt = TRUE),
+                      Pos = posDef(filt = FALSE),
                       Player = playerDef(minW = 225),
                       NFL = colDef(align = 'left'),
                       AgePH = colDef(name = "Age"),
                       DynRk = colDef(align = 'left'),
                       DynPosRk = colDef(align = 'left'),
                       Salary = salaryDefBar(),
-                      Contract = contractDef,
+                      Contract = contractDef(filt = FALSE),
                       ptslogs = ptsLogDef(maxW = 100)
                   )
         )
@@ -503,7 +494,6 @@ shinyServer(function(input, output, session) {
                   highlight = T,
                   #borderless = T,
                   compact = T,
-                  resizable = T,
                   columns = list(
                       Season = seasonDef,
                       Player = playerDef(minW = 135),
@@ -546,8 +536,8 @@ shinyServer(function(input, output, session) {
                       ReFD = colDef(minWidth = 40,name = "FD", align = 'right', style = function(value) {
                           fontWeight <- ifelse(value >= 50, 'bold', 'plain')
                           list(fontWeight = fontWeight)}),
-                      Avg = avgDef,
-                      FPts = fptsDefseasons
+                      Avg = avgDef(),
+                      FPts = fptsSeasDef()
                   ),
                   columnGroups = list(
                       colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
@@ -559,77 +549,77 @@ shinyServer(function(input, output, session) {
     
     #player portal advanced
     output$ppadvanced <- renderReactable({
-        perccolwidth <- 60
-        othcolwidth <- 43
-        reactable(advanced[Player %in% input$player][, -c("TRUFFLE","Pos")][order(-FPts)],
-                  paginationType = "jump",
-                  showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
-                  pageSizeOptions = c(10, 20, 50, 100),
-                  height = 'auto',
-                  filterable = F,
-                  highlight = T,
-                  #borderless = T,
-                  resizable = T,
-                  compact = T,
-                  columns = list(
-                      Player = playerDef(minW = 120),
-                      FPts = fptsDefseasons,
-                      Touch = colDef(minWidth = othcolwidth, align = "right", class = "border-left"),
-                      Opp = colDef(minWidth = othcolwidth, align = "right"),
-                      `FPts/Touch` = colDef(minWidth = 75, align = "right"),
-                      `FPts/Opp` = colDef(minWidth = 70, align = "right"),
-                      YdPts = colDef(minWidth = smallboxwidth, align = "right", class = "border-left"),
-                      TDPts = colDef(minWidth = smallboxwidth, align = "right"),
-                      FDPts = colDef(minWidth = smallboxwidth, align = "right"),
-                      RuPts = colDef(minWidth = smallboxwidth, align = "right"),
-                      RePts = colDef(minWidth = smallboxwidth, align = "right"),
-                      `YdPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `TDPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `FDPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `RuPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `RePt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1))
-                  ),
-                  columnGroups = list(
-                      colGroup(name = "Volume / Efficiency", columns = c("Touch","Opp","FPts/Touch","FPts/Opp"), align = 'left'),
-                      colGroup(name = "Point Source Breakdown", columns = c("YdPts","TDPts","FDPts","YdPt%","TDPt%","FDPt%","RuPts",
-                                                                            "RePts","RuPt%","RePt%"), align = 'left')
-                  )
-        )
+      perccolwidth <- 60
+      othcolwidth <- 43
+      reactable(advanced[Player %in% input$player][, -c("TRUFFLE","Pos")][order(-FPts)],
+                paginationType = "jump",
+                showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
+                pageSizeOptions = c(10, 20, 50, 100),
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                columns = list(
+                  Season = seasonDef,
+                  Player = playerDef(minW = 120),
+                  FPts = fptsSeasDef(),
+                  Touch = tchDef,
+                  Opp = oppDef,
+                  `FPts/Touch` = fptsPtchDef,
+                  `FPts/Opp` = fptsPoppDef,
+                  YdPts = ydptsDef,
+                  TDPts = tdptsDef,
+                  FDPts = fdptsDef,
+                  RuPts = ruptsDef,
+                  RePts = reptsDef,
+                  `YdPt%` = ydptpercDef,
+                  `TDPt%` = tdptpercDef,
+                  `FDPt%` = fdptpercDef,
+                  `RuPt%` = ruptpercDef,
+                  `RePt%` = reptpercDef
+                ),
+                columnGroups = list(
+                  colGroup(name = "Volume / Efficiency", columns = c("Touch","Opp","FPts/Touch","FPts/Opp"), align = 'left'),
+                  colGroup(name = "Point Source Breakdown", columns = c("YdPts","TDPts","FDPts","YdPt%","TDPt%","FDPt%","RuPts",
+                                                                        "RePts","RuPt%","RePt%"), align = 'left')
+                )
+      )
     })
     
     #player portal consistency
     output$ppconsistency <- renderReactable({
-        perccolwidth <- 60
-        reactable(consistency[Player %in% input$player][order(-Avg)][, -c("TRUFFLE","Pos")],
-                  paginationType = "jump",
-                  showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
-                  pageSizeOptions = c(10, 20, 50, 100),
-                  height = 'auto',
-                  filterable = F,
-                  highlight = T,
-                  #borderless = T,
-                  resizable = T,
-                  compact = T,
-                  columns = list(
-                      Player = playerDef(minW = 125),
-                      Avg = avgDef,
-                      RelSD = colDef(minWidth = perccolwidth, align = "right"),
-                      AvgPosRk = colDef(name = "Avg",minWidth = perccolwidth, align = "right", class = "border-left"),
-                      `Top5 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `Top12 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `Top24 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `Top36 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `NonStart %` = colDef(minWidth = 70, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `>10 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `>20 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `>30 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1))
-                      
-                  ),
-                  columnGroups = list(
-                      colGroup(name = "Fantasy Points", columns = c("Avg","RelSD",">10 %",">20 %",">30 %"), align = 'left'),
-                      colGroup(name = "Weekly Position Rank", columns = c("AvgPosRk","Top5 %","Top12 %","Top24 %","Top36 %", "NonStart %"), align = 'left')
-                  )
-        )
+      perccolwidth <- 60
+      reactable(consistency[Player %in% input$player][order(-Avg)][, -c("TRUFFLE","Pos")],
+                paginationType = "jump",
+                showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
+                pageSizeOptions = c(10, 20, 50, 100),
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                columns = list(
+                  Season = seasonDef,
+                  Player = playerDef(minW = 125),
+                  Avg = avgDef(),
+                  RelSD = colDef(minWidth = perccolwidth, align = "right"),
+                  AvgPosRk = colDef(name = "Avg",minWidth = perccolwidth, align = "right", class = "border-left"),
+                  `Top5 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
+                  `Top12 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
+                  `Top24 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
+                  `Top36 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
+                  `NonStart %` = colDef(minWidth = 70, align = "right", format = colFormat(percent = T, digits = 1)),
+                  `>10 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
+                  `>20 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
+                  `>30 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1))
+                  
+                ),
+                columnGroups = list(
+                  colGroup(name = "Fantasy Points", columns = c("Avg","RelSD",">10 %",">20 %",">30 %"), align = 'left'),
+                  colGroup(name = "Weekly Position Rank", columns = c("AvgPosRk","Top5 %","Top12 %","Top24 %","Top36 %", "NonStart %"), align = 'left')
+                )
+      )
     })
     
     #player portal weekly logs
@@ -646,7 +636,7 @@ shinyServer(function(input, output, session) {
                   columns = list(
                       Season = seasonDef,
                       Week = weekDef,
-                      Player = playerDef(minW = 135),
+                      Player = playerDef(minW = 135, filt = T),
                       Opp = oppDef,
                       OpRk = oprkDef,
                       PaCmp = colDef(minWidth = 50,name = "Cmp", align = 'right', class = "border-left"),
@@ -687,7 +677,7 @@ shinyServer(function(input, output, session) {
                       ReFD = colDef(minWidth = 40,name = "FD", align = 'right', style = function(value) {
                           fontWeight <- ifelse(value >= 5, 'bold', 'plain')
                           list(fontWeight = fontWeight)}),
-                      FPts = fptsDefweekly
+                      FPts = fptsWeekDef()
                   ),
                   columnGroups = list(
                       colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
@@ -785,7 +775,6 @@ shinyServer(function(input, output, session) {
             height = 'auto',
             filterable = F,
             highlight = T,
-            bordered = T,
             compact = T,
             columns = list(
                 TRUFFLE = trfDef(),
@@ -806,8 +795,8 @@ shinyServer(function(input, output, session) {
                 ReYd = reydDefNm,
                 ReTD = retdDefNm,
                 ReFD = refdDefNm,
-                Avg = colDef(maxWidth = 65, class = "border-left"),
-                FPts = colDef(maxWidth = 65)
+                Avg = avgDef(maxW = 65, borderL = T),
+                FPts = fptsSeasDef(maxW = 65, col = F)
             ),
             columnGroups = list(
                 colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
@@ -846,7 +835,6 @@ shinyServer(function(input, output, session) {
                 height = 'auto',
                 filterable = F,
                 highlight = T,
-                bordered = T,
                 compact = T,
                 columns = list(
                     TRUFFLE = trfDef(),
@@ -867,8 +855,8 @@ shinyServer(function(input, output, session) {
                     ReYd = reydDefNm,
                     ReTD = retdDefNm,
                     ReFD = refdDefNm,
-                    Avg = colDef(maxWidth = 65, class = "border-left"),
-                    FPts = colDef(maxWidth = 65)
+                    Avg = avgDef(maxW = 65, borderL = T),
+                    FPts = fptsSeasDef(maxW = 65, col = F)
                 ),
                 columnGroups = list(
                     colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
@@ -907,7 +895,6 @@ shinyServer(function(input, output, session) {
                 height = 'auto',
                 filterable = F,
                 highlight = T,
-                bordered = T,
                 compact = T,
                 columns = list(
                     TRUFFLE = trfDef(),
@@ -928,8 +915,8 @@ shinyServer(function(input, output, session) {
                     ReYd = reydDefNm,
                     ReTD = retdDefNm,
                     ReFD = refdDefNm,
-                    Avg = colDef(maxWidth = 65, class = "border-left"),
-                    FPts = colDef(maxWidth = 65)
+                    Avg = avgDef(maxW = 65, borderL = T),
+                    FPts = fptsSeasDef(maxW = 65, col = F)
                 ),
                 columnGroups = list(
                     colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
@@ -943,8 +930,6 @@ shinyServer(function(input, output, session) {
     
     #stat center advanced
     output$scadvanced <- renderReactable({
-        perccolwidth <- 60
-        othcolwidth <- 43
         reactable(weekly[Player %in% currentseason$Player[currentseason$FPts > input$scpointsmin]][Season == input$scseason &
                                                                                                        Week %in% seq(input$scweekrange[1],input$scweekrange[2]) &
                                                                                                        Pos %in% input$scpositions][,
@@ -972,27 +957,25 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = F,
                   highlight = T,
-                  bordered = T,
-                  resizable = T,
                   compact = T,
                   columns = list(
                       TRUFFLE = trfDef(),
                       Pos = posDef(),
                       Player = playerDef(minW = 120, filt = T),
-                      Touch = colDef(minWidth = othcolwidth, align = "right", class = "border-left"),
-                      Opp = colDef(minWidth = othcolwidth, align = "right"),
-                      `FPts/Touch` = colDef(minWidth = 75, align = "right"),
-                      `FPts/Opp` = colDef(minWidth = 70, align = "right"),
-                      YdPts = colDef(minWidth = smallboxwidth, align = "right", class = "border-left"),
-                      TDPts = colDef(minWidth = smallboxwidth, align = "right"),
-                      FDPts = colDef(minWidth = smallboxwidth, align = "right"),
-                      RuPts = colDef(minWidth = smallboxwidth, align = "right"),
-                      RePts = colDef(minWidth = smallboxwidth, align = "right"),
-                      `YdPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `TDPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `FDPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `RuPt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `RePt%` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1))
+                      Touch = tchDef,
+                      Opp = oppDef,
+                      `FPts/Touch` = fptsPtchDef,
+                      `FPts/Opp` = fptsPoppDef,
+                      YdPts = ydptsDef,
+                      TDPts = tdptsDef,
+                      FDPts = fdptsDef,
+                      RuPts = ruptsDef,
+                      RePts = reptsDef,
+                      `YdPt%` = ydptpercDef,
+                      `TDPt%` = tdptpercDef,
+                      `FDPt%` = fdptpercDef,
+                      `RuPt%` = ruptpercDef,
+                      `RePt%` = reptpercDef
                   ),
                   columnGroups = list(
                       colGroup(name = "Volume / Efficiency", columns = c("Touch","Opp","FPts/Touch","FPts/Opp"), align = 'left'),
@@ -1037,14 +1020,12 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = F,
                   highlight = T,
-                  bordered = T,
-                  resizable = T,
                   compact = T,
                   columns = list(
                       TRUFFLE = trfDef(),
                       Pos = posDef(),
                       Player = playerDef(minW = 125, filt = T),
-                      Avg = colDef(minWidth = perccolwidth, align = "right", class = "border-left"),
+                      Avg = avgDef(maxW = perccolwidth, borderL = T),
                       RelSD = colDef(minWidth = perccolwidth, align = "right"),
                       AvgPosRk = colDef(name = "Avg",minWidth = perccolwidth, align = "right", class = "border-left"),
                       `Top5 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
@@ -1082,17 +1063,16 @@ shinyServer(function(input, output, session) {
                   filterable = F,
                   #borderless = T,
                   compact = T,
-                  resizable = F,
                   columns = list(
                       Pos = posDef(maxW = 38, filt = FALSE),
                       Player = playerDef(minW = 125),
                       Age = colDef(minWidth =  40),
                       NFL = colDef(minWidth =  40),
                       Salary = salaryDefNobar(minW = 45, foot = T),
-                      Contract = contractDefFooternarrow,
+                      Contract = contractDef(minW = 30, foot = T, name = "Yr"),
                       ptslog = ptsLogDef(maxW = 70),
-                      Avg = avgDefnarrow,
-                      FPts = fptsDefseasonsnarrow
+                      Avg = avgDef(maxW = 45),
+                      FPts = fptsSeasDef(maxW = 50)
                   ),
                   defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
         )
@@ -1115,10 +1095,10 @@ shinyServer(function(input, output, session) {
                       Age = colDef(minWidth =  40),
                       NFL = colDef(minWidth =  40),
                       Salary = salaryDefNobar(minW = 45, foot = T),
-                      Contract = contractDefFooternarrow,
+                      Contract = contractDef(minW = 30, foot = T, name = "Yr"),
                       ptslog = ptsLogDef(maxW = 70),
-                      Avg = avgDefnarrow,
-                      FPts = fptsDefseasonsnarrow
+                      Avg = avgDef(maxW = 45),
+                      FPts = fptsSeasDef(maxW = 50)
                   ),
                   defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
         )
@@ -1147,11 +1127,11 @@ shinyServer(function(input, output, session) {
                       Player = playerDef(minW = 125),
                       NFL = colDef(minWidth =  40),
                       Salary = salaryDefNobar(minW = 45, foot = T),
-                      Contract = contractDefFooternarrow,
-                      `'22` = futurecolDefFooternarrow,
-                      `'23` = futurecolDefFooternarrow,
-                      `'24` = futurecolDefFooternarrow,
-                      `'25` = futurecolDefFooternarrow
+                      Contract = contractDef(minW = 30, foot = T, name = "Yr"),
+                      `'22` = futurecolDef(yr = "'22", maxW = 60, foot = T),
+                      `'23` = futurecolDef(yr = "'23", maxW = 60, foot = T),
+                      `'24` = futurecolDef(yr = "'24", maxW = 60, foot = T),
+                      `'25` = futurecolDef(yr = "'25", maxW = 60, foot = T)
                   ),
                   defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
         )
@@ -1177,11 +1157,11 @@ shinyServer(function(input, output, session) {
                           Player = playerDef(minW = 125),
                           NFL = colDef(minWidth =  40),
                           Salary = salaryDefNobar(minW = 45, foot = T),
-                          Contract = contractDefFooternarrow,
-                          `'22` = futurecolDefFooternarrow,
-                          `'23` = futurecolDefFooternarrow,
-                          `'24` = futurecolDefFooternarrow,
-                          `'25` = futurecolDefFooternarrow
+                          Contract = contractDef(minW = 30, foot = T, name = "Yr"),
+                          `'22` = futurecolDef(yr = "'22", maxW = 60, foot = T),
+                          `'23` = futurecolDef(yr = "'23", maxW = 60, foot = T),
+                          `'24` = futurecolDef(yr = "'24", maxW = 60, foot = T),
+                          `'25` = futurecolDef(yr = "'25", maxW = 60, foot = T)
                       ),
                       defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
             )
@@ -1270,6 +1250,7 @@ shinyServer(function(input, output, session) {
                 resizable = F,
                 columns = list(
                   TRF = trfDef(filt = FALSE),
+                  Team = colDef(minWidth = 125),
                   PlayersReceived = colDef(name = "Players Received"),
                   Net = colDef(name = "Net Salary", 
                                minWidth = 50,
@@ -1309,11 +1290,11 @@ shinyServer(function(input, output, session) {
                       Age = ageDef,
                       NFL = nflDef,
                       Salary = salaryDefBar(),
-                      Contract = contractDef,
-                      `'22` = futurecolDef,
-                      `'23` = futurecolDef,
-                      `'24` = futurecolDef,
-                      `'25` = futurecolDef
+                      Contract = contractDef(),
+                      `'22` = futurecolDef(yr = "'22"),
+                      `'23` = futurecolDef(yr = "'23"),
+                      `'24` = futurecolDef(yr = "'24"),
+                      `'25` = futurecolDef(yr = "'25")
                   ),
                   columnGroups = list(
                       colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
@@ -2128,7 +2109,7 @@ shinyServer(function(input, output, session) {
                       ReTD = retdDefWk,
                       ReFD = refdDefWk,
                       FL = flDef,
-                      FPts = fptsDefweekly
+                      FPts = fptsWeekDef()
                   ),
                   columnGroups = list(
                       colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
@@ -2171,7 +2152,7 @@ shinyServer(function(input, output, session) {
                       ReTD = retdDefWk,
                       ReFD = refdDefWk,
                       FL = flDef,
-                      FPts = fptsDefweekly
+                      FPts = fptsWeekDef()
                   ),
                   columnGroups = list(
                       colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
@@ -2214,8 +2195,8 @@ shinyServer(function(input, output, session) {
                       ReTD = retdDefSsn,
                       ReFD = refdDefSsn,
                       FL = flDef,
-                      Avg = avgDef,
-                      FPts = fptsDefseasons
+                      Avg = avgDef(),
+                      FPts = fptsSeasDef()
                   ),
                   columnGroups = list(
                       colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),

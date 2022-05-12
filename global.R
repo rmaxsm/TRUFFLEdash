@@ -372,10 +372,10 @@ by = .(Season,TRUFFLE,Pos,Player)][, `:=`(`YdPt%` = YdPts / FPts,
                                           `RePt%` = RePts / FPts,
                                           `FPts/Touch` = round(FPts/Touch, 3),
                                           `FPts/Opp` = round(FPts/Opp, 3)
-)][order(-FPts)][, c("Season","TRUFFLE","Pos","Player","FPts","Touch","Opp","FPts/Touch","FPts/Opp","YdPts","TDPts","FDPts","YdPt%","TDPt%","FDPt%","RuPts",
-                     "RePts","RuPt%","RePt%")]
+)][order(-FPts)][, c("Season","TRUFFLE","Pos","Player","FPts","Touch","Opp","FPts/Touch","FPts/Opp","YdPts","TDPts","FDPts","RuPts","RePts","YdPt%","TDPt%","FDPt%","RuPt%","RePt%")]
 
-consistencystart <- weekly
+consistencystart <- as.data.frame(weekly)
+consistencystart <- as.data.table(consistencystart)
 consistency <- consistencystart[, `:=` (
   top5dum = ifelse(PosRk <= 5, 1, 0),
   top12dum = ifelse(PosRk <= 12, 1, 0),
@@ -561,7 +561,7 @@ with_tt <- function(value, tooltip) {
             title = tooltip, value)
 }
 
-#column definitions
+#column definitions / definition functions
 trfDef <- function(name = "TRF", maxW = 75, filt = TRUE) {
   colDef(name = name,
          maxWidth = maxW,
@@ -576,7 +576,7 @@ trfDef <- function(name = "TRF", maxW = 75, filt = TRUE) {
   )
 }
 
-posDef <- function(maxW = 47, filt = T, foot = "") {
+posDef <- function(maxW = 48, filt = T, foot = "") {
   colDef(maxWidth = maxW,
          filterable = filt,
          footer = foot,
@@ -632,16 +632,6 @@ ptsLogDef <- function(maxW = 75) {
          })
 }
 
-nflDef <- colDef(minWidth = 50, align = 'left')
-
-byeDef <- colDef(minWidth = 60, align = 'left')
-
-gDef <- colDef(minWidth = 50, align = 'right')
-
-ageDef <- colDef(minWidth = 75, align = 'right')
-
-smallcolDef <- colDef(maxWidth = 100, align = 'left')
-
 salaryDefBar <- function(minW = 175, foot = F) {
   colDef(minWidth = minW,
          align = 'left',
@@ -669,138 +659,83 @@ salaryDefNobar <- function(minW = 45, foot = F) {
   )
 }
 
-draftsalaryDefnarrow <- colDef(minWidth = 100,align = 'left',
-                               format = colFormat(digits=0),
-                               style = function(value) {
-                                 color <- ifelse(value <= 15, IRcolor, 'black')
-                                 list(color = color)},
-                               cell = function(value) {
-                                 width <- paste0(value / 50 * 100, "%")
-                                 bar_chart(ifelse(is.na(value), "", value), width = ifelse(is.na(value), 0, width), prefix = "$")
-                               }
-)
+contractDef <- function(minW = 62, filt = T, foot = F, name = "Contract") {
+  colDef(minWidth = minW,
+         filt = filt,
+         name = name,
+         style = function(value) {
+           background <- ifelse(value == 1, RBcolor,
+                                ifelse(value == 2, TEcolor,
+                                       ifelse(value == 3, WRcolor, QBcolor)))
+           list(background = background)},
+         footer = function(values) if(foot == T) {sum(values)}
+  )
+}
 
-salaryDefFooter <- colDef(minWidth = 175,align = 'left',
-                          format = colFormat(digits=0),
-                          style = function(value) {
-                            color <- ifelse(value <= 15, IRcolor, 'black')
-                            list(color = color)},
-                          cell = function(value) {
-                            width <- paste0(value / max(rosters$Salary) * 100, "%")
-                            bar_chart(ifelse(is.na(value), "", value), width = ifelse(is.na(value), 0, width), prefix = "$")
-                          },
-                          footer = function(values) paste0("$", sum(values))
-)
+#formatting for future columns (including FA and RR tags)
+futurecolDef <- function(maxW = 75, filt = T, foot = F, yr) {
+  colDef(header = with_tt(yr, "FA: Free Agent\nRR: Rookie Extension Rights"),
+         maxWidth = maxW,
+         filterable = filt,
+         align = 'right',
+         cell = function(value) {
+           class <- paste0("tag status-", value)
+           htmltools::div(class = class, value)},
+         footer = function(values) if(foot == T) {paste0("$", sum(as.numeric(values), na.rm=T))}
+  )
+}
 
-salaryDefFooterTM <- colDef(name = "$", minWidth = 45,align = 'right',
-                            format = colFormat(digits=0, prefix = "$"),
-                            style = function(value) {
-                              color <- ifelse(value <= 15, IRcolor, 'black')
-                              list(color = color)},
-                            footer = function(values) paste0("$", sum(values))
-)
+avgDef <- function(maxW = 65, digs = 1, filt = F, col = T, borderL = F) {
+  colDef(header = with_tt("Avg", "Weekly average FPts"),
+         maxWidth = maxW,
+         format = colFormat(digits = digs),
+         filterable = filt,
+         class = function(value) if(borderL == T) {"border-left"},
+         style = function(value) { 
+           normalized <- (value) / (max(seasons$Avg,na.rm=T))
+           color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
+           if(col == T) {list(background = color)}
+         }
+  )
+}
 
+fptsWeekDef <- function(maxW = 65, borderL = T, digs = 1, filt = F, col = T) {
+  colDef(header = with_tt("FPts", "Fantasy points"),
+         maxWidth = 65,
+         format = colFormat(digits = digs),
+         filterable = filt,
+         class = function(value) if(borderL == T) {"border-left"},
+         style = function(value) { 
+           normalized <- (value) / (max(weekly$FPts[weekly$Season == max(weekly$Season)],na.rm=T))
+           color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
+           if(col == T) {list(background = color)}
+         }
+  )
+}
 
-contractDef <- colDef(minWidth = 75, style = function(value) {
-  background <- ifelse(value == 1, RBcolor,
-                       ifelse(value == 2, TEcolor,
-                              ifelse(value == 3, WRcolor, QBcolor)))
-  list(background = background)}
-)
+fptsSeasDef <- function(maxW = 65, borderL = F, digs = 1, filt = F, col = T) {
+  colDef(header = with_tt("FPts", "Fantasy points"),
+         maxWidth = maxW,
+         format = colFormat(digits = digs),
+         filterable = filt,
+         class = function(value) if(borderL == T) {"border-left"},
+         style = function(value) { 
+           normalized <- (value) / (max(seasons$FPts,na.rm=T))
+           color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
+           if(col == T) {list(background = color)}
+         }
+  )
+}
 
-contractDefFooter <- colDef(minWidth = 75, style = function(value) {
-  background <- ifelse(value == 1, RBcolor,
-                       ifelse(value == 2, TEcolor,
-                              ifelse(value == 3, WRcolor, QBcolor)))
-  list(background = background)},
-  footer = function(values) sum(values)
-)
+nflDef <- colDef(minWidth = 50, align = 'right')
 
-contractDefFooternarrow <- colDef(name = "Yr", minWidth = 30,
-                                  style = function(value) {
-                                    background <- ifelse(value == 1, RBcolor,
-                                                         ifelse(value == 2, TEcolor,
-                                                                ifelse(value == 3, WRcolor, QBcolor)))
-                                    list(background = background)},
-                                  footer = function(values) sum(values)
-)
+byeDef <- colDef(minWidth = 50, align = 'right')
 
-futurecolDef <- colDef(align = 'right', maxWidth = 75, cell = function(value) {
-  class <- paste0("tag status-", value)
-  htmltools::div(class = class, value)}
-)
+gDef <- colDef(minWidth = 50, align = 'right')
 
-futurecolDefFooter <- colDef(align = 'right', maxWidth = 75, cell = function(value) {
-  class <- paste0("tag status-", value)
-  htmltools::div(class = class, value)},
-  footer = function(values) paste0("$", sum(as.numeric(values), na.rm=T))
-)
+ageDef <- colDef(minWidth = 50, align = 'right')
 
-futurecolDefFooternarrow <- colDef(align = 'right', maxWidth = 60, cell = function(value) {
-  class <- paste0("tag status-", value)
-  htmltools::div(class = class, value)},
-  footer = function(values) paste0("$", sum(as.numeric(values), na.rm=T))
-)
-
-avgDef <- colDef(maxWidth = 65,
-                 style = function(value) {
-                   normalized <- (value) / (max(seasons$Avg,na.rm=T))
-                   color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
-                   list(background = color)
-                 }
-)
-
-avgDefnarrow <- colDef(maxWidth = 45,
-                       format = colFormat(digits = 1),
-                       style = function(value) {
-                         normalized <- (value) / (max(seasons$Avg,na.rm=T))
-                         color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
-                         list(background = color)
-                       }
-)
-
-fptsDefweekly <- colDef(maxWidth = 65, class = "border-left",
-                        style = function(value) {
-                          normalized <- (value) / (max(weekly$FPts[weekly$Season == max(weekly$Season)],na.rm=T))
-                          color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
-                          list(background = color)
-                        }
-)
-
-fptsDefweeklynarrownoline <- colDef(maxWidth = 50,
-                                    style = function(value) {
-                                      normalized <- (value) / (max(weekly$FPts[weekly$Season == max(weekly$Season)],na.rm=T))
-                                      color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
-                                      list(background = color)
-                                    }
-)
-
-fptsDefweeklynarrow <- colDef(maxWidth = 50, class = "border-left",
-                              style = function(value) {
-                                normalized <- (value) / (max(weekly$FPts[weekly$Season == max(weekly$Season)],na.rm=T))
-                                color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
-                                list(background = color)
-                              }
-)
-
-fptsDefseasons <- colDef(maxWidth = 65,
-                         style = function(value) {
-                           normalized <- (value) / (max(seasons$FPts,na.rm=T))
-                           color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
-                           list(background = color)
-                         }
-)
-
-fptsDefseasonsnarrow <- colDef(maxWidth = 50,
-                               format = colFormat(digits = 1),
-                               style = function(value) {
-                                 normalized <- (value) / (max(seasons$FPts,na.rm=T))
-                                 color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
-                                 list(background = color)
-                               }
-)
-
-FPtsstyle <- list(fontWeight = 'bold', background = fptsbackground)
+smallcolDef <- colDef(maxWidth = 100, align = 'left')
 
 seasonDef <- colDef(name="Yr", maxWidth = smallboxwidth, align = 'center')
 weekDef <- colDef("Wk",maxWidth = 50, align = 'center')
@@ -811,113 +746,173 @@ oprkDef <- colDef(maxWidth = 55, align = 'center', style = function(value) {
                   ifelse(value <= 20, 'black', 'green'))
   list(color = color)})
 
+#box score stats reactable formats ----
 #passing stats conditional formatting
-pacmpDef <- colDef(name = "Cmp", minWidth = smallboxwidth, align = 'right', class = "border-left")
-paattDef <- colDef(name = "Att", minWidth = smallboxwidth, align = 'right')
+pacmpDef <- colDef(header = with_tt("Cmp", "Passing Completions"), minWidth = smallboxwidth + 4, align = 'right', class = "border-left")
+paattDef <- colDef(header = with_tt("Att", "Passing Attempts"), minWidth = smallboxwidth, align = 'right')
 
-paydDefWk <- colDef(name = "Yd", minWidth = smallboxwidth, align = 'right', style = function(value) {
+paydDefWk <- colDef(header = with_tt("Yd", "Passing Yards\nBold if >=300"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 300, 'bold', 'plain')
   list(fontWeight = fontWeight)})
-paydDefSsn <- colDef(name = "Yd", minWidth = smallboxwidth, align = 'right', style = function(value) {
+paydDefSsn <- colDef(header = with_tt("Yd", "Passing Yards\nBold if >=4000"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 4000, 'bold', 'plain')
   list(fontWeight = fontWeight)})
-paydDefNm <- colDef(name = "Yd", minWidth = smallboxwidth, align = 'right')
+paydDefNm <- colDef(header = with_tt("Yd", "Passing Yards"), minWidth = smallboxwidth, align = 'right')
 
-patdDefWk <- colDef(name = "TD", minWidth = smallboxwidth, align = 'right', style = function(value) {
+patdDefWk <- colDef(header = with_tt("TD", "Passing TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'bold', 'plain')
   list(fontWeight = fontWeight)})
-patdDefSsn <- colDef(name = "TD", minWidth = smallboxwidth, align = 'right', style = function(value) {
+patdDefSsn <- colDef(header = with_tt("TD", "Passing TDs\nBold if >=30"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 30, 'bold', 'plain')
   list(fontWeight = fontWeight)})
-patdDefNm <- colDef(name = "TD", minWidth = smallboxwidth, align = 'right')
+patdDefNm <- colDef(header = with_tt("TD", "Passing TDs"), minWidth = smallboxwidth, align = 'right')
 
-paintDefWk <- colDef(name = "Int", minWidth = smallboxwidth, align = 'right', style = function(value) {
+paintDefWk <- colDef(header = with_tt("Int", "Interceptions\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'italic', 'plain')
   list(fontWeight = fontWeight)})
-paintDefSsn <- colDef(name = "Int", minWidth = smallboxwidth, align = 'right', style = function(value) {
+paintDefSsn <- colDef(header = with_tt("Int", "Interceptions\nBold if >=15"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 15, 'italic', 'plain')
   list(fontWeight = fontWeight)})
-paintDefNm <- colDef(name = "Int", minWidth = smallboxwidth, align = 'right')
+paintDefNm <- colDef(header = with_tt("Int", "Interceptions"), minWidth = smallboxwidth, align = 'right')
 
 #Rushing stats
-ruattDefWk <- colDef(name = "Att", minWidth = smallboxwidth, align = 'right', style = function(value) {
+ruattDefWk <- colDef(header = with_tt("Att", "Rushing Attempts\nBold if >=20"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 20, 'bold', 'plain')
   list(fontWeight = fontWeight)}, class = "border-left")
-ruattDefSsn <- colDef(name = "Att", minWidth = smallboxwidth, align = 'right', style = function(value) {
+ruattDefSsn <- colDef(header = with_tt("Att", "Rushing Attempts\nBold if >=250"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 250, 'bold', 'plain')
   list(fontWeight = fontWeight)}, class = "border-left")
-ruattDefNm <- colDef(name = "Att", minWidth = smallboxwidth, align = 'right', class = "border-left")
+ruattDefNm <- colDef(header = with_tt("Att", "Rushing Attempts"), minWidth = smallboxwidth, align = 'right', class = "border-left")
 
 #Rushing yards
-ruydDefWk <- colDef(name = "Yd", minWidth = smallboxwidth, align = 'right', style = function(value) {
+ruydDefWk <- colDef(header = with_tt("Yd", "Rushing Yards\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
   list(fontWeight = fontWeight)})
-ruydDefSsn <- colDef(name = "Yd", minWidth = smallboxwidth, align = 'right', style = function(value) {
+ruydDefSsn <- colDef(header = with_tt("Yd", "Rushing Yards\nBold if >=1000"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 1000, 'bold', 'plain')
   list(fontWeight = fontWeight)})
-ruydDefNm <- colDef(name = "Yd", minWidth = smallboxwidth, align = 'right')
+ruydDefNm <- colDef(header = with_tt("Yd", "Rushing Yards"), minWidth = smallboxwidth, align = 'right')
 
 #Rushing td
-rutdDefWk <- colDef(name = "TD", minWidth = smallboxwidth, align = 'right', style = function(value) {
+rutdDefWk <- colDef(header = with_tt("TD", "Rushing TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'bold', 'plain')
   list(fontWeight = fontWeight)})
-rutdDefSsn <- colDef(name = "TD", minWidth = smallboxwidth, align = 'right', style = function(value) {
+rutdDefSsn <- colDef(header = with_tt("TD", "Rushing TDs\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
   list(fontWeight = fontWeight)})
-rutdDefNm <- colDef(name = "TD", minWidth = smallboxwidth, align = 'right')
+rutdDefNm <- colDef(header = with_tt("TD", "Rushing TDs"), minWidth = smallboxwidth, align = 'right')
 
 #Rushing fd
-rufdDefWk <- colDef(name = "FD", minWidth = smallboxwidth, align = 'right', style = function(value) {
+rufdDefWk <- colDef(header = with_tt("FD", "Rushing First Downs\nBold if >=5"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 5, 'bold', 'plain')
   list(fontWeight = fontWeight)})
-rufdDefSsn <- colDef(name = "FD", minWidth = smallboxwidth, align = 'right', style = function(value) {
+rufdDefSsn <- colDef(header = with_tt("FD", "Rushing First Downs\nBold if >=50"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 50, 'bold', 'plain')
   list(fontWeight = fontWeight)})
-rufdDefNm <- colDef(name = "FD", minWidth = smallboxwidth, align = 'right')
+rufdDefNm <- colDef(header = with_tt("FD", "Rushing First Downs"), minWidth = smallboxwidth, align = 'right')
 
 #Targets
-tarDefWk <- colDef(minWidth = smallboxwidth, align = 'right', style = function(value) {
+tarDefWk <- colDef(header = with_tt("Tar", "Targets\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
   list(fontWeight = fontWeight)}, class = "border-left")
-tarDefSsn <- colDef(minWidth = smallboxwidth, align = 'right', style = function(value) {
+tarDefSsn <- colDef(header = with_tt("Tar", "Targets\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
   list(fontWeight = fontWeight)}, class = "border-left")
-tarDefNm <- colDef(name = "Tar", minWidth = smallboxwidth, align = 'right', class = "border-left")
+tarDefNm <- colDef(header = with_tt("Tar", "Targets"), minWidth = smallboxwidth, align = 'right', class = "border-left")
 
 #Receptions
-recDefWk <- colDef(minWidth = smallboxwidth, align = 'right', style = function(value) {
+recDefWk <- colDef(header = with_tt("Rec", "Receptions\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
   list(fontWeight = fontWeight)})
-recDefSsn <- colDef(minWidth = smallboxwidth, align = 'right', style = function(value) {
+recDefSsn <- colDef(header = with_tt("Rec", "Receptions\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
   list(fontWeight = fontWeight)})
-recDefNm <- colDef(name = "Rec", minWidth = smallboxwidth, align = 'right')
+recDefNm <- colDef(header = with_tt("Rec", "Receptions"), minWidth = smallboxwidth, align = 'right')
 
 #receiving yards
-reydDefWk <- colDef(name = "Yd", minWidth = smallboxwidth, align = 'right', style = function(value) {
+reydDefWk <- colDef(header = with_tt("Yd", "Receiving Yards\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
   list(fontWeight = fontWeight)})
-reydDefSsn <- colDef(name = "Yd", minWidth = smallboxwidth, align = 'right', style = function(value) {
+reydDefSsn <- colDef(header = with_tt("Yd", "Receiving Yards\nBold if >=1000"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 1000, 'bold', 'plain')
   list(fontWeight = fontWeight)})
-reydDefNm <- colDef(name = "Yd", minWidth = smallboxwidth, align = 'right')
+reydDefNm <- colDef(header = with_tt("Yd", "Receiving Yards"), minWidth = smallboxwidth, align = 'right')
 
 #receiving tds
-retdDefWk <- colDef(name = "TD", minWidth = smallboxwidth, align = 'right', style = function(value) {
+retdDefWk <- colDef(header = with_tt("TD", "Receiving TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'bold', 'plain')
   list(fontWeight = fontWeight)})
-retdDefSsn <- colDef(name = "TD", minWidth = smallboxwidth, align = 'right', style = function(value) {
+retdDefSsn <- colDef(header = with_tt("TD", "Receiving TDs\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
   list(fontWeight = fontWeight)})
-retdDefNm <- colDef(name = "TD", minWidth = smallboxwidth, align = 'right')
+retdDefNm <- colDef(header = with_tt("TD", "Receiving TDs"), minWidth = smallboxwidth, align = 'right')
 
 #Receiving fd
-refdDefWk <- colDef(name = "FD", minWidth = smallboxwidth, align = 'right', style = function(value) {
+refdDefWk <- colDef(header = with_tt("FD", "Receiving First Downs\nBold if >=5"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 5, 'bold', 'plain')
   list(fontWeight = fontWeight)})
-refdDefSsn <- colDef(name = "FD", minWidth = smallboxwidth, align = 'right', style = function(value) {
+refdDefSsn <- colDef(header = with_tt("FD", "Receiving First Downs\nBold if >=50"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 50, 'bold', 'plain')
   list(fontWeight = fontWeight)})
-refdDefNm <- colDef(name = "FD", minWidth = smallboxwidth, align = 'right')
+refdDefNm <- colDef(header = with_tt("FD", "Receiving First Downs"), minWidth = smallboxwidth, align = 'right')
 
-flDef <- colDef(minWidth = smallboxwidth, align = 'right')
+flDef <- colDef(header = with_tt("FL", "Fumbles Lost"), minWidth = smallboxwidth, align = 'right')
+
+#advanced stats reactable formats----
+perccolwidth <- 60
+othcolwidth <- 45
+blankptwidth <- 52
+tchDef <- colDef(header = with_tt("Tch", "Touches\n(Completions + Carries + Receptions)"),
+                minWidth = othcolwidth,
+                align = "right",
+                class = "border-left")
+oppDef <- colDef(header = with_tt("Opp", "Opportunities\n(Passing Attempts + Carries + Targets)"),
+                minWidth = othcolwidth + 2,
+                align = "right")
+fptsPtchDef <- colDef(header = with_tt("FPt/Tch", "Fantasy Points per Touch\n(Completions + Carries + Receptions)"),
+                     minWidth = 68,
+                     align = "right",
+                     format = colFormat(digits = 2))
+fptsPoppDef <- colDef(header = with_tt("FPt/Opp", "Fantasy Points per Opportunity\n(Passing Attempts + Carries + Targets)"),
+                     minWidth = 72,
+                     align = "right",
+                     format = colFormat(digits = 2))
+ydptsDef <- colDef(header = with_tt("YdPt", "Fantasy Points from Yards\n(Passing + Rushing + Receiving)"),
+                  minWidth = blankptwidth,
+                  align = "right",
+                  class = "border-left",
+                  format = colFormat(digits = 1))
+tdptsDef <- colDef(header = with_tt("TDPt", "Fantasy Points from Touchdowns\n(Passing + Rushing + Receiving)"),
+                  minWidth = blankptwidth,
+                  align = "right")
+fdptsDef <- colDef(header = with_tt("FDPt", "Fantasy Points from First Downs\n(Rushing + Receiving)"),
+                  minWidth = blankptwidth,
+                  align = "right")
+ruptsDef <- colDef(header = with_tt("RuPt", "Fantasy Points from Rushing\n(Yards + TDs + First Downs)"),
+                   minWidth = blankptwidth,
+                   align = "right",
+                   format = colFormat(digits = 1))
+reptsDef <- colDef(header = with_tt("RePt", "Fantasy Points from Receiving\n(Yards + TDs + First Downs)"),
+                   minWidth = blankptwidth,
+                   align = "right",
+                   format = colFormat(digits = 1))
+ydptpercDef <- colDef(header = with_tt("YdPt%", "Percentage of Total FPts from Yards\n(Passing + Rushing + Receiving)"),
+                      minWidth = perccolwidth,
+                      align = "right",
+                      format = colFormat(percent = T, digits = 0))
+tdptpercDef <- colDef(header = with_tt("TDPt%", "Percentage of Total FPts from Touchdowns\n(Passing + Rushing + Receiving)"),
+                      minWidth = perccolwidth + 2,
+                      align = "right",
+                      format = colFormat(percent = T, digits = 0))
+fdptpercDef = colDef(header = with_tt("FDPt%", "Percentage of Total FPts from First Downs\n(Rushing + Receiving)"),
+                     minWidth = perccolwidth + 3,
+                     align = "right",
+                     format = colFormat(percent = T, digits = 0))
+ruptpercDef = colDef(header = with_tt("RuPt%", "Percentage of Total FPts from Rushing\n(Yards + TDs + First Downs)"),
+                     minWidth = perccolwidth + 2,
+                     align = "right",
+                     format = colFormat(percent = T, digits = 0))
+reptpercDef = colDef(header = with_tt("RePt%", "Percentage of Total FPts from Receiving\n(Yards + TDs + First Downs)"),
+                     minWidth = perccolwidth + 2,
+                     align = "right",
+                     format = colFormat(percent = T, digits = 0))
