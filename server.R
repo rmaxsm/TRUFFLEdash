@@ -102,7 +102,7 @@ shinyServer(function(input, output, session) {
                   highlight = T,
                   #borderless = T,
                   compact = T,
-                  resizable = T,
+                  resizable = F,
                   columns = list(
                       TRUFFLE = trfDef(filt = FALSE),
                       Player = playerDef(minW = 125, filt = F),
@@ -297,44 +297,20 @@ shinyServer(function(input, output, session) {
                       Pos = posDef(),
                       Player = playerDef(minW = 135, filt=T),
                       G = gDef,
-                      PaCmp = colDef(minWidth = 53,name = "Cmp", align = 'right', class = "border-left"),
-                      PaAtt = colDef(minWidth = 53,name = "Att", align = 'right'),
-                      PaYd = colDef(minWidth = 53,name = "Yd", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 4000, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      PaTD = colDef(minWidth = 53,name = "TD", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 30, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      PaInt = colDef(minWidth = 53,name = "Int", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 15, 'italic', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      RuAtt = colDef(minWidth = 53,name = "Att", align = 'right', class = "border-left", style = function(value) {
-                          fontWeight <- ifelse(value >= 250, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      RuYd = colDef(minWidth = 53,name = "Yd", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 1000, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      RuTD = colDef(minWidth = 53,name = "TD", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 10, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      RuFD = colDef(minWidth = 40,name = "FD", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 50, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      Tar = colDef(minWidth = 53,align = 'right', class = "border-left", style = function(value) {
-                          fontWeight <- ifelse(value >= 100, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      Rec = colDef(minWidth = 53,align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 100, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      ReYd = colDef(minWidth = 53,name = "Yd", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 1000, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      ReTD = colDef(minWidth = 53,name = "TD", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 10, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      ReFD = colDef(minWidth = 40,name = "FD", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 50, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
+                      PaCmp = pacmpDef,
+                      PaAtt = paattDef,
+                      PaYd = paydDefSsn,
+                      PaTD = patdDefSsn,
+                      PaInt = paintDefSsn,
+                      RuAtt = ruattDefSsn,
+                      RuYd = ruydDefSsn,
+                      RuTD = rutdDefSsn,
+                      RuFD = rufdDefSsn,
+                      Tar = tarDefSsn,
+                      Rec = recDefSsn,
+                      ReYd = reydDefSsn,
+                      ReTD = retdDefSsn,
+                      ReFD = refdDefSsn,
                       Avg = avgDef(),
                       FPts = fptsSeasDef()
                   ),
@@ -355,6 +331,7 @@ shinyServer(function(input, output, session) {
                   showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
                   pageSizeOptions = c(10, 20, 50, 100),
                   height = 'auto',
+                  pagination = FALSE,
                   filterable = F,
                   highlight = T,
                   #borderless = T,
@@ -394,6 +371,7 @@ shinyServer(function(input, output, session) {
                   showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
                   pageSizeOptions = c(10, 20, 50, 100),
                   height = 'auto',
+                  pagination = FALSE,
                   filterable = F,
                   highlight = T,
                   #borderless = T,
@@ -402,17 +380,16 @@ shinyServer(function(input, output, session) {
                       Pos = posDef(),
                       Player = playerDef(minW = 125, filt = T),
                       Avg = avgDef(),
-                      RelSD = colDef(minWidth = perccolwidth, align = "right"),
-                      AvgPosRk = colDef(name = "Avg",minWidth = perccolwidth, align = "right", class = "border-left"),
-                      `Top5 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
-                      `Top12 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
-                      `Top24 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
-                      `Top36 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
-                      `NonStart %` = colDef(minWidth = 70, align = "right", format = colFormat(percent = T, digits = 0)),
-                      `>10 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
-                      `>20 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0)),
-                      `>30 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 0))
-                      
+                      RelSD = relsdDef,
+                      AvgPosRk = avgposrkDef,
+                      `Top5 %` = top5pDef,
+                      `Top12 %` = top12pDef,
+                      `Top24 %` = top24pDef,
+                      `Top36 %` = top36pDef,
+                      `NonStart %` = nonstartpDef,
+                      `>10 %` = g10pDef,
+                      `>20 %` = g20pDef,
+                      `>30 %` = g30pDef
                   ),
                   columnGroups = list(
                       colGroup(name = "Fantasy Points", columns = c("Avg","RelSD",">10 %",">20 %",">30 %"), align = 'left'),
@@ -434,7 +411,7 @@ shinyServer(function(input, output, session) {
                       Week = weekDef,
                       Pos = posDef(),
                       Player = playerDef(minW = 150, filt = T),
-                      Opp = oppDef,
+                      Opp = opDef,
                       OpRk = oprkDef,
                       PaCmp = pacmpDef,
                       PaAtt = paattDef,
@@ -498,44 +475,20 @@ shinyServer(function(input, output, session) {
                       Season = seasonDef,
                       Player = playerDef(minW = 135),
                       G = gDef,
-                      PaCmp = colDef(minWidth = 53,name = "Cmp", align = 'right', class = "border-left"),
-                      PaAtt = colDef(minWidth = 53,name = "Att", align = 'right'),
-                      PaYd = colDef(minWidth = 53,name = "Yd", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 4000, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      PaTD = colDef(minWidth = 53,name = "TD", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 30, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      PaInt = colDef(minWidth = 53,name = "Int", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 15, 'italic', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      RuAtt = colDef(minWidth = 53,name = "Att", align = 'right', class = "border-left", style = function(value) {
-                          fontWeight <- ifelse(value >= 250, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      RuYd = colDef(minWidth = 53,name = "Yd", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 1000, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      RuTD = colDef(minWidth = 53,name = "TD", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 10, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      RuFD = colDef(minWidth = 40,name = "FD", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 50, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      Tar = colDef(minWidth = 53,align = 'right', class = "border-left", style = function(value) {
-                          fontWeight <- ifelse(value >= 100, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      Rec = colDef(minWidth = 53,align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 100, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      ReYd = colDef(minWidth = 53,name = "Yd", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 1000, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      ReTD = colDef(minWidth = 53,name = "TD", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 10, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      ReFD = colDef(minWidth = 40,name = "FD", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 50, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
+                      PaCmp = pacmpDef,
+                      PaAtt = paattDef,
+                      PaYd = paydDefSsn,
+                      PaTD = patdDefSsn,
+                      PaInt = paintDefSsn,
+                      RuAtt = ruattDefSsn,
+                      RuYd = ruydDefSsn,
+                      RuTD = rutdDefSsn,
+                      RuFD = rufdDefSsn,
+                      Tar = tarDefSsn,
+                      Rec = recDefSsn,
+                      ReYd = reydDefSsn,
+                      ReTD = retdDefSsn,
+                      ReFD = refdDefSsn,
                       Avg = avgDef(),
                       FPts = fptsSeasDef()
                   ),
@@ -603,17 +556,16 @@ shinyServer(function(input, output, session) {
                   Season = seasonDef,
                   Player = playerDef(minW = 125),
                   Avg = avgDef(),
-                  RelSD = colDef(minWidth = perccolwidth, align = "right"),
-                  AvgPosRk = colDef(name = "Avg",minWidth = perccolwidth, align = "right", class = "border-left"),
-                  `Top5 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                  `Top12 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                  `Top24 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                  `Top36 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                  `NonStart %` = colDef(minWidth = 70, align = "right", format = colFormat(percent = T, digits = 1)),
-                  `>10 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                  `>20 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                  `>30 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1))
-                  
+                  RelSD = relsdDef,
+                  AvgPosRk = avgposrkDef,
+                  `Top5 %` = top5pDef,
+                  `Top12 %` = top12pDef,
+                  `Top24 %` = top24pDef,
+                  `Top36 %` = top36pDef,
+                  `NonStart %` = nonstartpDef,
+                  `>10 %` = g10pDef,
+                  `>20 %` = g20pDef,
+                  `>30 %` = g30pDef
                 ),
                 columnGroups = list(
                   colGroup(name = "Fantasy Points", columns = c("Avg","RelSD",">10 %",">20 %",">30 %"), align = 'left'),
@@ -637,46 +589,22 @@ shinyServer(function(input, output, session) {
                       Season = seasonDef,
                       Week = weekDef,
                       Player = playerDef(minW = 135, filt = T),
-                      Opp = oppDef,
+                      Opp = opDef,
                       OpRk = oprkDef,
-                      PaCmp = colDef(minWidth = 50,name = "Cmp", align = 'right', class = "border-left"),
-                      PaAtt = colDef(minWidth = 50,name = "Att", align = 'right'),
-                      PaYd = colDef(minWidth = 50,name = "Yd", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 300, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      PaTD = colDef(minWidth = 50,name = "TD", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 3, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      PaInt = colDef(minWidth = 50,name = "Int", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 3, 'italic', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      RuAtt = colDef(minWidth = 50,name = "Att", align = 'right', class = "border-left", style = function(value) {
-                          fontWeight <- ifelse(value >= 20, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      RuYd = colDef(minWidth = 50,name = "Yd", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 100, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      RuTD = colDef(minWidth = 50,name = "TD", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 3, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      RuFD = colDef(minWidth = 40,name = "FD", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 5, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      Tar = colDef(minWidth = 50,align = 'right', class = "border-left", style = function(value) {
-                          fontWeight <- ifelse(value >= 10, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      Rec = colDef(minWidth = 50,align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 10, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      ReYd = colDef(minWidth = 50,name = "Yd", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 100, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      ReTD = colDef(minWidth = 50,name = "TD", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 3, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
-                      ReFD = colDef(minWidth = 40,name = "FD", align = 'right', style = function(value) {
-                          fontWeight <- ifelse(value >= 5, 'bold', 'plain')
-                          list(fontWeight = fontWeight)}),
+                      PaCmp = pacmpDef,
+                      PaAtt = paattDef,
+                      PaYd = paydDefWk,
+                      PaTD = patdDefWk,
+                      PaInt = paintDefWk,
+                      RuAtt = ruattDefWk,
+                      RuYd = ruydDefWk,
+                      RuTD = rutdDefWk,
+                      RuFD = rufdDefWk,
+                      Tar = tarDefWk,
+                      Rec = recDefWk,
+                      ReYd = reydDefWk,
+                      ReTD = retdDefWk,
+                      ReFD = refdDefWk,
                       FPts = fptsWeekDef()
                   ),
                   columnGroups = list(
@@ -783,18 +711,18 @@ shinyServer(function(input, output, session) {
                 G = gDef,
                 PaCmp = pacmpDef,
                 PaAtt = paattDef,
-                PaYd = paydDefNm,
-                PaTD = patdDefNm,
-                PaInt = paintDefNm,
-                RuAtt = ruattDefNm,
-                RuYd = ruydDefNm,
-                RuTD = rutdDefNm,
-                RuFD = rufdDefNm,
-                Tar = tarDefNm,
-                Rec = recDefNm,
-                ReYd = reydDefNm,
-                ReTD = retdDefNm,
-                ReFD = refdDefNm,
+                PaYd = paydDefSsn,
+                PaTD = patdDefSsn,
+                PaInt = paintDefSsn,
+                RuAtt = ruattDefSsn,
+                RuYd = ruydDefSsn,
+                RuTD = rutdDefSsn,
+                RuFD = rufdDefSsn,
+                Tar = tarDefSsn,
+                Rec = recDefSsn,
+                ReYd = reydDefSsn,
+                ReTD = retdDefSsn,
+                ReFD = refdDefSsn,
                 Avg = avgDef(maxW = 65, borderL = T),
                 FPts = fptsSeasDef(maxW = 65, col = F)
             ),
@@ -843,18 +771,18 @@ shinyServer(function(input, output, session) {
                     G = gDef,
                     PaCmp = pacmpDef,
                     PaAtt = paattDef,
-                    PaYd = paydDefNm,
-                    PaTD = patdDefNm,
-                    PaInt = paintDefNm,
-                    RuAtt = ruattDefNm,
-                    RuYd = ruydDefNm,
-                    RuTD = rutdDefNm,
-                    RuFD = rufdDefNm,
-                    Tar = tarDefNm,
-                    Rec = recDefNm,
-                    ReYd = reydDefNm,
-                    ReTD = retdDefNm,
-                    ReFD = refdDefNm,
+                    PaYd = paydDefSsn,
+                    PaTD = patdDefSsn,
+                    PaInt = paintDefSsn,
+                    RuAtt = ruattDefSsn,
+                    RuYd = ruydDefSsn,
+                    RuTD = rutdDefSsn,
+                    RuFD = rufdDefSsn,
+                    Tar = tarDefSsn,
+                    Rec = recDefSsn,
+                    ReYd = reydDefSsn,
+                    ReTD = retdDefSsn,
+                    ReFD = refdDefSsn,
                     Avg = avgDef(maxW = 65, borderL = T),
                     FPts = fptsSeasDef(maxW = 65, col = F)
                 ),
@@ -1026,16 +954,16 @@ shinyServer(function(input, output, session) {
                       Pos = posDef(),
                       Player = playerDef(minW = 125, filt = T),
                       Avg = avgDef(maxW = perccolwidth, borderL = T),
-                      RelSD = colDef(minWidth = perccolwidth, align = "right"),
-                      AvgPosRk = colDef(name = "Avg",minWidth = perccolwidth, align = "right", class = "border-left"),
-                      `Top5 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `Top12 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `Top24 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `Top36 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `NonStart %` = colDef(minWidth = 70, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `>10 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `>20 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1)),
-                      `>30 %` = colDef(minWidth = perccolwidth, align = "right", format = colFormat(percent = T, digits = 1))
+                      RelSD = relsdDef,
+                      AvgPosRk = avgposrkDef,
+                      `Top5 %` = top5pDef,
+                      `Top12 %` = top12pDef,
+                      `Top24 %` = top24pDef,
+                      `Top36 %` = top36pDef,
+                      `NonStart %` = nonstartpDef,
+                      `>10 %` = g10pDef,
+                      `>20 %` = g20pDef,
+                      `>30 %` = g30pDef
                       
                   ),
                   columnGroups = list(
@@ -1069,7 +997,7 @@ shinyServer(function(input, output, session) {
                       Age = colDef(minWidth =  40),
                       NFL = colDef(minWidth =  40),
                       Salary = salaryDefNobar(minW = 45, foot = T),
-                      Contract = contractDef(minW = 30, foot = T, name = "Yr"),
+                      Contract = contractDef(minW = 30, foot = T, name = "Yr", filt = F),
                       ptslog = ptsLogDef(maxW = 70),
                       Avg = avgDef(maxW = 45),
                       FPts = fptsSeasDef(maxW = 50)
@@ -1095,7 +1023,7 @@ shinyServer(function(input, output, session) {
                       Age = colDef(minWidth =  40),
                       NFL = colDef(minWidth =  40),
                       Salary = salaryDefNobar(minW = 45, foot = T),
-                      Contract = contractDef(minW = 30, foot = T, name = "Yr"),
+                      Contract = contractDef(minW = 30, foot = T, filt = F),
                       ptslog = ptsLogDef(maxW = 70),
                       Avg = avgDef(maxW = 45),
                       FPts = fptsSeasDef(maxW = 50)
@@ -1121,7 +1049,7 @@ shinyServer(function(input, output, session) {
                   highlight = T,
                   #borderless = T,
                   compact = T,
-                  resizable = T,
+                  resizable = F,
                   columns = list(
                       Pos = posDef(maxW = 38, filt = FALSE),
                       Player = playerDef(minW = 125),
@@ -1151,7 +1079,7 @@ shinyServer(function(input, output, session) {
                       highlight = T,
                       #borderless = T,
                       compact = T,
-                      resizable = T,
+                      resizable = F,
                       columns = list(
                           Pos = posDef(maxW = 38, filt = FALSE),
                           Player = playerDef(minW = 125),
@@ -1286,7 +1214,7 @@ shinyServer(function(input, output, session) {
                   columns = list(
                       TRUFFLE = trfDef(),
                       Pos = posDef(),
-                      Player = playerDef(),
+                      Player = playerDef(filt = T),
                       Age = ageDef,
                       NFL = nflDef,
                       Salary = salaryDefBar(),
@@ -2077,66 +2005,21 @@ shinyServer(function(input, output, session) {
     #database ----
     #data hub weekly logs
     output$dhweekly <- renderReactable({
-        reactable(weekly[order(-FPts)][, !c("TRUFFLE", "NFL", "Avg", "top5dum", "top12dum", "top24dum", "top36dum", "nonStartdum", "PosRk", "lt10dum", "gt10dum", "gt20dum", "gt30dum")],
+        reactable(weekly[order(-FPts)][, !c("TRUFFLE", "NFL", "Avg", "PosRk")],
                   paginationType = "jump",
                   showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
                   pageSizeOptions = c(10, 20, 50, 100),
                   height = 'auto',
                   filterable = T,
                   highlight = T,
-                  bordered = T,
                   compact = T,
-                  resizable = T,
                   columns = list(
                       Season = seasonDef,
                       Week = weekDef,
                       Pos = posDef(),
                       Player = playerDef(minW = 150, filt = T),
-                      Opp = oppDef,
+                      Opp = opDef,
                       OpRk = oprkDef,
-                      PaCmp = pacmpDef,
-                      PaAtt = paattDef,
-                      PaYd = paydDefWk,
-                      PaTD = patdDefWk,
-                      PaInt = paintDefWk,
-                      RuAtt = ruattDefWk,
-                      RuYd = ruydDefWk,
-                      RuTD = rutdDefWk,
-                      RuFD = rufdDefWk,
-                      Tar = tarDefWk,
-                      Rec = recDefWk,
-                      ReYd = reydDefWk,
-                      ReTD = retdDefWk,
-                      ReFD = refdDefWk,
-                      FL = flDef,
-                      FPts = fptsWeekDef()
-                  ),
-                  columnGroups = list(
-                      colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
-                      colGroup(name = "Rushing", columns = c("RuAtt", "RuYd", "RuTD", "RuFD"), align = 'left'),
-                      colGroup(name = "Receiving", columns = c("Tar", "Rec", "ReYd", "ReTD", "ReFD"), align = 'left')
-                  )
-        )
-    })
-    
-    #data hub fantasy logs
-    output$dhfantasy <- renderReactable({
-        reactable(fantasy[order(-Season, -Week, -FPts)][, !c("Opp", "OpRk", "NFL", "Avg", "PosRk")],
-                  paginationType = "jump",
-                  showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
-                  pageSizeOptions = c(10, 20, 50, 100),
-                  height = 'auto',
-                  filterable = T,
-                  highlight = T,
-                  bordered = T,
-                  compact = T,
-                  resizable = T,
-                  columns = list(
-                      Season = seasonDef,
-                      Week = weekDef,
-                      TRUFFLE = trfDef(),
-                      Pos = posDef(),
-                      Player = playerDef(minW = 150, filt = T),
                       PaCmp = pacmpDef,
                       PaAtt = paattDef,
                       PaYd = paydDefWk,
@@ -2164,16 +2047,14 @@ shinyServer(function(input, output, session) {
     
     #datahub seasons
     output$dhseasons <- renderReactable({
-        reactable(seasons[order(-FPts)][, !c("TRUFFLE","PosRk")],
+        reactable(seasons[order(-FPts)][, !"PosRk"],
                   paginationType = "jump",
                   showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
                   pageSizeOptions = c(10, 20, 50, 100),
                   height = 'auto',
                   filterable = T,
                   highlight = T,
-                  bordered = T,
                   compact = T,
-                  resizable = T,
                   columns = list(
                       Season = seasonDef,
                       Pos = posDef(),
@@ -2204,6 +2085,47 @@ shinyServer(function(input, output, session) {
                       colGroup(name = "Receiving", columns = c("Tar", "Rec", "ReYd", "ReTD", "ReFD"), align = 'left')
                   )
         )
+    })
+    
+    #data hub fantasy logs
+    output$dhfantasy <- renderReactable({
+      reactable(fantasy[order(-Season, -Week, -FPts)][, !c("Opp", "OpRk", "NFL", "Avg")],
+                paginationType = "jump",
+                showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
+                pageSizeOptions = c(10, 20, 50, 100),
+                height = 'auto',
+                filterable = T,
+                highlight = T,
+                compact = T,
+                columns = list(
+                  Season = seasonDef,
+                  Week = weekDef,
+                  TRUFFLE = trfDef(),
+                  Pos = posDef(),
+                  Player = playerDef(minW = 150, filt = T),
+                  PaCmp = pacmpDef,
+                  PaAtt = paattDef,
+                  PaYd = paydDefWk,
+                  PaTD = patdDefWk,
+                  PaInt = paintDefWk,
+                  RuAtt = ruattDefWk,
+                  RuYd = ruydDefWk,
+                  RuTD = rutdDefWk,
+                  RuFD = rufdDefWk,
+                  Tar = tarDefWk,
+                  Rec = recDefWk,
+                  ReYd = reydDefWk,
+                  ReTD = retdDefWk,
+                  ReFD = refdDefWk,
+                  FL = flDef,
+                  FPts = fptsWeekDef()
+                ),
+                columnGroups = list(
+                  colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
+                  colGroup(name = "Rushing", columns = c("RuAtt", "RuYd", "RuTD", "RuFD"), align = 'left'),
+                  colGroup(name = "Receiving", columns = c("Tar", "Rec", "ReYd", "ReTD", "ReFD"), align = 'left')
+                )
+      )
     })
     
     #upcoming draft ----

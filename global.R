@@ -618,7 +618,8 @@ posRkDef <- function(maxW = 62, filt = F) {
          maxWidth = maxW,
          filterable = filt,
          align = 'right',
-         defaultSortOrder = "asc")
+         defaultSortOrder = "asc",
+         sortNALast = T)
 }
 
 ptsLogDef <- function(maxW = 75) {
@@ -636,6 +637,7 @@ salaryDefBar <- function(minW = 175, foot = F) {
   colDef(minWidth = minW,
          align = 'left',
          format = colFormat(digits=0),
+         defaultSortOrder = "desc",
          style = function(value) {
            color <- ifelse(value <= 15, IRcolor, 'black')
            list(color = color)},
@@ -651,6 +653,7 @@ salaryDefNobar <- function(minW = 45, foot = F) {
   colDef(minWidth = minW,
          name = "$",
          align = 'right',
+         defaultSortOrder = "desc",
          format = colFormat(digits=0, prefix = "$"),
          style = function(value) {
            color <- ifelse(value <= 15, IRcolor, 'black')
@@ -678,6 +681,7 @@ futurecolDef <- function(maxW = 75, filt = T, foot = F, yr) {
          maxWidth = maxW,
          filterable = filt,
          align = 'right',
+         defaultSortOrder = "desc",
          cell = function(value) {
            class <- paste0("tag status-", value)
            htmltools::div(class = class, value)},
@@ -690,7 +694,8 @@ avgDef <- function(maxW = 65, digs = 1, filt = F, col = T, borderL = F) {
          maxWidth = maxW,
          format = colFormat(digits = digs),
          filterable = filt,
-         class = function(value) if(borderL == T) {"border-left"},
+         defaultSortOrder = "desc",
+         class = function(value) if(borderL == T) {"border-left-grey"},
          style = function(value) { 
            normalized <- (value) / (max(seasons$Avg,na.rm=T))
            color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
@@ -704,7 +709,8 @@ fptsWeekDef <- function(maxW = 65, borderL = T, digs = 1, filt = F, col = T) {
          maxWidth = 65,
          format = colFormat(digits = digs),
          filterable = filt,
-         class = function(value) if(borderL == T) {"border-left"},
+         defaultSortOrder = "desc",
+         class = function(value) if(borderL == T) {"border-left-grey"},
          style = function(value) { 
            normalized <- (value) / (max(weekly$FPts[weekly$Season == max(weekly$Season)],na.rm=T))
            color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
@@ -718,7 +724,8 @@ fptsSeasDef <- function(maxW = 65, borderL = F, digs = 1, filt = F, col = T) {
          maxWidth = maxW,
          format = colFormat(digits = digs),
          filterable = filt,
-         class = function(value) if(borderL == T) {"border-left"},
+         defaultSortOrder = "desc",
+         class = function(value) if(borderL == T) {"border-left-grey"},
          style = function(value) { 
            normalized <- (value) / (max(seasons$FPts,na.rm=T))
            color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
@@ -731,132 +738,132 @@ nflDef <- colDef(minWidth = 50, align = 'right')
 
 byeDef <- colDef(minWidth = 50, align = 'right')
 
-gDef <- colDef(minWidth = 50, align = 'right')
+gDef <- colDef(header = with_tt("G", "Games Played"), minWidth = 40, align = 'right', defaultSortOrder = "desc")
 
-ageDef <- colDef(minWidth = 50, align = 'right')
+ageDef <- colDef(minWidth = 50, align = 'right', defaultSortOrder = "asc", sortNALast = T)
 
 smallcolDef <- colDef(maxWidth = 100, align = 'left')
 
 seasonDef <- colDef(name="Yr", maxWidth = smallboxwidth, align = 'center')
-weekDef <- colDef("Wk",maxWidth = 50, align = 'center')
+weekDef <- colDef("Wk",maxWidth = 44, align = 'center')
 
-oppDef <- colDef(maxWidth = 55, align = 'left')
-oprkDef <- colDef(maxWidth = 55, align = 'center', style = function(value) {
+opDef <- colDef(header = with_tt("Op", "Opponent"), maxWidth = 60, align = 'right')
+oprkDef <- colDef(header = with_tt("OpRk", "Opponent Rankings vs. Fantasy Posision"), maxWidth = 60, align = 'center', style = function(value) {
   color <- ifelse(value <= 10, 'firebrick',
                   ifelse(value <= 20, 'black', 'green'))
   list(color = color)})
 
 #box score stats reactable formats ----
 #passing stats conditional formatting
-pacmpDef <- colDef(header = with_tt("Cmp", "Passing Completions"), minWidth = smallboxwidth + 4, align = 'right', class = "border-left")
-paattDef <- colDef(header = with_tt("Att", "Passing Attempts"), minWidth = smallboxwidth, align = 'right')
+pacmpDef <- colDef(header = with_tt("Cmp", "Passing Completions"), minWidth = smallboxwidth + 8, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
+paattDef <- colDef(header = with_tt("Att", "Passing Attempts"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
 
 paydDefWk <- colDef(header = with_tt("Yd", "Passing Yards\nBold if >=300"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 300, 'bold', 'plain')
-  list(fontWeight = fontWeight)})
+  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
 paydDefSsn <- colDef(header = with_tt("Yd", "Passing Yards\nBold if >=4000"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 4000, 'bold', 'plain')
-  list(fontWeight = fontWeight)})
-paydDefNm <- colDef(header = with_tt("Yd", "Passing Yards"), minWidth = smallboxwidth, align = 'right')
+  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
+paydDefNm <- colDef(header = with_tt("Yd", "Passing Yards"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
 
 patdDefWk <- colDef(header = with_tt("TD", "Passing TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'bold', 'plain')
-  list(fontWeight = fontWeight)})
+  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
 patdDefSsn <- colDef(header = with_tt("TD", "Passing TDs\nBold if >=30"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 30, 'bold', 'plain')
-  list(fontWeight = fontWeight)})
-patdDefNm <- colDef(header = with_tt("TD", "Passing TDs"), minWidth = smallboxwidth, align = 'right')
+  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
+patdDefNm <- colDef(header = with_tt("TD", "Passing TDs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
 
 paintDefWk <- colDef(header = with_tt("Int", "Interceptions\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'italic', 'plain')
-  list(fontWeight = fontWeight)})
+  list(fontWeight = fontWeight)}, defaultSortOrder = "asc")
 paintDefSsn <- colDef(header = with_tt("Int", "Interceptions\nBold if >=15"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 15, 'italic', 'plain')
-  list(fontWeight = fontWeight)})
-paintDefNm <- colDef(header = with_tt("Int", "Interceptions"), minWidth = smallboxwidth, align = 'right')
+  list(fontWeight = fontWeight)}, defaultSortOrder = "asc")
+paintDefNm <- colDef(header = with_tt("Int", "Interceptions"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "asc")
 
 #Rushing stats
 ruattDefWk <- colDef(header = with_tt("Att", "Rushing Attempts\nBold if >=20"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 20, 'bold', 'plain')
-  list(fontWeight = fontWeight)}, class = "border-left")
+  list(fontWeight = fontWeight)}, class = "border-left-grey", defaultSortOrder = "desc")
 ruattDefSsn <- colDef(header = with_tt("Att", "Rushing Attempts\nBold if >=250"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 250, 'bold', 'plain')
-  list(fontWeight = fontWeight)}, class = "border-left")
-ruattDefNm <- colDef(header = with_tt("Att", "Rushing Attempts"), minWidth = smallboxwidth, align = 'right', class = "border-left")
+  list(fontWeight = fontWeight)}, class = "border-left-grey", defaultSortOrder = "desc")
+ruattDefNm <- colDef(header = with_tt("Att", "Rushing Attempts"), minWidth = smallboxwidth, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
 
 #Rushing yards
 ruydDefWk <- colDef(header = with_tt("Yd", "Rushing Yards\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
-  list(fontWeight = fontWeight)})
+  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
 ruydDefSsn <- colDef(header = with_tt("Yd", "Rushing Yards\nBold if >=1000"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 1000, 'bold', 'plain')
-  list(fontWeight = fontWeight)})
-ruydDefNm <- colDef(header = with_tt("Yd", "Rushing Yards"), minWidth = smallboxwidth, align = 'right')
+  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
+ruydDefNm <- colDef(header = with_tt("Yd", "Rushing Yards"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
 
 #Rushing td
 rutdDefWk <- colDef(header = with_tt("TD", "Rushing TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'bold', 'plain')
-  list(fontWeight = fontWeight)})
+  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
 rutdDefSsn <- colDef(header = with_tt("TD", "Rushing TDs\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
-  list(fontWeight = fontWeight)})
-rutdDefNm <- colDef(header = with_tt("TD", "Rushing TDs"), minWidth = smallboxwidth, align = 'right')
+  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
+rutdDefNm <- colDef(header = with_tt("TD", "Rushing TDs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
 
 #Rushing fd
 rufdDefWk <- colDef(header = with_tt("FD", "Rushing First Downs\nBold if >=5"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 5, 'bold', 'plain')
-  list(fontWeight = fontWeight)})
+  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
 rufdDefSsn <- colDef(header = with_tt("FD", "Rushing First Downs\nBold if >=50"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 50, 'bold', 'plain')
-  list(fontWeight = fontWeight)})
-rufdDefNm <- colDef(header = with_tt("FD", "Rushing First Downs"), minWidth = smallboxwidth, align = 'right')
+  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
+rufdDefNm <- colDef(header = with_tt("FD", "Rushing First Downs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
 
 #Targets
 tarDefWk <- colDef(header = with_tt("Tar", "Targets\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
-  list(fontWeight = fontWeight)}, class = "border-left")
+  list(fontWeight = fontWeight)}, class = "border-left-grey", defaultSortOrder = "desc")
 tarDefSsn <- colDef(header = with_tt("Tar", "Targets\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
-  list(fontWeight = fontWeight)}, class = "border-left")
-tarDefNm <- colDef(header = with_tt("Tar", "Targets"), minWidth = smallboxwidth, align = 'right', class = "border-left")
+  list(fontWeight = fontWeight)}, class = "border-left-grey", defaultSortOrder = "desc")
+tarDefNm <- colDef(header = with_tt("Tar", "Targets"), minWidth = smallboxwidth, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
 
 #Receptions
-recDefWk <- colDef(header = with_tt("Rec", "Receptions\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+recDefWk <- colDef(header = with_tt("Rec", "Receptions\nBold if >=10"), minWidth = smallboxwidth + 2, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
-  list(fontWeight = fontWeight)})
-recDefSsn <- colDef(header = with_tt("Rec", "Receptions\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
+recDefSsn <- colDef(header = with_tt("Rec", "Receptions\nBold if >=100"), minWidth = smallboxwidth + 2, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
-  list(fontWeight = fontWeight)})
-recDefNm <- colDef(header = with_tt("Rec", "Receptions"), minWidth = smallboxwidth, align = 'right')
+  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
+recDefNm <- colDef(header = with_tt("Rec", "Receptions"), minWidth = smallboxwidth + 2, align = 'right', defaultSortOrder = "desc")
 
 #receiving yards
 reydDefWk <- colDef(header = with_tt("Yd", "Receiving Yards\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
-  list(fontWeight = fontWeight)})
+  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
 reydDefSsn <- colDef(header = with_tt("Yd", "Receiving Yards\nBold if >=1000"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 1000, 'bold', 'plain')
-  list(fontWeight = fontWeight)})
-reydDefNm <- colDef(header = with_tt("Yd", "Receiving Yards"), minWidth = smallboxwidth, align = 'right')
+  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
+reydDefNm <- colDef(header = with_tt("Yd", "Receiving Yards"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
 
 #receiving tds
 retdDefWk <- colDef(header = with_tt("TD", "Receiving TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'bold', 'plain')
-  list(fontWeight = fontWeight)})
+  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
 retdDefSsn <- colDef(header = with_tt("TD", "Receiving TDs\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
-  list(fontWeight = fontWeight)})
-retdDefNm <- colDef(header = with_tt("TD", "Receiving TDs"), minWidth = smallboxwidth, align = 'right')
+  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
+retdDefNm <- colDef(header = with_tt("TD", "Receiving TDs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
 
 #Receiving fd
 refdDefWk <- colDef(header = with_tt("FD", "Receiving First Downs\nBold if >=5"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 5, 'bold', 'plain')
-  list(fontWeight = fontWeight)})
+  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
 refdDefSsn <- colDef(header = with_tt("FD", "Receiving First Downs\nBold if >=50"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 50, 'bold', 'plain')
-  list(fontWeight = fontWeight)})
+  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
 refdDefNm <- colDef(header = with_tt("FD", "Receiving First Downs"), minWidth = smallboxwidth, align = 'right')
 
-flDef <- colDef(header = with_tt("FL", "Fumbles Lost"), minWidth = smallboxwidth, align = 'right')
+flDef <- colDef(header = with_tt("Fl", "Fumbles Lost"), minWidth = smallboxwidth - 5, align = 'right', defaultSortOrder = "desc")
 
 #advanced stats reactable formats----
 perccolwidth <- 60
@@ -865,54 +872,148 @@ blankptwidth <- 52
 tchDef <- colDef(header = with_tt("Tch", "Touches\n(Completions + Carries + Receptions)"),
                 minWidth = othcolwidth,
                 align = "right",
-                class = "border-left")
+                class = "border-left-grey",
+                defaultSortOrder = "desc",
+                sortNALast = T)
 oppDef <- colDef(header = with_tt("Opp", "Opportunities\n(Passing Attempts + Carries + Targets)"),
                 minWidth = othcolwidth + 2,
-                align = "right")
-fptsPtchDef <- colDef(header = with_tt("FPt/Tch", "Fantasy Points per Touch\n(Completions + Carries + Receptions)"),
+                align = "right",
+                defaultSortOrder = "desc",
+                sortNALast = T)
+fptsPtchDef <- colDef(header = with_tt("FPt/Tch", "FPts per Touch\n(Completions + Carries + Receptions)"),
                      minWidth = 68,
                      align = "right",
-                     format = colFormat(digits = 2))
-fptsPoppDef <- colDef(header = with_tt("FPt/Opp", "Fantasy Points per Opportunity\n(Passing Attempts + Carries + Targets)"),
+                     format = colFormat(digits = 2),
+                     defaultSortOrder = "desc",
+                     sortNALast = T)
+fptsPoppDef <- colDef(header = with_tt("FPt/Opp", "FPts per Opportunity\n(Passing Attempts + Carries + Targets)"),
                      minWidth = 72,
                      align = "right",
-                     format = colFormat(digits = 2))
-ydptsDef <- colDef(header = with_tt("YdPt", "Fantasy Points from Yards\n(Passing + Rushing + Receiving)"),
+                     format = colFormat(digits = 2),
+                     defaultSortOrder = "desc",
+                     sortNALast = T)
+ydptsDef <- colDef(header = with_tt("YdPt", "FPts from Yards\n(Passing + Rushing + Receiving)"),
                   minWidth = blankptwidth,
                   align = "right",
-                  class = "border-left",
-                  format = colFormat(digits = 1))
-tdptsDef <- colDef(header = with_tt("TDPt", "Fantasy Points from Touchdowns\n(Passing + Rushing + Receiving)"),
+                  class = "border-left-grey",
+                  format = colFormat(digits = 1),
+                  defaultSortOrder = "desc",
+                  sortNALast = T)
+tdptsDef <- colDef(header = with_tt("TDPt", "FPts from Touchdowns\n(Passing + Rushing + Receiving)"),
                   minWidth = blankptwidth,
-                  align = "right")
-fdptsDef <- colDef(header = with_tt("FDPt", "Fantasy Points from First Downs\n(Rushing + Receiving)"),
+                  align = "right",
+                  defaultSortOrder = "desc",
+                  sortNALast = T)
+fdptsDef <- colDef(header = with_tt("FDPt", "FPts from First Downs\n(Rushing + Receiving)"),
                   minWidth = blankptwidth,
-                  align = "right")
-ruptsDef <- colDef(header = with_tt("RuPt", "Fantasy Points from Rushing\n(Yards + TDs + First Downs)"),
+                  align = "right",
+                  defaultSortOrder = "desc",
+                  sortNALast = T)
+ruptsDef <- colDef(header = with_tt("RuPt", "FPts from Rushing\n(Yards + TDs + First Downs)"),
                    minWidth = blankptwidth,
                    align = "right",
-                   format = colFormat(digits = 1))
-reptsDef <- colDef(header = with_tt("RePt", "Fantasy Points from Receiving\n(Yards + TDs + First Downs)"),
+                   format = colFormat(digits = 1),
+                   defaultSortOrder = "desc",
+                   sortNALast = T)
+reptsDef <- colDef(header = with_tt("RePt", "FPts from Receiving\n(Yards + TDs + First Downs)"),
                    minWidth = blankptwidth,
                    align = "right",
-                   format = colFormat(digits = 1))
+                   format = colFormat(digits = 1),
+                   defaultSortOrder = "desc",
+                   sortNALast = T)
 ydptpercDef <- colDef(header = with_tt("YdPt%", "Percentage of Total FPts from Yards\n(Passing + Rushing + Receiving)"),
                       minWidth = perccolwidth,
                       align = "right",
-                      format = colFormat(percent = T, digits = 0))
+                      format = colFormat(percent = T, digits = 0),
+                      class = "border-left-grey",
+                      defaultSortOrder = "desc",
+                      sortNALast = T)
 tdptpercDef <- colDef(header = with_tt("TDPt%", "Percentage of Total FPts from Touchdowns\n(Passing + Rushing + Receiving)"),
                       minWidth = perccolwidth + 2,
                       align = "right",
-                      format = colFormat(percent = T, digits = 0))
+                      format = colFormat(percent = T, digits = 0),
+                      defaultSortOrder = "desc",
+                      sortNALast = T)
 fdptpercDef = colDef(header = with_tt("FDPt%", "Percentage of Total FPts from First Downs\n(Rushing + Receiving)"),
                      minWidth = perccolwidth + 3,
                      align = "right",
-                     format = colFormat(percent = T, digits = 0))
+                     format = colFormat(percent = T, digits = 0),
+                     defaultSortOrder = "desc",
+                     sortNALast = T)
 ruptpercDef = colDef(header = with_tt("RuPt%", "Percentage of Total FPts from Rushing\n(Yards + TDs + First Downs)"),
                      minWidth = perccolwidth + 2,
                      align = "right",
-                     format = colFormat(percent = T, digits = 0))
+                     format = colFormat(percent = T, digits = 0),
+                     defaultSortOrder = "desc",
+                     sortNALast = T)
 reptpercDef = colDef(header = with_tt("RePt%", "Percentage of Total FPts from Receiving\n(Yards + TDs + First Downs)"),
                      minWidth = perccolwidth + 2,
                      align = "right",
-                     format = colFormat(percent = T, digits = 0))
+                     format = colFormat(percent = T, digits = 0),
+                     defaultSortOrder = "desc",
+                     sortNALast = T)
+
+#consistency stats reactable formats----
+conscolwidth <- 60
+relsdDef <- colDef(header = with_tt("RelSD", "Relative Standard Deviation of Weekly FPts\n(SD / Avg)"),
+                   minWidth = conscolwidth,
+                   align = "right",
+                   format = colFormat(digits = 2),
+                   defaultSortOrder = "asc",
+                   sortNALast = T)
+avgposrkDef <- colDef(header = with_tt("AvgPosRk", "Average Weekly Position Rank by FPts"),
+                      minWidth = conscolwidth + 10,
+                      align = "right",
+                      class = "border-left-grey",
+                      defaultSortOrder = "asc",
+                      sortNALast = T)
+top5pDef <- colDef(header = with_tt("Top5%", "Percentage of Weeks with top 5 Positional Scoring Rank"),
+                   minWidth = conscolwidth,
+                   align = "right",
+                   format = colFormat(percent = T, digits = 0),
+                   defaultSortOrder = "desc",
+                   sortNALast = T)
+top12pDef <- colDef(header = with_tt("Top12%", "Percentage of Weeks with top 12 Positional Scoring Rank"),
+                    minWidth = conscolwidth,
+                    align = "right",
+                    format = colFormat(percent = T, digits = 0),
+                    defaultSortOrder = "desc",
+                    sortNALast = T)
+top24pDef <- colDef(header = with_tt("Top24%", "Percentage of Weeks with top 24 Positional Scoring Rank"),
+                    minWidth = conscolwidth,
+                    align = "right",
+                    format = colFormat(percent = T, digits = 0),
+                    defaultSortOrder = "desc",
+                    sortNALast = T)
+top36pDef <- colDef(header = with_tt("Top36%", "Percentage of Weeks with top 36 Positional Scoring Rank"),
+                    minWidth = conscolwidth,
+                    align = "right",
+                    format = colFormat(percent = T, digits = 0),
+                    defaultSortOrder = "desc",
+                    sortNALast = T)
+nonstartpDef <- colDef(header = with_tt("NonStart%", "Percentage of Weeks outside of top 36 Positional Scoring Rank"),
+                       minWidth = 75,
+                       align = "right",
+                       format = colFormat(percent = T, digits = 0),
+                       defaultSortOrder = "desc",
+                       sortNALast = T)
+g10pDef <- colDef(header = with_tt(">10 %", "Percentage of Weeks scoring >10 FPts"),
+                  minWidth = conscolwidth,
+                  class = "border-left-grey",
+                  align = "right",
+                  format = colFormat(percent = T,digits = 0),
+                  defaultSortOrder = "desc",
+                  sortNALast = T)
+g20pDef <- colDef(header = with_tt(">20 %", "Percentage of Weeks scoring >20 FPts"),
+                  minWidth = conscolwidth,
+                  align = "right",
+                  format = colFormat(percent = T, digits = 0),
+                  defaultSortOrder = "desc",
+                  sortNALast = T)
+g30pDef <- colDef(header = with_tt(">30 %", "Percentage of Weeks scoring >30 FPts"),
+                  minWidth = conscolwidth,
+                  align = "right",
+                  format = colFormat(percent = T, digits = 0),
+                  defaultSortOrder = "desc",
+                  sortNALast = T)
+

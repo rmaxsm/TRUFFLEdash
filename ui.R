@@ -219,7 +219,7 @@ tagList(
                               )
                             ),
                             navbarPage(title = HTML("<span style=color:#84A4D8>StatCenter</span>"),
-                                       tabPanel("BoxScore",
+                                       tabPanel("Box Score",
                                                 wellPanel(class = "well",
                                                           reactableOutput('scboxscore')
                                                 )
