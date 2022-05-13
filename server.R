@@ -633,7 +633,7 @@ shinyServer(function(input, output, session) {
                                             width <- paste0(value / max(truffleanalysis$FPts) * 100, "%")
                                             bar_chart(round(value,0), width = width)
                                         }),
-                          Ydpts = colDef(class = 'border-left')
+                          Ydpts = colDef(class = 'border-left-grey')
                       ),
                       columnGroups = list(
                           colGroup(name = "Positional Breakdown", columns = c("QBpts", "RBpts", "WRpts", "TEpts", "DSTpts"), align = 'left'),
@@ -667,96 +667,37 @@ shinyServer(function(input, output, session) {
         
     })
     
+    
+    
     #statcenter ----
+    #building the tables that take the week sliders into account
+    boxscorerange <- reactive(weekly[Season == input$scseason &
+                                       Week %in% seq(input$scweekrange[1],input$scweekrange[2])
+    ][,
+      .(G = .N,
+        PaCmp = sum(PaCmp, na.rm = T),
+        PaAtt = sum(PaAtt, na.rm = T),
+        PaYd = sum(PaYd, na.rm = T),
+        PaTD = sum(PaTD, na.rm = T),
+        PaInt = sum(PaInt, na.rm = T),
+        RuAtt = sum(RuAtt, na.rm = T),
+        RuYd = sum(RuYd, na.rm = T),
+        RuTD = sum(RuTD, na.rm = T),
+        RuFD = sum(RuFD, na.rm = T),
+        Tar = sum(Tar, na.rm = T),
+        Rec = sum(Rec, na.rm = T),
+        ReYd = sum(ReYd, na.rm = T),
+        ReTD = sum(ReTD, na.rm = T),
+        ReFD = sum(ReFD, na.rm = T),
+        Avg = round(mean(FPts, na.rm = T),2),
+        FPts = sum(FPts, na.rm = T),
+        TRUFFLEdum = ifelse(TRUFFLE == "FA", "FA", "Owned")
+      ),
+      by = .(TRUFFLE, Pos, Player)][order(-FPts)][TRUFFLEdum %in% input$scavailable & Avg >= input$scavgmin][, !"TRUFFLEdum"])
+    
     #stat center boxscore
     output$scboxscore <- renderReactable({
-        
-        if (input$scavailable == "FA") {
-            
-            reactable(weekly[Season == input$scseason &
-                                 Week %in% seq(input$scweekrange[1],input$scweekrange[2]) &
-                                 Pos %in% input$scpositions &
-                                 TRUFFLE == "FA"
-            ][,
-              .(G = .N,
-                PaCmp = sum(PaCmp),
-                PaAtt = sum(PaAtt),
-                PaYd = sum(PaYd),
-                PaTD = sum(PaTD),
-                PaInt = sum(PaInt),
-                RuAtt = sum(RuAtt),
-                RuYd = sum(RuYd),
-                RuTD = sum(RuTD),
-                RuFD = sum(RuFD),
-                Tar = sum(Tar),
-                Rec = sum(Rec),
-                ReYd = sum(ReYd),
-                ReTD = sum(ReTD),
-                ReFD = sum(ReFD),
-                Avg = round(mean(FPts),2),
-                FPts = sum(FPts)
-              ),
-              by = .(TRUFFLE, Pos, Player)][order(-FPts)],
-            paginationType = "jump",
-            showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
-            pageSizeOptions = c(10, 20, 50, 100),
-            height = 'auto',
-            filterable = F,
-            highlight = T,
-            compact = T,
-            columns = list(
-                TRUFFLE = trfDef(),
-                Pos = posDef(),
-                Player = playerDef(minW = 125, filt = T),
-                G = gDef,
-                PaCmp = pacmpDef,
-                PaAtt = paattDef,
-                PaYd = paydDefSsn,
-                PaTD = patdDefSsn,
-                PaInt = paintDefSsn,
-                RuAtt = ruattDefSsn,
-                RuYd = ruydDefSsn,
-                RuTD = rutdDefSsn,
-                RuFD = rufdDefSsn,
-                Tar = tarDefSsn,
-                Rec = recDefSsn,
-                ReYd = reydDefSsn,
-                ReTD = retdDefSsn,
-                ReFD = refdDefSsn,
-                Avg = avgDef(maxW = 65, borderL = T),
-                FPts = fptsSeasDef(maxW = 65, col = F)
-            ),
-            columnGroups = list(
-                colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
-                colGroup(name = "Rushing", columns = c("RuAtt", "RuYd", "RuTD", "RuFD"), align = 'left'),
-                colGroup(name = "Receiving", columns = c("Tar", "Rec", "ReYd", "ReTD", "ReFD"), align = 'left')
-            )
-            ) } else if (input$scavailable == "Owned") {
-                
-                reactable(weekly[Season == input$scseason &
-                                     Week %in% seq(input$scweekrange[1],input$scweekrange[2]) &
-                                     Pos %in% input$scpositions &
-                                     TRUFFLE %in% c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW")
-                ][,
-                  .(G = .N,
-                    PaCmp = sum(PaCmp),
-                    PaAtt = sum(PaAtt),
-                    PaYd = sum(PaYd),
-                    PaTD = sum(PaTD),
-                    PaInt = sum(PaInt),
-                    RuAtt = sum(RuAtt),
-                    RuYd = sum(RuYd),
-                    RuTD = sum(RuTD),
-                    RuFD = sum(RuFD),
-                    Tar = sum(Tar),
-                    Rec = sum(Rec),
-                    ReYd = sum(ReYd),
-                    ReTD = sum(ReTD),
-                    ReFD = sum(ReFD),
-                    Avg = round(mean(FPts),2),
-                    FPts = sum(FPts)
-                  ),
-                  by = .(TRUFFLE, Pos, Player)][order(-FPts)],
+      reactable(boxscorerange()[Pos %in% input$scpositions],
                 paginationType = "jump",
                 showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
                 pageSizeOptions = c(10, 20, 50, 100),
@@ -765,120 +706,63 @@ shinyServer(function(input, output, session) {
                 highlight = T,
                 compact = T,
                 columns = list(
-                    TRUFFLE = trfDef(),
-                    Pos = posDef(),
-                    Player = playerDef(minW = 125, filt = T),
-                    G = gDef,
-                    PaCmp = pacmpDef,
-                    PaAtt = paattDef,
-                    PaYd = paydDefSsn,
-                    PaTD = patdDefSsn,
-                    PaInt = paintDefSsn,
-                    RuAtt = ruattDefSsn,
-                    RuYd = ruydDefSsn,
-                    RuTD = rutdDefSsn,
-                    RuFD = rufdDefSsn,
-                    Tar = tarDefSsn,
-                    Rec = recDefSsn,
-                    ReYd = reydDefSsn,
-                    ReTD = retdDefSsn,
-                    ReFD = refdDefSsn,
-                    Avg = avgDef(maxW = 65, borderL = T),
-                    FPts = fptsSeasDef(maxW = 65, col = F)
+                  TRUFFLE = trfDef(),
+                  Pos = posDef(),
+                  Player = playerDef(minW = 125, filt = T),
+                  G = gDef,
+                  PaCmp = pacmpDef,
+                  PaAtt = paattDef,
+                  PaYd = paydDefNm,
+                  PaTD = patdDefNm,
+                  PaInt = paintDefNm,
+                  RuAtt = ruattDefNm,
+                  RuYd = ruydDefNm,
+                  RuTD = rutdDefNm,
+                  RuFD = rufdDefNm,
+                  Tar = tarDefNm,
+                  Rec = recDefNm,
+                  ReYd = reydDefNm,
+                  ReTD = retdDefNm,
+                  ReFD = refdDefNm,
+                  Avg = avgDef(maxW = 65, borderL = T),
+                  FPts = fptsSeasDef(maxW = 65, col = F)
                 ),
                 columnGroups = list(
-                    colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
-                    colGroup(name = "Rushing", columns = c("RuAtt", "RuYd", "RuTD", "RuFD"), align = 'left'),
-                    colGroup(name = "Receiving", columns = c("Tar", "Rec", "ReYd", "ReTD", "ReFD"), align = 'left')
+                  colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
+                  colGroup(name = "Rushing", columns = c("RuAtt", "RuYd", "RuTD", "RuFD"), align = 'left'),
+                  colGroup(name = "Receiving", columns = c("Tar", "Rec", "ReYd", "ReTD", "ReFD"), align = 'left')
                 )
-                )
-            } else {
-                
-                reactable(weekly[Season == input$scseason &
-                                     Week %in% seq(input$scweekrange[1],input$scweekrange[2]) &
-                                     Pos %in% input$scpositions
-                ][,
-                  .(G = .N,
-                    PaCmp = sum(PaCmp),
-                    PaAtt = sum(PaAtt),
-                    PaYd = sum(PaYd),
-                    PaTD = sum(PaTD),
-                    PaInt = sum(PaInt),
-                    RuAtt = sum(RuAtt),
-                    RuYd = sum(RuYd),
-                    RuTD = sum(RuTD),
-                    RuFD = sum(RuFD),
-                    Tar = sum(Tar),
-                    Rec = sum(Rec),
-                    ReYd = sum(ReYd),
-                    ReTD = sum(ReTD),
-                    ReFD = sum(ReFD),
-                    Avg = round(mean(FPts),2),
-                    FPts = sum(FPts)
-                  ),
-                  by = .(TRUFFLE, Pos, Player)][order(-FPts)],
-                paginationType = "jump",
-                showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
-                pageSizeOptions = c(10, 20, 50, 100),
-                height = 'auto',
-                filterable = F,
-                highlight = T,
-                compact = T,
-                columns = list(
-                    TRUFFLE = trfDef(),
-                    Pos = posDef(),
-                    Player = playerDef(minW = 125, filt = T),
-                    G = gDef,
-                    PaCmp = pacmpDef,
-                    PaAtt = paattDef,
-                    PaYd = paydDefNm,
-                    PaTD = patdDefNm,
-                    PaInt = paintDefNm,
-                    RuAtt = ruattDefNm,
-                    RuYd = ruydDefNm,
-                    RuTD = rutdDefNm,
-                    RuFD = rufdDefNm,
-                    Tar = tarDefNm,
-                    Rec = recDefNm,
-                    ReYd = reydDefNm,
-                    ReTD = retdDefNm,
-                    ReFD = refdDefNm,
-                    Avg = avgDef(maxW = 65, borderL = T),
-                    FPts = fptsSeasDef(maxW = 65, col = F)
-                ),
-                columnGroups = list(
-                    colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
-                    colGroup(name = "Rushing", columns = c("RuAtt", "RuYd", "RuTD", "RuFD"), align = 'left'),
-                    colGroup(name = "Receiving", columns = c("Tar", "Rec", "ReYd", "ReTD", "ReFD"), align = 'left')
-                )
-                )
-            }
-        
+      )
     })
     
     #stat center advanced
+    #calculating the reactive advanced stats over ranges
+    advancedrange <- reactive(weekly[Season == input$scseason &
+                                       Week %in% seq(input$scweekrange[1],input$scweekrange[2])
+    ][,
+      .(Avg = round(mean(FPts, na.rm = T),2),
+        FPts = sum(FPts),
+        YdPts = round(.04*sum(PaYd) + .1*(sum(RuYd) + sum(ReYd)),1),
+        TDPts = 4*sum(PaTD) + 6*(sum(RuTD) + sum(ReTD)),
+        FDPts = sum(RuFD) + sum(ReFD),
+        RuPts = .1*sum(RuYd) + 6*sum(RuTD) + sum(RuFD),
+        RePts = .1*sum(ReYd) + 6*sum(ReTD) + sum(ReFD),
+        Touch = sum(PaCmp + RuAtt + Rec),
+        Opp = sum(PaAtt + RuAtt + Tar),
+        TRUFFLEdum = ifelse(TRUFFLE == "FA", "FA", "Owned")
+      ),
+      by = .(TRUFFLE,Pos,Player)][, `:=`(`YdPt%` = YdPts / FPts,
+                                         `TDPt%` = TDPts / FPts,
+                                         `FDPt%` = FDPts / FPts,
+                                         `RuPt%` = RuPts / FPts,
+                                         `RePt%` = RePts / FPts,
+                                         `FPts/Touch` = round(FPts/Touch, 3),
+                                         `FPts/Opp` = round(FPts/Opp, 3)
+      )][order(-FPts)][, c("TRUFFLE","Pos","Player","Avg","Touch","Opp","FPts/Touch","FPts/Opp","YdPts","TDPts","FDPts","YdPt%","TDPt%","FDPt%","RuPts",
+                           "RePts","RuPt%","RePt%","TRUFFLEdum")][TRUFFLEdum %in% input$scavailable & Avg >= input$scavgmin][, !c("Avg", "TRUFFLEdum")])
+    
     output$scadvanced <- renderReactable({
-        reactable(weekly[Player %in% currentseason$Player[currentseason$FPts > input$scpointsmin]][Season == input$scseason &
-                                                                                                       Week %in% seq(input$scweekrange[1],input$scweekrange[2]) &
-                                                                                                       Pos %in% input$scpositions][,
-                                                                                                                                   .(FPts = sum(FPts),
-                                                                                                                                     YdPts = round(.04*sum(PaYd) + .1*(sum(RuYd) + sum(ReYd)),1),
-                                                                                                                                     TDPts = 4*sum(PaTD) + 6*(sum(RuTD) + sum(ReTD)),
-                                                                                                                                     FDPts = sum(RuFD) + sum(ReFD),
-                                                                                                                                     RuPts = .1*sum(RuYd) + 6*sum(RuTD) + sum(RuFD),
-                                                                                                                                     RePts = .1*sum(ReYd) + 6*sum(ReTD) + sum(ReFD),
-                                                                                                                                     Touch = sum(PaCmp + RuAtt + Rec),
-                                                                                                                                     Opp = sum(PaAtt + RuAtt + Tar)
-                                                                                                                                   ),
-                                                                                                                                   by = .(TRUFFLE,Pos,Player)][, `:=`(`YdPt%` = YdPts / FPts,
-                                                                                                                                                                      `TDPt%` = TDPts / FPts,
-                                                                                                                                                                      `FDPt%` = FDPts / FPts,
-                                                                                                                                                                      `RuPt%` = RuPts / FPts,
-                                                                                                                                                                      `RePt%` = RePts / FPts,
-                                                                                                                                                                      `FPts/Touch` = round(FPts/Touch, 3),
-                                                                                                                                                                      `FPts/Opp` = round(FPts/Opp, 3)
-                                                                                                                                   )][order(-FPts)][, c("TRUFFLE","Pos","Player","Touch","Opp","FPts/Touch","FPts/Opp","YdPts","TDPts","FDPts","YdPt%","TDPt%","FDPt%","RuPts",
-                                                                                                                                                        "RePts","RuPt%","RePt%")],
+        reactable(advancedrange()[Pos %in% input$scpositions],
                   paginationType = "jump",
                   showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
                   pageSizeOptions = c(10, 20, 50, 100),
@@ -914,34 +798,41 @@ shinyServer(function(input, output, session) {
     })
     
     #stat center consistency
+    #consistency range filtered table
+    consistencyrange <- reactive(consistencystart[Season == input$scseason &
+                                                    Week %in% seq(input$scweekrange[1],input$scweekrange[2])
+    ][, `:=` (
+      top5dum = ifelse(PosRk <= 5, 1, 0),
+      top12dum = ifelse(PosRk <= 12, 1, 0),
+      top24dum = ifelse(PosRk <= 24, 1, 0),
+      top36dum = ifelse(PosRk <= 36, 1, 0),
+      nonStartdum = ifelse(PosRk > 36, 1, 0),
+      lt10dum = ifelse(FPts < 10, 1, 0),
+      gt10dum = ifelse(FPts >= 10, 1, 0),
+      gt20dum = ifelse(FPts >= 20, 1, 0),
+      gt30dum = ifelse(FPts >= 30, 1, 0)
+    )][,
+       .(FPts = sum(FPts, na.rm = T),
+         Avg = round(mean(FPts),1),
+         RelSD = round(sd(FPts)/mean(FPts),2),
+         AvgPosRk = round(mean(PosRk),1),
+         `Top5 %` = sum(top12dum)/.N,
+         `Top12 %` = sum(top12dum)/.N,
+         `Top24 %` = sum(top24dum)/.N,
+         `Top36 %` = sum(top36dum)/.N,
+         `NonStart %` = sum(nonStartdum)/.N,
+         `>10 %` = sum(gt10dum)/.N,
+         `>20 %` = sum(gt20dum)/.N,
+         `>30 %` = sum(gt30dum)/.N,
+         TRUFFLEdum = ifelse(TRUFFLE == "FA", "FA", "Owned")
+       ),
+       by = .(TRUFFLE, Pos, Player)][order(-FPts)][, c("TRUFFLE","Pos","Player","Avg","RelSD",
+                                                      ">10 %",">20 %",">30 %","AvgPosRk",
+                                                      "Top5 %","Top12 %","Top24 %","Top36 %", "NonStart %","TRUFFLEdum")][TRUFFLEdum %in% input$scavailable & Avg >= input$scavgmin][, !"TRUFFLEdum"])
+    
     output$scconsistency <- renderReactable({
         perccolwidth <- 60
-        reactable(consistencystart[Player %in% currentseason$Player[currentseason$FPts > input$scpointsmin]][Season == input$scseason &
-                                                                                                                 Week %in% seq(input$scweekrange[1],input$scweekrange[2]) &
-                                                                                                                 Pos %in% input$scpositions][, `:=` (
-                                                                                                                     top5dum = ifelse(PosRk <= 5, 1, 0),
-                                                                                                                     top12dum = ifelse(PosRk <= 12, 1, 0),
-                                                                                                                     top24dum = ifelse(PosRk <= 24, 1, 0),
-                                                                                                                     top36dum = ifelse(PosRk <= 36, 1, 0),
-                                                                                                                     nonStartdum = ifelse(PosRk > 36, 1, 0),
-                                                                                                                     lt10dum = ifelse(FPts < 10, 1, 0),
-                                                                                                                     gt10dum = ifelse(FPts >= 10, 1, 0),
-                                                                                                                     gt20dum = ifelse(FPts >= 20, 1, 0),
-                                                                                                                     gt30dum = ifelse(FPts >= 30, 1, 0)
-                                                                                                                 )][,
-                                                                                                                    .(Avg = round(mean(FPts),1),
-                                                                                                                      RelSD = round(sd(FPts)/mean(FPts),2),
-                                                                                                                      AvgPosRk = round(mean(PosRk),1),
-                                                                                                                      `Top5 %` = sum(top12dum)/.N,
-                                                                                                                      `Top12 %` = sum(top12dum)/.N,
-                                                                                                                      `Top24 %` = sum(top24dum)/.N,
-                                                                                                                      `Top36 %` = sum(top36dum)/.N,
-                                                                                                                      `NonStart %` = sum(nonStartdum)/.N,
-                                                                                                                      `>10 %` = sum(gt10dum)/.N,
-                                                                                                                      `>20 %` = sum(gt20dum)/.N,
-                                                                                                                      `>30 %` = sum(gt30dum)/.N
-                                                                                                                    ),
-                                                                                                                    by = .(TRUFFLE, Pos, Player)][order(-Avg)][, c("TRUFFLE","Pos","Player","Avg","RelSD",">10 %",">20 %",">30 %","AvgPosRk","Top5 %","Top12 %","Top24 %","Top36 %", "NonStart %")],
+        reactable(consistencyrange()[Pos %in% input$scpositions],
                   paginationType = "jump",
                   showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
                   pageSizeOptions = c(10, 20, 50, 100),

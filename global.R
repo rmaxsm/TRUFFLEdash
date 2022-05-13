@@ -547,7 +547,17 @@ award2021 <- awards[Award!="1stTm" & Award!="2ndTm"][Season==2021]
 smallboxwidth <- 45
 
 #functions
-avg_pal <- function(x) rgb(colorRamp(c("#E1F1E8", maxscale))(x), maxColorValue = 255)
+avg_pal <- function(x) { 
+  if(is.na(x) == T) {
+    rgb(1, 1, 1)
+  } else if (x < 0) {
+    rbcolor
+  } else if (x > 1) {
+    maxscale
+  } else {
+    rgb(colorRamp(c(minscale, maxscale))(ifelse(is.na(x), 0, x)), maxColorValue = 255)
+  }
+}
 #avg_pal <- function(x) rgb(colorRamp(c(RBcolor, TEcolor, QBcolor))(x), maxColorValue = 255) red to orange to green option
 
 bar_chart <- function(label, width = "100%", height = "16px", fill = QBcolor, background = NULL, prefix = "") {

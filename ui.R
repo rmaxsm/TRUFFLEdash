@@ -166,6 +166,7 @@ tagList(
                                       reactableOutput('ppweekly')
                             )),
                     
+                    # Fantasy Portal -----
                     tabItem(tabName = "fantasyportal",
                             wellPanel(class = "well",
                                       fluidRow(
@@ -206,13 +207,13 @@ tagList(
                                                           inline = T)
                                 ),
                                 column(width = 2,
-                                       checkboxGroupInput("scavailable", "Availability", choiceNames = c("Owned","FA"), choiceValues = list( c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW"), "FA"), selected = c("Owned", "FA"),
+                                       checkboxGroupInput("scavailable", "Availability", choices = c("Owned","FA"), selected = c("Owned", "FA"),
                                                           inline = T)
                                 ),
                                 column(width = 2,
-                                       sliderInput("scpointsmin", "Minimum Point Threshold",
-                                                   min = min(currentseason$FPts), max = max(currentseason$FPts),
-                                                   value = 50,
+                                       sliderInput("scavgmin", "Minimum Average FPts Threshold",
+                                                   min = 0, max = 30,
+                                                   value = 5,
                                                    step = 1, round = T)
                                 )
                                 
