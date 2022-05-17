@@ -90,7 +90,7 @@ while(len(season) != 4):
   print("get the SEASON right dumbass")
   season = input("What SEASON is it..? ")
 
-# week = input("What WEEK is it..? ")
+week = input("What WEEK is it..? ")
 while(len(week) >= 3):
   print("get the week right dumbass")
   week = input("What WEEK is it..? ")
@@ -135,10 +135,8 @@ def separatePlayers(rows):
   curRow = []
   for i in rows:
     if itr == 0:    #first value always empty string
-      # curRow.append("")
       #adding player id numbers as temp
       test = str(i.find_all("div")[0])
-      # print(test.split("_"))
       actionId = test.split("_")[1]
       curRow.append(actionId.split('\"')[0])
 
@@ -151,18 +149,21 @@ def separatePlayers(rows):
 
 #where the connection is made to the truffle cbs website
 url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:FLEX/period-{}:p/TRUFFLEoffense/?print_rows=9999".format(week)
-urlDef = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:DST/period-{}:p/TRUFFLEoffense/?print_rows=99".format(week)
 
 response = requests.get(url, cookies=cookies, headers=headers)
 soup = BeautifulSoup(response.content, 'html.parser')
 
-responseDef = requests.get(urlDef, cookies=cookies, headers=headers)
-soupDef = BeautifulSoup(responseDef.content, 'html.parser')
 
 # complete =  soup.find("div", {"id": "sortableStats"})
 tbls =  soup.find("table", {"class":"data pinHeader"})
 combined = tbls.find_all("tr", class_="label")
 label = combined[1]
+
+#connect to defense to get all dst stats - uses same logic to clean as anything else - could be not repeated code probably lol
+urlDef = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:DST/period-{}:p/TRUFFLEoffense/?print_rows=99".format(week)
+
+responseDef = requests.get(urlDef, cookies=cookies, headers=headers)
+soupDef = BeautifulSoup(responseDef.content, 'html.parser')
 
 tblsDef =  soupDef.find("table", {"class":"data pinHeader"})
 combinedDef = tblsDef.find_all("tr", class_="label")
@@ -185,20 +186,13 @@ allRowsDef = tblsDef.find_all("tr", class_=re.compile("row\d"))
 #html is different for 'owned' teams. Metadata should always load puffins. 
 allPuffinsDef = tblsDef.find_all("tr", class_="bgFan")
 
-allPlayers = []
-
 #for every player - clean the row and add to list of lists
-for i in allRows:
-  allPlayers.append(separatePlayers(i))
-  
-for i in allPuffins:
-  allPlayers.append(separatePlayers(i))
+allPlayers = [separatePlayers(i) for i in allRows]
 
-for i in allRowsDef:
-  allPlayers.append(separatePlayers(i))
-  
-for i in allPuffinsDef:
-  allPlayers.append(separatePlayers(i))
+#add def and puffins players to the master player list
+allPlayers.extend([separatePlayers(i) for i in allPuffins])
+allPlayers.extend([separatePlayers(i) for i in allRowsDef])
+allPlayers.extend([separatePlayers(i) for i in allPuffinsDef])
 
 #lamba functions to split player name team and position
 getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
@@ -230,15 +224,10 @@ df['Player'] = df['Player'].str.replace(r' III', '', regex=True)
 df['Player'] = df['Player'].str.replace(r' II', '', regex=True)
 df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
 
-# print(df.columns)
-# print(df)
-
 playerDb = df[["Action", "Player", "Pos", "NFL", "TRUFFLE"]]
 playerDb = playerDb.rename(columns={"Action": "playerID"})
 playerDb = playerDb.sort_values(by=['Player','Pos'])
 
-
-#THIS DELETE REMOVES THE PLAYER ID
 df = df.drop(columns=["Action"])
 
 print(playerDb)
