@@ -60,6 +60,8 @@ pal <- setNames(pal, c("QB", "RB", "WR", "TE", "DST", "DC", "IR"))
 #file of CBS player IDs
 ids <- read_csv("data/playerIDs.csv")
 ids$playerID <- as.character(ids$playerID)
+ids$TRUFFLE[!(ids$TRUFFLE %in% c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW"))] <- "FA"
+ids <- merge(ids, teams[, c("Abbrev", "TeamNum")], by.x = "TRUFFLE", by.y = "Abbrev", all.x = T)
 
 #file of TRUFFLE team info
 teams <- read_excel("data/teams.xlsx")
@@ -306,6 +308,9 @@ ptslogs <- weekly[is.element(Player, rosters$Player),
 tpoverview <- merge(tpoverview, ptslogs[Season == max(seasons$Season), c("Player","ptslog")], by = 'Player', all.x = T)
 tpoverview <- merge(tpoverview, seasons[Season == max(seasons$Season)][, c("Player","PosRk")], by = 'Player', all.x = T)
 tpoverview <- tpoverview[, .(TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
+#tpoverview <- merge(tpoverview, ids[, c("Player","playerID")], by = 'Player', all.x = T)
+#tpoverview <- tpoverview[, .(playerID, TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
+#colnames(tpoverview)[1] <- "Action"
 #bug fix
 tpoverview$Avg[tpoverview$Pos == "DST"] <- NA
 
@@ -558,7 +563,19 @@ avg_pal <- function(x) {
     rgb(colorRamp(c(minscale, maxscale))(ifelse(is.na(x), 0, x)), maxColorValue = 255)
   }
 }
-#avg_pal <- function(x) rgb(colorRamp(c(RBcolor, TEcolor, QBcolor))(x), maxColorValue = 255) red to orange to green option
+
+#function that preps any guven data frame for the inclusion of action buttons
+action_mod <- function(df, team) {
+  myteam <- team
+  df <- merge(df, ids[, c("Player", "playerID", "TeamNum")], by = 'Player', all.x = T)
+  df$Action <- ifelse(df$TRUFFLE == myteam, "www/graphics/actions/drop.png",
+                          ifelse(df$TRUFFLE == "FA", "www/graphics/actions/add.png",
+                                 "www/graphics/actions/trade.png"))
+  df$ActionLink <- ifelse(df$TRUFFLE == myteam, paste0("https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main?selectedplayer=", df$playerID),
+                              ifelse(df$TRUFFLE == "FA", paste0("https://theradicalultimatefflexperience.football.cbssports.com/players/playerpage/", df$playerID),
+                                     paste0("https://theradicalultimatefflexperience.football.cbssports.com/transactions/trade/", df$playerID, "/", df$TeamNum)))
+  return(df)
+}
 
 bar_chart <- function(label, width = "100%", height = "16px", fill = QBcolor, background = NULL, prefix = "") {
   bar <- div(style = list(background = fill, width = width, height = height))
@@ -572,10 +589,22 @@ with_tt <- function(value, tooltip) {
 }
 
 #column definitions / definition functions
-trfDef <- function(name = "TRF", maxW = 75, filt = TRUE) {
+actionDef <- colDef(header = with_tt("Act", "Drop players on your team\nTrade for players on other teams\nAdd Free Agents"),
+                    align="center", 
+                    minWidth = 35, 
+                    cell = function(value) {
+                      img_src <- knitr::image_uri(value)
+                      image <- img(src = img_src, height = "10px", alt = "drop")
+                      tagList(
+                        div(style = list(display = "inline-block"), image)
+                      )
+                    })
+
+trfDef <- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE) {
   colDef(name = name,
          maxWidth = maxW,
          filterable = filt,
+         sortable = sort,
          align = 'center',
          cell = function(value) {
            teamnum <- teams$TeamNum[teams$Abbrev == value]
@@ -586,10 +615,11 @@ trfDef <- function(name = "TRF", maxW = 75, filt = TRUE) {
   )
 }
 
-posDef <- function(maxW = 48, filt = T, foot = "") {
+posDef <- function(maxW = 48, filt = T, foot = "", sort = T) {
   colDef(maxWidth = maxW,
          filterable = filt,
          footer = foot,
+         sortable = sort,
          align = "center",
          style = function(value) {
            if (value == "QB") {
@@ -613,9 +643,10 @@ posDef <- function(maxW = 48, filt = T, foot = "") {
          })
 }
 
-playerDef <- function(minW = 200, filt = FALSE) {
+playerDef <- function(minW = 200, filt = FALSE, sort = T) {
   colDef(minWidth = minW,
          filterable = filt,
+         sortable = sort,
          cell = function(value) {
            playerid <- ids$playerID[ids$Player == value]
            player_url <- paste0("https://theradicalultimatefflexperience.football.cbssports.com/players/playerpage/", playerid, "/")
@@ -672,7 +703,7 @@ salaryDefNobar <- function(minW = 45, foot = F) {
   )
 }
 
-contractDef <- function(minW = 62, filt = T, foot = F, name = "Contract") {
+contractDef <- function(minW = 65, filt = T, foot = F, name = "Contract") {
   colDef(minWidth = minW,
          filt = filt,
          name = name,
@@ -744,6 +775,14 @@ fptsSeasDef <- function(maxW = 65, borderL = F, digs = 1, filt = F, col = T) {
   )
 }
 
+seasonDef <- function(name = "Yr", maxW = 45, filt = F) {
+  colDef(name=name,
+         maxWidth = maxW,
+         defaultSortOrder = "desc",
+         align = 'center',
+         filterable = filt)
+}
+
 nflDef <- colDef(minWidth = 50, align = 'right')
 
 byeDef <- colDef(minWidth = 50, align = 'right')
@@ -754,8 +793,7 @@ ageDef <- colDef(minWidth = 50, align = 'right', defaultSortOrder = "asc", sortN
 
 smallcolDef <- colDef(maxWidth = 100, align = 'left')
 
-seasonDef <- colDef(name="Yr", maxWidth = smallboxwidth, align = 'center')
-weekDef <- colDef("Wk",maxWidth = 44, align = 'center')
+weekDef <- colDef("Wk",maxWidth = 44, align = 'center', defaultSortOrder = "desc")
 
 opDef <- colDef(header = with_tt("Op", "Opponent"), maxWidth = 60, align = 'right')
 oprkDef <- colDef(header = with_tt("OpRk", "Opponent Rankings vs. Fantasy Posision"), maxWidth = 60, align = 'center', style = function(value) {
@@ -922,6 +960,7 @@ fdptsDef <- colDef(header = with_tt("FDPt", "FPts from First Downs\n(Rushing + R
 ruptsDef <- colDef(header = with_tt("RuPt", "FPts from Rushing\n(Yards + TDs + First Downs)"),
                    minWidth = blankptwidth,
                    align = "right",
+                   class = "border-left-grey",
                    format = colFormat(digits = 1),
                    defaultSortOrder = "desc",
                    sortNALast = T)
@@ -953,6 +992,7 @@ fdptpercDef = colDef(header = with_tt("FDPt%", "Percentage of Total FPts from Fi
 ruptpercDef = colDef(header = with_tt("RuPt%", "Percentage of Total FPts from Rushing\n(Yards + TDs + First Downs)"),
                      minWidth = perccolwidth + 2,
                      align = "right",
+                     class = "border-left-grey",
                      format = colFormat(percent = T, digits = 0),
                      defaultSortOrder = "desc",
                      sortNALast = T)
@@ -1027,3 +1067,4 @@ g30pDef <- colDef(header = with_tt(">30 %", "Percentage of Weeks scoring >30 FPt
                   defaultSortOrder = "desc",
                   sortNALast = T)
 
+myteam <- "Frankfurt Roadrunners"

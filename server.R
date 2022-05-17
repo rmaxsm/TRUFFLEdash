@@ -1,6 +1,19 @@
 
 shinyServer(function(input, output, session) {
     
+  #testing my team function for stuff
+  observe({
+    x = input$myteam
+    
+    updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == x])
+    #tpoverview$Action <- ifelse(tpoverview$TRUFFLE == input$myteam, "www/graphics/actions/drop.png", "www/graphics/actions/trade.png")
+    })
+  
+  #another test
+  # tpoverview$Action <- reactive(
+  #   ifelse(tpoverview$TRUFFLE == input$myteam, "www/graphics/actions/drop.png", "www/graphics/actions/trade.png")
+  # )
+  
     #sponsor logo
     output$sponsor <- renderImage({
         randsponsor <- sample(1:length(list.files("www/graphics/sponsors")), 1)
@@ -13,6 +26,7 @@ shinyServer(function(input, output, session) {
     #home page standings
     output$hometeamsfantasy <- renderReactable({
       reactable(teamsfantasy[Season == input$homeseason, c("TRUFFLE", "Weekly", "Low", "High", "Avg", "Total")],
+                defaultSorted = c("Total"),
                 defaultSortOrder = "desc",
                 pagination = FALSE,
                 height = 420,
@@ -66,6 +80,7 @@ shinyServer(function(input, output, session) {
     output$homepointsleaders <- renderReactable({
         reactable(pointsleaders[Season == input$homeseason, c("TRUFFLE", "Pos", "Player", "PosRk", "ptslogs", "Avg", "Total")],
                   height = 420,
+                  defaultSorted = c("Total"),
                   defaultSortOrder = "desc",
                   filterable = T,
                   showPageInfo = FALSE,
@@ -82,7 +97,7 @@ shinyServer(function(input, output, session) {
                                          filt = T),
                       PosRk = posRkDef(filt = F),
                       ptslogs = ptsLogDef(),
-                      Avg = avgDef(maxW = 48, col = F),
+                      Avg = avgDef(maxW = 48),
                       Total = colDef(header = with_tt("Tot", "Seasonal total FPts"),
                                      maxWidth = 45,
                                      format = colFormat(digits = 0),
@@ -105,7 +120,7 @@ shinyServer(function(input, output, session) {
                   resizable = F,
                   columns = list(
                       TRUFFLE = trfDef(filt = FALSE),
-                      Player = playerDef(minW = 125, filt = F),
+                      Player = playerDef(minW = 125, filt = F, sort = F),
                       FPts = fptsWeekDef(maxW = 50, borderL = F)
                   ),
                   columnGroups = list(colGroup(name = "QB", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
@@ -125,7 +140,7 @@ shinyServer(function(input, output, session) {
                   resizable = F,
                   columns = list(
                       TRUFFLE = trfDef(filt = FALSE),
-                      Player = playerDef(minW = 125, filt = F),
+                      Player = playerDef(minW = 125, filt = F, sort = F),
                       FPts = fptsWeekDef(maxW = 50, borderL = F)
                   ),
                   columnGroups = list(colGroup(name = "RB", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
@@ -145,7 +160,7 @@ shinyServer(function(input, output, session) {
                   resizable = F,
                   columns = list(
                       TRUFFLE = trfDef(filt = FALSE),
-                      Player = playerDef(minW = 125, filt = F),
+                      Player = playerDef(minW = 125, filt = F, sort = F),
                       FPts = fptsWeekDef(maxW = 50, borderL = F)
                   ),
                   columnGroups = list(colGroup(name = "WR", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
@@ -165,7 +180,7 @@ shinyServer(function(input, output, session) {
                   resizable = F,
                   columns = list(
                       TRUFFLE = trfDef(filt = FALSE),
-                      Player = playerDef(minW = 125, filt = F),
+                      Player = playerDef(minW = 125, filt = F, sort = F),
                       FPts = fptsWeekDef(maxW = 50, borderL = F)
                   ),
                   columnGroups = list(colGroup(name = "TE", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
@@ -226,14 +241,30 @@ shinyServer(function(input, output, session) {
     
     #team portal overview
     output$tpoverview <- renderReactable({
-        reactable(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][, !"TRUFFLE"],
+      tpoverview <- action_mod(df = tpoverview, team = input$myteam)
+      selectedteam <- tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder), -Avg)]
+
+        reactable(selectedteam[, .(Action, TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][, !"TRUFFLE"],
                   defaultSortOrder = "desc",
                   pagination = FALSE,
                   highlight = T,
                   filterable = T,
-                  #borderless = T,
                   compact = T,
                   columns = list(
+                      Action = colDef(header = with_tt("A", "Action link to add, drop, or trade player"),
+                                      sortable = F,
+                                      filterable = F,
+                                      align="center",
+                                      minWidth = 30,
+                                      cell = function(value, index) {
+                                        action_url <- selectedteam$ActionLink[index]
+                                        img_src <- knitr::image_uri(value)
+                                        image <- img(src = img_src, height = "15px", alt = value)
+                                        tagList(
+                                          div(style = list(display = "inline-block"), image)
+                                        )
+                                        tags$a(href = action_url, target = "_blank", image)
+                                      }),
                       Pos = posDef(foot = "Total"),
                       Player = playerDef(filt=T),
                       Age = ageDef,
@@ -440,23 +471,40 @@ shinyServer(function(input, output, session) {
     #player portal ----
     #player portal bio
     output$ppbios <- renderReactable({
-        reactable(ppbios[Player %in% input$player][order(-Salary)],
+      ppbios <- action_mod(df = ppbios, team = input$myteam)
+      selectedplayers <- ppbios[Player %in% input$player][order(-Salary)]
+      
+        reactable(selectedplayers[, .(Action, TRUFFLE, Pos, Player, NFL, AgePH, DynRk, DynPosRk, Salary, Contract, ptslogs)],
+                  defaultSorted = c("Salary"),
                   pagination = F,
                   height = 'auto',
                   filterable = F,
                   highlight = T,
-                  #borderless = T,
                   compact = T,
                   columns = list(
+                    Action = colDef(header = with_tt("A", "Action link to add, drop, or trade player"),
+                                    sortable = F,
+                                    filterable = F,
+                                    align="center",
+                                    minWidth = 30,
+                                    cell = function(value, index) {
+                                      action_url <- selectedplayers$ActionLink[index]
+                                      img_src <- knitr::image_uri(value)
+                                      image <- img(src = img_src, height = "15px", alt = value)
+                                      tagList(
+                                        div(style = list(display = "inline-block"), image)
+                                      )
+                                      tags$a(href = action_url, target = "_blank", image)
+                                    }),
                       TRUFFLE = trfDef(filt = FALSE),
                       Pos = posDef(filt = FALSE),
-                      Player = playerDef(minW = 225),
+                      Player = playerDef(minW = 140),
                       NFL = colDef(align = 'left'),
                       AgePH = colDef(name = "Age"),
-                      DynRk = colDef(align = 'left'),
-                      DynPosRk = colDef(align = 'left'),
+                      DynRk = colDef(header = with_tt("DynRk", "Fantasy Pros Overall Dynasty Rank"), align = 'left'),
+                      DynPosRk = colDef(header = with_tt("DynRk", "Fantasy Pros Positional Dynasty Rank"), align = 'left'),
                       Salary = salaryDefBar(),
-                      Contract = contractDef(filt = FALSE),
+                      Contract = contractDef(filt = FALSE, minW = 70),
                       ptslogs = ptsLogDef(maxW = 100)
                   )
         )
@@ -465,6 +513,7 @@ shinyServer(function(input, output, session) {
     #player portal seasons
     output$ppseasons <- renderReactable({
         reactable(seasons[Player %in% input$player][order(-Season, -FPts)][, !c("NFL", "Pos","FL", "PosRk")],
+                  defaultSorted = c("Season", "FPts"),
                   pagination = F,
                   height = 'auto',
                   filterable = F,
@@ -472,7 +521,7 @@ shinyServer(function(input, output, session) {
                   #borderless = T,
                   compact = T,
                   columns = list(
-                      Season = seasonDef,
+                      Season = seasonDef(filt = T),
                       Player = playerDef(minW = 135),
                       G = gDef,
                       PaCmp = pacmpDef,
@@ -505,6 +554,7 @@ shinyServer(function(input, output, session) {
       perccolwidth <- 60
       othcolwidth <- 43
       reactable(advanced[Player %in% input$player][, -c("TRUFFLE","Pos")][order(-FPts)],
+                defaultSorted = c("FPts"),
                 paginationType = "jump",
                 showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
                 pageSizeOptions = c(10, 20, 50, 100),
@@ -514,7 +564,7 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Season = seasonDef,
+                  Season = seasonDef(filt = T),
                   Player = playerDef(minW = 120),
                   FPts = fptsSeasDef(),
                   Touch = tchDef,
@@ -544,6 +594,7 @@ shinyServer(function(input, output, session) {
     output$ppconsistency <- renderReactable({
       perccolwidth <- 60
       reactable(consistency[Player %in% input$player][order(-Avg)][, -c("TRUFFLE","Pos")],
+                defaultSorted = c("Avg"),
                 paginationType = "jump",
                 showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
                 pageSizeOptions = c(10, 20, 50, 100),
@@ -553,7 +604,7 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Season = seasonDef,
+                  Season = seasonDef(filt = T),
                   Player = playerDef(minW = 125),
                   Avg = avgDef(),
                   RelSD = relsdDef,
@@ -577,6 +628,7 @@ shinyServer(function(input, output, session) {
     #player portal weekly logs
     output$ppweekly <- renderReactable({
         reactable(weekly[Player %in% input$player][order(-Week, -FPts)][, !c("Pos", "TRUFFLE", "NFL", "Avg", "FL", "PosRk")],
+                  defaultSorted = c("Season","Week"),
                   paginationType = "jump",
                   showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 16,
                   pageSizeOptions = c(10, 16, 50, 100),
@@ -586,7 +638,7 @@ shinyServer(function(input, output, session) {
                   #borderless = T,
                   compact = T,
                   columns = list(
-                      Season = seasonDef,
+                      Season = seasonDef(filt = T),
                       Week = weekDef,
                       Player = playerDef(minW = 135, filt = T),
                       Opp = opDef,
@@ -671,43 +723,60 @@ shinyServer(function(input, output, session) {
     
     #statcenter ----
     #building the tables that take the week sliders into account
-    boxscorerange <- reactive(weekly[Season == input$scseason &
-                                       Week %in% seq(input$scweekrange[1],input$scweekrange[2])
-    ][,
-      .(G = .N,
-        PaCmp = sum(PaCmp, na.rm = T),
-        PaAtt = sum(PaAtt, na.rm = T),
-        PaYd = sum(PaYd, na.rm = T),
-        PaTD = sum(PaTD, na.rm = T),
-        PaInt = sum(PaInt, na.rm = T),
-        RuAtt = sum(RuAtt, na.rm = T),
-        RuYd = sum(RuYd, na.rm = T),
-        RuTD = sum(RuTD, na.rm = T),
-        RuFD = sum(RuFD, na.rm = T),
-        Tar = sum(Tar, na.rm = T),
-        Rec = sum(Rec, na.rm = T),
-        ReYd = sum(ReYd, na.rm = T),
-        ReTD = sum(ReTD, na.rm = T),
-        ReFD = sum(ReFD, na.rm = T),
-        Avg = round(mean(FPts, na.rm = T),2),
-        FPts = sum(FPts, na.rm = T),
-        TRUFFLEdum = ifelse(TRUFFLE == "FA", "FA", "Owned")
-      ),
-      by = .(TRUFFLE, Pos, Player)][order(-FPts)][TRUFFLEdum %in% input$scavailable & Avg >= input$scavgmin][, !"TRUFFLEdum"])
-    
     #stat center boxscore
     output$scboxscore <- renderReactable({
-      reactable(boxscorerange()[Pos %in% input$scpositions],
+      boxscorerange <- weekly[Season == input$scseason &
+                                         Week %in% seq(input$scweekrange[1],input$scweekrange[2])
+      ][,
+        .(G = .N,
+          PaCmp = sum(PaCmp, na.rm = T),
+          PaAtt = sum(PaAtt, na.rm = T),
+          PaYd = sum(PaYd, na.rm = T),
+          PaTD = sum(PaTD, na.rm = T),
+          PaInt = sum(PaInt, na.rm = T),
+          RuAtt = sum(RuAtt, na.rm = T),
+          RuYd = sum(RuYd, na.rm = T),
+          RuTD = sum(RuTD, na.rm = T),
+          RuFD = sum(RuFD, na.rm = T),
+          Tar = sum(Tar, na.rm = T),
+          Rec = sum(Rec, na.rm = T),
+          ReYd = sum(ReYd, na.rm = T),
+          ReTD = sum(ReTD, na.rm = T),
+          ReFD = sum(ReFD, na.rm = T),
+          Avg = round(mean(FPts, na.rm = T),2),
+          FPts = sum(FPts, na.rm = T),
+          TRUFFLEdum = ifelse(TRUFFLE == "FA", "FA", "Owned")
+        ),
+        by = .(TRUFFLE, Pos, Player)][order(-FPts)][TRUFFLEdum %in% input$scavailable & Avg >= input$scavgmin & Pos %in% input$scpositions][, !"TRUFFLEdum"]
+      
+      boxscorerange <- action_mod(df = boxscorerange, team = input$myteam)
+      
+      reactable(boxscorerange[, .(Action,TRUFFLE,Pos,Player,G,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,RuYd,RuTD,RuFD,Tar,Rec,ReYd,ReTD,ReFD,Avg,FPts)],
                 paginationType = "jump",
                 showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
+                defaultSorted = c("FPts"),
                 pageSizeOptions = c(10, 20, 50, 100),
                 height = 'auto',
                 filterable = F,
                 highlight = T,
                 compact = T,
                 columns = list(
-                  TRUFFLE = trfDef(),
-                  Pos = posDef(),
+                  Action = colDef(header = with_tt("A", "Action link to add, drop, or trade player"),
+                                  sortable = F,
+                                  filterable = F,
+                                  align="center",
+                                  minWidth = 30,
+                                  cell = function(value, index) {
+                                    action_url <- boxscorerange$ActionLink[index]
+                                    img_src <- knitr::image_uri(value)
+                                    image <- img(src = img_src, height = "15px", alt = value)
+                                    tagList(
+                                      div(style = list(display = "inline-block"), image)
+                                    )
+                                    tags$a(href = action_url, target = "_blank", image)
+                                  }),
+                  TRUFFLE = trfDef(sort = F, maxW = 60),
+                  Pos = posDef(sort = F, maxW = 38),
                   Player = playerDef(minW = 125, filt = T),
                   G = gDef,
                   PaCmp = pacmpDef,
@@ -1905,7 +1974,7 @@ shinyServer(function(input, output, session) {
                   highlight = T,
                   compact = T,
                   columns = list(
-                      Season = seasonDef,
+                      Season = seasonDef(filt = T),
                       Week = weekDef,
                       Pos = posDef(),
                       Player = playerDef(minW = 150, filt = T),
@@ -1947,7 +2016,7 @@ shinyServer(function(input, output, session) {
                   highlight = T,
                   compact = T,
                   columns = list(
-                      Season = seasonDef,
+                      Season = seasonDef(filt = T),
                       Pos = posDef(),
                       Player = playerDef(minW = 150, filt = T),
                       NFL = nflDef,
@@ -1989,7 +2058,7 @@ shinyServer(function(input, output, session) {
                 highlight = T,
                 compact = T,
                 columns = list(
-                  Season = seasonDef,
+                  Season = seasonDef(filt = T),
                   Week = weekDef,
                   TRUFFLE = trfDef(),
                   Pos = posDef(),

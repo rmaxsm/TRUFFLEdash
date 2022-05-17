@@ -84,7 +84,9 @@ tagList(
                                                reactableOutput('homeweeklytop5te')
                                         )
                                       )
-                            )
+                            ),
+                            wellPanel(class = "well",
+                                      selectInput("myteam", "My Team", unique(teams$Abbrev)))
                     ),
                     # Team Portal -----
                     tabItem(tabName = "teamportal",
@@ -92,7 +94,7 @@ tagList(
                               
                               sidebarLayout(
                                 sidebarPanel(
-                                  fluidRow(selectInput("tmportaltm",HTML("<span style=color:#84A4D8;font-size:14px>Select Team:</span>"),unique(teams$FullName)), style ="padding-top:10px;padding-left:20px;padding-right:20px;z-index:10000;")
+                                  fluidRow(selectInput("tmportaltm",HTML("<span style=color:#84A4D8;font-size:14px>Select Team:</span>"), unique(teams$FullName)), style ="padding-top:10px;padding-left:20px;padding-right:20px;z-index:10000;")
                                 ),
                                 mainPanel(br(),
                                   reactableOutput('tpheader'))
