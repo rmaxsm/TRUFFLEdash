@@ -90,7 +90,7 @@ while(len(season) != 4):
   print("get the SEASON right dumbass")
   season = input("What SEASON is it..? ")
 
-week = input("What WEEK is it..? ")
+# week = input("What WEEK is it..? ")
 while(len(week) >= 3):
   print("get the week right dumbass")
   week = input("What WEEK is it..? ")
@@ -151,26 +151,53 @@ def separatePlayers(rows):
 
 #where the connection is made to the truffle cbs website
 url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:FLEX/period-{}:p/TRUFFLEoffense/?print_rows=9999".format(week)
+urlDef = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:DST/period-{}:p/TRUFFLEoffense/?print_rows=99".format(week)
+
 response = requests.get(url, cookies=cookies, headers=headers)
 soup = BeautifulSoup(response.content, 'html.parser')
+
+responseDef = requests.get(urlDef, cookies=cookies, headers=headers)
+soupDef = BeautifulSoup(responseDef.content, 'html.parser')
 
 # complete =  soup.find("div", {"id": "sortableStats"})
 tbls =  soup.find("table", {"class":"data pinHeader"})
 combined = tbls.find_all("tr", class_="label")
 label = combined[1]
 
+tblsDef =  soupDef.find("table", {"class":"data pinHeader"})
+combinedDef = tblsDef.find_all("tr", class_="label")
+labelDef = combinedDef[1]
+
 #calls function to clean column headers stored as cols (used in pandas df)
 cols = separateColumns(label)
 
-
 #regex used to find row1/2 (\d means only numbers following exact match of row)
 allRows = tbls.find_all("tr", class_=re.compile("row\d"))
+#html is different for 'owned' teams. Metadata should always load puffins. 
+allPuffins = tbls.find_all("tr", class_="bgFan")
 
+
+#calls function to clean column headers stored as cols (used in pandas df)
+colsDef = separateColumns(labelDef)
+
+#regex used to find row1/2 (\d means only numbers following exact match of row)
+allRowsDef = tblsDef.find_all("tr", class_=re.compile("row\d"))
+#html is different for 'owned' teams. Metadata should always load puffins. 
+allPuffinsDef = tblsDef.find_all("tr", class_="bgFan")
 
 allPlayers = []
 
 #for every player - clean the row and add to list of lists
 for i in allRows:
+  allPlayers.append(separatePlayers(i))
+  
+for i in allPuffins:
+  allPlayers.append(separatePlayers(i))
+
+for i in allRowsDef:
+  allPlayers.append(separatePlayers(i))
+  
+for i in allPuffinsDef:
   allPlayers.append(separatePlayers(i))
 
 #lamba functions to split player name team and position
@@ -217,3 +244,4 @@ df = df.drop(columns=["Action"])
 print(playerDb)
 
 playerDb.to_csv("dre/adHoc/playerDbPOC.csv", index=False)
+
