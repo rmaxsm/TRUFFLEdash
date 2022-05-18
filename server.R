@@ -13,15 +13,9 @@ shinyServer(function(input, output, session) {
   })
   
   #testing my team function for stuff
-  observe({
-    updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == myteam])
-    #tpoverview$Action <- ifelse(tpoverview$TRUFFLE == input$myteam, "www/graphics/actions/drop.png", "www/graphics/actions/trade.png")
-    })
-  
-  #another test
-  # tpoverview$Action <- reactive(
-  #   ifelse(tpoverview$TRUFFLE == input$myteam, "www/graphics/actions/drop.png", "www/graphics/actions/trade.png")
-  # )
+  # observe({
+  #   updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
+  #   })
   
     #sponsor logo
     output$sponsor <- renderImage({
@@ -250,7 +244,7 @@ shinyServer(function(input, output, session) {
     
     #team portal overview
     output$tpoverview <- renderReactable({
-      tpoverview <- action_mod(df = tpoverview, team = input$myteam)
+      tpoverview <- action_mod(df = tpoverview, team = globalteam)
       selectedteam <- tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder), -Avg)]
 
         reactable(selectedteam[, .(Action, TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][, !"TRUFFLE"],
@@ -326,7 +320,8 @@ shinyServer(function(input, output, session) {
     
     #team portal boxscore
     output$tpboxscore <- renderReactable({
-        reactable(seasons[Player %in% rosters$Player[rosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]] & Season == max(seasons$Season)][order(match(Pos, positionorder), -FPts)][, !c("Season","NFL", "PosRk", "FL")],
+        reactable(seasons[Player %in% rosters$Player[rosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]] 
+                          & Season == max(seasons$Season)][order(match(Pos, positionorder), -FPts)][, !c("Season","NFL", "PosRk", "FL")],
                   pagination = F,
                   height = 'auto',
                   filterable = T,
@@ -480,7 +475,7 @@ shinyServer(function(input, output, session) {
     #player portal ----
     #player portal bio
     output$ppbios <- renderReactable({
-      ppbios <- action_mod(df = ppbios, team = input$myteam)
+      ppbios <- action_mod(df = ppbios, team = globalteam)
       selectedplayers <- ppbios[Player %in% input$player][order(-Salary)]
       
         reactable(selectedplayers[, .(Action, TRUFFLE, Pos, Player, NFL, AgePH, DynRk, DynPosRk, Salary, Contract, ptslogs)],
@@ -756,9 +751,9 @@ shinyServer(function(input, output, session) {
           FPts = sum(FPts, na.rm = T),
           TRUFFLEdum = ifelse(TRUFFLE == "FA", "FA", "Owned")
         ),
-        by = .(TRUFFLE, Pos, Player)][order(-FPts)][TRUFFLEdum %in% input$scavailable & Avg >= input$scavgmin & Pos %in% input$scpositions][, !"TRUFFLEdum"]
+        by = .(TRUFFLE, Pos, Player)][TRUFFLEdum %in% input$scavailable & Avg >= input$scavgmin & Pos %in% input$scpositions][, !"TRUFFLEdum"]
       
-      boxscorerange <- action_mod(df = boxscorerange, team = input$myteam)
+      boxscorerange <- action_mod(df = boxscorerange, team = globalteam)
       
       reactable(boxscorerange[, .(Action,TRUFFLE,Pos,Player,G,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,RuYd,RuTD,RuFD,Tar,Rec,ReYd,ReTD,ReFD,Avg,FPts)],
                 paginationType = "jump",
@@ -815,102 +810,121 @@ shinyServer(function(input, output, session) {
     
     #stat center advanced
     #calculating the reactive advanced stats over ranges
-    advancedrange <- reactive(weekly[Season == input$scseason &
-                                       Week %in% seq(input$scweekrange[1],input$scweekrange[2])
-    ][,
-      .(Avg = round(mean(FPts, na.rm = T),2),
-        FPts = sum(FPts),
-        YdPts = round(.04*sum(PaYd) + .1*(sum(RuYd) + sum(ReYd)),1),
-        TDPts = 4*sum(PaTD) + 6*(sum(RuTD) + sum(ReTD)),
-        FDPts = sum(RuFD) + sum(ReFD),
-        RuPts = .1*sum(RuYd) + 6*sum(RuTD) + sum(RuFD),
-        RePts = .1*sum(ReYd) + 6*sum(ReTD) + sum(ReFD),
-        Touch = sum(PaCmp + RuAtt + Rec),
-        Opp = sum(PaAtt + RuAtt + Tar),
-        TRUFFLEdum = ifelse(TRUFFLE == "FA", "FA", "Owned")
-      ),
-      by = .(TRUFFLE,Pos,Player)][, `:=`(`YdPt%` = YdPts / FPts,
-                                         `TDPt%` = TDPts / FPts,
-                                         `FDPt%` = FDPts / FPts,
-                                         `RuPt%` = RuPts / FPts,
-                                         `RePt%` = RePts / FPts,
-                                         `FPts/Touch` = round(FPts/Touch, 3),
-                                         `FPts/Opp` = round(FPts/Opp, 3)
-      )][order(-FPts)][, c("TRUFFLE","Pos","Player","Avg","Touch","Opp","FPts/Touch","FPts/Opp","YdPts","TDPts","FDPts","YdPt%","TDPt%","FDPt%","RuPts",
-                           "RePts","RuPt%","RePt%","TRUFFLEdum")][TRUFFLEdum %in% input$scavailable & Avg >= input$scavgmin][, !c("Avg", "TRUFFLEdum")])
-    
     output$scadvanced <- renderReactable({
-        reactable(advancedrange()[Pos %in% input$scpositions],
-                  paginationType = "jump",
-                  showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
-                  pageSizeOptions = c(10, 20, 50, 100),
-                  height = 'auto',
-                  filterable = F,
-                  highlight = T,
-                  compact = T,
-                  columns = list(
-                      TRUFFLE = trfDef(),
-                      Pos = posDef(),
-                      Player = playerDef(minW = 120, filt = T),
-                      Touch = tchDef,
-                      Opp = oppDef,
-                      `FPts/Touch` = fptsPtchDef,
-                      `FPts/Opp` = fptsPoppDef,
-                      YdPts = ydptsDef,
-                      TDPts = tdptsDef,
-                      FDPts = fdptsDef,
-                      RuPts = ruptsDef,
-                      RePts = reptsDef,
-                      `YdPt%` = ydptpercDef,
-                      `TDPt%` = tdptpercDef,
-                      `FDPt%` = fdptpercDef,
-                      `RuPt%` = ruptpercDef,
-                      `RePt%` = reptpercDef
-                  ),
-                  columnGroups = list(
-                      colGroup(name = "Volume / Efficiency", columns = c("Touch","Opp","FPts/Touch","FPts/Opp"), align = 'left'),
-                      colGroup(name = "Point Source Breakdown", columns = c("YdPts","TDPts","FDPts","YdPt%","TDPt%","FDPt%","RuPts",
-                                                                            "RePts","RuPt%","RePt%"), align = 'left')
-                  )
-        )
+      advancedrange <- weekly[Season == input$scseason & Week %in% seq(input$scweekrange[1],input$scweekrange[2])
+      ][,
+        .(Avg = round(mean(FPts, na.rm = T),2),
+          FPts = sum(FPts),
+          YdPts = round(.04*sum(PaYd) + .1*(sum(RuYd) + sum(ReYd)),1),
+          TDPts = 4*sum(PaTD) + 6*(sum(RuTD) + sum(ReTD)),
+          FDPts = sum(RuFD) + sum(ReFD),
+          RuPts = .1*sum(RuYd) + 6*sum(RuTD) + sum(RuFD),
+          RePts = .1*sum(ReYd) + 6*sum(ReTD) + sum(ReFD),
+          Touch = sum(PaCmp + RuAtt + Rec),
+          Opp = sum(PaAtt + RuAtt + Tar)
+        ),
+        by = .(TRUFFLE,Pos,Player)][, `:=`(`YdPt%` = YdPts / FPts,
+                                           `TDPt%` = TDPts / FPts,
+                                           `FDPt%` = FDPts / FPts,
+                                           `RuPt%` = RuPts / FPts,
+                                           `RePt%` = RePts / FPts,
+                                           `FPts/Touch` = round(FPts/Touch, 3),
+                                           `FPts/Opp` = round(FPts/Opp, 3),
+                                           TRUFFLEdum = ifelse(TRUFFLE == "FA", "FA", "Owned")
+        )][TRUFFLEdum %in% input$scavailable & Avg >= input$scavgmin & Pos %in% input$scpositions][order(-Avg)][, !c("TRUFFLEdum")]
+      
+      advancedrange <- action_mod(df = advancedrange, team = globalteam)
+      
+      reactable(advancedrange[, c("Action","TRUFFLE","Pos","Player","Touch","Opp","FPts/Touch","FPts/Opp","YdPts","TDPts","FDPts","YdPt%","TDPt%","FDPt%","RuPts",
+                                  "RePts","RuPt%","RePt%","Avg")],
+                paginationType = "jump",
+                showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
+                pageSizeOptions = c(10, 20, 50, 100),
+                defaultSorted = c("Avg"),
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                compact = T,
+                columns = list(
+                  Action = colDef(header = with_tt("A", "Action link to add, drop, or trade player"),
+                                  sortable = F,
+                                  filterable = F,
+                                  align="center",
+                                  minWidth = 30,
+                                  cell = function(value, index) {
+                                    action_url <- advancedrange$ActionLink[index]
+                                    img_src <- knitr::image_uri(value)
+                                    image <- img(src = img_src, height = "15px", alt = value)
+                                    tagList(
+                                      div(style = list(display = "inline-block"), image)
+                                    )
+                                    tags$a(href = action_url, target = "_blank", image)
+                                  }),
+                  Avg = colDef(show = F, defaultSortOrder = "desc"),
+                  TRUFFLE = trfDef(),
+                  Pos = posDef(),
+                  Player = playerDef(minW = 120, filt = T),
+                  Touch = tchDef,
+                  Opp = oppDef,
+                  `FPts/Touch` = fptsPtchDef,
+                  `FPts/Opp` = fptsPoppDef,
+                  YdPts = ydptsDef,
+                  TDPts = tdptsDef,
+                  FDPts = fdptsDef,
+                  RuPts = ruptsDef,
+                  RePts = reptsDef,
+                  `YdPt%` = ydptpercDef,
+                  `TDPt%` = tdptpercDef,
+                  `FDPt%` = fdptpercDef,
+                  `RuPt%` = ruptpercDef,
+                  `RePt%` = reptpercDef
+                ),
+                columnGroups = list(
+                  colGroup(name = "Volume / Efficiency", columns = c("Touch","Opp","FPts/Touch","FPts/Opp"), align = 'left'),
+                  colGroup(name = "Point Source Breakdown", columns = c("YdPts","TDPts","FDPts","YdPt%","TDPt%","FDPt%","RuPts",
+                                                                        "RePts","RuPt%","RePt%"), align = 'left')
+                )
+      )
     })
     
     #stat center consistency
     #consistency range filtered table
-    consistencyrange <- reactive(consistencystart[Season == input$scseason &
-                                                    Week %in% seq(input$scweekrange[1],input$scweekrange[2])
-    ][, `:=` (
-      top5dum = ifelse(PosRk <= 5, 1, 0),
-      top12dum = ifelse(PosRk <= 12, 1, 0),
-      top24dum = ifelse(PosRk <= 24, 1, 0),
-      top36dum = ifelse(PosRk <= 36, 1, 0),
-      nonStartdum = ifelse(PosRk > 36, 1, 0),
-      lt10dum = ifelse(FPts < 10, 1, 0),
-      gt10dum = ifelse(FPts >= 10, 1, 0),
-      gt20dum = ifelse(FPts >= 20, 1, 0),
-      gt30dum = ifelse(FPts >= 30, 1, 0)
-    )][,
-       .(FPts = sum(FPts, na.rm = T),
-         Avg = round(mean(FPts),1),
-         RelSD = round(sd(FPts)/mean(FPts),2),
-         AvgPosRk = round(mean(PosRk),1),
-         `Top5 %` = sum(top12dum)/.N,
-         `Top12 %` = sum(top12dum)/.N,
-         `Top24 %` = sum(top24dum)/.N,
-         `Top36 %` = sum(top36dum)/.N,
-         `NonStart %` = sum(nonStartdum)/.N,
-         `>10 %` = sum(gt10dum)/.N,
-         `>20 %` = sum(gt20dum)/.N,
-         `>30 %` = sum(gt30dum)/.N,
-         TRUFFLEdum = ifelse(TRUFFLE == "FA", "FA", "Owned")
-       ),
-       by = .(TRUFFLE, Pos, Player)][order(-FPts)][, c("TRUFFLE","Pos","Player","Avg","RelSD",
-                                                      ">10 %",">20 %",">30 %","AvgPosRk",
-                                                      "Top5 %","Top12 %","Top24 %","Top36 %", "NonStart %","TRUFFLEdum")][TRUFFLEdum %in% input$scavailable & Avg >= input$scavgmin][, !"TRUFFLEdum"])
-    
     output$scconsistency <- renderReactable({
         perccolwidth <- 60
-        reactable(consistencyrange()[Pos %in% input$scpositions],
+        consistencyrange <- consistencystart[Season == input$scseason &
+                                                        Week %in% seq(input$scweekrange[1],input$scweekrange[2])
+        ][, `:=` (
+          top5dum = ifelse(PosRk <= 5, 1, 0),
+          top12dum = ifelse(PosRk <= 12, 1, 0),
+          top24dum = ifelse(PosRk <= 24, 1, 0),
+          top36dum = ifelse(PosRk <= 36, 1, 0),
+          nonStartdum = ifelse(PosRk > 36, 1, 0),
+          lt10dum = ifelse(FPts < 10, 1, 0),
+          gt10dum = ifelse(FPts >= 10, 1, 0),
+          gt20dum = ifelse(FPts >= 20, 1, 0),
+          gt30dum = ifelse(FPts >= 30, 1, 0)
+        )][,
+           .(FPts = sum(FPts, na.rm = T),
+             Avg = round(mean(FPts),1),
+             RelSD = round(sd(FPts)/mean(FPts),2),
+             AvgPosRk = round(mean(PosRk),1),
+             `Top5 %` = sum(top12dum)/.N,
+             `Top12 %` = sum(top12dum)/.N,
+             `Top24 %` = sum(top24dum)/.N,
+             `Top36 %` = sum(top36dum)/.N,
+             `NonStart %` = sum(nonStartdum)/.N,
+             `>10 %` = sum(gt10dum)/.N,
+             `>20 %` = sum(gt20dum)/.N,
+             `>30 %` = sum(gt30dum)/.N,
+             TRUFFLEdum = ifelse(TRUFFLE == "FA", "FA", "Owned")
+           ),
+           by = .(TRUFFLE, Pos, Player)][TRUFFLEdum %in% input$scavailable & Avg >= input$scavgmin & Pos %in% input$scpositions][, !"TRUFFLEdum"]
+        
+        consistencyrange <- action_mod(df = consistencyrange, team = globalteam)
+        
+        reactable(consistencyrange[, .(Action,TRUFFLE,Pos,Player,Avg,RelSD,
+                                       `>10 %`,`>20 %`,`>30 %`,AvgPosRk,
+                                       `Top5 %`,`Top12 %`,`Top24 %`,`Top36 %`, `NonStart %`)],
                   paginationType = "jump",
                   showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
                   pageSizeOptions = c(10, 20, 50, 100),
@@ -919,6 +933,20 @@ shinyServer(function(input, output, session) {
                   highlight = T,
                   compact = T,
                   columns = list(
+                    Action = colDef(header = with_tt("A", "Action link to add, drop, or trade player"),
+                                    sortable = F,
+                                    filterable = F,
+                                    align="center",
+                                    minWidth = 30,
+                                    cell = function(value, index) {
+                                      action_url <- consistencyrange$ActionLink[index]
+                                      img_src <- knitr::image_uri(value)
+                                      image <- img(src = img_src, height = "15px", alt = value)
+                                      tagList(
+                                        div(style = list(display = "inline-block"), image)
+                                      )
+                                      tags$a(href = action_url, target = "_blank", image)
+                                    }),
                       TRUFFLE = trfDef(),
                       Pos = posDef(),
                       Player = playerDef(minW = 125, filt = T),
@@ -2159,7 +2187,7 @@ shinyServer(function(input, output, session) {
         )
     })
     
-    #### PASSWORD server code ---------------------------------------------------- 
+    #### password server code ---------------------------------------------------- 
     # reactive value containing user's authentication status
     user_input <- reactiveValues(authenticated = FALSE, valid_credentials = FALSE, 
                                  user_locked_out = FALSE, status = "")
@@ -2167,18 +2195,9 @@ shinyServer(function(input, output, session) {
     
     
     # authenticate user by:
-    #   1. checking whether their user name and password are in the credentials 
-    #       data frame and on the same row (credentials are valid)
-    #   2. if credentials are valid, retrieve their lockout status from the data frame
-    #   3. if user has failed login too many times and is not currently locked out, 
-    #       change locked out status to TRUE in credentials DF and save DF to file
-    #   4. if user is not authenticated, determine whether the user name or the password 
-    #       is bad (username precedent over pw) or he is locked out. set status value for
-    #       error message code below
+    #   1. checking whether their team is in the credentials
     observeEvent(input$login_button, {
       credentials <- readRDS("credentials/credentials.rds")
-      
-      #row_username <- which(credentials$user == input$user_name)
       
       # if user name row and password name row are same, credentials are valid
       #   and retrieve locked out status
@@ -2190,32 +2209,19 @@ shinyServer(function(input, output, session) {
       #   1. set current lockout status to TRUE
       #   2. if username is present in credentials DF, set locked out status in 
       #     credentials DF to TRUE and save DF
-      # if (input$login_button == num_fails_to_lockout & 
-      #     user_input$user_locked_out == FALSE) {
-      #     
-      #     user_input$user_locked_out <- TRUE
-      #     
-      #     if (length(row_username) == 1) {
-      #         credentials$locked_out[row_username] <- TRUE
-      #         
-      #         saveRDS(credentials, "credentials/credentials.rds")
-      #     }
-      # }
       
       # if a user has valid credentials and is not locked out, he is authenticated      
       if (user_input$valid_credentials == TRUE) {
         user_input$authenticated <- TRUE
-        myteam <- input$user_name
-        updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == myteam])
+        globalteam <<- input$user_name
+        updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
       } else {
         user_input$authenticated <- FALSE
       }
       
       # if user is not authenticated, set login status variable for error messages below
       if (user_input$authenticated == FALSE) {
-        if (user_input$user_locked_out == TRUE) {
-          user_input$status <- "locked_out"  
-        } else if (input$user_name == "" || !(input$user_name %in% credentials$user)) {
+        if (input$user_name == "" || !(input$user_name %in% credentials$user)) {
           user_input$status <- "bad_user"
         } 
       }
@@ -2238,15 +2244,8 @@ shinyServer(function(input, output, session) {
     
     # red error message if bad credentials
     output$pass <- renderUI({
-      if (user_input$status == "locked_out") {
-        h5(strong(paste0("Your account is locked because of too many\n",
-                         "failed login attempts. Contact administrator."), style = "color:red"), align = "center")
-      } else if (user_input$status == "credentials_data_error") {    
-        h5(strong("Credentials data error - contact administrator!", style = "color:red"), align = "center")
-      } else if (user_input$status == "bad_user") {
+      if (user_input$status == "bad_user") {
         h5(strong("Team not found!", style = "color:red"), align = "center")
-      } else if (user_input$status == "bad_password") {
-        h5(strong("Incorrect password!", style = "color:red"), align = "center")
       } else {
         ""
       }

@@ -4,11 +4,19 @@
   min-height: 96.2vh !important;
 }
 
+.main-header .logo {
+  width: 200px;
+}
+
 .main-sidebar {
   background-color: #242D31;
 }
 
 .sidebar-menu a {
+  color: #b8c7ce;
+}
+
+.navbar>..sidebar-togglea:hover {
   color: #b8c7ce;
 }
 

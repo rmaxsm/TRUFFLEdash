@@ -12,7 +12,7 @@ dashboardPageUI <-
                   dashboardHeader(title = HTML(" <span style=color:#84A4D8;font-size:24px>truffle</span><span style =color:#8C2E26;font-weight:bold;font-size:40px;font-family:'Audiowide'>dash</span>  ")),
                   
                   #laying out the sidebar menu
-                  dashboardSidebar(sidebarMenu(
+                  dashboardSidebar(width = '200px', sidebarMenu(
                     br(),
                     menuItem("Home", tabName = "home", icon = icon("football-ball")),
                     menuItem("Team Portal", tabName = "teamportal", icon = icon("users")),
@@ -87,9 +87,7 @@ dashboardPageUI <-
                                                  reactableOutput('homeweeklytop5te')
                                           )
                                         )
-                              ),
-                              wellPanel(class = "well",
-                                        selectInput("myteam", "My Team", unique(teams$Abbrev)))
+                              )
                       ),
                       # Team Portal -----
                       tabItem(tabName = "teamportal",
