@@ -1,5 +1,33 @@
 @import url("https://fonts.googleapis.com/css2?family=Audiowide,wght@0,400;0,700;1,400&display=swap");
 
+.main-sidebar {
+  background-color: #242D31;
+}
+
+.sidebar-menu a {
+  color: #b8c7ce;
+}
+
+.sidebar-menu a:hover {
+   color: #fff;
+    background: #1e282c;
+    border-left-color: #fff;
+}
+
+.sidebar-menu>li>a {
+    border-left: 3px solid transparent;
+}
+
+.sidebar-menu>li.active>a {
+    color: #fff;
+    background: #1e282c;
+    border-left-color: #fff;
+}
+
+.main-header {
+  background-color: #FFFFFF;
+}
+
 h2 {
   font-size: 20px;
   color: #84A4D8;

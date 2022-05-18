@@ -19,6 +19,10 @@ library(crosstalk)
 library(shinyBS)
 library(markdown)
 
+# #getting the newly setup ui pages
+# source("dashboardPage.R")
+# source("loginPage.R")
+
 # setting colors -----
 #colors and global options 
 
