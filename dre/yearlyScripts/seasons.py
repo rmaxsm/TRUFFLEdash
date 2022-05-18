@@ -1,6 +1,8 @@
-#this is a python script. It will ask for the week then get all scoring data
+#this is a python script. It will ask for the year then get all scoring data
 #it should append to a current csv file - can stay hardcoded or ask for filepath.
 #currently POC concept. 
+## writes to a file but not adding at all. That needs to be implemented.
+
 
 import os
 import requests
@@ -8,8 +10,8 @@ import datetime
 import pandas as pd
 import numpy as np
 import re
+import shutil
 from bs4 import BeautifulSoup
-from pprint import pprint
 
 
 #below are 'keys' of some sort from copy and pasting - unclear how they fit in left for reference
@@ -84,22 +86,18 @@ headers = {
 }
 
 
-
-#this is the main pandas frame that will be added to throughout
-dfGlobal = pd.DataFrame()
-
 #get year and week for url/formatting
-# season = input("What YEAR is it..? ")
+# season = input("What SEASON is it..? ")
 # while(len(season) != 4):
-#   print("get the year right dumbass")
-#   season = input("What YEAR is it..? ")
-# 
+#   print("get the SEASON right dumbass")
+#   season = input("What SEASON is it..? ")
+
 # week = input("What WEEK is it..? ")
 # while(len(week) >= 3):
 #   print("get the week right dumbass")
 #   week = input("What WEEK is it..? ")
-season = 2022
-week = 1
+season = 2021
+# week = 1
 
 
 begin_time = datetime.datetime.now()
@@ -118,6 +116,7 @@ for index, row in teamsPd.iterrows():
 def getTeamAbbreviation(team):
   try:
     if(team == "W "):
+      ##NEED TO CHECK IF THIS IS WHAT IS CORRECT. WANT SEASON NOT YEAR???
       return "W ({}/{})".format(todays_date.month, todays_date.day) 
     return teamsDict[team]
   except Exception as exp:
@@ -130,7 +129,7 @@ def separateColumns(row):
   allCols = []
   for i in row:
     allCols.append(i.getText())
-  allCols[1] = "TRUFFLE"
+  # allCols[1] = "TRUFFLE"
   return allCols
 
 #takes in a single row of html and returns the stats as list (for players/dst)
@@ -147,9 +146,8 @@ def separatePlayers(rows):
     itr += 1
   return curRow
 
-teamNum = row["TeamNumber"]
 #where the connection is made to the truffle cbs website
-url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:{}/period-{}:p/TRUFFLEoffense/?print_rows=9999".format("FLEX",week)
+url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:FLEX/2021:p/TRUFFLEoffense/?print_rows=9999".format(season)
 response = requests.get(url, cookies=cookies, headers=headers)
 soup = BeautifulSoup(response.content, 'html.parser')
 
@@ -171,11 +169,6 @@ allPlayers = []
 #for every player - clean the row and add to list of lists
 for i in allRows:
   allPlayers.append(separatePlayers(i))
-  
-# print(allPlayers[0])
-# print(len(allPlayers[0]))
-# print(len(cols))
-
 
 #lamba functions to split player name team and position
 getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
@@ -195,20 +188,59 @@ nfl = pd.Series(playerTeam[1])
 
 
 #add/remove columns for TRUFFLE formatting
-df = df.drop(["Bye","Rost", "Start"],axis=1)
+df = df.drop(["Bye","Rost", "Start", "Avail", "Opp"],axis=1)
 df["Player"] = player
 df.insert(0,"Season", season)
-df.insert(1,"Week", week)
-df.insert(3,"Pos", position[0])
-df.insert(5,"NFL", nfl)
+df.insert(1,"Pos", position[0])
+df.insert(3,"NFL", nfl)
 
-print(df.columns)
-print(df)
+df['Player'] = df['Player'].str.replace(r'.', '', regex=True)
+df['Player'] = df['Player'].str.replace(r' Jr', '', regex=True)
+df['Player'] = df['Player'].str.replace(r' Sr', '', regex=True)
+df['Player'] = df['Player'].str.replace(r' III', '', regex=True)
+df['Player'] = df['Player'].str.replace(r' II', '', regex=True)
+df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
+
+df = df.sort_values(by=['Player','Pos'])
+
+masterPath = "dre/yearlyScripts/"
+masterFile = "dre/yearlyScripts/seasons_new_copy.csv"
 
 
-# stores as csv
-filepath = "dre/allScoringWeeklyPOC.csv"
-df.to_csv(filepath, index=False)
-print("\nstored file in location {}".format(filepath))
-print("\n\nscript complete. execution time:")
-print(datetime.datetime.now() - begin_time)
+#read the existing csv as a pd df for error checking
+masterDf = pd.read_csv(masterFile)
+
+years = [str(i) for i in masterDf["Season"]]
+
+#if year week trying to be written already exists print error output - will not write 
+#COMMENTED OUT BELOW IS CORRECT SYNTAX - NEED STR CONVERSTION OR IT WILL NOT WORK
+# if (str(season) in years):
+if (season in years):
+  print("AN ERROR WAS ENCOUNTERED. YOU ARE TRYING TO WRITE DATA SEASON {}.".format(season))
+  print("THIS DATA ALREADY EXISTS IN THE FILE {}. DOUBLE CHECK DUMBASS.".format(masterFile))
+  
+#if the data isn't in the legacy already append to it
+else:
+  #create backup file
+  shutil.copyfile(masterFile, masterPath+"seasons_backup.csv")
+
+  dfCleaned = df[df.Avg != "-"].copy()
+  avg = dfCleaned.loc[:,"Avg"].astype('float')
+  total = dfCleaned.loc[:,"Total"].astype('float')
+  dfCleaned.loc[:,"Avg"] = avg
+  dfCleaned.loc[:,"Total"] = total
+
+  gamesPlayed = round(dfCleaned["Total"] / dfCleaned["Avg"], 0)
+  
+  dfCleaned["OVP"] = gamesPlayed
+  
+  dfCleaned.columns = masterDf.columns
+  
+  # dfCleaned = dfCleaned.replace(np.nan, 0.0, regex = True)
+  dfCleaned = dfCleaned.dropna()
+  games = dfCleaned.loc[:,"G"].astype('int')
+  dfCleaned.loc[:,"G"] = games
+
+  print(dfCleaned)
+  
+  dfCleaned.to_csv("dre/yearlyScripts/seasons_2021_POC.csv", index=False)
