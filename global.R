@@ -19,9 +19,15 @@ library(crosstalk)
 library(shinyBS)
 library(markdown)
 
-# #getting the newly setup ui pages
-# source("dashboardPage.R")
-# source("loginPage.R")
+#getting the newly setup ui pages
+source("dashboardPage.R")
+source("loginPage.R")
+
+#password stuff
+num_fails_to_lockout <- 1000
+# credentials <- data.frame(user = c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW"),
+#                           stringsAsFactors = FALSE)
+# saveRDS(credentials, "credentials/credentials.rds")
 
 # setting colors -----
 #colors and global options 

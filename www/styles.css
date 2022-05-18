@@ -1,5 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Audiowide,wght@0,400;0,700;1,400&display=swap");
 
+.wrapper .content-wrapper {
+  min-height: 96.2vh !important;
+}
+
 .main-sidebar {
   background-color: #242D31;
 }
@@ -26,6 +30,18 @@
 
 .main-header {
   background-color: #FFFFFF;
+}
+
+.main-header>.logo {
+    background-color: #fff;
+    color: #333;
+    border-bottom: 0 solid transparent;
+    border-right: 1px solid #eee;
+}
+
+.navbar>.sidebar-toggle {
+    color: #333;
+    border-right: 1px solid #eee;
 }
 
 h2 {
