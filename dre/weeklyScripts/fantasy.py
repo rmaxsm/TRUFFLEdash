@@ -244,7 +244,7 @@ currentWeekYear = (season,week)
 
 #if year week trying to be written already exists print error output - will not write 
 if (currentWeekYear in allWeeksYears):
-  print("AN ERROR WAS ENCOUNTERED. YOU ARE TRYING TO WRITE DATA FOR WEEK {} IN SEASON {}.".format(week, season))
+  print("AN ERROR WAS ENCOUNTERED WHILE APPENDING TO FANTASY. YOU ARE TRYING TO WRITE DATA FOR WEEK {} IN SEASON {}.".format(week, season))
   print("THIS DATA ALREADY EXISTS IN THE FILE {}. DOUBLE CHECK DUMBASS.".format(masterFile))
   
 #if the data isn't in the legacy already append to it
@@ -260,6 +260,7 @@ else:
   #create backup file
   
   shutil.copyfile(masterFile, masterPath+"fantasy_backup.csv")
+  print("Backup created at location {}".format(masterPath+"fantasy_backup.csv"))
   #add newline to end of file - fixes error of writing into last cell instead of new row
   file_object = open(masterFile, 'a')
   file_object.write('\n')
@@ -268,7 +269,7 @@ else:
   # append data frame to CSV file
   dfGlobal.to_csv(masterFile, mode='a', index=False, header=False)
   
-  print("Data appended successfully.")
+  print("Data appended successfully at location {}.".format(masterFile))
   print(dfGlobal)
-  print("\n\nscript complete. execution time:")
+  print("\n\nFantasy script complete. execution time:")
   print(datetime.datetime.now() - begin_time)
