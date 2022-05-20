@@ -2201,7 +2201,7 @@ shinyServer(function(input, output, session) {
       
       # if user name row and password name row are same, credentials are valid
       #   and retrieve locked out status
-      if (input$user_name %in% credentials$user) {
+      if (toupper(input$user_name) %in% credentials$user) {
         user_input$valid_credentials <- TRUE
       }
       
