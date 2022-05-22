@@ -228,7 +228,8 @@ else:
   shutil.copyfile(masterFile, masterPath+"weekly_backup.csv")
   
   #this line removes all avgs but fails for now until 2022 data is valid
-  dfCleaned = df[df.Avg != "-"]
+  # dfCleaned = df[df.Avg != "-"]
+  dfCleaned = df[df.TRUFFLE != re.compile("W (.)")]
   print(dfCleaned)
   
   #add newline to end of file - fixes error of writing into last cell instead of new row
@@ -243,7 +244,11 @@ else:
 
   # stores as csv
   filepath = "dre/weeklyScripts/allScoringWeeklyPOC.csv"
+  
+  #this line will need to change for the 'cleaned'
   df.to_csv(filepath, index=False)
+  
+  
   print("\nstored file in location {}".format(filepath))
   print("\n\nscript complete. execution time:")
   print(datetime.datetime.now() - begin_time)
