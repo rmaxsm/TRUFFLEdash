@@ -2213,7 +2213,7 @@ shinyServer(function(input, output, session) {
       # if a user has valid credentials and is not locked out, he is authenticated      
       if (user_input$valid_credentials == TRUE) {
         user_input$authenticated <- TRUE
-        globalteam <<- input$user_name
+        globalteam <<- toupper(input$user_name)
         updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
       } else {
         user_input$authenticated <- FALSE
