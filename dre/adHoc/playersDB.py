@@ -101,7 +101,6 @@ while(len(week) >= 3):
 begin_time = datetime.datetime.now()
 todays_date = datetime.datetime.today()
 
-
 #get information from teams document to refer to for shortcuts ext
 teamsPd = pd.read_csv("dre/teams_copy.csv")
 
@@ -113,11 +112,13 @@ for index, row in teamsPd.iterrows():
 #returns team abbreviation from team name
 def getTeamAbbreviation(team):
   try:
-    if(team == "W "):
-      return "W ({}/{})".format(todays_date.month, todays_date.day) 
+    waived =  re.compile("W ")
+    if(waived.match(team)):
+      return team 
     return teamsDict[team]
   except Exception as exp:
-    print("An Error Occuring while trying to get the team abbreviation for " + team)
+    print(exp)
+    print("An Error occured while trying to get the team abbreviation for " + team)
     return "err"
 
 #separates the column names
