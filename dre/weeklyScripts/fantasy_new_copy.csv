@@ -3966,8 +3966,9 @@ Season,Week,TRUFFLE,Pos,Player,NFL,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2022,1,AFL,WR,AJ Brown,PHI,@DET,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,AFL,TE,George Kittle,SF,@CHI,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,AFL,WR,Nico Collins,HOU,IND,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,AFL,WR,Chris Olave,NO,@ATL,26,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,AFL,QB,Trey Lance,SF,@CHI,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,AFL,DST,Dolphins,MIA,NE,20,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,-,0
+2022,1,AFL,DST,Dolphins,MIA,NE,19,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,-,0
 2022,1,CC,QB,Kirk Cousins,MIN,GB,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,CC,WR,Marvin Jones,JAC,@WAS,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,CC,RB,Alvin Kamara,NO,@ATL,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
@@ -3981,12 +3982,12 @@ Season,Week,TRUFFLE,Pos,Player,NFL,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2022,1,CRB,QB,Ryan Tannehill,TEN,NYG,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,CRB,TE,Travis Kelce,KC,@ARI,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,CRB,WR,Russell Gage,TB,@DAL,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,CRB,RB,Ronald Jones,KC,@ARI,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,CRB,WR,Michael Gallup,DAL,TB,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CRB,WR,KJ Osborn,MIN,GB,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,CRB,RB,JK Dobbins,BAL,@NYJ,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,CRB,WR,DeVonta Smith,PHI,@DET,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,CRB,RB,Antonio Gibson,WAS,JAC,21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,CRB,WR,Amon-Ra St Brown,DET,PHI,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,CRB,RB,Breece Hall,NYJ,BAL,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,CRB,DST,Cowboys,DAL,TB,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,-,0
 2022,1,ELP,QB,Aaron Rodgers,GB,@MIN,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,ELP,TE,Mark Andrews,BAL,@NYJ,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
@@ -3995,8 +3996,8 @@ Season,Week,TRUFFLE,Pos,Player,NFL,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2022,1,ELP,WR,Michael Pittman,IND,@HOU,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,ELP,QB,Mac Jones,NE,@MIA,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,ELP,WR,Marquise Brown,ARI,KC,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,ELP,RB,Clyde Edwards-Helaire,KC,@ARI,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,ELP,RB,AJ Dillon,GB,@MIN,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,ELP,RB,Kenneth Walker,SEA,DEN,14,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,ELP,DST,49ers,SF,@CHI,30,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,-,0
 2022,1,FRR,RB,Christian McCaffrey,CAR,CLE,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,FRR,QB,Patrick Mahomes,KC,@ARI,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
@@ -4011,13 +4012,13 @@ Season,Week,TRUFFLE,Pos,Player,NFL,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2022,1,GF,QB,Russell Wilson,DEN,@SEA,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,GF,QB,Derek Carr,LV,@LAC,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,GF,WR,Keenan Allen,LAC,LV,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,GF,WR,Sterling Shepard,NYG,@TEN,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,GF,RB,James Conner,ARI,KC,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,GF,WR,Kendrick Bourne,NE,@MIA,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,GF,TE,Noah Fant,SEA,DEN,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,GF,RB,Michael Carter,NYJ,BAL,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,GF,WR,Amari Rodgers,GB,@MIN,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,GF,DST,Patriots,NE,@MIA,23,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,-,0
+2022,1,GF,WR,Christian Watson,GB,@MIN,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,GF,WR,Jameson Williams,DET,PHI,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,GF,WR,David Bell,CLE,@CAR,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,GF,DST,Patriots,NE,@MIA,24,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,-,0
 2022,1,MAM,QB,Justin Fields,CHI,SF,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,MAM,WR,Mike Evans,TB,@DAL,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,MAM,RB,Kenyan Drake,LV,@LAC,29,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
@@ -4027,17 +4028,16 @@ Season,Week,TRUFFLE,Pos,Player,NFL,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2022,1,MAM,QB,Tua Tagovailoa,MIA,NE,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,MAM,WR,Chris Godwin,TB,@DAL,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,MAM,RB,Chuba Hubbard,CAR,CLE,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,MAM,DST,Bills,BUF,@LAR,17,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,-,0
+2022,1,MAM,DST,Bills,BUF,@LAR,16,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,-,0
 2022,1,MCM,QB,Dak Prescott,DAL,TB,23,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,MCM,RB,Cordarrelle Patterson,ATL,NO,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,MCM,WR,Stefon Diggs,BUF,@LAR,21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,MCM,WR,Mike Williams,LAC,LV,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,MCM,RB,Darrel Williams,KC,@ARI,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MCM,RB,Darrel Williams,ARI,KC,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,MCM,WR,Hunter Renfrow,LV,@LAC,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,MCM,QB,Justin Herbert,LAC,LV,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,MCM,RB,Travis Etienne,JAC,@WAS,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,MCM,TE,Kyle Pitts,ATL,NO,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,MCM,DST,Buccaneers,TB,@DAL,5,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,-,0
+2022,1,MCM,TE,Kyle Pitts,ATL,NO,6,NA,NA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2022,1,MWM,QB,Tom Brady,TB,@DAL,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,MWM,WR,Cooper Kupp,LAR,BUF,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,MWM,WR,Adam Thielen,MIN,GB,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
@@ -4045,6 +4045,7 @@ Season,Week,TRUFFLE,Pos,Player,NFL,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2022,1,MWM,TE,CJ Uzomah,NYJ,BAL,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,MWM,WR,Van Jefferson,LAR,BUF,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,MWM,WR,DK Metcalf,SEA,DEN,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,MWM,TE,Jeremy Ruckert,NYJ,BAL,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,MWM,RB,Rhamondre Stevenson,NE,@MIA,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,MWM,DST,Chiefs,KC,@ARI,12,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,-,0
 2022,1,NN,WR,Odell Beckham,LAR,BUF,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
@@ -4055,7 +4056,8 @@ Season,Week,TRUFFLE,Pos,Player,NFL,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2022,1,NN,WR,Christian Kirk,JAC,@WAS,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,NN,QB,Kyler Murray,ARI,KC,31,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,NN,RB,Cam Akers,LAR,BUF,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,NN,TE,Pat Freiermuth,PIT,@CIN,24,NA,NA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,1,NN,TE,Pat Freiermuth,PIT,@CIN,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,NN,DST,Saints,NO,@ATL,28,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,-,0
 2022,1,VD,WR,Davante Adams,LV,@LAC,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,VD,RB,Derrick Henry,TEN,NYG,26,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,VD,TE,Dalton Schultz,DAL,TB,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
@@ -4065,11 +4067,12 @@ Season,Week,TRUFFLE,Pos,Player,NFL,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2022,1,VD,RB,Austin Ekeler,LAC,LV,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,VD,WR,Laviska Shenault,JAC,@WAS,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,VD,QB,Zach Wilson,NYJ,BAL,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,VD,DST,Colts,IND,@HOU,16,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,-,0
+2022,1,VD,DST,Colts,IND,@HOU,17,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,-,0
 2022,1,WLW,QB,Carson Wentz,WAS,JAC,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,WLW,WR,Michael Thomas,NO,@ATL,26,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,WLW,WR,DJ Moore,CAR,CLE,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,WLW,QB,Lamar Jackson,BAL,@NYJ,29,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,WLW,RB,Najee Harris,PIT,@CIN,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
 2022,1,WLW,WR,Tee Higgins,CIN,PIT,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2022,1,WLW,WR,CeeDee Lamb,DAL,TB,12,NA,NA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,1,WLW,WR,CeeDee Lamb,DAL,TB,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2022,1,WLW,RB,Isaiah Spiller,LAC,LV,22,NA,NA,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
