@@ -23,8 +23,8 @@ dashboardPageUI <-
                     menuItem("Cap Corner", tabName = "capcorner", icon = icon("dollar-sign")),
                     menuItem("History Books", tabName = "historybooks", icon = icon("book")),
                     menuItem("Database", tabName = "database", icon = icon("database")),
-                    menuItem("Rookie Draft", tabName = "draft", icon = icon("business-time"))
-                    #menuItem("BYOG", tabName = "byog", icon = icon("chart-line"))
+                    menuItem("Rookie Draft", tabName = "draft", icon = icon("business-time")),
+                    menuItem("Constitution", href = "https://docs.google.com/document/d/1-FyXq3HWtEETQlpF-_HnofCb2y1SGKUn7c7NVFlrx1E/", newtab = TRUE, icon = icon("paragraph"))
                   )
                   ),
                   # Dashboard Body -----
@@ -464,7 +464,7 @@ dashboardPageUI <-
                               wellPanel(class = "well",
                                         fluidRow(
                                           column(width=8, h2("Rookie Draft Records")),
-                                          column(width=4, selectInput("draftseason", "Season", unique(draft$Season), selected = max(weekly$Season) ))
+                                          column(width=4, selectInput("draftseason", "Season", unique(draft$Season), selected = max(draft$Season) ))
                                         ),
                                         fluidRow(
                                           column(width=4, reactableOutput('rd1')),

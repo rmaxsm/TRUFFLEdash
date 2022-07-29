@@ -33,7 +33,7 @@ num_fails_to_lockout <- 1000
 #colors and global options 
 
 minAvg <- 3
-currentyr <- 2021
+currentyr <- 2022
 
 options(reactable.language = reactableLang(
   pagePrevious = "\u276e",
