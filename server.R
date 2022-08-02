@@ -195,13 +195,13 @@ shinyServer(function(input, output, session) {
     #tpheader
     output$tpheader <- renderReactable({
         reactable(
-            teams[teams$FullName == input$tmportaltm, c("FullName", "Abbrev", "Logo", "DivLogo")],
+            teams[teams$FullName == input$tmportaltm, c("FullName", "Abbrev", "Logo", "DivLogo", "RivLogo")],
             sortable = FALSE,
             compact = TRUE,
             columns = list(
                 FullName = colDef(name = "Selected Team:",
                                   headerStyle = list(color = "#84A4D8", fontSize = 14, fontWeight = 800),
-                                  minWidth = 250,
+                                  minWidth = 225,
                                   cell = function(value) {
                                       owner <- teams$Owner[teams$FullName == input$tmportaltm]
                                       col <- teams$Primary[teams$FullName == input$tmportaltm]
@@ -213,9 +213,9 @@ shinyServer(function(input, output, session) {
                 ),
                 Abbrev = trfDef(filt = FALSE, name = ""),
                 Logo = colDef(name = "",
-                              class = "border-right-grey",
+                              #class = "border-right-grey",
                               align="center", 
-                              minWidth = 80, 
+                              minWidth = 70, 
                               cell = function(value) {
                                   img_src <- knitr::image_uri(value)
                                   image <- img(src = img_src, height = "70px", alt = value)
@@ -226,14 +226,25 @@ shinyServer(function(input, output, session) {
                 DivLogo = colDef(name = "",
                               class = "border-left-grey",
                               align="center", 
-                              minWidth = 80, 
+                              minWidth = 70, 
                               cell = function(value) {
                                   img_src <- knitr::image_uri(value)
                                   image <- img(src = img_src, height = "70px", alt = value)
                                   tagList(
                                       div(style = list(display = "inline-block"), image)
                                   )
-                              })
+                              }),
+                RivLogo = colDef(name = "",
+                                 class = "border-left-grey",
+                                 align="center", 
+                                 minWidth = 70, 
+                                 cell = function(value) {
+                                   img_src <- knitr::image_uri(value)
+                                   image <- img(src = img_src, height = "60px", alt = value)
+                                   tagList(
+                                     div(style = list(display = "inline-block"), image)
+                                   )
+                                 })
             ),
             theme = reactableTheme(
               # Vertically center cells

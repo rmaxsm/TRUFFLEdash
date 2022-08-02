@@ -1076,5 +1076,3 @@ g30pDef <- colDef(header = with_tt(">30 %", "Percentage of Weeks scoring >30 FPt
                   format = colFormat(percent = T, digits = 0),
                   defaultSortOrder = "desc",
                   sortNALast = T)
-
-myteam <- "Frankfurt Roadrunners"
