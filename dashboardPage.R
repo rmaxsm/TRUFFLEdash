@@ -432,6 +432,13 @@ dashboardPageUI <-
                                                               )
                                                             )
                                                   )
+                                         ), #end tabpanel
+                                         
+                                         tabPanel("Bench Cup",
+                                                  
+                                                  wellPanel(class = "well",
+                                                            htmlOutput("bcgsheet")
+                                                  )
                                          ) #end tabpanel
                                          
                               ) #end navbarpage

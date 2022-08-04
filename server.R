@@ -2010,6 +2010,16 @@ shinyServer(function(input, output, session) {
                   ))
     })
     
+    #Bench Cup Output
+    output$bcgsheet <- renderUI({
+      tags$iframe(id = "bcgsheet", 
+                  src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSyQkU3S-LR5J0QU2nb8Kh3hQPaax_TsIpVUantq6wFwvaoxcR6K5_moO4xqEqCcGx8vewMBcP3t3xG/pubhtml",
+                  height=1020,
+                  width='100%',
+                  frameborder = 0,
+                  marginheight = 0)
+    })
+    
     #database ----
     #data hub weekly logs
     output$dhweekly <- renderReactable({
