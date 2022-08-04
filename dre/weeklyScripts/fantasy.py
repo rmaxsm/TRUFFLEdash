@@ -135,7 +135,7 @@ def separatePlayers(rows):
     if itr == 0:    #first value always empty string
       curRow.append("")
     elif itr == 1:    #second value convert to team abbreviation
-      curRow.append(getTeamAbbreviation(i.getText()))   
+      curRow.append(getTeamAbbreviation(i.getText()).strip())   
     else:       #after first two iterations just get exact data from source
       curRow.append(i.getText())
     itr += 1

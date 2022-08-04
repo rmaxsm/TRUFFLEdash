@@ -112,8 +112,9 @@ for index, row in teamsPd.iterrows():
 #returns team abbreviation from team name
 def getTeamAbbreviation(team):
   try:
-    if(team == "W "):
-      return "W ({}/{})".format(todays_date.month, todays_date.day) 
+    waived =  re.compile("W ")
+    if(waived.match(team)):
+      return team
     return teamsDict[team]
   except Exception as exp:
     print("An Error Occuring while trying to get the team abbreviation for " + team)
