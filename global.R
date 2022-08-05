@@ -68,7 +68,7 @@ pal <- setNames(pal, c("QB", "RB", "WR", "TE", "DST", "DC", "IR"))
 # Reading in and cleaning data from Excels/csvs -----
 
 #file of CBS player IDs
-ids <- read_csv("data/playerIDs.csv")
+ids <- read_csv("data/playerIDs.csv", col_types = cols())
 ids$playerID <- as.character(ids$playerID)
 ids$TRUFFLE[!(ids$TRUFFLE %in% c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW"))] <- "FA"
 ids <- merge(ids, teams[, c("Abbrev", "TeamNum")], by.x = "TRUFFLE", by.y = "Abbrev", all.x = T)
@@ -148,6 +148,7 @@ seasons <- as.data.table(cleanSeasons(seasons))
 #import fantasy pros file to use for age
 fprosage <- read_excel("data/fprosage.xlsx")
 cleanFprosage <- function(file) {
+  file$TIERS <- NULL
   colnames(file) <- c("DynRk", "Player", "NFL", "DynPosRk", "Bye", "AgePH", "SOS", "EcfADP")
   file$Player <- str_replace_all(file$Player,"\\.","")
   file$Player <- str_replace_all(file$Player," Jr","")
@@ -162,51 +163,11 @@ cleanFprosage <- function(file) {
 fprosage <- cleanFprosage(fprosage)
 
 #file of current TRUFFLE rosters
-rosters <- read_excel("data/rosters.xlsx")
+rosters <- read_csv("data/rosters.csv", col_types = cols())
 cleanRosters <- function(file) {
-  #find all the rows with all caps players which designate next team
-  dummy <- c(grep("PLAYERS", file$Pos), nrow(file))
-  #vector of teams in order
-  truffle_ordered <- c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW")
-  
-  #loop through and input team abbreviations
-  for (t in 1:12) {
-    file$TRUFFLE[dummy[t]:dummy[t+1]] <- truffle_ordered[t]
-  }
-  
-  injured <- grep("^INJURED$", file$Pos)
-  practice <- grep("^PRACTICE$", file$Pos)
-  file$IR <- NA
-  
-  for (t in 1:12) {
-    file$IR[injured[t]:practice[t]] <- "IR"
-  }
-  
-  #convert columns to numeric
-  file[,which(colnames(file) == "Bye"):which(colnames(file) == "Proj")] <-
-    sapply(file[,which(colnames(file) == "Bye"):which(colnames(file) == "Proj")],as.numeric)
   
   #convert to DT
   file <- as.data.table(file)
-  
-  #takeout unnecessary rows
-  file <- file[Proj >= 0]
-  
-  #modifying player column to parse out positions, teams, and player names
-  file <- add_column(file, NFL = NA, .after = "Player")
-  file$NFL <- str_trim(substr(file$Player, as.numeric(gregexpr(pattern = "\\|", file$Player)) + 1, str_length(file$Player)))
-  file$Pos <- str_trim(substr(file$Player, as.numeric(gregexpr(pattern = "\\|", file$Player))-4, as.numeric(gregexpr(pattern = "\\|", file$Player))-2))
-  file$Player <- substr(file$Player, 1, as.numeric(gregexpr(pattern = "\\|", file$Player))-5)
-  file$Player <- str_replace_all(file$Player,"\\.","")
-  file$Player <- str_replace_all(file$Player," Jr","")
-  file$Player <- str_replace_all(file$Player," III","")
-  file$Player <- str_replace_all(file$Player," II","")
-  file$Player <- str_replace_all(file$Player,"Will Fuller V","Will Fuller")
-  file$Pos[grepl("Lynn Bowden", file$Player)] <- "WR"
-  file$Player[grepl("Lynn Bowden", file$Player)] <- "Lynn Bowden"
-  
-  file$Pos[is.na(file$IR) == F] <- paste0(file$IR[is.na(file$IR) == F],"-",file$Pos[is.na(file$IR) == F])
-  file$IR <- NULL
   
   #merge in correct team abbreviations
   file <- merge(x = file, y = fprosage[ , c("Player", "AgePH")], by = "Player", all.x=TRUE)
@@ -214,15 +175,12 @@ cleanRosters <- function(file) {
   file$Age <- as.integer(file$AgePH)
   file$AgePH <- NULL
   
-  dummy <- grep("Dead Cap", file$Player)
-  file$Pos[dummy] <- "DC"
+  colnames(file) <- c("Player", "Age", "Pos", "TRUFFLE", "NFL", "Opp", "GameTime", "Bye", "O/U", "PosRnk", "Ovp", "Rost", "Start", "Salary", "Contract", "Last", "Avg", "Proj")
   
   #finalized 
   return(file)
 }
 rosters <- cleanRosters(rosters)
-tmp1 <- rosters
-tmp2 <- rosters
 
 #file of weekly scoring across NFL
 weekly <- read_excel("data/weekly.xlsx")

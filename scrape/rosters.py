@@ -1,8 +1,5 @@
-#this is a python script. It will ask for the year then get all scoring data
-#it should append to a current csv file - can stay hardcoded or ask for filepath.
+#this is a python script.
 #currently POC concept. 
-## writes to a file but not adding at all. That needs to be implemented.
-
 
 import os
 import requests
@@ -10,8 +7,8 @@ import datetime
 import pandas as pd
 import numpy as np
 import re
-import shutil
 from bs4 import BeautifulSoup
+from bs4 import NavigableString
 
 
 #below are 'keys' of some sort from copy and pasting - unclear how they fit in left for reference
@@ -85,43 +82,42 @@ headers = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36',
 }
 
-
-#get year and week for url/formatting
-season = input("What SEASON is it..? ")
-while(len(season) != 4):
-  print("get the SEASON right dumbass")
-  season = input("What SEASON is it..? ")
-
-# week = input("What WEEK is it..? ")
-# while(len(week) >= 3):
-#   print("get the week right dumbass")
-#   week = input("What WEEK is it..? ")
-#season = 2021
-# week = 1
-
-
-begin_time = datetime.datetime.now()
-todays_date = datetime.datetime.today()
-
-
 #get information from teams document to refer to for shortcuts ext
-teamsPd = pd.read_csv("dre/teams_copy.csv")
+teamsPd = pd.read_csv("data/teams.csv")
 
 teamsDict = {}
 for index, row in teamsPd.iterrows():
-  teamsDict[row["Logs"]] = row["Abbrev"]  
-
+  teamsDict[row["FullName"]] = row["Abbrev"]  
 
 #returns team abbreviation from team name
 def getTeamAbbreviation(team):
   try:
-    if(team == "W "):
-      ##NEED TO CHECK IF THIS IS WHAT IS CORRECT. WANT SEASON NOT YEAR???
-      return "W ({}/{})".format(todays_date.month, todays_date.day) 
+    waived =  re.compile("W ")
+    if(waived.match(team)):
+      return team
     return teamsDict[team]
   except Exception as exp:
     print("An Error Occuring while trying to get the team abbreviation for " + team)
     return "err"
+  
+#takes in a single row of html and returns the stats as list (for players/dst)
+def separatePlayers(rows):
+  curRow = []
+  for i in rows:
+    curRow.append(i.getText())
+  return curRow
+
+#takes in a single row of html and returns the stats as list deadcap players only
+def separatePlayersDeadCap(rows):
+  itr = 0
+  curRow = []
+  for i in rows:
+    if itr == 0:
+      curRow.append("DC")
+    else:
+      curRow.append(i.getText())
+    itr += 1
+  return curRow
 
 #separates the column names
 #returns list representing the columns for tables 
@@ -129,118 +125,94 @@ def separateColumns(row):
   allCols = []
   for i in row:
     allCols.append(i.getText())
-  # allCols[1] = "TRUFFLE"
+  allCols[1] = "Player"
   return allCols
 
-#takes in a single row of html and returns the stats as list (for players/dst)
-def separatePlayers(rows):
-  itr = 0
-  curRow = []
-  for i in rows:
-    if itr == 0:    #first value always empty string
-      curRow.append("")
-    elif itr == 1:    #second value convert to team abbreviation
-      curRow.append(getTeamAbbreviation(i.getText()))
-    else:       #after first two iterations just get exact data from source
-      curRow.append(i.getText())
-    itr += 1
-  return curRow
-
+getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
+getPosition = lambda y: pd.Series([i for i in y.split(" ")][-1])
+getPlayer = lambda z: pd.Series(' '.join([i for i in z.split(" ")][:-1]))
+  
 #where the connection is made to the truffle cbs website
-url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:FLEX/{}:p/TRUFFLEoffense/?print_rows=9999".format(season)
+url = "https://theradicalultimatefflexperience.football.cbssports.com/teams/all"
 response = requests.get(url, cookies=cookies, headers=headers)
 soup = BeautifulSoup(response.content, 'html.parser')
 
 # complete =  soup.find("div", {"id": "sortableStats"})
-tbls =  soup.find("table", {"class":"data pinHeader"})
-combined = tbls.find_all("tr", class_="label")
-label = combined[1]
+tbls =  soup.findAll("table", {"class":"data data3 pinHeader borderTop"})
+dfGlobal = pd.DataFrame()
+counter = 0
 
-#calls function to clean column headers stored as cols (used in pandas df)
-cols = separateColumns(label)
-
-# print(cols)
-
-#regex used to find row1/2 (\d means only numbers following exact match of row)
-allRows = tbls.find_all("tr", class_=re.compile("row\d"))
-
-allPlayers = []
-
-#for every player - clean the row and add to list of lists
-for i in allRows:
-  allPlayers.append(separatePlayers(i))
-
-#lamba functions to split player name team and position
-getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
-getPosition = lambda y: pd.Series([i for i in y.split(" ")][-1])
-getPlayer = lambda z: pd.Series(' '.join([i for i in z.split(" ")][:-1]))
-
-#pandas df to represent team
-df = pd.DataFrame(allPlayers, columns=cols)
-df = df.drop(columns=["Action"])
-
-
-#apply lambda fcts to correct columns
-playerTeam = df["Player"].apply(getNFLTeam)
-position = playerTeam[0].apply(getPosition)
-player =  playerTeam[0].apply(getPlayer)
-nfl = pd.Series(playerTeam[1])
-
-
-#add/remove columns for TRUFFLE formatting
-df = df.drop(["Bye","Rost", "Start", "Avail", "Opp"],axis=1)
-df["Player"] = player
-df.insert(0,"Season", season)
-df.insert(1,"Pos", position[0])
-df.insert(3,"NFL", nfl)
-
-df['Player'] = df['Player'].str.replace(r'.', '', regex=True)
-df['Player'] = df['Player'].str.replace(r' Jr', '', regex=True)
-df['Player'] = df['Player'].str.replace(r' Sr', '', regex=True)
-df['Player'] = df['Player'].str.replace(r' III', '', regex=True)
-df['Player'] = df['Player'].str.replace(r' II', '', regex=True)
-df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
-
-df = df.sort_values(by=['Player','Pos'])
-
-masterPath = "dre/yearlyScripts/"
-masterFile = "dre/yearlyScripts/seasons_new_copy.csv"
-
-
-#read the existing csv as a pd df for error checking
-masterDf = pd.read_csv(masterFile)
-
-years = [str(i) for i in masterDf["Season"]]
-
-#if year week trying to be written already exists print error output - will not write 
-#COMMENTED OUT BELOW IS CORRECT SYNTAX - NEED STR CONVERSTION OR IT WILL NOT WORK
-# if (str(season) in years):
-if (season in years):
-  print("AN ERROR WAS ENCOUNTERED. YOU ARE TRYING TO WRITE DATA SEASON {}.".format(season))
-  print("THIS DATA ALREADY EXISTS IN THE FILE {}. DOUBLE CHECK DUMBASS.".format(masterFile))
+for tbl in tbls:
+  # print(tbl.prettify())
+  tableRows = tbl.findAll('tr')
   
-#if the data isn't in the legacy already append to it
-else:
-  #create backup file
-  shutil.copyfile(masterFile, masterPath+"seasons_backup.csv")
+  teamName = ""
+  cols = []
+  players = []
+  
+  for row in tableRows:
+    if row.has_attr('class') and row['class'][0] == "title":
+      # print("THIS IS THE TEAM NAME")
+      nameSplit = row.getText().split(" ")
+      nameSplit.pop()
+      teamName = ' '.join(nameSplit)
+    elif row.has_attr('class') and row['class'][0] == "label" and len(row['class']) == 1:
+      # print("THIS IS THE COLUMN HEADERS")
+      cols = separateColumns(row)
+    elif row.has_attr('class') and row['class'][0] == "playerRow" and len(row['class']) == 2:
+      # print("THESE ARE ALL THE STARTING PLAYERS")
+      players.append(separatePlayers(row))
+    elif row.has_attr('class') and row['class'][0] == "playerRow" and len(row['class']) == 3:
+      # print("THESE ARE ALL THE BENCHED PLAYERS")
+      playerName = row.find('a').getText()
+      if (playerName.split(" ")[-1] == "Cap"):
+        players.append(separatePlayersDeadCap(row))
+      else:
+        players.append(separatePlayers(row))
 
-  dfCleaned = df[df.Avg != "-"].copy()
-  avg = dfCleaned.loc[:,"Avg"].astype('float')
-  total = dfCleaned.loc[:,"Total"].astype('float')
-  dfCleaned.loc[:,"Avg"] = avg
-  dfCleaned.loc[:,"Total"] = total
+  dfTeam = pd.DataFrame(players, columns = cols)
+  dfTeam["TRUFFLE"] = getTeamAbbreviation(teamName)
+  
+  #apply lambda fcts to correct columns
+  playerTeam = dfTeam["Player"].apply(getNFLTeam)
+  position = playerTeam[0].apply(getPosition)
+  player =  playerTeam[0].apply(getPlayer)
+  nfl = pd.Series(playerTeam[1])
+  
+  #add/remove columns for TRUFFLE formatting
+  dfTeam["Player"] = player
+  #dfTeam.insert(0,"Season", season)
+  #dfTeam.insert(1,"Week", week)
+  dfTeam.insert(1,"PosTRUFFLE", position[0])
+  dfTeam.insert(3,"NFL", nfl)
+  
+  dfTeam['Player'] = dfTeam['Player'].str.replace(r'.', '', regex=True)
+  dfTeam['Player'] = dfTeam['Player'].str.replace(r' Jr', '', regex=True)
+  dfTeam['Player'] = dfTeam['Player'].str.replace(r' Sr', '', regex=True)
+  dfTeam['Player'] = dfTeam['Player'].str.replace(r' III', '', regex=True)
+  dfTeam['Player'] = dfTeam['Player'].str.replace(r' II', '', regex=True)
+  dfTeam['Player'] = dfTeam['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
 
-  gamesPlayed = round(dfCleaned["Total"] / dfCleaned["Avg"], 0)
+  if counter == 0:
+    dfGlobal = dfTeam
+  else:
+    dfGlobal = pd.concat([dfGlobal, dfTeam], ignore_index = True)
+  counter += 1
   
-  dfCleaned["OVP"] = gamesPlayed
   
-  dfCleaned.columns = masterDf.columns
-  
-  # dfCleaned = dfCleaned.replace(np.nan, 0.0, regex = True)
-  dfCleaned = dfCleaned.dropna()
-  games = dfCleaned.loc[:,"G"].astype('int')
-  dfCleaned.loc[:,"G"] = games
+for index, row in dfGlobal.loc[~(dfGlobal['Pos'] == dfGlobal['PosTRUFFLE'])].iterrows():
+  if row['Pos'] == "DC":
+    # print("DEAD CAP HARD CODE ASSIGN")
+    dfGlobal.at[index, 'Pos'] = "DC"
+  else:
+    # print("NEED TO ASSIGN THE Pos = PosTRUFFLE")
+    dfGlobal.at[index, 'Pos'] = row['PosTRUFFLE']
+    
+#shifting/deleting/sorting columns for formatting
+truffle = dfGlobal.pop("TRUFFLE")
+dfGlobal.insert(2,"TRUFFLE", truffle)
+dfGlobal = dfGlobal.drop(["PosTRUFFLE"], axis=1)
+# dfGlobal = dfGlobal.sort_values(by=['TRUFFLE'])
 
-  print(dfCleaned)
-  
-  dfCleaned.to_csv("dre/yearlyScripts/seasons_2021_POC.csv", index=False)
+#save final csv
+dfGlobal.to_csv("data/rosters.csv", index = False)

@@ -4,7 +4,7 @@
 import os
 import requests
 import datetime
-import pandas as pd
+import pandas as pd2022
 import numpy as np
 import re
 from bs4 import BeautifulSoup
@@ -89,12 +89,12 @@ while(len(season) != 4):
   print("get the SEASON right dumbass")
   season = input("What SEASON is it..? ")
 
-week = input("What WEEK is it..? ")
-while(len(week) >= 3):
-  print("get the week right dumbass")
-  week = input("What WEEK is it..? ")
-# season = 2022
-# week = 1
+# week = input("What WEEK is it..? ")
+# while(len(week) >= 3):
+#   print("get the week right dumbass")
+#   week = input("What WEEK is it..? ")
+#season = 2022
+#week = 1
 
 
 begin_time = datetime.datetime.now()
@@ -204,10 +204,10 @@ for tbl in tbls:
   
   #add/remove columns for TRUFFLE formatting
   dfTeam["Player"] = player
-  dfTeam.insert(0,"Season", season)
-  dfTeam.insert(1,"Week", week)
-  dfTeam.insert(3,"PosTRUFFLE", position[0])
-  dfTeam.insert(5,"NFL", nfl)
+  #dfTeam.insert(0,"Season", season)
+  #dfTeam.insert(1,"Week", week)
+  dfTeam.insert(1,"PosTRUFFLE", position[0])
+  dfTeam.insert(3,"NFL", nfl)
   
   dfTeam['Player'] = dfTeam['Player'].str.replace(r'.', '', regex=True)
   dfTeam['Player'] = dfTeam['Player'].str.replace(r' Jr', '', regex=True)
