@@ -68,41 +68,6 @@ ids$TRUFFLE[!(ids$TRUFFLE %in% c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","
 ids <- merge(ids, teams[, c("Abbrev", "TeamNum")], by.x = "TRUFFLE", by.y = "Abbrev", all.x = T)
 
 #file of weekly scoring for players started/active in TRUFFLE
-fantasyold <- read_excel("data/fantasy.xlsx")
-#fantasy <- read_excel("data/fantasy2022test.xlsx")
-cleanFantasyold <- function(file) {
-  #deselect columns to delete and modify avg
-  file <- file[, -c(grep("Del", colnames(file)))]
-  file$Avg <- as.numeric(file$Avg)
-
-  #modifying player column to parse out positions, teams, and player names
-  file <- add_column(file, Pos = NA, .before = "Player")
-  file <- add_column(file, NFL = NA, .after = "Player")
-  file$NFL <- str_trim(substr(file$Player, as.numeric(gregexpr(pattern = "\\|", file$Player)) + 1, str_length(file$Player)))
-  file$Pos <- str_trim(substr(file$Player, as.numeric(gregexpr(pattern = "\\|", file$Player))-4, as.numeric(gregexpr(pattern = "\\|", file$Player))-2))
-  file$Player <- substr(file$Player, 1, as.numeric(gregexpr(pattern = "\\|", file$Player))-5)
-  file$Player <- str_replace_all(file$Player,"\\.","")
-  file$Player <- str_replace_all(file$Player," Jr","")
-  file$Player <- str_replace_all(file$Player," Sr","")
-  file$Player <- str_replace_all(file$Player," III","")
-  file$Player <- str_replace_all(file$Player," II","")
-  file$Player <- str_replace_all(file$Player,"Will Fuller V","Will Fuller")
-
-  #making small change for defenses
-  file$Avg[file$Pos == "DST"] <- file$PaCmp[file$Pos == "DST"]
-  file$FPts[file$Pos == "DST"] <- file$PaAtt[file$Pos == "DST"]
-  file$PaAtt[file$Pos == "DST"] <- NA
-  file$PaCmp[file$Pos == "DST"] <- NA
-
-  ints <- colnames(file[is.element(colnames(file), c("TRUFFLE","Pos","Player","NFL","Opp","Avg","FPts"))==F])
-  file[,ints] <- lapply(file[,ints], as.integer)
-
-  file <- file[, c(24:25, 1, 2, 3, 4, 5:23)]
-
-  return(file)
-}
-fantasyold <- as.data.table(cleanFantasyold(fantasyold))
-
 fantasy <- as.data.table(read_csv("data/fantasy.csv", col_types = cols()))
 #fantasy <- read_excel("data/fantasy2022test.xlsx")
 cleanFantasy <- function(file) {
@@ -156,59 +121,12 @@ cleanRosters <- function(file) {
 rosters <- cleanRosters(rosters)
 
 #file of weekly scoring across NFL
-weeklyold <- read_excel("data/weekly.xlsx")
-#weekly <- read_excel("data/weekly2022test.xlsx")
-cleanWeeklyold <- function(file) {
-  #remove players that didnt play in a week
-  file <- filter(file, is.na(Avg) == F)
-
-  #deselect columns to delete
-  file <- file[, -c(grep("Del", colnames(file)))]
-
-  #modifying player column to parse out positions, teams, and player names
-  file <- add_column(file, Pos = NA, .before = "Player")
-  file <- add_column(file, NFL = NA, .after = "Player")
-  file$NFL <- str_trim(substr(file$Player, as.numeric(gregexpr(pattern = "\\|", file$Player)) + 1, str_length(file$Player)))
-  file$Pos <- str_trim(substr(file$Player, as.numeric(gregexpr(pattern = "\\|", file$Player))-4, as.numeric(gregexpr(pattern = "\\|", file$Player))-2))
-  file$Player <- substr(file$Player, 1, as.numeric(gregexpr(pattern = "\\|", file$Player))-5)
-  file$Player <- str_replace_all(file$Player,"\\.","")
-  file$Player <- str_replace_all(file$Player," Jr","")
-  file$Player <- str_replace_all(file$Player," Sr","")
-  file$Player <- str_replace_all(file$Player," III","")
-  file$Player <- str_replace_all(file$Player," II","")
-  file$Player <- str_replace_all(file$Player,"Will Fuller V","Will Fuller")
-
-  #merge in correct team abbreviations
-  file$TRUFFLE <- NA
-  file <- merge(x = file, y = rosters[ , c("Player", "TRUFFLE")], by = "Player", all.x=TRUE)
-  #replace initial TRUFFLE column with Abbrev's and delete extra column
-  file$TRUFFLE.x <- file$TRUFFLE.y
-  file$TRUFFLE.y <- NULL
-  setnames(file, "TRUFFLE.x", "TRUFFLE")
-  file$TRUFFLE[is.na(file$TRUFFLE)]  <- "FA"
-
-  ints <- colnames(file[is.element(colnames(file), c("TRUFFLE","Pos","Player","NFL","Opp","Avg","FPts"))==F])
-  file[,ints] <- lapply(file[,ints], as.integer)
-
-  file <- file[, c(24:25, 2, 3, 4, 1, 5:23)]
-
-  return(file)
-}
-weeklyold <- as.data.table(cleanWeeklyold(weeklyold))
-weeklyold <- weeklyold[order(-Season,Week,-FPts)][, `:=`(PosRk = 1:.N), by = .(Season, Week, Pos)]
-
-#file of weekly scoring across NFL
 weekly <- as.data.table(read_csv("data/weekly.csv", col_types = cols()))
 cleanWeekly <- function(file) {
   #remove players that didnt play in a week
   file <- filter(file, is.na(Avg) == F)
   
-  file <- merge(x = file, y = rosters[ , c("Player", "TRUFFLE")], by = "Player", all.x=TRUE)
-  #replace initial TRUFFLE column with Abbrev's and delete extra column
-  file$TRUFFLE.x <- file$TRUFFLE.y
-  file$TRUFFLE.y <- NULL
-  setnames(file, "TRUFFLE.x", "TRUFFLE")
-  file$TRUFFLE[is.na(file$TRUFFLE)]  <- "FA"
+  file$TRUFFLE[!(file$TRUFFLE %in% teams$Abbrev)]  <- "FA"
 
   return(file)
 }

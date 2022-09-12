@@ -107,7 +107,7 @@ teamsPd = pd.read_csv("data/teams.csv")
 
 teamsDict = {}
 for index, row in teamsPd.iterrows():
-  teamsDict[row["Logs"]] = row["Abbrev"]  
+  teamsDict[row["LogsScrape"]] = row["Abbrev"]  
 
 
 #returns team abbreviation from team name

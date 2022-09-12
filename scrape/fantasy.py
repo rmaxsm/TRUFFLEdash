@@ -104,11 +104,11 @@ begin_time = datetime.datetime.now()
 
 
 #get information from teams document to refer to for shortcuts ext
-teamsPd = pd.read_csv("dre/teams_copy.csv")
+teamsPd = pd.read_csv("data/teams.csv")
 
 teamsDict = {}
 for index, row in teamsPd.iterrows():
-  teamsDict[row["Logs"]] = row["Abbrev"]  
+  teamsDict[row["LogsScrape"]] = row["Abbrev"]  
 
 #returns team abbreviation from team name
 def getTeamAbbreviation(team):
