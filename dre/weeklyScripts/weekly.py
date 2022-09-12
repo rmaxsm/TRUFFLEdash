@@ -113,7 +113,8 @@ for index, row in teamsPd.iterrows():
 #returns team abbreviation from team name
 def getTeamAbbreviation(team):
   try:
-    if(team == "W "):
+#    if(team == "W "):
+    if("W (" in team):
       ##NEED TO CHECK IF THIS IS WHAT IS CORRECT. WANT SEASON NOT YEAR???
       return "W ({}/{})".format(todays_date.month, todays_date.day) 
     return teamsDict[team]
@@ -162,10 +163,17 @@ cols = separateColumns(label)
 #regex used to find row1/2 (\d means only numbers following exact match of row)
 allRows = tbls.find_all("tr", class_=re.compile("row\d"))
 
+#puffins players (/ logged in users players) display under 'bgFan' in html - locate thusly 
+puffinsRows = tbls.find_all("tr", class_=re.compile("bgFan"))
+
 allPlayers = []
 
 #for every player - clean the row and add to list of lists
 for i in allRows:
+  allPlayers.append(separatePlayers(i))
+#add puffins players too   
+for i in puffinsRows:
+  #print(separatePlayers(i))
   allPlayers.append(separatePlayers(i))
 
 #lamba functions to split player name team and position
@@ -217,6 +225,9 @@ years = [str(i) for i in masterDf["Season"]]
 weeks = [str(i) for i in masterDf["Week"]]
 allWeeksYears = list(zip(years,weeks))
 
+#use current input week year tuple as comparison
+currentWeekYear = (season,week)
+
 #if year week trying to be written already exists print error output - will not write 
 if (currentWeekYear in allWeeksYears):
   print("AN ERROR WAS ENCOUNTERED. YOU ARE TRYING TO WRITE DATA FOR WEEK {} IN SEASON {}.".format(week, season))
@@ -242,6 +253,8 @@ else:
   # print("\n\nscript complete. execution time:")
   # print(datetime.datetime.now() - begin_time)
 
+  #BELOW is a POC. It stores backup but only stores as POC and doesnt append.
+  #WHEN APPENDING.. note the format. its 2021-1 -> 2021-17 ... 2022-1 ->2022-17. appending will be strange. and rethought.
   # stores as csv
   filepath = "dre/weeklyScripts/allScoringWeeklyPOC.csv"
   
