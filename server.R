@@ -1031,7 +1031,7 @@ shinyServer(function(input, output, session) {
                       Age = colDef(minWidth =  40),
                       NFL = colDef(minWidth =  40),
                       Salary = salaryDefNobar(minW = 45, foot = T),
-                      Contract = contractDef(minW = 30, foot = T, filt = F),
+                      Contract = contractDef(minW = 30, foot = T, name = "Yr", filt = F),
                       ptslog = ptsLogDef(maxW = 70),
                       Avg = avgDef(maxW = 45),
                       FPts = fptsSeasDef(maxW = 50)
@@ -2010,6 +2010,49 @@ shinyServer(function(input, output, session) {
                   ))
     })
     
+    #rivheader
+    output$rivheader <- renderReactable({
+      reactable(
+        riv[riv$RivalryName == input$rivalry, c("Team1Full", "Established", "Logo")],
+        sortable = FALSE,
+        compact = TRUE,
+        columns = list(
+          Team1Full = colDef(name = "Teams",
+                            headerStyle = list(color = "#84A4D8", fontSize = 14, fontWeight = 800),
+                            minWidth = 225,
+                            cell = function(value) {
+                              tm2 <- riv$Team2Full[riv$RivalryName == input$rivalry]
+                              col1 <- teams$Primary[teams$FullName == riv$Team1Full[riv$RivalryName == input$rivalry]]
+                              col2 <- teams$Primary[teams$FullName == riv$Team2Full[riv$RivalryName == input$rivalry]]
+                              div(
+                                div(style = list(fontWeight = 800, fontSize=26, color = col1), value),
+                                div(style = list(fontSize = 16), "vs."),
+                                div(style = list(fontWeight = 800, fontSize=26, color = col2), tm2),
+                              )
+                            }
+          ),
+          Established = colDef(name = "Established",
+                               headerStyle = list(color = "#84A4D8", fontSize = 14, fontWeight = 800),
+                               align="center"),
+          Logo = colDef(name = "Logo",
+                        headerStyle = list(color = "#84A4D8", fontSize = 14, fontWeight = 800),
+                        align="center", 
+                        minWidth = 120, 
+                        cell = function(value) {
+                             img_src <- knitr::image_uri(value)
+                             image <- img(src = img_src, height = "100px", alt = value)
+                             tagList(
+                               div(style = list(display = "inline-block"), image)
+                             )
+                           })
+        ),
+        theme = reactableTheme(
+          # Vertically center cells
+          cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")
+        )
+      )
+    })
+    
     #Bench Cup Output
     output$bcgsheet <- renderUI({
       tags$iframe(id = "bcgsheet", 
@@ -2236,6 +2279,7 @@ shinyServer(function(input, output, session) {
         user_input$authenticated <- TRUE
         globalteam <<- toupper(input$user_name)
         updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
+        updateSelectInput(session, 'rivalry', choices = unique(teams$RivalryName), selected = teams$RivalryName[teams$Abbrev == globalteam])
       } else {
         user_input$authenticated <- FALSE
       }

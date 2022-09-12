@@ -201,7 +201,7 @@ dashboardPageUI <-
                                   ),
                                   column(width = 3,
                                          sliderInput("scweekrange", "Weeks",
-                                                     min = 1, max = max(weekly$Week[weekly$Season == max(weekly$Season)]),
+                                                     min = 1, max = 18,
                                                      value = c(1,max(weekly$Week[weekly$Season == max(weekly$Season)])),
                                                      step = 1, round = T)
                                   ),
@@ -249,8 +249,7 @@ dashboardPageUI <-
                                         fluidRow(column(width = 9,
                                                         h2("Trade Machine"),
                                                         p("An interactive, and helpful tool, designed to be a peace offering from the Commissioner for making the rules so complicated."),),
-                                                 column(width = 3#,
-                                                        #selectInput("tmview", "Team View", c("Overview", "Contracts", "Box Score", "Advanced", "Consistency"))
+                                                 column(width = 3
                                                  )
                                         )
                                         
@@ -431,6 +430,28 @@ dashboardPageUI <-
                                                                      reactableOutput('allt2')
                                                               )
                                                             )
+                                                  )
+                                         ), #end tabpanel
+                                         
+                                         tabPanel("Rivalries",
+                                                  wellPanel(
+                                                    sidebarLayout(
+                                                      sidebarPanel(
+                                                        fluidRow(selectInput("rivalry",HTML("<span style=color:#84A4D8;font-size:14px>Select Rivalry:</span>"), unique(teams$RivalryName)), style ="padding-top:10px;padding-left:20px;padding-right:20px;z-index:10000;")
+                                                      ),
+                                                      mainPanel(reactableOutput('rivheader'))
+                                                      
+                                                    ), style = "background-color:#FFFFFF;padding-top:20px"), #end sidebarLayout
+                                                  fluidRow(
+                                                    column(width = 6,
+                                                           wellPanel(class = "well",
+                                                                     h2("History")
+                                                           )
+                                                    ),
+                                                    column(width = 6,
+                                                           wellPanel(class = "well",
+                                                                     h2("Leading Scorers")
+                                                           ))
                                                   )
                                          ), #end tabpanel
                                          

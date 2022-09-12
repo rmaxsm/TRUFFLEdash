@@ -19,16 +19,6 @@ library(crosstalk)
 library(shinyBS)
 library(markdown)
 
-#getting the newly setup ui pages
-source("dashboardPage.R")
-source("loginPage.R")
-
-#password stuff
-num_fails_to_lockout <- 1000
-# credentials <- data.frame(user = c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW"),
-#                           stringsAsFactors = FALSE)
-# saveRDS(credentials, "credentials/credentials.rds")
-
 # setting colors -----
 #colors and global options 
 
@@ -67,22 +57,24 @@ pal <- setNames(pal, c("QB", "RB", "WR", "TE", "DST", "DC", "IR"))
 
 # Reading in and cleaning data from Excels/csvs -----
 
+#file of TRUFFLE team info
+#teams <- read_excel("data/oldexcel/teams.xlsx")
+teams <- read_csv("data/teams.csv", col_types = cols())
+
 #file of CBS player IDs
 ids <- read_csv("data/playerIDs.csv", col_types = cols())
 ids$playerID <- as.character(ids$playerID)
 ids$TRUFFLE[!(ids$TRUFFLE %in% c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW"))] <- "FA"
 ids <- merge(ids, teams[, c("Abbrev", "TeamNum")], by.x = "TRUFFLE", by.y = "Abbrev", all.x = T)
 
-#file of TRUFFLE team info
-teams <- read_excel("data/teams.xlsx")
-
 #file of weekly scoring for players started/active in TRUFFLE
-fantasy <- read_excel("data/fantasy.xlsx")
-cleanFantasy <- function(file) {
+fantasyold <- read_excel("data/fantasy.xlsx")
+#fantasy <- read_excel("data/fantasy2022test.xlsx")
+cleanFantasyold <- function(file) {
   #deselect columns to delete and modify avg
   file <- file[, -c(grep("Del", colnames(file)))]
   file$Avg <- as.numeric(file$Avg)
-  
+
   #modifying player column to parse out positions, teams, and player names
   file <- add_column(file, Pos = NA, .before = "Player")
   file <- add_column(file, NFL = NA, .after = "Player")
@@ -95,58 +87,39 @@ cleanFantasy <- function(file) {
   file$Player <- str_replace_all(file$Player," III","")
   file$Player <- str_replace_all(file$Player," II","")
   file$Player <- str_replace_all(file$Player,"Will Fuller V","Will Fuller")
-  
+
   #making small change for defenses
   file$Avg[file$Pos == "DST"] <- file$PaCmp[file$Pos == "DST"]
   file$FPts[file$Pos == "DST"] <- file$PaAtt[file$Pos == "DST"]
   file$PaAtt[file$Pos == "DST"] <- NA
   file$PaCmp[file$Pos == "DST"] <- NA
-  
+
   ints <- colnames(file[is.element(colnames(file), c("TRUFFLE","Pos","Player","NFL","Opp","Avg","FPts"))==F])
   file[,ints] <- lapply(file[,ints], as.integer)
-  
+
   file <- file[, c(24:25, 1, 2, 3, 4, 5:23)]
+
+  return(file)
+}
+fantasyold <- as.data.table(cleanFantasyold(fantasyold))
+
+fantasy <- as.data.table(read_csv("data/fantasy.csv", col_types = cols()))
+#fantasy <- read_excel("data/fantasy2022test.xlsx")
+cleanFantasy <- function(file) {
+  #deselect columns to delete and modify avg
+  file$Avg <- as.numeric(file$Avg)
   
   return(file)
 }
 fantasy <- as.data.table(cleanFantasy(fantasy))
 
 #file of full season data for players dating back to 2015
-seasons <- read_excel("data/seasons.xlsx")
-cleanSeasons <- function(file) {
-  #deselect columns to delete
-  file <- file[, -c(grep("Del", colnames(file)))]
-  
-  #merge in correct team abbreviations
-  file$TRUFFLE <- NA
-  file$OpRk <- NULL
-  file$Opp <- NULL
-  
-  #modifying player column to parse out positions, teams, and player names
-  file <- add_column(file, G = round(file$FPts/file$Avg), .before = "PaCmp")
-  file <- add_column(file, Pos = NA, .before = "Player")
-  file <- add_column(file, NFL = NA, .after = "Player")
-  file$NFL <- str_trim(substr(file$Player, as.numeric(gregexpr(pattern = "\\|", file$Player)) + 1, str_length(file$Player)))
-  file$Pos <- str_trim(substr(file$Player, as.numeric(gregexpr(pattern = "\\|", file$Player))-4, as.numeric(gregexpr(pattern = "\\|", file$Player))-2))
-  file$Player <- substr(file$Player, 1, as.numeric(gregexpr(pattern = "\\|", file$Player))-5)
-  file$Player <- str_replace_all(file$Player,"\\.","")
-  file$Player <- str_replace_all(file$Player," Jr","")
-  file$Player <- str_replace_all(file$Player," Sr","")
-  file$Player <- str_replace_all(file$Player," III","")
-  file$Player <- str_replace_all(file$Player," II","")
-  file$Player <- str_replace_all(file$Player,"Will Fuller V","Will Fuller")
-  
-  ints <- colnames(file[is.element(colnames(file), c("TRUFFLE","Pos","Player","NFL","Opp","Avg","FPts"))==F])
-  file[,ints] <- lapply(file[,ints], as.integer)
-  
-  file <- file[, c(23, 2:22)]
-  
-  return(file)
-}
-seasons <- as.data.table(cleanSeasons(seasons))
+seasons <- as.data.table(read_csv("data/seasons.csv", col_types = cols()))
+
 
 #import fantasy pros file to use for age
-fprosage <- read_excel("data/fprosage.xlsx")
+#fprosage <- read_excel("data/fprosage.xlsx")
+fprosage <- read_csv("data/fprosage.csv", col_types = cols())
 cleanFprosage <- function(file) {
   file$TIERS <- NULL
   colnames(file) <- c("DynRk", "Player", "NFL", "DynPosRk", "Bye", "AgePH", "SOS", "EcfADP")
@@ -183,14 +156,15 @@ cleanRosters <- function(file) {
 rosters <- cleanRosters(rosters)
 
 #file of weekly scoring across NFL
-weekly <- read_excel("data/weekly.xlsx")
-cleanWeekly <- function(file) {
+weeklyold <- read_excel("data/weekly.xlsx")
+#weekly <- read_excel("data/weekly2022test.xlsx")
+cleanWeeklyold <- function(file) {
   #remove players that didnt play in a week
   file <- filter(file, is.na(Avg) == F)
-  
+
   #deselect columns to delete
   file <- file[, -c(grep("Del", colnames(file)))]
-  
+
   #modifying player column to parse out positions, teams, and player names
   file <- add_column(file, Pos = NA, .before = "Player")
   file <- add_column(file, NFL = NA, .after = "Player")
@@ -203,7 +177,7 @@ cleanWeekly <- function(file) {
   file$Player <- str_replace_all(file$Player," III","")
   file$Player <- str_replace_all(file$Player," II","")
   file$Player <- str_replace_all(file$Player,"Will Fuller V","Will Fuller")
-  
+
   #merge in correct team abbreviations
   file$TRUFFLE <- NA
   file <- merge(x = file, y = rosters[ , c("Player", "TRUFFLE")], by = "Player", all.x=TRUE)
@@ -212,12 +186,30 @@ cleanWeekly <- function(file) {
   file$TRUFFLE.y <- NULL
   setnames(file, "TRUFFLE.x", "TRUFFLE")
   file$TRUFFLE[is.na(file$TRUFFLE)]  <- "FA"
-  
+
   ints <- colnames(file[is.element(colnames(file), c("TRUFFLE","Pos","Player","NFL","Opp","Avg","FPts"))==F])
   file[,ints] <- lapply(file[,ints], as.integer)
-  
+
   file <- file[, c(24:25, 2, 3, 4, 1, 5:23)]
+
+  return(file)
+}
+weeklyold <- as.data.table(cleanWeeklyold(weeklyold))
+weeklyold <- weeklyold[order(-Season,Week,-FPts)][, `:=`(PosRk = 1:.N), by = .(Season, Week, Pos)]
+
+#file of weekly scoring across NFL
+weekly <- as.data.table(read_csv("data/weekly.csv", col_types = cols()))
+cleanWeekly <- function(file) {
+  #remove players that didnt play in a week
+  file <- filter(file, is.na(Avg) == F)
   
+  file <- merge(x = file, y = rosters[ , c("Player", "TRUFFLE")], by = "Player", all.x=TRUE)
+  #replace initial TRUFFLE column with Abbrev's and delete extra column
+  file$TRUFFLE.x <- file$TRUFFLE.y
+  file$TRUFFLE.y <- NULL
+  setnames(file, "TRUFFLE.x", "TRUFFLE")
+  file$TRUFFLE[is.na(file$TRUFFLE)]  <- "FA"
+
   return(file)
 }
 weekly <- as.data.table(cleanWeekly(weekly))
@@ -247,7 +239,9 @@ currentseason <- currentseason[Season == max(weekly$Season),
                                ),
                                by = .(Season, Pos, Player, NFL)]
 
-seasons <- rbind(seasons, currentseason)
+if (max(seasons$Season) != max(currentseason$Season)) {
+  seasons <- rbind(seasons, currentseason)
+}
 seasons <- seasons[order(-Season,-FPts)][, `:=`(PosRk = 1:.N), by = .(Season, Pos)]
 
 #file to indicate what players have rookie rights
@@ -256,6 +250,26 @@ rookierights <- as.vector(rookierights$Player)
 
 #file of upcoming draft order
 draft <- as.data.table(read_excel("data/drafts.xlsx"))
+
+#rivalry scorers
+riv <- as.data.table(read_csv("data/rivalries.csv", col_types = cols()))
+
+rivscores <- as.data.table(read_csv("data/rivalryscores.csv", col_types = cols()))
+rivscores$Winner <- ifelse(rivscores$Team1Score > rivscores$Team2Score, rivscores$Team1, rivscores$Team2)
+
+rivfantasy <- merge(fantasy, rivscores)
+rivfantasy <- rivfantasy[TRUFFLE == Team1 | TRUFFLE == Team2]
+rivscorers <- rivfantasy[,
+          .(G = .N,
+            FPts = sum(FPts, na.rm = T),
+            Avg = round(mean(FPts, na.rm = T),2)),
+          by = .(Rivalry, TRUFFLE, Player)]
+
+turkeyscorers <- rivfantasy[Thanksgiving == 1,
+                        .(G = .N,
+                          FPts = sum(FPts, na.rm = T),
+                          Avg = round(mean(FPts, na.rm = T),2)),
+                        by = .(Rivalry, TRUFFLE, Player)]
 
 # modifying tables for display -----
 
@@ -540,7 +554,7 @@ action_mod <- function(df, team) {
                           ifelse(df$TRUFFLE == "FA", "www/graphics/actions/add.png",
                                  "www/graphics/actions/trade.png"))
   df$ActionLink <- ifelse(df$TRUFFLE == myteam, paste0("https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main?selectedplayer=", df$playerID),
-                              ifelse(df$TRUFFLE == "FA", paste0("https://theradicalultimatefflexperience.football.cbssports.com/players/playerpage/", df$playerID),
+                              ifelse(df$TRUFFLE == "FA", paste0("https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main?default_add=", df$Pos, ":", df$playerID),
                                      paste0("https://theradicalultimatefflexperience.football.cbssports.com/transactions/trade/", df$playerID, "/", df$TeamNum)))
   return(df)
 }
@@ -1034,3 +1048,13 @@ g30pDef <- colDef(header = with_tt(">30 %", "Percentage of Weeks scoring >30 FPt
                   format = colFormat(percent = T, digits = 0),
                   defaultSortOrder = "desc",
                   sortNALast = T)
+
+# Source UI files ----
+source("dashboardPage.R")
+source("loginPage.R")
+
+#password stuff
+num_fails_to_lockout <- 1000
+# credentials <- data.frame(user = c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW"),
+#                           stringsAsFactors = FALSE)
+# saveRDS(credentials, "credentials/credentials.rds")

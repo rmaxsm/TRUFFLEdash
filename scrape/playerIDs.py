@@ -1,5 +1,7 @@
-#this is a python script.
-#currently POC concept. 
+'''
+this is a python script. It will ask for the week/season then create 
+a csv file with the unique playerID,Player,Pos,NFL,TRUFFLE(team)
+'''
 
 import os
 import requests
@@ -8,7 +10,6 @@ import pandas as pd
 import numpy as np
 import re
 from bs4 import BeautifulSoup
-from bs4 import NavigableString
 
 
 #below are 'keys' of some sort from copy and pasting - unclear how they fit in left for reference
@@ -82,42 +83,43 @@ headers = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36',
 }
 
+
+#get year and week for url/formatting
+# season = input("What SEASON is it..? ")
+# while(len(season) != 4):
+#   print("get the SEASON right dumbass")
+#   season = input("What SEASON is it..? ")
+# 
+# week = input("What WEEK is it..? ")
+# while(len(week) >= 3):
+#   print("get the week right dumbass")
+#   week = input("What WEEK is it..? ")
+season = 2022
+week = 1
+
+
+begin_time = datetime.datetime.now()
+todays_date = datetime.datetime.today()
+
 #get information from teams document to refer to for shortcuts ext
 teamsPd = pd.read_csv("data/teams.csv")
 
 teamsDict = {}
 for index, row in teamsPd.iterrows():
-  teamsDict[row["FullName"]] = row["Abbrev"]  
+  teamsDict[row["LogsScrape"]] = row["Abbrev"]  
+
 
 #returns team abbreviation from team name
 def getTeamAbbreviation(team):
   try:
     waived =  re.compile("W ")
     if(waived.match(team)):
-      return team
+      return team 
     return teamsDict[team]
   except Exception as exp:
-    print("An Error Occuring while trying to get the team abbreviation for " + team)
+    print(exp)
+    print("An Error occured while trying to get the team abbreviation for " + team)
     return "err"
-  
-#takes in a single row of html and returns the stats as list (for players/dst)
-def separatePlayers(rows):
-  curRow = []
-  for i in rows:
-    curRow.append(i.getText())
-  return curRow
-
-#takes in a single row of html and returns the stats as list deadcap players only
-def separatePlayersDeadCap(rows):
-  itr = 0
-  curRow = []
-  for i in rows:
-    if itr == 0:
-      curRow.append("DC")
-    else:
-      curRow.append(i.getText())
-    itr += 1
-  return curRow
 
 #separates the column names
 #returns list representing the columns for tables 
@@ -125,97 +127,114 @@ def separateColumns(row):
   allCols = []
   for i in row:
     allCols.append(i.getText())
-  allCols[1] = "Player"
+  allCols[1] = "TRUFFLE"
   return allCols
 
-getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
-getPosition = lambda y: pd.Series([i for i in y.split(" ")][-1])
-getPlayer = lambda z: pd.Series(' '.join([i for i in z.split(" ")][:-1]))
-  
+#takes in a single row of html and returns the stats as list (for players/dst)
+def separatePlayers(rows):
+  itr = 0
+  curRow = []
+  for i in rows:
+    if itr == 0:    #first value always empty string
+      #adding player id numbers as temp
+      test = str(i.find_all("div")[0])
+      actionId = test.split("_")[1]
+      curRow.append(actionId.split('\"')[0])
+
+    elif itr == 1:    #second value convert to team abbreviation
+      curRow.append(getTeamAbbreviation(i.getText()))
+    else:       #after first two iterations just get exact data from source
+      curRow.append(i.getText())
+    itr += 1
+  return curRow
+
 #where the connection is made to the truffle cbs website
-url = "https://theradicalultimatefflexperience.football.cbssports.com/teams/all"
+url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:FLEX/period-{}:p/TRUFFLEoffense/?print_rows=9999".format(week)
+
 response = requests.get(url, cookies=cookies, headers=headers)
 soup = BeautifulSoup(response.content, 'html.parser')
 
+
 # complete =  soup.find("div", {"id": "sortableStats"})
-tbls =  soup.findAll("table", {"class":"data data3 pinHeader borderTop"})
-dfGlobal = pd.DataFrame()
-counter = 0
+tbls =  soup.find("table", {"class":"data pinHeader"})
+combined = tbls.find_all("tr", class_="label")
+label = combined[1]
 
-for tbl in tbls:
-  # print(tbl.prettify())
-  tableRows = tbl.findAll('tr')
-  
-  teamName = ""
-  cols = []
-  players = []
-  
-  for row in tableRows:
-    if row.has_attr('class') and row['class'][0] == "title":
-      # print("THIS IS THE TEAM NAME")
-      nameSplit = row.getText().split(" ")
-      nameSplit.pop()
-      teamName = ' '.join(nameSplit)
-    elif row.has_attr('class') and row['class'][0] == "label" and len(row['class']) == 1:
-      # print("THIS IS THE COLUMN HEADERS")
-      cols = separateColumns(row)
-    elif row.has_attr('class') and row['class'][0] == "playerRow" and len(row['class']) == 2:
-      # print("THESE ARE ALL THE STARTING PLAYERS")
-      players.append(separatePlayers(row))
-    elif row.has_attr('class') and row['class'][0] == "playerRow" and len(row['class']) == 3:
-      # print("THESE ARE ALL THE BENCHED PLAYERS")
-      playerName = row.find('a').getText()
-      if (playerName.split(" ")[-1] == "Cap"):
-        players.append(separatePlayersDeadCap(row))
-      else:
-        players.append(separatePlayers(row))
+#connect to defense to get all dst stats - uses same logic to clean as anything else - could be not repeated code probably lol
+urlDef = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:DST/period-{}:p/TRUFFLEoffense/?print_rows=99".format(week)
 
-  dfTeam = pd.DataFrame(players, columns = cols)
-  dfTeam["TRUFFLE"] = getTeamAbbreviation(teamName)
-  
-  #apply lambda fcts to correct columns
-  playerTeam = dfTeam["Player"].apply(getNFLTeam)
-  position = playerTeam[0].apply(getPosition)
-  player =  playerTeam[0].apply(getPlayer)
-  nfl = pd.Series(playerTeam[1])
-  
-  #add/remove columns for TRUFFLE formatting
-  dfTeam["Player"] = player
-  #dfTeam.insert(0,"Season", season)
-  #dfTeam.insert(1,"Week", week)
-  dfTeam.insert(1,"PosTRUFFLE", position[0])
-  dfTeam.insert(3,"NFL", nfl)
-  
-  dfTeam['Player'] = dfTeam['Player'].str.replace(r'.', '', regex=True)
-  dfTeam['Player'] = dfTeam['Player'].str.replace(r' Jr', '', regex=True)
-  dfTeam['Player'] = dfTeam['Player'].str.replace(r' Sr', '', regex=True)
-  dfTeam['Player'] = dfTeam['Player'].str.replace(r' III', '', regex=True)
-  dfTeam['Player'] = dfTeam['Player'].str.replace(r' II', '', regex=True)
-  dfTeam['Player'] = dfTeam['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
+responseDef = requests.get(urlDef, cookies=cookies, headers=headers)
+soupDef = BeautifulSoup(responseDef.content, 'html.parser')
 
-  if counter == 0:
-    dfGlobal = dfTeam
-  else:
-    dfGlobal = pd.concat([dfGlobal, dfTeam], ignore_index = True)
-  counter += 1
-  
-  
-for index, row in dfGlobal.loc[~(dfGlobal['Pos'] == dfGlobal['PosTRUFFLE'])].iterrows():
-  if row['Pos'] == "DC":
-    # print("DEAD CAP HARD CODE ASSIGN")
-    dfGlobal.at[index, 'Pos'] = "DC"
-  else:
-    # print("NEED TO ASSIGN THE Pos = PosTRUFFLE")
-    dfGlobal.at[index, 'Pos'] = row['PosTRUFFLE']
-    
-#shifting/deleting/sorting columns for formatting
-truffle = dfGlobal.pop("TRUFFLE")
-dfGlobal.insert(2,"TRUFFLE", truffle)
-dfGlobal = dfGlobal.drop(["PosTRUFFLE"], axis=1)
-# dfGlobal = dfGlobal.sort_values(by=['TRUFFLE'])
+tblsDef =  soupDef.find("table", {"class":"data pinHeader"})
+combinedDef = tblsDef.find_all("tr", class_="label")
+labelDef = combinedDef[1]
 
-#create roster backup
-shutil.copyfile("data/rosters.csv", "data/backup/rosters_backup.csv")
+#calls function to clean column headers stored as cols (used in pandas df)
+cols = separateColumns(label)
 
-#save final csv
-dfGlobal.to_csv("data/rosters.csv", index = False)
+#regex used to find row1/2 (\d means only numbers following exact match of row)
+allRows = tbls.find_all("tr", class_=re.compile("row\d"))
+#html is different for 'owned' teams. Metadata should always load puffins. 
+allPuffins = tbls.find_all("tr", class_="bgFan")
+
+
+#calls function to clean column headers stored as cols (used in pandas df)
+colsDef = separateColumns(labelDef)
+
+#regex used to find row1/2 (\d means only numbers following exact match of row)
+allRowsDef = tblsDef.find_all("tr", class_=re.compile("row\d"))
+#html is different for 'owned' teams. Metadata should always load puffins. 
+allPuffinsDef = tblsDef.find_all("tr", class_="bgFan")
+
+#for every player - clean the row and add to list of lists
+allPlayers = [separatePlayers(i) for i in allRows]
+
+#add def and puffins players to the master player list
+allPlayers.extend([separatePlayers(i) for i in allPuffins])
+allPlayers.extend([separatePlayers(i) for i in allRowsDef])
+allPlayers.extend([separatePlayers(i) for i in allPuffinsDef])
+
+#lamba functions to split player name team and position
+getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
+getPosition = lambda y: pd.Series([i for i in y.split(" ")][-1])
+getPlayer = lambda z: pd.Series(' '.join([i for i in z.split(" ")][:-1]))
+
+#pandas df to represent team
+df = pd.DataFrame(allPlayers, columns=cols)
+
+#apply lambda fcts to correct columns
+playerTeam = df["Player"].apply(getNFLTeam)
+position = playerTeam[0].apply(getPosition)
+player =  playerTeam[0].apply(getPlayer)
+nfl = pd.Series(playerTeam[1])
+
+
+#add/remove columns for TRUFFLE formatting
+df = df.drop(["Bye","Rost", "Start"],axis=1)
+df["Player"] = player
+df.insert(0,"Season", season)
+df.insert(1,"Week", week)
+df.insert(3,"Pos", position[0])
+df.insert(5,"NFL", nfl)
+
+df['Player'] = df['Player'].str.replace(r'.', '', regex=True)
+df['Player'] = df['Player'].str.replace(r' Jr', '', regex=True)
+df['Player'] = df['Player'].str.replace(r' Sr', '', regex=True)
+df['Player'] = df['Player'].str.replace(r' III', '', regex=True)
+df['Player'] = df['Player'].str.replace(r' II', '', regex=True)
+df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
+
+playerDb = df[["Action", "Player", "Pos", "NFL", "TRUFFLE"]]
+playerDb = playerDb.rename(columns={"Action": "playerID"})
+playerDb = playerDb.sort_values(by=['Player','Pos'])
+
+df = df.drop(columns=["Action"])
+
+#print(playerDb)
+
+#create playerIDs backup
+shutil.copyfile("data/playerIDs.csv", "data/backup/playerIDs_backup.csv")
+
+playerDb.to_csv("data/playerIDs.csv", index=False)
+
