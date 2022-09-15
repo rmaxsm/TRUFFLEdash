@@ -261,15 +261,19 @@ else:
   
   shutil.copyfile(masterFile, masterPath+"fantasy_backup.csv")
   print("Backup created at location {}".format(masterPath+"fantasy_backup.csv"))
-  #add newline to end of file - fixes error of writing into last cell instead of new row
-  file_object = open(masterFile, 'a')
-  file_object.write('\n')
-  file_object.close()
-
-  # append data frame to CSV file
-  dfGlobal.to_csv(masterFile, mode='a', index=False, header=False)
+  # #add newline to end of file - fixes error of writing into last cell instead of new row
+  # file_object = open(masterFile, 'a')
+  # file_object.write('\n')
+  # file_object.close()
+  # 
+  # # append data frame to CSV file
+  # dfGlobal.to_csv(masterFile, mode='a', index=False, header=False)
+  # 
+  # print("Data appended successfully at location {}.".format(masterFile))
   
-  print("Data appended successfully at location {}.".format(masterFile))
+  #this line will need to be removed. using as POC
+  dfGlobal.to_csv("dre/weeklyScripts/fantasy_1.csv", index=False)
+  
   print(dfGlobal)
   print("\n\nFantasy script complete. execution time:")
   print(datetime.datetime.now() - begin_time)
