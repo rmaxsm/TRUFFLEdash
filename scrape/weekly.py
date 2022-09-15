@@ -214,13 +214,13 @@ df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=T
 
 df = df.sort_values(by="FPts", ascending = False)
 
-masterPath = "data/backup/"
 masterFile = "data/weekly.csv"
 
 #read the existing csv as a pd df for error checking
 masterDf = pd.read_csv(masterFile)
 #create backup copy
-shutil.copyfile(masterFile, masterPath+"weekly_backup.csv")
+filepath = "data/backup/weekly_backup.csv"
+masterDf.to_csv(filepath, index=False)
 
 #reassign the columns to be equal to that of the existing csv
 df.columns = masterDf.columns

@@ -148,7 +148,7 @@ getPlayer = lambda z: pd.Series(' '.join([i for i in z.split(" ")][:-1]))
 
 for index, row in teamsPd.iterrows():
 
-  teamNum = row["TeamNumber"]
+  teamNum = row["TeamNum"]
   #where the connection is made to the truffle cbs website
   url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/team:{}/period-{}:f/TRUFFLEoffense/".format(teamNum,week)
   response = requests.get(url, cookies=cookies, headers=headers)
@@ -224,12 +224,12 @@ for index, row in teamsPd.iterrows():
 
 #dfGlobal = dfGlobal.replace('', "NA", regex = True)
 
-masterPath = "data/backup/"
 masterFile = "data/fantasy.csv"
 
 #read the existing csv as a pd df for error checking
 masterDf = pd.read_csv(masterFile)
-shutil.copyfile(masterFile, masterPath+"fantasy_backup.csv")
+filepath = "data/backup/fantasy_backup.csv"
+masterDf.to_csv(filepath, index=False)
 
 #reassign the columns to be equal to that of the existing csv
 dfGlobal.columns = masterDf.columns

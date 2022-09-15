@@ -215,7 +215,15 @@ dfGlobal = dfGlobal.drop(["PosTRUFFLE"], axis=1)
 # dfGlobal = dfGlobal.sort_values(by=['TRUFFLE'])
 
 #create roster backup
-shutil.copyfile("data/rosters.csv", "data/backup/rosters_backup.csv")
+#read the existing csv as a pd df for error checking
+masterDf = pd.read_csv("data/rosters.csv")
+#create backup copy
+filepath = "data/backup/rosters_backup.csv"
+masterDf.to_csv(filepath, index=False)
 
 #save final csv
 dfGlobal.to_csv("data/rosters.csv", index = False)
+
+print(dfGlobal)
+print("\n\nscript complete. execution time:")
+print(datetime.datetime.now() - begin_time)

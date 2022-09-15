@@ -234,7 +234,15 @@ df = df.drop(columns=["Action"])
 #print(playerDb)
 
 #create playerIDs backup
-shutil.copyfile("data/playerIDs.csv", "data/backup/playerIDs_backup.csv")
+#read the existing csv as a pd df for error checking
+masterDf = pd.read_csv("data/playerIDs.csv")
+#create backup copy
+filepath = "data/backup/playerIDs_backup.csv"
+masterDf.to_csv(filepath, index=False)
 
+#save file
 playerDb.to_csv("data/playerIDs.csv", index=False)
 
+print(playerDb)
+print("\n\nscript complete. execution time:")
+print(datetime.datetime.now() - begin_time)
