@@ -160,7 +160,7 @@ currentseason <- currentseason[Season == max(weekly$Season),
 if (max(seasons$Season) != max(currentseason$Season)) {
   seasons <- rbind(seasons, currentseason)
 }
-seasons <- seasons[order(-Season,-FPts)][, `:=`(PosRk = 1:.N), by = .(Season, Pos)]
+seasons <- seasons[order(-Season,-FPts, -Avg)][, `:=`(PosRk = 1:.N), by = .(Season, Pos)]
 
 #file to indicate what players have rookie rights
 rookierights <- read_excel("data/rookierights.xlsx")
@@ -248,7 +248,7 @@ pointsleaders <- weekly[,
                         .(ptslogs = list(FPts),
                           Avg = round(mean(FPts),1),
                           Total = round(sum(FPts))),
-                        by = .(Season, TRUFFLE, Pos, Player)][order(-Season, match(Pos, positionorder), -Total)][, `:=`(PosRk = 1:.N), by = .(Season, Pos)][, c("Season", "TRUFFLE", "Player", "Pos", "PosRk", "ptslogs", "Avg", "Total")][order(-Total)]
+                        by = .(Season, TRUFFLE, Pos, Player)][order(-Season, match(Pos, positionorder), -Total, -Avg)][, `:=`(PosRk = 1:.N), by = .(Season, Pos)][, c("Season", "TRUFFLE", "Player", "Pos", "PosRk", "ptslogs", "Avg", "Total")][order(-Total, -Avg)]
 
 ppbios <- weekly[order(-Season,-Week)]
 ppbios <- ppbios[,

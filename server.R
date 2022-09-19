@@ -83,7 +83,7 @@ shinyServer(function(input, output, session) {
     output$homepointsleaders <- renderReactable({
         reactable(pointsleaders[Season == input$homeseason, c("TRUFFLE", "Pos", "Player", "PosRk", "ptslogs", "Avg", "Total")],
                   height = 420,
-                  defaultSorted = c("Total"),
+                  defaultSorted = c("Total", "Avg"),
                   defaultSortOrder = "desc",
                   filterable = T,
                   showPageInfo = FALSE,
