@@ -160,6 +160,7 @@ currentseason <- currentseason[Season == max(weekly$Season),
 if (max(seasons$Season) != max(currentseason$Season)) {
   seasons <- rbind(seasons, currentseason)
 }
+
 seasons <- seasons[order(-Season,-FPts, -Avg)][, `:=`(PosRk = 1:.N), by = .(Season, Pos)]
 
 #file to indicate what players have rookie rights
