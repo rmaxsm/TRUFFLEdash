@@ -88,7 +88,7 @@ shinyServer(function(input, output, session) {
                   filterable = T,
                   showPageInfo = FALSE,
                   defaultPageSize = 10,
-                  paginationType = 'jump',
+                  paginationType = 'simple',
                   highlight = T,
                   #borderless = T,
                   compact = T,
@@ -116,7 +116,8 @@ shinyServer(function(input, output, session) {
                   defaultSortOrder = "desc",
                   filterable = F,
                   showPageInfo = FALSE,
-                  pagination = F,
+                  defaultPageSize = 10,
+                  paginationType = 'simple',
                   highlight = T,
                   #borderless = T,
                   compact = T,
@@ -124,7 +125,7 @@ shinyServer(function(input, output, session) {
                   columns = list(
                       TRUFFLE = trfDef(filt = FALSE),
                       Player = playerDef(minW = 125, filt = F, sort = F),
-                      FPts = fptsWeekDef(maxW = 50, borderL = F)
+                      FPts = fptsWeekDef(maxW = 40, borderL = F)
                   ),
                   columnGroups = list(colGroup(name = "QB", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
         )
@@ -136,7 +137,8 @@ shinyServer(function(input, output, session) {
                   defaultSortOrder = "desc",
                   filterable = F,
                   showPageInfo = FALSE,
-                  pagination = F,
+                  defaultPageSize = 10,
+                  paginationType = 'simple',
                   highlight = T,
                   #borderless = T,
                   compact = T,
@@ -144,7 +146,7 @@ shinyServer(function(input, output, session) {
                   columns = list(
                       TRUFFLE = trfDef(filt = FALSE),
                       Player = playerDef(minW = 125, filt = F, sort = F),
-                      FPts = fptsWeekDef(maxW = 50, borderL = F)
+                      FPts = fptsWeekDef(maxW = 40, borderL = F)
                   ),
                   columnGroups = list(colGroup(name = "RB", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
         )
@@ -156,7 +158,8 @@ shinyServer(function(input, output, session) {
                   defaultSortOrder = "desc",
                   filterable = F,
                   showPageInfo = FALSE,
-                  pagination = F,
+                  defaultPageSize = 10,
+                  paginationType = 'simple',
                   highlight = T,
                   #borderless = T,
                   compact = T,
@@ -164,7 +167,7 @@ shinyServer(function(input, output, session) {
                   columns = list(
                       TRUFFLE = trfDef(filt = FALSE),
                       Player = playerDef(minW = 125, filt = F, sort = F),
-                      FPts = fptsWeekDef(maxW = 50, borderL = F)
+                      FPts = fptsWeekDef(maxW = 40, borderL = F)
                   ),
                   columnGroups = list(colGroup(name = "WR", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
         )
@@ -176,7 +179,8 @@ shinyServer(function(input, output, session) {
                   defaultSortOrder = "desc",
                   filterable = F,
                   showPageInfo = FALSE,
-                  pagination = F,
+                  defaultPageSize = 10,
+                  paginationType = 'simple',
                   highlight = T,
                   #borderless = T,
                   compact = T,
@@ -184,7 +188,7 @@ shinyServer(function(input, output, session) {
                   columns = list(
                       TRUFFLE = trfDef(filt = FALSE),
                       Player = playerDef(minW = 125, filt = F, sort = F),
-                      FPts = fptsWeekDef(maxW = 50, borderL = F)
+                      FPts = fptsWeekDef(maxW = 40, borderL = F)
                   ),
                   columnGroups = list(colGroup(name = "TE", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
         )

@@ -247,7 +247,7 @@ teamsfantasy <- teamsfantasyweekly[,
 pointsleaders <- weekly[,
                         .(ptslogs = list(FPts),
                           Avg = round(mean(FPts),1),
-                          Total = round(sum(FPts))),
+                          Total = round(sum(FPts),1)),
                         by = .(Season, TRUFFLE, Pos, Player)][order(-Season, match(Pos, positionorder), -Total, -Avg)][, `:=`(PosRk = 1:.N), by = .(Season, Pos)][, c("Season", "TRUFFLE", "Player", "Pos", "PosRk", "ptslogs", "Avg", "Total")][order(-Total, -Avg)]
 
 ppbios <- weekly[order(-Season,-Week)]
@@ -306,9 +306,9 @@ consistency <- consistencystart[, `:=` (
    ),
    by = .(Season ,TRUFFLE, Pos, Player)][order(-Avg)][, c("Season","TRUFFLE","Pos","Player","Avg","RelSD",">10 %",">20 %",">30 %","AvgPosRk","Top5 %","Top12 %","Top24 %","Top36 %", "NonStart %")]
 
-weeklytop5 <- weekly[, c("Season", "Week", "TRUFFLE", "Pos", "Player", "FPts")][order(Week,-FPts)][, .(TRUFFLE = TRUFFLE[1:5],
-                                                                                                       Player = Player[1:5],
-                                                                                                       FPts = FPts[1:5]), 
+weeklytop5 <- weekly[, c("Season", "Week", "TRUFFLE", "Pos", "Player", "FPts")][order(Week,-FPts)][, .(TRUFFLE = TRUFFLE[1:30],
+                                                                                                       Player = Player[1:30],
+                                                                                                       FPts = FPts[1:30]), 
                                                                                                    by = .(Season,Week, Pos)][, .(Season,Week,TRUFFLE,Pos,Player,FPts)]
 
 weeklytop5qb <- weeklytop5[Pos == "QB"]
@@ -647,7 +647,7 @@ avgDef <- function(maxW = 65, digs = 1, filt = F, col = T, borderL = F) {
 
 fptsWeekDef <- function(maxW = 65, borderL = T, digs = 1, filt = F, col = T) {
   colDef(header = with_tt("FPts", "Fantasy points"),
-         maxWidth = 65,
+         maxWidth = maxW,
          format = colFormat(digits = digs),
          filterable = filt,
          defaultSortOrder = "desc",
