@@ -121,8 +121,11 @@ def separatePlayers(rows):
     itr += 1
   curRow.append("QB")
   return curRow
+
+#using scraped data create columns/players then combine into pandas dataframe :)
+
+
 colHeaders = separateColumns(headers)
-print(colHeaders)
 
 allPlayers = []
 #regex used to find row1/2 (\d means only numbers following exact match of row)
