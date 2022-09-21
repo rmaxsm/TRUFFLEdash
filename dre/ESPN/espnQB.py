@@ -135,4 +135,7 @@ for i in allRows:
 
 #pandas df to represent team
 df = pd.DataFrame(allPlayers, columns=colHeaders)
+df = df.drop(columns=["FORP","G", "P Yds", "P TD", "R Yds", "R TD"])
+df = df.loc[:, ["Player","NFL","Pos","xFP","ActualPts"]]
 print(df)
+df.to_pickle("dre/ESPN/qb.pkl")
