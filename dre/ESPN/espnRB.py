@@ -81,7 +81,7 @@ headers = {
     'If-None-Match': 'W/512483eb531a053b813e1053b334fca28b487287',
 }
 
-response = requests.get('https://www.espn.com/fantasy/insider/football/insider/story/_/id/34586183/fantasy-football-2022-expected-fantasy-points-xfp-leaderboard-qbs', cookies=cookies, headers=headers)
+response = requests.get('https://www.espn.com/fantasy/insider/football/insider/story/_/id/34586341/fantasy-football-2022-expected-fantasy-points-xfp-leaderboard-rbs', cookies=cookies, headers=headers)
 soup = BeautifulSoup(response.content, 'html.parser')
 
 complete =  soup.find("section", {"id": "article-feed"})
@@ -119,26 +119,25 @@ def separatePlayers(rows, idx):
       if len(i.getText()) > 0:
         curRow.append(i.getText())
     itr += 1
-  curRow.append("QB")
+  curRow.append("RB")
   return curRow
 
 #using scraped data create columns/players then combine into pandas dataframe :)
 
-
 colHeaders = separateColumns(headers)
+allRBS = []
 
-allPlayers = []
 allRows = tbls.find_all("tr", class_="last")
 
 players = tbls.find_all("a")    # this is a key to get the player names. was a nice fix for a huge pain.
 allNames = [i.getText() for i in players]
 
 for i in range(len(allRows)):
-  allPlayers.append(separatePlayers(allRows[i], i))
+  allRBS.append(separatePlayers(allRows[i], i))
 
 #pandas df to represent team
-df = pd.DataFrame(allPlayers, columns=colHeaders)
-df = df.drop(columns=["FORP","G", "P Yds", "P TD", "R Yds", "R TD"])
+df = pd.DataFrame(allRBS, columns=colHeaders)
+df = df.drop(columns=["FORP","G", "Ru Yd", "Ru TD", "Rec", "Re Yd", "Re TD"])
 df = df.loc[:, ["Player","NFL","Pos","xFP","ActualPts"]]
 print(df)
-df.to_pickle("dre/ESPN/qb.pkl")
+df.to_pickle("dre/ESPN/rb.pkl")
