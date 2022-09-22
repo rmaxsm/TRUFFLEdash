@@ -14,8 +14,6 @@ def separateColumns(row):
         allCols.append(i.getText().split(".")[1].strip())
       else:
         allCols.append(i.getText())
-  allCols.insert(1, "NFL")
-  allCols.append("Pos")
   return allCols
 
 #takes in a single row of html and returns the stats as list
@@ -24,16 +22,12 @@ def separatePlayers(rows, idx, namesArray):
   curRow = []
   for i in rows:
     if itr == 0:
-      test = i.getText().split(",")
-      if len(test) > 1:
-        #need the idx field for this. workaround is weird ik..
-        curRow.append(namesArray[idx])
-        curRow.append(test[1].strip())
+      test = i.getText().split(". ")
+      curRow.append(namesArray[idx])
     else:
       if len(i.getText()) > 0:
         curRow.append(i.getText())
     itr += 1
-  curRow.append("WR")
   return curRow
 
 def runXTD():
@@ -130,22 +124,22 @@ def runXTD():
   
   players = tbls.find_all("a")    # this is a key to get the player names. was a nice fix for a huge pain.
   allNames = [i.getText() for i in players]
-
+  # print(allNames)
   for i in range(len(allRows)):
     allPlayers.append(separatePlayers(allRows[i], i, allNames))
+    
+  # print(allPlayers)
   #pandas df to represent team
-
-  # df = pd.DataFrame(allPlayers, columns=colHeaders)
+  df = pd.DataFrame(allPlayers, columns=colHeaders)
   # df = df.drop(columns=["FORP","G", "Rec", "Yds", "TD"])
   # df = df.loc[:, ["Player","NFL","Pos","xFP","Actual Pts"]]
   # df = df.rename(columns={"Actual Pts" : "ActualPts"})
-  # print(df)
-  # df.to_pickle("dre/ESPN/xtd.pkl")
+  print(df)
+  df.to_pickle("dre/ESPN/xtd.pkl")
   
   
 def main():
-  print("XTD DOESNT REALLY WORK STILL.. NEED TO GET PLAYER NAMES IN NEW WAY")
-  print("NOTHING BEING SAVED CURRENTLY")
+  print("XTD WARNING: NOT GETTING POSITION OR TEAM. PLAYER NAME ONLY")
   runXTD()
   print("XTD DONE")
   
