@@ -503,6 +503,7 @@ actionDef <- colDef(header = with_tt("Act", "Drop players on your team\nTrade fo
 
 trfDef <- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE) {
   colDef(name = name,
+         aggregate = "unique",
          maxWidth = maxW,
          filterable = filt,
          sortable = sort,

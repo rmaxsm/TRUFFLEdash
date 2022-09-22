@@ -488,7 +488,7 @@ shinyServer(function(input, output, session) {
     })
     
     #player portal ----
-    #player portal bio
+    #player portal bios
     output$ppbios <- renderReactable({
       ppbios <- action_mod(df = ppbios, team = globalteam)
       selectedplayers <- ppbios[Player %in% input$player][order(-Salary)]
