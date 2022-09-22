@@ -42,7 +42,7 @@ def separateColumns(row):
   # allCols[1] = "Player"
   return allCols
 
-def getExtraDash():
+def getRedZone():
   
   cookies = {
     'ppid': 'bf794872c9de88772307c75ceb0df52d',
@@ -115,71 +115,89 @@ def getExtraDash():
     
   
   #where the connection is made to the truffle cbs website
-  url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:QB:RB:WR:TE:RB-WR-TE:FLEX/ytd:p/ExtraDash/?print_rows=9999"
+  url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/redzone/all:QB:RB:WR:TE/season:p/standard"
   response = requests.get(url, cookies=cookies, headers=headers)
-  soup = BeautifulSoup(response.content, 'html.parser')
+  soup = BeautifulSoup(response.content, 'lxml')
+  print(soup)
   
-  complete =  soup.find("div", {"id": "sortableStats"})
-  tbls = complete.find("table")
-  headers = tbls.find_all("th")
   
-  colHeaders = separateColumns(headers)
+  script_blocks = soup.find_all('script', {'type': 'text/javascript'})
+  print(script_blocks)
+  for i in script_blocks:
+    print("UHH")
+    print(i)
+  
+  
+  # complete =  soup.find("table", {"id": "tableContainer-0"})
+  # complete =  soup.find_all("div")
+  # for item in complete:
+  #   print("?")
+  #   print(item)
+  # # tbl = complete[0].find_all("div")
+  # 
+  # print(type(complete))
+  # print(tbl)
 
-  #regex used to find row1/2 (\d means only numbers following exact match of row)
-  allRows = tbls.find_all("tr", class_=re.compile("row\d"))
-  #html is different for 'owned' teams. Metadata should always load puffins. 
-  allPuffins = tbls.find_all("tr", class_="bgFan")
-  
-  
-  #for every player - clean the row and add to list of lists
-  allPlayers = []
-  allPlayers = [separatePlayers(i) for i in allRows]
-  
-  #add puffins players to the master player list
-  allPlayers.extend([separatePlayers(i) for i in allPuffins])
-  
-  # print(allPlayers)
-  
-  #lamba functions to split player name team and position
-  getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
-  getPosition = lambda y: pd.Series([i for i in y.split(" ")][-1])
-  getPlayer = lambda z: pd.Series(' '.join([i for i in z.split(" ")][:-1]))
-  
-  #pandas df to represent team
-  df = pd.DataFrame(allPlayers, columns=colHeaders)
-  
-  #apply lambda fcts to correct columns
-  playerTeam = df["Player"].apply(getNFLTeam)
-  position = playerTeam[0].apply(getPosition)
-  player =  playerTeam[0].apply(getPlayer)
-  nfl = pd.Series(playerTeam[1])
-   
-  # #add/remove columns for TRUFFLE formatting
-  df = df.drop(["Bye","Rost", "Start"],axis=1)
-  df["Player"] = player
-  # df.insert(0,"Season", season)
-  # df.insert(1,"Week", week)
-  df.insert(3,"Pos", position[0])
-  df.insert(5,"NFL", nfl)
-  
-  
-  df['Player'] = df['Player'].str.replace(r'.', '', regex=True)
-  df['Player'] = df['Player'].str.replace(r' Jr', '', regex=True)
-  df['Player'] = df['Player'].str.replace(r' Sr', '', regex=True)
-  df['Player'] = df['Player'].str.replace(r' III', '', regex=True)
-  df['Player'] = df['Player'].str.replace(r' II', '', regex=True)
-  df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
-  
-  df['Avail'] = df.apply(lambda x: getTeamAbbreviation(x['Avail']), axis=1)
-  
-  df = df.drop(columns=["Action", "Opp", "OVP"])
-  df = df.rename(columns={"Avail": "TRUFFLE"})
-  
-  df.to_csv("dre/CBS/extraDash.csv", index=False)
-  print("\nTRUFFLE EXTRA DASH SAVED TO dre/CBS/extraDash.csv")
+  # tbls = complete.find("table")
+  # headers = tbls.find_all("th")
+  # 
+  # colHeaders = separateColumns(headers)
+  # 
+  # #regex used to find row1/2 (\d means only numbers following exact match of row)
+  # allRows = tbls.find_all("tr", class_=re.compile("row\d"))
+  # #html is different for 'owned' teams. Metadata should always load puffins. 
+  # allPuffins = tbls.find_all("tr", class_="bgFan")
+  # 
+  # 
+  # #for every player - clean the row and add to list of lists
+  # allPlayers = []
+  # allPlayers = [separatePlayers(i) for i in allRows]
+  # 
+  # #add puffins players to the master player list
+  # allPlayers.extend([separatePlayers(i) for i in allPuffins])
+  # 
+  # # print(allPlayers)
+  # 
+  # #lamba functions to split player name team and position
+  # getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
+  # getPosition = lambda y: pd.Series([i for i in y.split(" ")][-1])
+  # getPlayer = lambda z: pd.Series(' '.join([i for i in z.split(" ")][:-1]))
+  # 
+  # #pandas df to represent team
+  # df = pd.DataFrame(allPlayers, columns=colHeaders)
+  # 
+  # #apply lambda fcts to correct columns
+  # playerTeam = df["Player"].apply(getNFLTeam)
+  # position = playerTeam[0].apply(getPosition)
+  # player =  playerTeam[0].apply(getPlayer)
+  # nfl = pd.Series(playerTeam[1])
+  #  
+  # # #add/remove columns for TRUFFLE formatting
+  # df = df.drop(["Bye","Rost", "Start"],axis=1)
+  # df["Player"] = player
+  # # df.insert(0,"Season", season)
+  # # df.insert(1,"Week", week)
+  # df.insert(3,"Pos", position[0])
+  # df.insert(5,"NFL", nfl)
+  # 
+  # 
+  # df['Player'] = df['Player'].str.replace(r'.', '', regex=True)
+  # df['Player'] = df['Player'].str.replace(r' Jr', '', regex=True)
+  # df['Player'] = df['Player'].str.replace(r' Sr', '', regex=True)
+  # df['Player'] = df['Player'].str.replace(r' III', '', regex=True)
+  # df['Player'] = df['Player'].str.replace(r' II', '', regex=True)
+  # df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
+  # 
+  # df['Avail'] = df.apply(lambda x: getTeamAbbreviation(x['Avail']), axis=1)
+  # 
+  # df = df.drop(columns=["Action", "Opp", "OVP"])
+  # df = df.rename(columns={"Avail": "TRUFFLE"})
+  # 
+  # df.to_csv("dre/CBS/extraDash.csv", index=False)
+  # print("\nTRUFFLE EXTRA DASH SAVED TO dre/CBS/redZone.csv")
 
 def main():
-  getExtraDash()
-  print("EXTRA DASH DONE")
+  getRedZone()
+  print("RED ZONE DONE")
 if __name__ == "__main__":
   main()
