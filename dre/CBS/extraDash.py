@@ -174,7 +174,7 @@ def getExtraDash():
   
   df['Avail'] = df.apply(lambda x: getTeamAbbreviation(x['Avail']), axis=1)
   
-  df = df.drop(columns=["Action", "Pos", "Opp", "OVP", "Pct"])
+  df = df.drop(columns=["Action", "Opp", "OVP", "Pct"])
   df = df.rename(columns={"Avail": "TRUFFLE"})
   
   df.to_csv("dre/CBS/extraDash.csv", index=False)
