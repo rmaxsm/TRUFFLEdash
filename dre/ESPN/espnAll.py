@@ -3,6 +3,7 @@ import dre.ESPN.espnRB as rb
 import dre.ESPN.espnWR as wr
 import dre.ESPN.espnTE as te
 import dre.ESPN.espnXTD as xtd
+import pandas as pd
 
 
 def main():
@@ -21,9 +22,12 @@ def main():
   # combinedDf = pd.DataFrame(columns = qbDf.columns)
   combinedDf = pd.concat([qbDf, rbDf, wrDf, teDf], ignore_index=True, sort=False)
   
-  tst = pd.merge(combinedDf, xtdDf, on='Player')
-  tst.to_csv("dre/ESPN/test.csv")
-  
+  dupe = pd.merge(combinedDf, xtdDf, on='Player')
+
+  noDupe = dupe.drop_duplicates(subset=["Player", "NFL", "Pos"])
+  noDupe.to_csv("dre/ESPN/espnStatsFinal.csv", index=False)
+  print(noDupe)
+
   print("\nALL DONE :)")
 
   
