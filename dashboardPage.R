@@ -36,6 +36,7 @@ dashboardPageUI <-
                     tabItems(
                       # Home Page -----
                       tabItem(tabName = "home",
+                              h1("Hi"),
                               wellPanel(class = "well",
                                         fluidRow(
                                           column(width=4, style = 'padding-top:10px;',
