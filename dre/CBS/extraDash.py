@@ -1,7 +1,7 @@
 import os
 import requests
 import datetime
-import pandas as pd2022
+import pandas as pd
 import numpy as np
 import re
 from bs4 import BeautifulSoup
