@@ -35,10 +35,9 @@ def main():
   noDupe['Player'] = noDupe['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
   
   noDupe.to_csv("dre/ESPN/espnStatsFinal.csv", index=False)
-  print(noDupe)
-
-  print("\nALL DONE :)")
-
+  # print(noDupe)
+  print("\nESPN FILE SAVED TO dre/ESPN/espnStatsFinal.csv")
+  print("ESPN DONE :)\n")
   
 if __name__ == "__main__":
   main()
