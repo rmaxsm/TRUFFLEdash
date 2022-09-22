@@ -33,10 +33,10 @@ def separatePlayers(rows, idx, namesArray):
       if len(i.getText()) > 0:
         curRow.append(i.getText())
     itr += 1
-  curRow.append("RB")
+  curRow.append("TE")
   return curRow
 
-def runRB():
+def runTE():
   cookies = {
     'edition': 'espn-en-us',
     'edition-view': 'espn-en-us',
@@ -114,7 +114,7 @@ def runRB():
       'If-None-Match': 'W/512483eb531a053b813e1053b334fca28b487287',
   }
   
-  response = requests.get('https://www.espn.com/fantasy/insider/football/insider/story/_/id/34586341/fantasy-football-2022-expected-fantasy-points-xfp-leaderboard-rbs', cookies=cookies, headers=headers)
+  response = requests.get('https://www.espn.com/fantasy/insider/football/insider/story/_/id/34586431/fantasy-football-2022-expected-fantasy-points-xfp-leaderboard-tes', cookies=cookies, headers=headers)
   soup = BeautifulSoup(response.content, 'html.parser')
   
   complete =  soup.find("section", {"id": "article-feed"})
@@ -124,7 +124,7 @@ def runRB():
   #using scraped data create columns/players then combine into pandas dataframe :)
   
   colHeaders = separateColumns(headers)
-  allRBS = []
+  allTEs = []
   
   allRows = tbls.find_all("tr", class_="last")
   
@@ -132,19 +132,21 @@ def runRB():
   allNames = [i.getText() for i in players]
   
   for i in range(len(allRows)):
-    allRBS.append(separatePlayers(allRows[i], i, allNames))
+    allTEs.append(separatePlayers(allRows[i], i, allNames))
   
   #pandas df to represent team
-  df = pd.DataFrame(allRBS, columns=colHeaders)
-  df = df.drop(columns=["FORP","G", "Ru Yd", "Ru TD", "Rec", "Re Yd", "Re TD"])
-  df = df.loc[:, ["Player","NFL","Pos","xFP","ActualPts"]]
+
+  df = pd.DataFrame(allTEs, columns=colHeaders)
+  df = df.drop(columns=["FORP","G", "Rec", "Yds", "TD"])
+  df = df.loc[:, ["Player","NFL","Pos","xFP","Actual Pts"]]
+  df = df.rename(columns={"Actual Pts" : "ActualPts"})
   # print(df)
-  df.to_pickle("dre/ESPN/rb.pkl")
+  df.to_pickle("dre/ESPN/te.pkl")
   
 def main():
-  runRB()
-  print("RB DONE")
-  
+  runTE()
+  print("TE DONE")
+
 if __name__ == "__main__":
   main()
 

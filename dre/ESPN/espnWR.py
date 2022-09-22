@@ -33,10 +33,10 @@ def separatePlayers(rows, idx, namesArray):
       if len(i.getText()) > 0:
         curRow.append(i.getText())
     itr += 1
-  curRow.append("RB")
+  curRow.append("WR")
   return curRow
 
-def runRB():
+def runWR():
   cookies = {
     'edition': 'espn-en-us',
     'edition-view': 'espn-en-us',
@@ -114,7 +114,7 @@ def runRB():
       'If-None-Match': 'W/512483eb531a053b813e1053b334fca28b487287',
   }
   
-  response = requests.get('https://www.espn.com/fantasy/insider/football/insider/story/_/id/34586341/fantasy-football-2022-expected-fantasy-points-xfp-leaderboard-rbs', cookies=cookies, headers=headers)
+  response = requests.get('https://www.espn.com/fantasy/insider/football/insider/story/_/id/34586380/fantasy-football-2022-expected-fantasy-points-xfp-leaderboard-wrs', cookies=cookies, headers=headers)
   soup = BeautifulSoup(response.content, 'html.parser')
   
   complete =  soup.find("section", {"id": "article-feed"})
@@ -124,27 +124,32 @@ def runRB():
   #using scraped data create columns/players then combine into pandas dataframe :)
   
   colHeaders = separateColumns(headers)
-  allRBS = []
+  allWRs = []
   
   allRows = tbls.find_all("tr", class_="last")
   
   players = tbls.find_all("a")    # this is a key to get the player names. was a nice fix for a huge pain.
   allNames = [i.getText() for i in players]
   
+  #JAMES WEBB X IS NOT LINKED AND THEREFORE NOT FOUND. VERY VERY HARDCODED... NOT GREAT BOB
+  # the linked is caught in the find_all("a") query so.. hopefully that just gets fixed and we can remove this
+  allNames.insert(165,"James Webb X")
   for i in range(len(allRows)):
-    allRBS.append(separatePlayers(allRows[i], i, allNames))
+    allWRs.append(separatePlayers(allRows[i], i, allNames))
   
   #pandas df to represent team
-  df = pd.DataFrame(allRBS, columns=colHeaders)
-  df = df.drop(columns=["FORP","G", "Ru Yd", "Ru TD", "Rec", "Re Yd", "Re TD"])
+
+  df = pd.DataFrame(allWRs, columns=colHeaders)
+  df = df.drop(columns=["FORP","G", "Rec", "Yds", "TD"])
   df = df.loc[:, ["Player","NFL","Pos","xFP","ActualPts"]]
   # print(df)
-  df.to_pickle("dre/ESPN/rb.pkl")
+  df.to_pickle("dre/ESPN/wr.pkl")
   
 def main():
-  runRB()
-  print("RB DONE")
-  
+  print("\nMESSAGE FROM THE WR FUNCTION:\nHEY BTW I'M STILL HARDCODING JAMES WEBB FOR NOW. IF THATS CHANGED DELETE ME. OTHERWISE IDK FIGURE IT OUT\n")
+  runWR()
+  print("WR DONE")
+
 if __name__ == "__main__":
   main()
 
