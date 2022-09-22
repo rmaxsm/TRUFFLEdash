@@ -25,6 +25,7 @@ def main():
   dupe = pd.merge(combinedDf, xtdDf, on='Player')
 
   noDupe = dupe.drop_duplicates(subset=["Player", "NFL", "Pos"])
+  noDupe = noDupe.loc[:, ["Player","NFL","Pos","xFP","ActualPts","xTD","TD", "Looks", "Diff","In5", "EZ"]]
   noDupe.to_csv("dre/ESPN/espnStatsFinal.csv", index=False)
   print(noDupe)
 
