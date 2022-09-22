@@ -26,6 +26,14 @@ def main():
 
   noDupe = dupe.drop_duplicates(subset=["Player", "NFL", "Pos"])
   noDupe = noDupe.loc[:, ["Player","NFL","Pos","xFP","ActualPts","xTD","TD", "Looks", "Diff","In5", "EZ"]]
+  
+  noDupe['Player'] = noDupe['Player'].str.replace(r'.', '', regex=True)
+  noDupe['Player'] = noDupe['Player'].str.replace(r' Jr', '', regex=True)
+  noDupe['Player'] = noDupe['Player'].str.replace(r' Sr', '', regex=True)
+  noDupe['Player'] = noDupe['Player'].str.replace(r' III', '', regex=True)
+  noDupe['Player'] = noDupe['Player'].str.replace(r' II', '', regex=True)
+  noDupe['Player'] = noDupe['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
+  
   noDupe.to_csv("dre/ESPN/espnStatsFinal.csv", index=False)
   print(noDupe)
 

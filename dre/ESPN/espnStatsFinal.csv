@@ -34,7 +34,7 @@ Christian McCaffrey,CAR,RB,30,33,0.8,1,35,0.2,1,0
 Miles Sanders,PHI,RB,29,30,1.3,1,35,-0.3,2,0
 James Robinson,JAC,RB,29,36,1.3,3,38,1.7,1,0
 Dalvin Cook,MIN,RB,28,21,0.3,0,36,-0.3,0,0
-Jeff Wilson Jr.,SF,RB,27,17,1.6,0,31,-1.6,2,0
+Jeff Wilson,SF,RB,27,17,1.6,0,31,-1.6,2,0
 Breece Hall,NYJ,RB,27,23,0.9,1,24,0.1,0,0
 Cordarrelle Patterson,ATL,RB,26,27,0.6,1,38,0.4,0,0
 Aaron Jones,GB,RB,25,43,0.8,2,28,1.2,0,0
@@ -44,19 +44,19 @@ Jamaal Williams,DET,RB,25,23,2.0,2,26,0.0,3,0
 James Conner,ARI,RB,24,24,0.6,1,26,0.4,1,0
 Derrick Henry,TEN,RB,24,17,1.3,1,35,-0.3,1,0
 Kareem Hunt,CLE,RB,24,32,0.9,2,30,1.1,0,1
-Travis Etienne Jr.,JAC,RB,24,17,1.1,0,20,-1.1,0,1
+Travis Etienne,JAC,RB,24,17,1.1,0,20,-1.1,0,1
 Josh Jacobs,LV,RB,23,17,1.3,0,31,-1.3,2,0
 Nyheim Hines,IND,RB,23,19,0.8,0,15,-0.8,1,0
 Clyde Edwards-Helaire,KC,RB,23,38,1.1,2,22,0.9,0,0
 Tony Pollard,DAL,RB,23,24,0.7,1,24,0.3,1,0
 Rex Burkhead,HOU,RB,22,15,0.3,0,25,-0.3,0,0
 Damien Harris,NE,RB,22,25,1.1,1,29,-0.1,1,0
-Melvin Gordon III,DEN,RB,21,14,1.1,0,25,-1.1,2,0
-Darrell Henderson Jr.,LAR,RB,21,23,0.5,1,28,0.5,0,0
+Melvin Gordon,DEN,RB,21,14,1.1,0,25,-1.1,2,0
+Darrell Henderson,LAR,RB,21,23,0.5,1,28,0.5,0,0
 Eno Benjamin,ARI,RB,20,17,0.4,0,20,-0.4,0,0
 Dameon Pierce,HOU,RB,18,14,0.4,0,29,-0.4,1,0
 Chase Edmonds,MIA,RB,18,16,0.1,0,24,-0.1,0,0
-J.D. McKissic,WAS,RB,18,21,0.1,0,16,-0.1,0,0
+JD McKissic,WAS,RB,18,21,0.1,0,16,-0.1,0,0
 Jerick McKinnon,KC,RB,17,18,0.8,1,14,0.2,1,0
 Ezekiel Elliott,DAL,RB,17,12,0.1,0,29,-0.1,0,0
 Kenneth Gainwell,PHI,RB,17,14,0.9,1,13,0.1,1,0
@@ -71,7 +71,7 @@ Khalil Herbert,CHI,RB,13,16,0.7,1,15,0.3,2,0
 Rashaad Penny,SEA,RB,13,10,0.2,0,21,-0.2,0,0
 Samaje Perine,CIN,RB,11,9,0.3,0,8,-0.3,0,0
 Kyle Juszczyk,SF,RB,11,6,1.1,1,5,-0.1,2,0
-Mark Ingram II,NO,RB,11,8,0.1,0,17,-0.1,0,0
+Mark Ingram,NO,RB,11,8,0.1,0,17,-0.1,0,0
 Zander Horvath,LAC,RB,11,16,1.0,2,4,1.0,0,2
 Tyrion Davis-Price,SF,RB,10,3,0.8,0,14,-0.8,1,0
 Sony Michel,LAC,RB,10,4,0.6,0,12,-0.6,1,0
@@ -81,7 +81,7 @@ Isiah Pacheco,KC,RB,10,13,0.7,1,14,0.3,1,0
 Kenyan Drake,BAL,RB,9,6,0.2,0,18,-0.2,0,0
 Rachaad White,TB,RB,9,4,0.1,0,12,-0.1,0,0
 Joshua Kelley,LAC,RB,8,9,0.1,0,11,-0.1,0,0
-Ken Walker III,SEA,RB,8,4,0.1,0,7,-0.1,0,0
+Ken Walker,SEA,RB,8,4,0.1,0,7,-0.1,0,0
 James Cook,BUF,RB,8,4,0.2,0,13,-0.2,0,0
 Boston Scott,PHI,RB,8,10,0.6,1,9,0.4,1,0
 Mike Davis,BAL,RB,8,2,1.0,0,7,-1.0,2,0
@@ -98,7 +98,7 @@ Chris Myarick,NYG,RB,4,7,0.5,1,1,0.5,0,1
 Avery Williams,ATL,RB,4,4,0.0,0,4,0.0,0,0
 Demetric Felton,CLE,RB,4,1,0.0,0,3,0.0,0,0
 Matt Breida,NYG,RB,4,2,0.1,0,7,-0.1,0,0
-Tony Jones Jr.,NO,RB,4,4,0.0,0,4,0.0,0,0
+Tony Jones,NO,RB,4,4,0.0,0,4,0.0,0,0
 Ameer Abdullah,LV,RB,3,3,0.0,0,2,0.0,0,0
 Elijah Mitchell,SF,RB,3,4,0.1,0,6,-0.1,0,0
 Craig Reynolds,DET,RB,3,4,0.0,0,4,0.0,0,0
@@ -110,7 +110,7 @@ Ja'Marr Chase,CIN,WR,52,40,2.6,1,26,-1.6,0,5
 Cooper Kupp,LAR,WR,52,64,1.7,3,29,1.3,0,3
 Davante Adams,LV,WR,48,39,2.5,2,24,-0.5,0,4
 Stefon Diggs,BUF,WR,46,71,2.1,4,23,1.9,0,4
-Amon-Ra St. Brown,DET,WR,45,60,1.7,3,26,1.3,0,3
+Amon-Ra St Brown,DET,WR,45,60,1.7,3,26,1.3,0,3
 Justin Jefferson,MIN,WR,45,50,2.1,2,22,-0.1,0,3
 Jaylen Waddle,MIA,WR,44,58,1.3,3,25,1.7,0,2
 Tyreek Hill,MIA,WR,40,60,0.4,2,26,1.6,0,0
@@ -124,14 +124,14 @@ Deebo Samuel,SF,WR,32,27,0.9,1,25,0.1,1,0
 Drake London,ATL,WR,31,37,0.7,1,19,0.3,0,0
 CeeDee Lamb,DAL,WR,30,20,0.3,0,22,-0.3,0,0
 Diontae Johnson,PIT,WR,30,26,0.4,0,20,-0.4,0,0
-A.J. Brown,PHI,WR,30,37,0.2,0,21,-0.2,0,1
+AJ Brown,PHI,WR,30,37,0.2,0,21,-0.2,0,1
 Chris Olave,NO,WR,29,20,0.7,0,16,-0.7,0,0
 Jakobi Meyers,NE,WR,28,29,0.1,0,19,-0.1,0,0
 Amari Cooper,CLE,WR,27,30,0.6,1,16,0.4,0,1
 Christian Kirk,JAC,WR,26,44,0.7,2,18,1.3,0,0
 Chase Claypool,PIT,WR,26,16,1.0,0,19,-1.0,1,0
 Zay Jones,JAC,WR,26,18,1.2,0,13,-1.2,0,3
-DJ Chark Jr.,DET,WR,25,15,1.3,1,12,-0.3,0,3
+DJ Chark,DET,WR,25,15,1.3,1,12,-0.3,0,3
 Mike Williams,LAC,WR,25,28,0.8,1,14,0.2,0,1
 Jahan Dotson,WAS,WR,25,36,1.3,3,12,1.7,0,3
 Noah Brown,DAL,WR,25,32,0.5,1,15,0.5,0,1
@@ -141,7 +141,7 @@ Ashton Dulin,IND,WR,24,21,0.7,0,14,-0.7,0,1
 Hunter Renfrow,LV,WR,24,16,0.3,0,16,-0.3,0,0
 Mecole Hardman,KC,WR,23,18,1.2,1,11,-0.2,0,1
 Tyler Lockett,SEA,WR,23,26,0.1,0,15,-0.1,0,0
-Michael Pittman Jr.,IND,WR,22,27,0.6,1,13,0.4,0,1
+Michael Pittman,IND,WR,22,27,0.6,1,13,0.4,0,1
 Greg Dortch,ARI,WR,22,29,0.5,1,13,0.5,0,1
 Jarvis Landry,NO,WR,22,25,0.3,0,14,-0.3,0,0
 Donovan Peoples-Jones,CLE,WR,21,12,0.8,0,12,-0.8,0,2
@@ -152,21 +152,21 @@ Sterling Shepard,NYG,WR,20,25,0.2,1,14,0.8,0,0
 Adam Thielen,MIN,WR,20,16,0.8,0,11,-0.8,0,0
 Terry McLaurin,WAS,WR,20,26,0.5,1,12,0.5,0,1
 Tee Higgins,CIN,WR,20,24,0.6,1,12,0.4,0,1
-A.J. Green,ARI,WR,20,10,0.9,0,11,-0.9,0,1
+AJ Green,ARI,WR,20,10,0.9,0,11,-0.9,0,1
 Elijah Moore,NYJ,WR,20,16,0.4,0,13,-0.4,0,0
 Nelson Agholor,NE,WR,19,27,0.2,1,12,0.8,0,0
 Treylon Burks,TEN,WR,19,17,0.4,0,11,-0.4,0,1
 DJ Moore,CAR,WR,19,21,0.4,1,13,0.6,0,1
 Jerry Jeudy,DEN,WR,18,22,0.7,1,11,0.3,0,1
-Allen Robinson II,LAR,WR,18,18,1.2,1,7,-0.2,0,3
+Allen Robinson,LAR,WR,18,18,1.2,1,7,-0.2,0,3
 Nico Collins,HOU,WR,18,14,0.5,0,10,-0.5,0,0
 JuJu Smith-Schuster,KC,WR,18,16,0.1,0,12,-0.1,0,0
 Robbie Anderson,CAR,WR,17,25,0.3,1,13,0.7,0,0
 Breshad Perriman,TB,WR,17,13,0.7,1,9,0.3,0,2
 Tyler Boyd,CIN,WR,17,19,0.5,1,9,0.5,0,1
-Richie James Jr.,NYG,WR,17,21,0.1,0,12,-0.1,0,0
+Richie James,NYG,WR,17,21,0.1,0,12,-0.1,0,0
 Mack Hollins,LV,WR,16,14,0.5,0,9,-0.5,0,0
-Marvin Jones Jr.,JAC,WR,16,14,0.1,0,11,-0.1,0,0
+Marvin Jones,JAC,WR,16,14,0.1,0,11,-0.1,0,0
 Marquez Valdes-Scantling,KC,WR,16,11,0.2,0,11,-0.2,0,0
 Brandon Aiyuk,SF,WR,15,18,0.2,0,11,-0.2,0,0
 Josh Reynolds,DET,WR,14,17,1.0,1,6,0.0,0,2
@@ -179,7 +179,7 @@ Devin Duvernay,BAL,WR,13,34,0.6,2,6,1.4,0,2
 Scotty Miller,TB,WR,13,7,0.1,0,9,-0.1,0,0
 DeVonta Smith,PHI,WR,13,15,0.0,0,10,0.0,0,0
 Mike Strachan,IND,WR,13,9,0.8,0,5,-0.8,0,2
-Equanimeous St. Brown,CHI,WR,12,15,0.4,1,7,0.6,0,1
+Equanimeous St Brown,CHI,WR,12,15,0.4,1,7,0.6,0,1
 Christian Watson,GB,WR,12,10,0.2,0,8,-0.2,0,0
 Russell Gage,TB,WR,12,11,0.0,0,9,0.0,0,0
 Dezmon Patmon,IND,WR,12,4,0.4,0,6,-0.4,0,1
@@ -188,7 +188,7 @@ Isaiah McKenzie,BUF,WR,12,16,0.5,1,6,0.5,0,0
 Jauan Jennings,SF,WR,12,12,0.1,0,8,-0.1,0,0
 Sammy Watkins,GB,WR,12,17,0.1,0,7,-0.1,0,0
 Shi Smith,CAR,WR,12,3,0.2,0,9,-0.2,0,0
-K.J. Osborn,MIN,WR,11,9,0.5,0,6,-0.5,0,1
+KJ Osborn,MIN,WR,11,9,0.5,0,6,-0.5,0,1
 Julio Jones,TB,WR,11,12,0.3,0,7,-0.3,0,0
 Chris Moore,HOU,WR,11,10,0.1,0,7,-0.1,0,0
 Braxton Berrios,NYJ,WR,10,11,0.1,0,8,-0.1,0,0
@@ -221,7 +221,7 @@ Jake Kumerow,BUF,WR,5,7,0.1,0,3,-0.1,0,0
 Anthony Schwartz,CLE,WR,5,5,0.1,0,4,-0.1,0,0
 Danny Gray,SF,WR,5,0,0.3,0,2,-0.3,0,0
 Byron Pringle,CHI,WR,5,3,0.3,0,2,-0.3,0,1
-Ray-Ray McCloud III,SF,WR,5,6,0.0,0,4,0.0,0,0
+Ray-Ray McCloud,SF,WR,5,6,0.0,0,4,0.0,0,0
 Chris Godwin,TB,WR,4,7,0.1,0,3,-0.1,0,0
 Andy Isabella,ARI,WR,4,2,0.0,0,3,0.0,0,0
 Quez Watkins,PHI,WR,4,15,0.1,1,2,0.9,0,0
@@ -251,10 +251,10 @@ Hayden Hurst,CIN,TE,25,17,0.9,0,15,-0.9,0,1
 Juwan Johnson,NO,TE,23,14,0.9,0,12,-0.9,0,2
 Tyler Conklin,NYJ,TE,23,22,0.6,1,16,0.4,0,1
 Logan Thomas,WAS,TE,21,20,0.9,1,11,0.1,0,0
-T.J. Hockenson,DET,TE,20,13,0.2,0,14,-0.2,0,0
+TJ Hockenson,DET,TE,20,13,0.2,0,14,-0.2,0,0
 Dalton Schultz,DAL,TE,19,15,0.0,0,13,0.0,0,0
 Kyle Pitts,ATL,TE,18,8,0.5,0,10,-0.5,0,1
-Irv Smith Jr.,MIN,TE,18,15,0.6,1,10,0.4,0,0
+Irv Smith,MIN,TE,18,15,0.6,1,10,0.4,0,0
 Evan Engram,JAC,TE,17,18,0.0,0,12,0.0,0,0
 Harrison Bryant,CLE,TE,16,11,0.7,0,8,-0.7,0,1
 Dallas Goedert,PHI,TE,15,22,0.1,0,10,-0.1,0,0
@@ -276,7 +276,7 @@ Johnny Mundt,MIN,TE,9,10,0.0,0,6,0.0,0,0
 Ian Thomas,CAR,TE,8,10,0.1,0,6,-0.1,0,0
 Brevin Jordan,HOU,TE,8,4,0.0,0,6,0.0,0,0
 Pharaoh Brown,HOU,TE,8,8,0.0,0,6,0.0,0,0
-O.J. Howard,HOU,TE,8,20,0.5,2,3,1.5,0,0
+OJ Howard,HOU,TE,8,20,0.5,2,3,1.5,0,0
 Cameron Brate,TB,TE,8,4,0.1,0,5,-0.1,0,0
 Tyler Kroft,SF,TE,8,2,0.1,0,4,-0.1,0,0
 Will Dissly,SEA,TE,7,15,0.0,1,5,1.0,0,0
