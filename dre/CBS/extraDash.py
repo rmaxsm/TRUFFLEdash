@@ -174,6 +174,8 @@ def getExtraDash():
   
   df = df.drop(columns=["Action", "Opp", "OVP"])
   df = df.rename(columns={"Avail": "TRUFFLE"})
+  # df = df.sort_values(by=['Player','Total'])
+
   
   df.to_csv("dre/CBS/extraDash.csv", index=False)
   print("\nTRUFFLE EXTRA DASH SAVED TO dre/CBS/extraDash.csv")
