@@ -128,21 +128,15 @@ def runXTD():
   for i in range(len(allRows)):
     allPlayers.append(separatePlayers(allRows[i], i, allNames))
     
-  # print(allPlayers)
   #pandas df to represent team
   df = pd.DataFrame(allPlayers, columns=colHeaders)
-  # df = df.drop(columns=["FORP","G", "Rec", "Yds", "TD"])
-  # df = df.loc[:, ["Player","NFL","Pos","xFP","Actual Pts"]]
-  # df = df.rename(columns={"Actual Pts" : "ActualPts"})
-  print(df)
+  # print(df)
   df.to_pickle("dre/ESPN/xtd.pkl")
   
   
 def main():
-  print("XTD WARNING: NOT GETTING POSITION OR TEAM. PLAYER NAME ONLY")
   runXTD()
-  print("XTD DONE")
-  
+
 if __name__ == "__main__":
   main()
 
