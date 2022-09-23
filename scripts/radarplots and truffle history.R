@@ -168,43 +168,40 @@ radarchart2(fullradar[(Season == 2022 & Pos == "RB") & (Player == "MAX" | Player
 
 #### revamped player portal ----
 
-output$pptesto <- renderReactable({
-  testo <- fantasy[Pos != "DST" & Player == "D'Andre Swift",
-                   .(G = .N,
-                     PaYd = sum(PaYd, na.rm=T),
-                     PaTD = sum(PaTD, na.rm=T),
-                     PaInt = sum(PaInt, na.rm=T),
-                     RuYd = sum(RuYd, na.rm=T),
-                     RuTD = sum(RuTD, na.rm=T),
-                     RuFD = sum(RuFD, na.rm=T),
-                     Rec = sum(Rec, na.rm=T),
-                     ReYd = sum(ReYd, na.rm=T),
-                     ReTD = sum(ReTD, na.rm=T),
-                     ReFD = sum(ReFD, na.rm=T),
-                     Avg = round(sum(FPts, na.rm=T)/.N, 2),
-                     FPts = sum(FPts, na.rm=T)),
-                   by = .(Player, TRUFFLE)]
+#output$pptesto <- renderReactable({
+testo <- fantasy[Pos != "DST",
+                 .(G = .N,
+                   PaYd = sum(PaYd, na.rm=T),
+                   PaTD = sum(PaTD, na.rm=T),
+                   PaInt = sum(PaInt, na.rm=T),
+                   RuYd = sum(RuYd, na.rm=T),
+                   RuTD = sum(RuTD, na.rm=T),
+                   RuFD = sum(RuFD, na.rm=T),
+                   Rec = sum(Rec, na.rm=T),
+                   ReYd = sum(ReYd, na.rm=T),
+                   ReTD = sum(ReTD, na.rm=T),
+                   ReFD = sum(ReFD, na.rm=T),
+                   Avg = round(sum(FPts, na.rm=T)/.N, 2),
+                   FPts = sum(FPts, na.rm=T)),
+                 by = .(Player, TRUFFLE)]
   
-  reactable(testo,
-            filter = T,
-            columns = list(
-              #Season = colDef(aggregate = "unique"),
-              TRUFFLE = trfDef(),
-              G = colDef(aggregate = "sum"),
-              PaYd = colDef(aggregate = "sum"),
-              PaTD = colDef(aggregate = "sum"),
-              PaInt = colDef(aggregate = "sum"),
-              RuYd = colDef(aggregate = "sum"),
-              RuTD = colDef(aggregate = "sum"),
-              RuFD = colDef(aggregate = "sum"),
-              Rec = colDef(aggregate = "sum"),
-              ReYd = colDef(aggregate = "sum"),
-              ReTD = colDef(aggregate = "sum"),
-              ReFD = colDef(aggregate = "sum"),
-              Avg = colDef(aggregate = "mean", format = colFormat(digits = 2)),
-              FPts = colDef(aggregate = "sum")
-            )
-  )
-  
-  
-})
+reactable(testo,
+          filter = T,
+          columns = list(
+            #Season = colDef(aggregate = "unique"),
+            TRUFFLE = trfDef(),
+            G = colDef(aggregate = "sum", footer = function(values) {sum(values)}),
+            PaYd = colDef(aggregate = "sum", footer = function(values) {sum(values)}),
+            PaTD = colDef(aggregate = "sum", footer = function(values) {sum(values)}),
+            PaInt = colDef(aggregate = "sum", footer = function(values) {sum(values)}),
+            RuYd = colDef(aggregate = "sum", footer = function(values) {sum(values)}),
+            RuTD = colDef(aggregate = "sum", footer = function(values) {sum(values)}),
+            RuFD = colDef(aggregate = "sum", footer = function(values) {sum(values)}),
+            Rec = colDef(aggregate = "sum", footer = function(values) {sum(values)}),
+            ReYd = colDef(aggregate = "sum", footer = function(values) {sum(values)}),
+            ReTD = colDef(aggregate = "sum", footer = function(values) {sum(values)}),
+            ReFD = colDef(aggregate = "sum", footer = function(values) {sum(values)}),
+            Avg = colDef(aggregate = "mean", format = colFormat(digits = 2), footer = function(values) {mean(values)}),
+            FPts = colDef(aggregate = "sum", footer = function(values) {sum(values)})
+          )
+)
