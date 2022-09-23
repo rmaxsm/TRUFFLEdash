@@ -312,10 +312,10 @@ weeklytop5 <- weekly[, c("Season", "Week", "TRUFFLE", "Pos", "Player", "FPts")][
                                                                                                        FPts = FPts[1:30]), 
                                                                                                    by = .(Season,Week, Pos)][, .(Season,Week,TRUFFLE,Pos,Player,FPts)]
 
-weeklytop5qb <- weeklytop5[Pos == "QB"]
-weeklytop5rb <- weeklytop5[Pos == "RB"]
-weeklytop5wr <- weeklytop5[Pos == "WR"]
-weeklytop5te <- weeklytop5[Pos == "TE"]
+weeklytop5qb <- na.omit(weeklytop5[Pos == "QB"])
+weeklytop5rb <- na.omit(weeklytop5[Pos == "RB"])
+weeklytop5wr <- na.omit(weeklytop5[Pos == "WR"])
+weeklytop5te <- na.omit(weeklytop5[Pos == "TE"])
 
 truffleanalysis <- fantasy[,
                            .(FPts = sum(FPts),
