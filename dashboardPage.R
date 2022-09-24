@@ -36,7 +36,7 @@ dashboardPageUI <-
                     tabItems(
                       # Home Page -----
                       tabItem(tabName = "home",
-                              h1("Hi"),
+                              
                               wellPanel(class = "well",
                                         fluidRow(
                                           column(width=4, style = 'padding-top:10px;',
@@ -153,22 +153,87 @@ dashboardPageUI <-
                                         h2("Player Info"),
                                         reactableOutput('ppbios')
                               ),
-                              wellPanel(class = "well",
-                                        h2("Season Log"),
-                                        reactableOutput('ppseasons')
-                              ),
-                              wellPanel(class = "well",
-                                        h2("Advanced Stats"),
-                                        reactableOutput('ppadvanced')
-                              ),
-                              wellPanel(class = "well",
-                                        h2("Consistency Stats"),
-                                        reactableOutput('ppconsistency')
-                              ),
-                              wellPanel(class = "well",
-                                        h2(str_c(max(weekly$Season) , " Game Log")),
-                                        reactableOutput('ppweekly')
-                              )),
+                      fluidRow(
+                        column(width = 8,
+                               wellPanel(class = "well",
+                                         h2("TRUFFLE Career Stats"),
+                                         reactableOutput('pptrufflecareerstats')
+                               )
+                        ),
+                        column(width = 4,
+                               wellPanel(class = "well",
+                                         h2("Contract History"),
+                                         reactableOutput('ppcontracthistory')
+                               )
+                               )
+                        ),
+                      wellPanel(class = "well",
+                                fluidRow(
+                                  column(width = 10,
+                                         h2("Stat Center")
+                                  ),
+                                  column(width = 2,
+                                         selectInput("ppstatcenterseason", "Season", c(as.character(unique(weekly$Season)), "All"), selected = as.character(max(weekly$Season)) )
+                                  )
+                                ),
+                                tabsetPanel(
+                                  tabPanel("BoxScore", reactableOutput('ppseasons')),
+                                  tabPanel("Advanced", reactableOutput('ppadvanced')),
+                                  tabPanel("Consistency", reactableOutput('ppconsistency'))
+                                )
+                      ),
+                      fluidRow(
+                        column(width = 4,
+                               wellPanel(class = "well",
+                                         fluidRow(
+                                           column(width = 8,
+                                                  h2("Percentile Radar Chart")),
+                                           column(width = 4,
+                                                  selectInput("ppradarplotseason", "Season", c(unique(weekly$Season)), selected = max(weekly$Season)))
+                                           ),
+                                         plotOutput('ppradarplot',
+                                                    width = "100%",
+                                                    height = "400px"),
+                                         hr(),
+                                         em("Radar chart indicates player percentile performance at position. Do not select multiple positions.")
+                                         )
+                               ),
+                        column(width = 8,
+                               wellPanel(class = "well",
+                                         fluidRow(
+                                           column(width = 6,
+                                                  h2("Week-by-Week")),
+                                           column(width = 3,
+                                                  selectInput("ppwbwstat", "Stat", colnames(weekly)[c(9:23, 25)], selected = colnames(weekly)[25])),
+                                           column(width = 3,
+                                                  selectInput("ppwbwseason", "Season", c(unique(weekly$Season)), selected = max(weekly$Season)))
+                                         ),
+                                         plotlyOutput('ppwbw',
+                                                    width = "100%",
+                                                    height = "400px"),
+                                         hr(),
+                                         em("Weeks missed represented by missing data point, not 0")
+                               )
+                        )
+                      ),
+                      wellPanel(class = "well",
+                                fluidRow(
+                                  column(width = 10,
+                                         h2("Game Logs")
+                                  ),
+                                  column(width = 2,
+                                         selectInput("ppgamelogsseason", "Season", as.character(unique(weekly$Season)), "All"), selected = as.character(max(weekly$Season)) )
+                                  ),
+                                
+                                tabsetPanel(
+                                  tabPanel("Weekly", reactableOutput('ppgamelogweekly')),
+                                  tabPanel("Fantasy",
+                                           br(),
+                                           p("*Only includes games when player was actively started in TRUFFLE"),
+                                           reactableOutput('ppgamelogfantasy'))
+                                )
+                      )
+                      ),
                       
                       # Fantasy Portal -----
                       tabItem(tabName = "fantasyportal",

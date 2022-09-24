@@ -18,6 +18,7 @@ library(htmltools)
 library(crosstalk)
 library(shinyBS)
 library(markdown)
+library(fmsb)
 
 # setting colors -----
 #colors and global options 
@@ -119,6 +120,14 @@ cleanRosters <- function(file) {
   return(file)
 }
 rosters <- cleanRosters(rosters)
+
+#get old rosters and merge in current teams to see what TRUFFLE team players were on which year
+oldrosters <- read_csv("data/oldrosters.csv", col_types = cols())
+mergerosters <- rosters[, c("TRUFFLE", "Pos", "Player", "NFL", "Salary", "Contract")]
+mergerosters$Season <- currentyr
+mergerosters <- mergerosters[, c("Season", "TRUFFLE", "Pos", "Player", "NFL", "Salary", "Contract")]
+oldrosters <- as.data.table(rbind(oldrosters, mergerosters))[order(Player,Season)]
+rm(mergerosters)
 
 #file of weekly scoring across NFL
 weekly <- as.data.table(read_csv("data/weekly.csv", col_types = cols()))
@@ -312,10 +321,10 @@ weeklytop5 <- weekly[, c("Season", "Week", "TRUFFLE", "Pos", "Player", "FPts")][
                                                                                                        FPts = FPts[1:30]), 
                                                                                                    by = .(Season,Week, Pos)][, .(Season,Week,TRUFFLE,Pos,Player,FPts)]
 
-weeklytop5qb <- weeklytop5[Pos == "QB"]
-weeklytop5rb <- weeklytop5[Pos == "RB"]
-weeklytop5wr <- weeklytop5[Pos == "WR"]
-weeklytop5te <- weeklytop5[Pos == "TE"]
+weeklytop5qb <- na.omit(weeklytop5[Pos == "QB"])
+weeklytop5rb <- na.omit(weeklytop5[Pos == "RB"])
+weeklytop5wr <- na.omit(weeklytop5[Pos == "WR"])
+weeklytop5te <- na.omit(weeklytop5[Pos == "TE"])
 
 truffleanalysis <- fantasy[,
                            .(FPts = sum(FPts),
@@ -344,6 +353,95 @@ truffleanalysisperc <- fantasy[,
                                  TOpts = (-2*sum(PaInt + FL,na.rm=T))/sum(FPts)
                                ),
                                by = .(Season, TRUFFLE)][order(-FPts)]
+
+pptrufflecareer <- fantasy[Pos != "DST",
+                           .(G = .N,
+                             PaYd = sum(PaYd, na.rm=T),
+                             PaTD = sum(PaTD, na.rm=T),
+                             PaInt = sum(PaInt, na.rm=T),
+                             RuYd = sum(RuYd, na.rm=T),
+                             RuTD = sum(RuTD, na.rm=T),
+                             RuFD = sum(RuFD, na.rm=T),
+                             Rec = sum(Rec, na.rm=T),
+                             ReYd = sum(ReYd, na.rm=T),
+                             ReTD = sum(ReTD, na.rm=T),
+                             ReFD = sum(ReFD, na.rm=T),
+                             Avg = round(sum(FPts, na.rm=T)/.N, 2),
+                             FPts = sum(FPts, na.rm=T)),
+                           by = .(Player, TRUFFLE)]
+
+#radar plot set up ----
+radchart_fill <- c(
+  rgb(255/255, 38/255, 0, .1),
+  rgb(68/255, 114/255, 196/255, .1),
+  rgb(0, 176/255, 80/255, .1),
+  rgb(255/255, 192/255, 0, .1),
+  rgb(112/255, 48/255, 160/255, .1),
+  rgb(237/255, 125/255, 49/255, .1),
+  rgb(0, 0, 0, .1),
+  rgb(255/255, 138/255, 216/255, .1),
+  rgb(146/255, 208/255, 80/255, .1),
+  rgb(91/255, 155/255, 213/255, .1)
+)
+radchart_line <- c(
+  rgb(255/255, 38/255, 0, .9),
+  rgb(68/255, 114/255, 196/255, .9),
+  rgb(0, 176/255, 80/255, .9),
+  rgb(255/255, 192/255, 0, .9),
+  rgb(112/255, 48/255, 160/255, .9),
+  rgb(237/255, 125/255, 49/255, .9),
+  rgb(0, 0, 0, .9),
+  rgb(255/255, 138/255, 216/255, .9),
+  rgb(146/255, 208/255, 80/255, .9),
+  rgb(91/255, 155/255, 213/255, .9)
+)
+
+#aggregate weekly by season, position, player
+radarplot <- weekly[,
+                    .(FPts = mean(FPts, na.rm = T),
+                      Touches = mean(PaCmp, na.rm = T) + mean(RuAtt, na.rm = T) + mean(Rec, na.rm = T),
+                      Yd = mean(PaYd, na.rm = T) + mean(RuYd, na.rm = T) + mean(ReYd, na.rm = T),
+                      TD = mean(PaTD, na.rm = T) + mean(RuTD, na.rm = T) + mean(ReTD, na.rm = T),
+                      FD = mean(RuFD, na.rm = T) + mean(ReFD, na.rm = T)
+                    ),
+                    by = .(Season, Pos, Player)][order(Player)]
+#get the max positional values based on radar plot
+radarplotmax <- radarplot[,
+                          .(FPts = max(FPts, na.rm = T),
+                            Touches = max(Touches, na.rm = T),
+                            Yd = max(Yd, na.rm = T),
+                            TD = max(TD, na.rm = T),
+                            FD = max(FD, na.rm = T)
+                          ),
+                          by = .(Season, Pos)]
+radarplotmax$Player <- "MAX"
+radarplotmax <- radarplotmax[, c("Season", "Pos", "Player", "FPts", "Touches", "Yd", "TD", "FD")]
+#get min positional values based on radar plot
+radarplotmin <- radarplot[,
+                          .(FPts = min(FPts, na.rm = T),
+                            Touches = min(Touches, na.rm = T),
+                            Yd = min(Yd, na.rm = T),
+                            TD = min(TD, na.rm = T),
+                            FD = min(FD, na.rm = T)
+                          ),
+                          by = .(Season, Pos)]
+radarplotmin$Player <- "MIN"
+radarplotmin <- radarplotmin[, c("Season", "Pos", "Player", "FPts", "Touches", "Yd", "TD", "FD")]
+#combine all to get correct format
+fullradar <- rbind(radarplotmax, radarplotmin, radarplot)
+#delete unnecessary tables for efficiency
+rm(radarplot, radarplotmax, radarplotmin)
+
+#dummy radarchart when players are incorrectly selected
+emptyradar <- as.data.frame(
+  rbind(
+    c(50, 50, 50, 50, 50),
+    c(0, 0, 0, 0, 0),
+    c(0, 0, 0, 0, 0)
+  )
+)
+colnames(emptyradar) <- c("FPts", "Tch", "Yd", "TD", "FD")
+rownames(emptyradar) <- c("MAX", "MIN","Empty")
 
 #building the record books -----
 recordbookstm <- fantasy[,
@@ -632,7 +730,7 @@ futurecolDef <- function(maxW = 75, filt = T, foot = F, yr) {
   )
 }
 
-avgDef <- function(maxW = 65, digs = 1, filt = F, col = T, borderL = F) {
+avgDef <- function(maxW = 65, digs = 1, filt = F, col = T, borderL = F, foot = F) {
   colDef(header = with_tt("Avg", "Weekly average FPts"),
          maxWidth = maxW,
          format = colFormat(digits = digs),
@@ -643,7 +741,19 @@ avgDef <- function(maxW = 65, digs = 1, filt = F, col = T, borderL = F) {
            normalized <- (value) / (max(seasons$Avg,na.rm=T))
            color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
            if(col == T) {list(background = color)}
-         }
+         },
+         footer = function(values) if(foot == T) {round(mean(as.numeric(values), na.rm=T),2)}
+  )
+}
+
+fptsDef <- function(maxW = 65, borderL = T, digs = 1, filt = F, foot = F) {
+  colDef(header = with_tt("FPts", "Fantasy points"),
+         maxWidth = maxW,
+         format = colFormat(digits = digs),
+         filterable = filt,
+         defaultSortOrder = "desc",
+         class = function(value) if(borderL == T) {"border-left-grey"},
+         footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
   )
 }
 
@@ -689,7 +799,13 @@ nflDef <- colDef(minWidth = 50, align = 'right')
 
 byeDef <- colDef(minWidth = 50, align = 'right')
 
-gDef <- colDef(header = with_tt("G", "Games Played"), minWidth = 40, align = 'right', defaultSortOrder = "desc")
+gDef <- function(minW = 40, foot = F) {
+  colDef(header = with_tt("G", "Games Played"),
+         minWidth = minW,
+         align = 'right',
+         defaultSortOrder = "desc",
+         footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
+  )}
 
 ageDef <- colDef(minWidth = 50, align = 'right', defaultSortOrder = "asc", sortNALast = T)
 
@@ -715,6 +831,15 @@ paydDefSsn <- colDef(header = with_tt("Yd", "Passing Yards\nBold if >=4000"), mi
   fontWeight <- ifelse(value >= 4000, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
 paydDefNm <- colDef(header = with_tt("Yd", "Passing Yards"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+paydDef <- function(minW = 45, foot = F, borderL = F) {
+  colDef(header = with_tt("Yd", "Passing Yards"),
+         minWidth = minW,
+         class = function(value) if(borderL == T) {"border-left-grey"},
+         align = 'right',
+         defaultSortOrder = "desc",
+         footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
+         )
+}
 
 patdDefWk <- colDef(header = with_tt("TD", "Passing TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'bold', 'plain')
@@ -723,6 +848,14 @@ patdDefSsn <- colDef(header = with_tt("TD", "Passing TDs\nBold if >=30"), minWid
   fontWeight <- ifelse(value >= 30, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
 patdDefNm <- colDef(header = with_tt("TD", "Passing TDs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+patdDef <- function(minW = 45, foot = F) {
+  colDef(header = with_tt("TD", "Passing TDs"),
+         minWidth = minW,
+         align = 'right',
+         defaultSortOrder = "desc",
+         footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
+  )
+}
 
 paintDefWk <- colDef(header = with_tt("Int", "Interceptions\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'italic', 'plain')
@@ -731,6 +864,14 @@ paintDefSsn <- colDef(header = with_tt("Int", "Interceptions\nBold if >=15"), mi
   fontWeight <- ifelse(value >= 15, 'italic', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "asc")
 paintDefNm <- colDef(header = with_tt("Int", "Interceptions"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "asc")
+paintDef <- function(minW = 45, foot = F) {
+  colDef(header = with_tt("Int", "Interceptions"),
+         minWidth = minW,
+         align = 'right',
+         defaultSortOrder = "desc",
+         footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
+  )
+}
 
 #Rushing stats
 ruattDefWk <- colDef(header = with_tt("Att", "Rushing Attempts\nBold if >=20"), minWidth = smallboxwidth, align = 'right', style = function(value) {
@@ -740,6 +881,15 @@ ruattDefSsn <- colDef(header = with_tt("Att", "Rushing Attempts\nBold if >=250")
   fontWeight <- ifelse(value >= 250, 'bold', 'plain')
   list(fontWeight = fontWeight)}, class = "border-left-grey", defaultSortOrder = "desc")
 ruattDefNm <- colDef(header = with_tt("Att", "Rushing Attempts"), minWidth = smallboxwidth, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
+ruattDef <- function(minW = 45, foot = F, borderL = T) {
+  colDef(header = with_tt("Att", "Rushing Attempts"),
+         class = function(value) if(borderL == T) {"border-left-grey"},
+         minWidth = minW,
+         align = 'right',
+         defaultSortOrder = "desc",
+         footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
+  )
+}
 
 #Rushing yards
 ruydDefWk <- colDef(header = with_tt("Yd", "Rushing Yards\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
@@ -749,6 +899,15 @@ ruydDefSsn <- colDef(header = with_tt("Yd", "Rushing Yards\nBold if >=1000"), mi
   fontWeight <- ifelse(value >= 1000, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
 ruydDefNm <- colDef(header = with_tt("Yd", "Rushing Yards"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+ruydDef <- function(minW = 45, foot = F, borderL = F) {
+  colDef(header = with_tt("Yd", "Rushing Yards"),
+         class = function(value) if(borderL == T) {"border-left-grey"},
+         minWidth = minW,
+         align = 'right',
+         defaultSortOrder = "desc",
+         footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
+  )
+}
 
 #Rushing td
 rutdDefWk <- colDef(header = with_tt("TD", "Rushing TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
@@ -758,6 +917,15 @@ rutdDefSsn <- colDef(header = with_tt("TD", "Rushing TDs\nBold if >=10"), minWid
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
 rutdDefNm <- colDef(header = with_tt("TD", "Rushing TDs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+rutdDef <- function(minW = 45, foot = F, borderL = F) {
+  colDef(header = with_tt("TD", "Rushing TDs"),
+         class = function(value) if(borderL == T) {"border-left-grey"},
+         minWidth = minW,
+         align = 'right',
+         defaultSortOrder = "desc",
+         footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
+  )
+}
 
 #Rushing fd
 rufdDefWk <- colDef(header = with_tt("FD", "Rushing First Downs\nBold if >=5"), minWidth = smallboxwidth, align = 'right', style = function(value) {
@@ -767,6 +935,15 @@ rufdDefSsn <- colDef(header = with_tt("FD", "Rushing First Downs\nBold if >=50")
   fontWeight <- ifelse(value >= 50, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
 rufdDefNm <- colDef(header = with_tt("FD", "Rushing First Downs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+rufdDef <- function(minW = 45, foot = F, borderL = F) {
+  colDef(header = with_tt("FD", "Rushing TDs"),
+         class = function(value) if(borderL == T) {"border-left-grey"},
+         minWidth = minW,
+         align = 'right',
+         defaultSortOrder = "desc",
+         footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
+  )
+}
 
 #Targets
 tarDefWk <- colDef(header = with_tt("Tar", "Targets\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
@@ -776,6 +953,15 @@ tarDefSsn <- colDef(header = with_tt("Tar", "Targets\nBold if >=100"), minWidth 
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
   list(fontWeight = fontWeight)}, class = "border-left-grey", defaultSortOrder = "desc")
 tarDefNm <- colDef(header = with_tt("Tar", "Targets"), minWidth = smallboxwidth, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
+tarDef <- function(minW = 45, foot = F, borderL = F) {
+  colDef(header = with_tt("Tar", "Targets"),
+         class = function(value) if(borderL == T) {"border-left-grey"},
+         minWidth = minW,
+         align = 'right',
+         defaultSortOrder = "desc",
+         footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
+  )
+}
 
 #Receptions
 recDefWk <- colDef(header = with_tt("Rec", "Receptions\nBold if >=10"), minWidth = smallboxwidth + 2, align = 'right', style = function(value) {
@@ -785,6 +971,15 @@ recDefSsn <- colDef(header = with_tt("Rec", "Receptions\nBold if >=100"), minWid
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
 recDefNm <- colDef(header = with_tt("Rec", "Receptions"), minWidth = smallboxwidth + 2, align = 'right', defaultSortOrder = "desc")
+recDef <- function(minW = 47, foot = F, borderL = F) {
+  colDef(header = with_tt("Rec", "Receptions"),
+         class = function(value) if(borderL == T) {"border-left-grey"},
+         minWidth = minW,
+         align = 'right',
+         defaultSortOrder = "desc",
+         footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
+  )
+}
 
 #receiving yards
 reydDefWk <- colDef(header = with_tt("Yd", "Receiving Yards\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
@@ -794,6 +989,15 @@ reydDefSsn <- colDef(header = with_tt("Yd", "Receiving Yards\nBold if >=1000"), 
   fontWeight <- ifelse(value >= 1000, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
 reydDefNm <- colDef(header = with_tt("Yd", "Receiving Yards"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+reydDef <- function(minW = 47, foot = F, borderL = F) {
+  colDef(header = with_tt("Yd", "Receiving Yards"),
+         class = function(value) if(borderL == T) {"border-left-grey"},
+         minWidth = minW,
+         align = 'right',
+         defaultSortOrder = "desc",
+         footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
+  )
+}
 
 #receiving tds
 retdDefWk <- colDef(header = with_tt("TD", "Receiving TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
@@ -803,6 +1007,15 @@ retdDefSsn <- colDef(header = with_tt("TD", "Receiving TDs\nBold if >=10"), minW
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
 retdDefNm <- colDef(header = with_tt("TD", "Receiving TDs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+retdDef <- function(minW = 47, foot = F, borderL = F) {
+  colDef(header = with_tt("TD", "Receiving TDs"),
+         class = function(value) if(borderL == T) {"border-left-grey"},
+         minWidth = minW,
+         align = 'right',
+         defaultSortOrder = "desc",
+         footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
+  )
+}
 
 #Receiving fd
 refdDefWk <- colDef(header = with_tt("FD", "Receiving First Downs\nBold if >=5"), minWidth = smallboxwidth, align = 'right', style = function(value) {
@@ -812,6 +1025,15 @@ refdDefSsn <- colDef(header = with_tt("FD", "Receiving First Downs\nBold if >=50
   fontWeight <- ifelse(value >= 50, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
 refdDefNm <- colDef(header = with_tt("FD", "Receiving First Downs"), minWidth = smallboxwidth, align = 'right')
+refdDef <- function(minW = 47, foot = F, borderL = F) {
+  colDef(header = with_tt("FD", "Receiving First Downs"),
+         class = function(value) if(borderL == T) {"border-left-grey"},
+         minWidth = minW,
+         align = 'right',
+         defaultSortOrder = "desc",
+         footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
+  )
+}
 
 flDef <- colDef(header = with_tt("Fl", "Fumbles Lost"), minWidth = smallboxwidth - 5, align = 'right', defaultSortOrder = "desc")
 
