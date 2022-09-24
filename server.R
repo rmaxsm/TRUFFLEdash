@@ -787,17 +787,17 @@ shinyServer(function(input, output, session) {
     
     #create week by week runchart
     output$ppwbw <- renderPlotly({
-      if (input$player >= 1) {
-      df <- weekly[Season == input$ppwbwseason & Player %in% input$player]
-      df$Stat <- df[[input$ppwbwstat]]
-      ggplotly(ggplot(df, aes(x = Week, y = Stat, color = Player)) +
-                 geom_point(size = 4) +
-                 geom_line(linetype = "longdash", size = .3) +
-                 xlim(0,18) + ylim(0, max(df[[input$ppwbwstat]], na.rm=T)) +
-                 ylab(input$ppwbwstat) +
-                 theme_minimal() + scale_x_continuous(labels=as.character(0:18),breaks=c(0:18)))
+      if (length(input$player) == 0) {
+        ggplotly(ggplot(weekly,aes(Week,FPts)) + geom_blank() +theme_minimal() + scale_x_continuous(labels=as.character(0:18),breaks=c(0:18)))
       } else {
-        ggplotly(ggplot(weekly,aes(Week,FPts)) + geom_blank() +theme_minimal())
+        df <- weekly[Season == input$ppwbwseason & Player %in% input$player]
+        df$Stat <- df[[input$ppwbwstat]]
+        ggplotly(ggplot(df, aes(x = Week, y = Stat, color = Player)) +
+                   geom_point(size = 4) +
+                   geom_line(linetype = "longdash", size = .3) +
+                   xlim(0,18) + ylim(0, max(df[[input$ppwbwstat]], na.rm=T)) +
+                   ylab(input$ppwbwstat) +
+                   theme_minimal() + scale_x_continuous(labels=as.character(0:18),breaks=c(0:18)))
       }
     })
     
