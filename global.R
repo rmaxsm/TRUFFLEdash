@@ -368,7 +368,24 @@ pptrufflecareer <- fantasy[Pos != "DST",
                              ReFD = sum(ReFD, na.rm=T),
                              Avg = round(sum(FPts, na.rm=T)/.N, 2),
                              FPts = sum(FPts, na.rm=T)),
-                           by = .(Player, TRUFFLE)]
+                           by = .(Pos, Player)]
+
+pptrufflecareerteam <- fantasy[Pos != "DST",
+                                    .(Seasons = list(unique(Season)),
+                                      G = .N,
+                                      PaYd = sum(PaYd, na.rm=T),
+                                      PaTD = sum(PaTD, na.rm=T),
+                                      PaInt = sum(PaInt, na.rm=T),
+                                      RuYd = sum(RuYd, na.rm=T),
+                                      RuTD = sum(RuTD, na.rm=T),
+                                      RuFD = sum(RuFD, na.rm=T),
+                                      Rec = sum(Rec, na.rm=T),
+                                      ReYd = sum(ReYd, na.rm=T),
+                                      ReTD = sum(ReTD, na.rm=T),
+                                      ReFD = sum(ReFD, na.rm=T),
+                                      Avg = round(sum(FPts, na.rm=T)/.N, 2),
+                                      FPts = sum(FPts, na.rm=T)),
+                                    by = .(Pos, Player, TRUFFLE)][order(-FPts)]
 
 #radar plot set up ----
 radchart_fill <- c(

@@ -532,7 +532,9 @@ shinyServer(function(input, output, session) {
     
     #player portal TRUFFLE Career Stats
     output$pptrufflecareerstats <- renderReactable({
-      reactable(pptrufflecareer[Player %in% input$player][order(Player)],
+      df <- pptrufflecareer[Player %in% input$player][order(-FPts)]
+      
+      reactable(df,
                 pagination = F,
                 height = 'auto',
                 filterable = F,
@@ -541,23 +543,45 @@ shinyServer(function(input, output, session) {
                 compact = T,
                 columns = list(
                   #Season = colDef(aggregate = "unique"),
-                  TRUFFLE = trfDef(filt = F),
-                  G = gDef(foot = T),
-                  PaYd = paydDef(foot = T, borderL = T),
-                  PaTD = patdDef(foot = T),
-                  PaInt = paintDef(foot = T),
-                  RuYd = ruydDef(foot = T, borderL = T),
-                  RuTD = rutdDef(foot = T),
-                  RuFD = patdDef(foot = T),
-                  Rec = recDef(foot = T, borderL = T),
-                  ReYd = reydDef(foot = T),
-                  ReTD = retdDef(foot = T),
-                  ReFD = refdDef(foot = T),
-                  Avg = avgDef(foot = T),
-                  FPts = fptsDef(foot = T)
+                  Pos = posDef(maxW = 75, filt = F),
+                  Player = playerDef(minW=200),
+                  G = gDef(),
+                  PaYd = paydDef(borderL = T),
+                  PaTD = patdDef(),
+                  PaInt = paintDef(),
+                  RuYd = ruydDef(borderL = T),
+                  RuTD = rutdDef(),
+                  RuFD = patdDef(),
+                  Rec = recDef(borderL = T),
+                  ReYd = reydDef(),
+                  ReTD = retdDef(),
+                  ReFD = refdDef(),
+                  Avg = avgDef(),
+                  FPts = fptsDef()
                 ),
-                defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
-                )
+                details = function(index) {
+                  poi <- df$Player[index]
+                  reactable(pptrufflecareerteam[Player == poi][, -c("Pos", "Player")],
+                            columns = list(
+                              TRUFFLE = trfDef(maxW = 95, filt = F),
+                              Seasons = colDef(minWidth = 215),
+                              G = gDef(),
+                              PaYd = paydDef(borderL = T),
+                              PaTD = patdDef(),
+                              PaInt = paintDef(),
+                              RuYd = ruydDef(borderL = T),
+                              RuTD = rutdDef(),
+                              RuFD = patdDef(),
+                              Rec = recDef(borderL = T),
+                              ReYd = reydDef(),
+                              ReTD = retdDef(),
+                              ReFD = refdDef(),
+                              Avg = avgDef(),
+                              FPts = fptsDef()
+                            ))
+                  
+                }
+      )
       
     })
     

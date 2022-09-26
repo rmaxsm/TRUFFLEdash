@@ -1,68 +1,86 @@
-#### Radarplots ----
+#### detail expansion ----
 
-library(fmsb)
+testo <- fantasy[Pos != "DST",
+                           .(G = .N,
+                             PaYd = sum(PaYd, na.rm=T),
+                             PaTD = sum(PaTD, na.rm=T),
+                             PaInt = sum(PaInt, na.rm=T),
+                             RuYd = sum(RuYd, na.rm=T),
+                             RuTD = sum(RuTD, na.rm=T),
+                             RuFD = sum(RuFD, na.rm=T),
+                             Rec = sum(Rec, na.rm=T),
+                             ReYd = sum(ReYd, na.rm=T),
+                             ReTD = sum(ReTD, na.rm=T),
+                             ReFD = sum(ReFD, na.rm=T),
+                             Avg = round(sum(FPts, na.rm=T)/.N, 2),
+                             FPts = sum(FPts, na.rm=T)),
+                           by = .(Pos, Player)]
+
+trufflecareerstatsbyteam <- fantasy[Pos != "DST",
+                 .(Seasons = list(unique(Season)),
+                   G = .N,
+                   PaYd = sum(PaYd, na.rm=T),
+                   PaTD = sum(PaTD, na.rm=T),
+                   PaInt = sum(PaInt, na.rm=T),
+                   RuYd = sum(RuYd, na.rm=T),
+                   RuTD = sum(RuTD, na.rm=T),
+                   RuFD = sum(RuFD, na.rm=T),
+                   Rec = sum(Rec, na.rm=T),
+                   ReYd = sum(ReYd, na.rm=T),
+                   ReTD = sum(ReTD, na.rm=T),
+                   ReFD = sum(ReFD, na.rm=T),
+                   Avg = round(sum(FPts, na.rm=T)/.N, 2),
+                   FPts = sum(FPts, na.rm=T)),
+                 by = .(Pos, Player, TRUFFLE)][order(-FPts)]
 
 
-radarchart(emptyradar,
-           #custom polygon
-           pcol="grey", pfcol= "white", plwd=1, pty = 32,
-           
-           #custom the grid
-           cglcol="grey", cglty=1, axislabcol="grey", caxislabels=seq(0,20,5), cglwd=0.8,
-           
-           #custom labels
-           vlcex=1,
-           
-           ylim = c(-1,1.2)
-           )
+df <- testo[Player %in% c("D'Andre Swift", "Davante Adams")][order(-FPts)]
 
-legend(x=0.6, y=1.3, legend = "No Players selected", bty = "n", text.col = 'black', cex=1.2, pt.cex=3)
-
-
-library(plotly)
-
-
-
-fig <- plot_ly(
-  type = 'scatterpolar',
-  fill = 'toself',
-  mode = 'markers'
-) 
-for (i in 3:4) {
-fig <- fig %>%
-  add_trace(
-    r = as.numeric(testo[i, ]/testo[1, ]),
-    theta = colnames(testo),
-    name = rownames(testo)[3]
-  ) 
-}
-
-fig <- fig %>%
-  layout(
-    polar = list(
-      radialaxis = list(
-        visible = T,
-        range = c(0,1)
-      )
-    )
-  )
-
-fig
-
-par(mar=c(0, 0, 0, 0))
-radarchart(emptyradar,
-           #custom polygon
-           pcol="grey", pfcol= "white", plwd=1, pty = 32,
-           
-           #custom the grid
-           cglcol="grey", cglty=1, axislabcol="grey", caxislabels=seq(0,20,5), cglwd=0.8,
-           
-           #custom labels
-           vlcex=1,
-           
-           ylim = c(-1.5,1.2),
-           xlim = c(-1,1)
+reactable(df,
+          pagination = F,
+          height = 'auto',
+          filterable = F,
+          highlight = T,
+          #borderless = T,
+          compact = T,
+          columns = list(
+            #Season = colDef(aggregate = "unique"),
+            Pos = posDef(maxW = 75, filt = F),
+            Player = playerDef(minW=200),
+            G = gDef(),
+            PaYd = paydDef(borderL = T),
+            PaTD = patdDef(),
+            PaInt = paintDef(),
+            RuYd = ruydDef(borderL = T),
+            RuTD = rutdDef(),
+            RuFD = patdDef(),
+            Rec = recDef(borderL = T),
+            ReYd = reydDef(),
+            ReTD = retdDef(),
+            ReFD = refdDef(),
+            Avg = avgDef(),
+            FPts = fptsDef()
+          ),
+          details = function(index) {
+            poi <- df$Player[index]
+            reactable(details[Player == poi][, -c("Pos", "Player")],
+                      columns = list(
+                        TRUFFLE = trfDef(maxW = 95, filt = F),
+                        Seasons = colDef(minWidth = 220),
+                        G = gDef(),
+                        PaYd = paydDef(borderL = T),
+                        PaTD = patdDef(),
+                        PaInt = paintDef(),
+                        RuYd = ruydDef(borderL = T),
+                        RuTD = rutdDef(),
+                        RuFD = patdDef(),
+                        Rec = recDef(borderL = T),
+                        ReYd = reydDef(),
+                        ReTD = retdDef(),
+                        ReFD = refdDef(),
+                        Avg = avgDef(),
+                        FPts = fptsDef()
+                      ))
+            
+          }
 )
-
-legend(x=-.4, y=-1, legend = "No Players selected", bty = "n", text.col = 'black', cex=1.2, pt.cex=3)
-
