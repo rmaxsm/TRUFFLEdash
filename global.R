@@ -131,7 +131,7 @@ cleanWeekly <- function(file) {
   return(file)
 }
 weekly <- as.data.table(cleanWeekly(weekly))
-weekly <- weekly[order(-Season,Week,-FPts)][, `:=`(PosRk = 1:.N), by = .(Season, Week, Pos)]
+weekly <- weekly[order(-Season,-Week,-FPts)][, `:=`(PosRk = 1:.N), by = .(Season, Week, Pos)]
 
 #add current season
 currentseason <-weekly[, !c("Opp", "OpRk")]
@@ -155,7 +155,7 @@ currentseason <- currentseason[Season == max(weekly$Season),
                                  Avg = round(mean(FPts),2),
                                  FPts = sum(FPts)
                                ),
-                               by = .(Season, Pos, Player, NFL)]
+                               by = .(Season, Pos, Player)]
 
 if (max(seasons$Season) != max(currentseason$Season)) {
   seasons <- rbind(seasons, currentseason)
