@@ -290,7 +290,7 @@ shinyServer(function(input, output, session) {
                       NFL = nflDef,
                       Salary = salaryDefBar(foot = T),
                       Contract = contractDef(foot = T),
-                      G = gDef,
+                      G = gDef(),
                       PosRk = posRkDef(filt = T),
                       ptslog = ptsLogDef(),
                       Avg = avgDef(),
@@ -346,7 +346,7 @@ shinyServer(function(input, output, session) {
                   columns = list(
                       Pos = posDef(),
                       Player = playerDef(minW = 135, filt=T),
-                      G = gDef,
+                      G = gDef(),
                       PaCmp = pacmpDef,
                       PaAtt = paattDef,
                       PaYd = paydDefSsn,
@@ -369,6 +369,7 @@ shinyServer(function(input, output, session) {
                       colGroup(name = "Rushing", columns = c("RuAtt", "RuYd", "RuTD", "RuFD"), align = 'left'),
                       colGroup(name = "Receiving", columns = c("Tar", "Rec", "ReYd", "ReTD", "ReFD"), align = 'left')
                   )
+                  
         )
     })
     
@@ -529,20 +530,126 @@ shinyServer(function(input, output, session) {
         )
     })
     
+    #player portal TRUFFLE Career Stats
+    output$pptrufflecareerstats <- renderReactable({
+      df <- pptrufflecareer[Player %in% input$player][order(-FPts)][, -"Pos"]
+      
+      reactable(df,
+                pagination = F,
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                columns = list(
+                  #Season = colDef(aggregate = "unique"),
+                  Player = playerDef(minW=120),
+                  G = gDef(),
+                  PaYd = paydDef(borderL = T),
+                  PaTD = patdDef(),
+                  PaInt = paintDef(),
+                  RuYd = ruydDef(borderL = T),
+                  RuTD = rutdDef(),
+                  RuFD = patdDef(),
+                  ReYd = reydDef(borderL = T),
+                  ReTD = retdDef(),
+                  ReFD = refdDef(),
+                  Avg = avgDef(),
+                  FPts = fptsDef()
+                ),
+                details = function(index) {
+                  poi <- df$Player[index]
+                  reactable(pptrufflecareerteam[Player == poi][, -c("Pos", "Player")],
+                            columns = list(
+                              TRUFFLE = trfDef(filt=F),
+                              Seasons = colDef(minWidth = 90),
+                              G = gDef(),
+                              PaYd = paydDef(borderL = T),
+                              PaTD = patdDef(),
+                              PaInt = paintDef(),
+                              RuYd = ruydDef(borderL = T),
+                              RuTD = rutdDef(),
+                              RuFD = rufdDef(),
+                              ReYd = reydDef(borderL = T),
+                              ReTD = retdDef(),
+                              ReFD = refdDef(),
+                              Avg = avgDef(),
+                              FPts = fptsDef()
+                            ))
+                }
+      )
+      
+    })
+    
+    #player portal Contract History
+    output$ppcontracthistory <- renderReactable({
+      df <- oldrosters[Player %in% input$player,
+                       .(TRUFFLE = TRUFFLE[Season == 2022],
+                         Salary = Salary[Season == 2022],
+                         Contract = Contract[Season == 2022]
+                         ),
+                       by = .(Player)][order(-Salary)]
+
+      reactable(df,
+                pagination = F,
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                columns = list(
+                  Player = playerDef(minW = 125),
+                  TRUFFLE = trfDef(filt = FALSE),
+                  Salary = salaryDefNobar(title = "$"),
+                  Contract = contractDef(filt = F, name = "Yr")
+                ),
+                details = function(index) {
+                  poi <- df$Player[index]
+                  reactable(oldrosters[Player == poi][order(Player, Season)][, c("Season", "TRUFFLE", "Salary", "Contract")],
+                            fullWidth = F,
+                            columns = list(
+                              Season = colDef(name="Season",
+                                              maxWidth = 80,
+                                              align = 'center',
+                                              footer = "Career:"),
+                              TRUFFLE = trfDef(filt = F),
+                              Salary = salaryDefNobar(foot = T, minW = 80),
+                              Contract = colDef(name="Yr",
+                                                maxWidth = 45,
+                                                align = 'center',
+                                                style = function(value) {
+                                                  background <- ifelse(value == 1, RBcolor,
+                                                                       ifelse(value == 2, TEcolor,
+                                                                              ifelse(value == 3, WRcolor, QBcolor)))
+                                                  list(background = background)},
+                                                footer = function(values) {length(values)})
+                            ),
+                            defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
+                            )
+                }
+      )
+    })
+    
     #player portal seasons
     output$ppseasons <- renderReactable({
-        reactable(seasons[Player %in% input$player][order(-Season, -FPts)][, !c("NFL", "Pos","FL", "PosRk")],
+      if(input$ppstatcenterseason == "All") {
+        df <- seasons[Season >= 2020]
+      } else {
+        df <- seasons[Season == as.numeric(input$ppstatcenterseason)]
+      }
+      
+        reactable(df[Player %in% input$player][order(-Season, -FPts)][, !c("NFL", "Pos","FL", "PosRk")],
                   defaultSorted = c("Season", "FPts"),
                   pagination = F,
                   height = 'auto',
                   filterable = F,
                   highlight = T,
                   #borderless = T,
-                  compact = T,
+                  #compact = T,
                   columns = list(
-                      Season = seasonDef(filt = T),
+                      Season = seasonDef(filt = F),
                       Player = playerDef(minW = 135),
-                      G = gDef,
+                      G = gDef(),
                       PaCmp = pacmpDef,
                       PaAtt = paattDef,
                       PaYd = paydDefSsn,
@@ -570,20 +677,22 @@ shinyServer(function(input, output, session) {
     
     #player portal advanced
     output$ppadvanced <- renderReactable({
-      perccolwidth <- 60
-      othcolwidth <- 43
-      reactable(advanced[Player %in% input$player][, -c("TRUFFLE","Pos")][order(-FPts)],
+      if(input$ppstatcenterseason == "All") {
+        df <- advanced[Season >= 2020]
+      } else {
+        df <- advanced[Season == as.numeric(input$ppstatcenterseason)]
+      }
+      
+      reactable(df[Player %in% input$player][, -c("TRUFFLE","Pos")][order(-FPts)],
                 defaultSorted = c("FPts"),
-                paginationType = "jump",
-                showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
-                pageSizeOptions = c(10, 20, 50, 100),
+                pagination = F,
                 height = 'auto',
                 filterable = F,
                 highlight = T,
                 #borderless = T,
-                compact = T,
+                #compact = T,
                 columns = list(
-                  Season = seasonDef(filt = T),
+                  Season = seasonDef(filt = F),
                   Player = playerDef(minW = 120),
                   FPts = fptsSeasDef(),
                   Touch = tchDef,
@@ -611,19 +720,21 @@ shinyServer(function(input, output, session) {
     
     #player portal consistency
     output$ppconsistency <- renderReactable({
-      perccolwidth <- 60
-      reactable(consistency[Player %in% input$player][order(-Avg)][, -c("TRUFFLE","Pos")],
+      if(input$ppstatcenterseason == "All") {
+        df <- consistency[Season >= 2020]
+      } else {
+        df <- consistency[Season == as.numeric(input$ppstatcenterseason)]
+      }
+      reactable(df[Player %in% input$player][order(-Avg)][, -c("TRUFFLE","Pos")],
                 defaultSorted = c("Avg"),
-                paginationType = "jump",
-                showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
-                pageSizeOptions = c(10, 20, 50, 100),
+                pagination = F,
                 height = 'auto',
                 filterable = F,
                 highlight = T,
                 #borderless = T,
-                compact = T,
+                #compact = T,
                 columns = list(
-                  Season = seasonDef(filt = T),
+                  Season = seasonDef(filt = F),
                   Player = playerDef(minW = 125),
                   Avg = avgDef(),
                   RelSD = relsdDef,
@@ -644,26 +755,123 @@ shinyServer(function(input, output, session) {
       )
     })
     
+    #player portal radar plot
+    output$ppradarplot <- renderPlot({
+      margins <- c(0,0,0,0)
+      y_lim <- c(-1.1, 1.2)
+      x_lim <- c(-1,1)
+      
+      #check that player has been selected and grab position of selected players(s)
+      if(length(input$player >= 1)) {
+        selectedposition <- unique(weekly$Pos[weekly$Player %in% input$player])
+        
+        #only output radar plot if all selected players have same position
+        if(length(selectedposition) == 1) {
+          y_lim[1] <- -1 - (0.1 * length(input$player))
+          #modify data
+          df <- as.data.frame(fullradar[(Player %in% input$player | Player == "MAX" | Player == "MIN") & (Season == input$ppradarplotseason & Pos == selectedposition[1])])
+          rownames(df) <- df$Player
+          df <- df[, c(4:8)]
+          colnames(df) <- c("FPts", "Tch", "Yd", "TD", "FD")
+          #create the plot
+          par(mar= margins )
+          radarchart(df,
+                     #custom polygon
+                     pcol=radchart_line , pfcol= radchart_fill, plwd=3, plty = 1,
+                     
+                     #custom the grid
+                     cglcol="grey", cglty=1, axislabcol="grey", caxislabels=seq(0,20,5), cglwd=0.8,
+                     
+                     #custom labels
+                     #custom labels
+                     vlcex=1,
+                     
+                     ylim = y_lim,
+                     xlim = x_lim
+                     )
+          #add legend
+          legend(x=-.4, y=-1, legend = rownames(df[-c(1,2),]), bty = "n", pch=20, col=radchart_fill, text.col = "black", cex=1, pt.cex=3)
+          
+        } else {
+          #empty radar chart if multiple positions are selected
+          par(mar= margins )
+          radarchart(emptyradar,
+                     #custom polygon
+                     pcol="grey", pfcol= "white", plwd=1, pty = 32,
+                     
+                     #custom the grid
+                     cglcol="grey", cglty=1, axislabcol="grey", caxislabels=seq(0,20,5), cglwd=0.8,
+                     
+                     #custom labels
+                     #custom labels
+                     vlcex=1,
+                     
+                     ylim = y_lim,
+                     xlim = x_lim)
+          
+          legend(x=-.4, y=-1, legend = "Multiple positions", bty = "n", text.col = 'black', cex=1, pt.cex=3)
+        }
+        
+      } else {
+        #empty radarchart before players are selected
+        par(mar= margins )
+        radarchart(emptyradar,
+                   #custom polygon
+                   pcol="grey", pfcol= "white", plwd=1, pty = 32,
+                   
+                   #custom the grid
+                   cglcol="grey", cglty=1, axislabcol="grey", caxislabels=seq(0,20,5), cglwd=0.8,
+                   
+                   #custom labels
+                   #custom labels
+                   vlcex=1,
+                   
+                   ylim = y_lim,
+                   xlim = x_lim)
+        
+        legend(x=-.4, y=-1, legend = "Select players", bty = "n", text.col = 'black', cex=1, pt.cex=3)
+      }
+      
+    })
+    
+    #create week by week runchart
+    output$ppwbw <- renderPlotly({
+      if (length(input$player) == 0) {
+        ggplotly(ggplot(weekly,aes(Week,FPts)) + geom_blank() +theme_minimal() + scale_x_continuous(labels=as.character(0:18),breaks=c(0:18)))
+      } else {
+        df <- weekly[Season == input$ppwbwseason & Player %in% input$player]
+        df$Stat <- df[[input$ppwbwstat]]
+        ggplotly(ggplot(df, aes(x = Week, y = Stat, color = Player)) +
+                   geom_point(size = 4) +
+                   geom_line(linetype = "longdash", size = .3) +
+                   xlim(0,18) + ylim(0, max(df[[input$ppwbwstat]], na.rm=T)) +
+                   ylab(input$ppwbwstat) +
+                   theme_minimal() + scale_x_continuous(labels=as.character(0:18),breaks=c(0:18)))
+      }
+    })
+    
     #player portal weekly logs
-    output$ppweekly <- renderReactable({
-        reactable(weekly[Player %in% input$player][order(-Week, -FPts)][, !c("Pos", "TRUFFLE", "NFL", "Avg", "FL", "PosRk")],
-                  defaultSorted = c("Season","Week"),
-                  paginationType = "jump",
-                  showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 16,
-                  pageSizeOptions = c(10, 16, 50, 100),
+    output$ppgamelogweekly <- renderReactable({
+      if(input$ppgamelogsseason == "All") {
+        df <- weekly
+      } else {
+        df <- weekly[Season == as.numeric(input$ppgamelogsseason)]
+      }
+
+        reactable(df[Player %in% input$player][order(Season, Week, -FPts)][, !c("TRUFFLE", "PaCmp", "PaAtt", "NFL", "Avg", "FL", "PosRk")],
+                  pagination = F,
                   height = 'auto',
-                  filterable = T,
+                  filterable = F,
                   highlight = T,
                   #borderless = T,
                   compact = T,
                   columns = list(
-                      Season = seasonDef(filt = T),
+                      Season = seasonDef(filt = F),
                       Week = weekDef,
-                      Player = playerDef(minW = 135, filt = T),
+                      Pos = posDef(filt = F),
+                      Player = playerDef(minW = 135, filt = F),
                       Opp = opDef,
                       OpRk = oprkDef,
-                      PaCmp = pacmpDef,
-                      PaAtt = paattDef,
                       PaYd = paydDefWk,
                       PaTD = patdDefWk,
                       PaInt = paintDefWk,
@@ -679,11 +887,53 @@ shinyServer(function(input, output, session) {
                       FPts = fptsWeekDef()
                   ),
                   columnGroups = list(
-                      colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
+                      colGroup(name = "Passing", columns = c("PaYd", "PaTD", "PaInt"), align = 'left'),
                       colGroup(name = "Rushing", columns = c("RuAtt", "RuYd", "RuTD", "RuFD"), align = 'left'),
                       colGroup(name = "Receiving", columns = c("Tar", "Rec", "ReYd", "ReTD", "ReFD"), align = 'left')
                   )
         )
+    })
+    
+    output$ppgamelogfantasy <- renderReactable({
+      if(input$ppgamelogsseason == "All") {
+        df <- fantasy
+      } else {
+        df <- fantasy[Season == as.numeric(input$ppgamelogsseason)]
+      }
+      
+      reactable(df[Player %in% input$player][order(Season, Week, -FPts)][, !c("PaAtt", "PaCmp", "Opp", "OpRk", "Tar","NFL", "Avg")],       
+                pagination = F,
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                columns = list(
+                  Season = seasonDef(),
+                  Week = weekDef,
+                  TRUFFLE = trfDef(filt = F),
+                  Pos = posDef(filt = F),
+                  Player = playerDef(minW = 150, filt = F),
+                  PaYd = paydDefWk,
+                  PaTD = patdDefWk,
+                  PaInt = paintDefWk,
+                  RuAtt = ruattDefWk,
+                  RuYd = ruydDefWk,
+                  RuTD = rutdDefWk,
+                  RuFD = rufdDefWk,
+                  Rec = recDefWk,
+                  ReYd = reydDefWk,
+                  ReTD = retdDefWk,
+                  ReFD = refdDefWk,
+                  FL = flDef,
+                  FPts = fptsWeekDef()
+                ),
+                columnGroups = list(
+                  colGroup(name = "Passing", columns = c("PaYd", "PaTD", "PaInt"), align = 'left'),
+                  colGroup(name = "Rushing", columns = c("RuAtt", "RuYd", "RuTD", "RuFD"), align = 'left'),
+                  colGroup(name = "Receiving", columns = c("Rec", "ReYd", "ReTD", "ReFD"), align = 'left')
+                )
+      )
     })
     
     #fantasy portal ----
@@ -797,7 +1047,7 @@ shinyServer(function(input, output, session) {
                   TRUFFLE = trfDef(sort = F, maxW = 60),
                   Pos = posDef(sort = F, maxW = 38),
                   Player = playerDef(minW = 125, filt = T),
-                  G = gDef,
+                  G = gDef(),
                   PaCmp = pacmpDef,
                   PaAtt = paattDef,
                   PaYd = paydDefNm,
@@ -2125,7 +2375,7 @@ shinyServer(function(input, output, session) {
                       Pos = posDef(),
                       Player = playerDef(minW = 150, filt = T),
                       NFL = nflDef,
-                      G = gDef,
+                      G = gDef(),
                       PaCmp = pacmpDef,
                       PaAtt = paattDef,
                       PaYd = paydDefSsn,
