@@ -53,8 +53,9 @@ def runSnapPer():
   df['Player'] = df['Player'].str.replace(r' II', '', regex=True)
   df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
   # print(df)
-  df.to_csv("dre/FantasyPros/snapPer.csv", index=False)
-  print("\nSNAP PER FILE SAVED TO dre/FantasyPros/snapPer.csv")
+  filepath = "data/snapPer.csv"
+  df.to_csv(filepath, index=False)
+  print("\nSNAP PER FILE SAVED TO {}".format(filepath))
   print("Fantasy Pros DONE :)\n")
   
 def main():
