@@ -142,6 +142,12 @@ cleanWeekly <- function(file) {
 weekly <- as.data.table(cleanWeekly(weekly))
 weekly <- weekly[order(-Season,-Week,-FPts)][, `:=`(PosRk = 1:.N), by = .(Season, Week, Pos)]
 
+#modified weekly w current truffle for stat center
+weeklysc <- weekly
+weeklysc$TRUFFLE <- NULL
+weeklysc <- merge(x = weeklysc, y = rosters[ , c("Pos", "Player", "TRUFFLE")], by = c("Pos", "Player"), all.x=TRUE)
+weeklysc$TRUFFLE[is.na(weeklysc$TRUFFLE)] <- "FA"
+
 #add current season
 currentseason <-weekly[, !c("Opp", "OpRk")]
 currentseason <- currentseason[Season == max(weekly$Season),
@@ -273,7 +279,7 @@ ppbios <- merge(ppbios, rosters[, c("Player","Salary", "Contract")], by = 'Playe
 ppbios <- merge(ppbios, fprosage[, c("Player", "AgePH", "DynRk", "DynPosRk")])
 ppbios <- ppbios[, c("TRUFFLE","Pos","Player", "NFL", "AgePH", "DynRk", "DynPosRk","Salary", "Contract", "ptslogs")]
 
-advanced <- weekly[, .(FPts = sum(FPts),
+advanced <- weeklysc[, .(FPts = sum(FPts),
                        YdPts = round(.04*sum(PaYd) + .1*(sum(RuYd) + sum(ReYd)),1),
                        TDPts = 4*sum(PaTD) + 6*(sum(RuTD) + sum(ReTD)),
                        FDPts = sum(RuFD) + sum(ReFD),
@@ -291,7 +297,7 @@ by = .(Season,TRUFFLE,Pos,Player)][, `:=`(`YdPt%` = YdPts / FPts,
                                           `FPts/Opp` = round(FPts/Opp, 3)
 )][order(-FPts)][, c("Season","TRUFFLE","Pos","Player","FPts","Touch","Opp","FPts/Touch","FPts/Opp","YdPts","TDPts","FDPts","RuPts","RePts","YdPt%","TDPt%","FDPt%","RuPt%","RePt%")]
 
-consistencystart <- as.data.frame(weekly)
+consistencystart <- as.data.frame(weeklysc)
 consistencystart <- as.data.table(consistencystart)
 consistency <- consistencystart[, `:=` (
   top5dum = ifelse(PosRk <= 5, 1, 0),

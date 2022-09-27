@@ -994,7 +994,7 @@ shinyServer(function(input, output, session) {
     #building the tables that take the week sliders into account
     #stat center boxscore
     output$scboxscore <- renderReactable({
-      boxscorerange <- weekly[Season == input$scseason &
+      boxscorerange <- weeklysc[Season == input$scseason &
                                          Week %in% seq(input$scweekrange[1],input$scweekrange[2])
       ][,
         .(G = .N,
@@ -1076,7 +1076,7 @@ shinyServer(function(input, output, session) {
     #stat center advanced
     #calculating the reactive advanced stats over ranges
     output$scadvanced <- renderReactable({
-      advancedrange <- weekly[Season == input$scseason & Week %in% seq(input$scweekrange[1],input$scweekrange[2])
+      advancedrange <- weeklysc[Season == input$scseason & Week %in% seq(input$scweekrange[1],input$scweekrange[2])
       ][,
         .(Avg = round(mean(FPts, na.rm = T),2),
           FPts = sum(FPts),
@@ -1190,6 +1190,8 @@ shinyServer(function(input, output, session) {
         reactable(consistencyrange[, .(Action,TRUFFLE,Pos,Player,Avg,RelSD,
                                        `>10 %`,`>20 %`,`>30 %`,AvgPosRk,
                                        `Top5 %`,`Top12 %`,`Top24 %`,`Top36 %`, `NonStart %`)],
+                  defaultSorted = "Avg",
+                  defaultSortOrder = "desc",
                   paginationType = "jump",
                   showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
                   pageSizeOptions = c(10, 20, 50, 100),
