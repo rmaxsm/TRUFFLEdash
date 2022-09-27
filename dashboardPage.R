@@ -157,13 +157,17 @@ dashboardPageUI <-
                         column(width = 8,
                                wellPanel(class = "well",
                                          h2("TRUFFLE Career Stats"),
-                                         reactableOutput('pptrufflecareerstats')
+                                         reactableOutput('pptrufflecareerstats'),
+                                         hr(),
+                                         em("Statistics only based on stats produced in active TRUFFLE lineups. Expand for career stats by team.")
                                )
                         ),
                         column(width = 4,
                                wellPanel(class = "well",
-                                         h2("Contract History"),
-                                         reactableOutput('ppcontracthistory')
+                                         h2("Contract Details"),
+                                         reactableOutput('ppcontracthistory'),
+                                         hr(),
+                                         em("Expand for year-by-year contract overview.")
                                )
                                )
                         ),
@@ -195,7 +199,7 @@ dashboardPageUI <-
                                                     width = "100%",
                                                     height = "400px"),
                                          hr(),
-                                         em("Radar chart indicates player percentile performance at position. Do not select multiple positions.")
+                                         em("Radar chart shows avg. weekly player percentile performance at position.")
                                          )
                                ),
                         column(width = 8,

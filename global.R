@@ -260,13 +260,14 @@ pointsleaders <- weekly[,
                           Total = round(sum(FPts),1)),
                         by = .(Season, TRUFFLE, Pos, Player)][order(-Season, match(Pos, positionorder), -Total, -Avg)][, `:=`(PosRk = 1:.N), by = .(Season, Pos)][, c("Season", "TRUFFLE", "Player", "Pos", "PosRk", "ptslogs", "Avg", "Total")][order(-Total, -Avg)]
 
-ppbios <- weekly[order(-Season,-Week)]
+ppbios <- weekly[Season == max(weekly$Season)][order(-Season,-Week)]
 ppbios <- ppbios[,
-                 .(NFL = NFL[1],
+                 .(TRUFFLE = TRUFFLE[1],
+                   NFL = NFL[1],
                    ptslogs = list(FPts),
                    Avg = round(mean(FPts),1),
                    Total = round(sum(FPts))),
-                 by = .(TRUFFLE, Pos, Player)]
+                 by = .(Pos, Player)]
 ppbios <- merge(ppbios, rosters[, c("Player","Salary", "Contract")], by = 'Player', all.x = T)
 ppbios <- merge(ppbios, fprosage[, c("Player", "AgePH", "DynRk", "DynPosRk")])
 ppbios <- ppbios[, c("TRUFFLE","Pos","Player", "NFL", "AgePH", "DynRk", "DynPosRk","Salary", "Contract", "ptslogs")]
@@ -362,16 +363,15 @@ pptrufflecareer <- fantasy[Pos != "DST",
                              RuYd = sum(RuYd, na.rm=T),
                              RuTD = sum(RuTD, na.rm=T),
                              RuFD = sum(RuFD, na.rm=T),
-                             Rec = sum(Rec, na.rm=T),
                              ReYd = sum(ReYd, na.rm=T),
                              ReTD = sum(ReTD, na.rm=T),
                              ReFD = sum(ReFD, na.rm=T),
-                             Avg = round(sum(FPts, na.rm=T)/.N, 2),
+                             Avg = round(sum(FPts, na.rm=T)/.N, 1),
                              FPts = sum(FPts, na.rm=T)),
                            by = .(Pos, Player)]
 
 pptrufflecareerteam <- fantasy[Pos != "DST",
-                                    .(Seasons = list(unique(Season)),
+                                    .(Seasons = list(unique(substr(Season, 3, 4))),
                                       G = .N,
                                       PaYd = sum(PaYd, na.rm=T),
                                       PaTD = sum(PaTD, na.rm=T),
@@ -379,11 +379,10 @@ pptrufflecareerteam <- fantasy[Pos != "DST",
                                       RuYd = sum(RuYd, na.rm=T),
                                       RuTD = sum(RuTD, na.rm=T),
                                       RuFD = sum(RuFD, na.rm=T),
-                                      Rec = sum(Rec, na.rm=T),
                                       ReYd = sum(ReYd, na.rm=T),
                                       ReTD = sum(ReTD, na.rm=T),
                                       ReFD = sum(ReFD, na.rm=T),
-                                      Avg = round(sum(FPts, na.rm=T)/.N, 2),
+                                      Avg = round(sum(FPts, na.rm=T)/.N, 1),
                                       FPts = sum(FPts, na.rm=T)),
                                     by = .(Pos, Player, TRUFFLE)][order(-FPts)]
 
@@ -707,9 +706,9 @@ salaryDefBar <- function(minW = 175, foot = F) {
   )
 }
 
-salaryDefNobar <- function(minW = 45, foot = F) {
+salaryDefNobar <- function(minW = 45, foot = F, title = "$") {
   colDef(minWidth = minW,
-         name = "$",
+         name = title,
          align = 'right',
          defaultSortOrder = "desc",
          format = colFormat(digits=0, prefix = "$"),
@@ -720,7 +719,7 @@ salaryDefNobar <- function(minW = 45, foot = F) {
   )
 }
 
-contractDef <- function(minW = 65, filt = T, foot = F, name = "Contract") {
+contractDef <- function(minW = 45, filt = T, foot = F, name = "Contract") {
   colDef(minWidth = minW,
          filt = filt,
          name = name,

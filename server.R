@@ -532,7 +532,7 @@ shinyServer(function(input, output, session) {
     
     #player portal TRUFFLE Career Stats
     output$pptrufflecareerstats <- renderReactable({
-      df <- pptrufflecareer[Player %in% input$player][order(-FPts)]
+      df <- pptrufflecareer[Player %in% input$player][order(-FPts)][, -"Pos"]
       
       reactable(df,
                 pagination = F,
@@ -543,8 +543,7 @@ shinyServer(function(input, output, session) {
                 compact = T,
                 columns = list(
                   #Season = colDef(aggregate = "unique"),
-                  Pos = posDef(maxW = 75, filt = F),
-                  Player = playerDef(minW=200),
+                  Player = playerDef(minW=120),
                   G = gDef(),
                   PaYd = paydDef(borderL = T),
                   PaTD = patdDef(),
@@ -552,8 +551,7 @@ shinyServer(function(input, output, session) {
                   RuYd = ruydDef(borderL = T),
                   RuTD = rutdDef(),
                   RuFD = patdDef(),
-                  Rec = recDef(borderL = T),
-                  ReYd = reydDef(),
+                  ReYd = reydDef(borderL = T),
                   ReTD = retdDef(),
                   ReFD = refdDef(),
                   Avg = avgDef(),
@@ -563,23 +561,21 @@ shinyServer(function(input, output, session) {
                   poi <- df$Player[index]
                   reactable(pptrufflecareerteam[Player == poi][, -c("Pos", "Player")],
                             columns = list(
-                              TRUFFLE = trfDef(maxW = 95, filt = F),
-                              Seasons = colDef(minWidth = 215),
+                              TRUFFLE = trfDef(filt=F),
+                              Seasons = colDef(minWidth = 90),
                               G = gDef(),
                               PaYd = paydDef(borderL = T),
                               PaTD = patdDef(),
                               PaInt = paintDef(),
                               RuYd = ruydDef(borderL = T),
                               RuTD = rutdDef(),
-                              RuFD = patdDef(),
-                              Rec = recDef(borderL = T),
-                              ReYd = reydDef(),
+                              RuFD = rufdDef(),
+                              ReYd = reydDef(borderL = T),
                               ReTD = retdDef(),
                               ReFD = refdDef(),
                               Avg = avgDef(),
                               FPts = fptsDef()
                             ))
-                  
                 }
       )
       
@@ -587,7 +583,14 @@ shinyServer(function(input, output, session) {
     
     #player portal Contract History
     output$ppcontracthistory <- renderReactable({
-      reactable(oldrosters[Player %in% input$player][, c("Season", "Player", "TRUFFLE", "Salary", "Contract")][order(Player)],
+      df <- oldrosters[Player %in% input$player,
+                       .(TRUFFLE = TRUFFLE[Season == 2022],
+                         Salary = Salary[Season == 2022],
+                         Contract = Contract[Season == 2022]
+                         ),
+                       by = .(Player)][order(-Salary)]
+
+      reactable(df,
                 pagination = F,
                 height = 'auto',
                 filterable = F,
@@ -595,13 +598,35 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Season = seasonDef(filt = F),
-                  Player = playerDef(minW = 135),
+                  Player = playerDef(minW = 125),
                   TRUFFLE = trfDef(filt = FALSE),
-                  Salary = salaryDefNobar(foot = T),
-                  Contract = contractDef(filt = F)
+                  Salary = salaryDefNobar(title = "$"),
+                  Contract = contractDef(filt = F, name = "Yr")
                 ),
-                defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
+                details = function(index) {
+                  poi <- df$Player[index]
+                  reactable(oldrosters[Player == poi][order(Player, Season)][, c("Season", "TRUFFLE", "Salary", "Contract")],
+                            fullWidth = F,
+                            columns = list(
+                              Season = colDef(name="Season",
+                                              maxWidth = 80,
+                                              align = 'center',
+                                              footer = "Career:"),
+                              TRUFFLE = trfDef(filt = F),
+                              Salary = salaryDefNobar(foot = T, minW = 80),
+                              Contract = colDef(name="Yr",
+                                                maxWidth = 45,
+                                                align = 'center',
+                                                style = function(value) {
+                                                  background <- ifelse(value == 1, RBcolor,
+                                                                       ifelse(value == 2, TEcolor,
+                                                                              ifelse(value == 3, WRcolor, QBcolor)))
+                                                  list(background = background)},
+                                                footer = function(values) {length(values)})
+                            ),
+                            defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
+                            )
+                }
       )
     })
     
