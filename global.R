@@ -206,6 +206,19 @@ turkeyscorers <- rivfantasy[Thanksgiving == 1,
                           Avg = round(mean(FPts, na.rm = T),2)),
                         by = .(Rivalry, TRUFFLE, Player)]
 
+
+#read in advanced combined files
+extradash <- as.data.table(read_csv("data/extraDash.csv", col_types = cols()))
+colnames(extradash)[5:18] <- c("Cmp%", "Pa20+", "Pa40+", "RuYPC", "Ru20+", "Tar", "Tar%", "ReYPC", "Re20+", "Re40+", "ReFD%", "TotYd", "Avg", "FPts")
+
+espn <- as.data.table(read_csv("data/espnStats.csv", col_types = cols()))
+espn <- merge(x = espn, y = rosters[ , c("Pos", "Player", "TRUFFLE")], by = c("Pos", "Player"), all.x=TRUE)
+espn$TRUFFLE[is.na(espn$TRUFFLE)] <- "FA"
+
+snaps <- as.data.table(read_csv("data/snapPer.csv", col_types = cols()))
+snaps <- merge(x = snaps, y = rosters[ , c("Pos", "Player", "TRUFFLE")], by = c("Pos", "Player"), all.x=TRUE)
+snaps$TRUFFLE[is.na(snaps$TRUFFLE)] <- "FA"
+
 # modifying tables for display -----
 
 # helpful vectors
