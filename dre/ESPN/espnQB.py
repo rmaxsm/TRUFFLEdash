@@ -139,7 +139,7 @@ def runQB():
   df = pd.DataFrame(allPlayers, columns=colHeaders)
   df = df.drop(columns=["FORP","G", "P Yds", "P TD", "R Yds", "R TD"])
   df = df.loc[:, ["Player","NFL","Pos","xFP","ActualPts"]]
-  # print(df)
+  print(df)
   df.to_pickle("dre/ESPN/qb.pkl")
   
 def main():

@@ -42,7 +42,7 @@ def separateColumns(row):
   # allCols[1] = "Player"
   return allCols
 
-def getExtraDash():
+def getExtraDash(week):
   
   cookies = {
     'ppid': 'bf794872c9de88772307c75ceb0df52d',
@@ -115,7 +115,8 @@ def getExtraDash():
     
   
   #where the connection is made to the truffle cbs website
-  url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:QB:RB:WR:TE:RB-WR-TE:FLEX/ytd:p/ExtraDash/?print_rows=9999"
+  # url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:QB:RB:WR:TE:RB-WR-TE:FLEX/ytd:p/ExtraDash/?print_rows=9999"  #ytd
+  url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:QB:RB:WR:TE:RB-WR-TE:FLEX/period-{}:p/ExtraDash/?print_rows=9999".format(week)
   response = requests.get(url, cookies=cookies, headers=headers)
   soup = BeautifulSoup(response.content, 'html.parser')
   
@@ -175,13 +176,14 @@ def getExtraDash():
   df = df.drop(columns=["Action", "Opp", "OVP"])
   df = df.rename(columns={"Avail": "TRUFFLE"})
   # df = df.sort_values(by=['Player','Total'])
-
+  filepath = "dre/CBS/extraDash_{}.csv".format(week)
   
-  df.to_csv("dre/CBS/extraDash.csv", index=False)
-  print("\nTRUFFLE EXTRA DASH SAVED TO dre/CBS/extraDash.csv")
+  df.to_csv(filepath, index=False)
+  print("\nTRUFFLE EXTRA DASH SAVED TO {}".format(filepath))
 
-def main():
-  getExtraDash()
+def main(week):
+  # week = input("What week is it? ")
+  getExtraDash(week)
   print("EXTRA DASH DONE")
 if __name__ == "__main__":
   main()

@@ -5,10 +5,13 @@ import pandas as pd
 
 
 def main():
+  
+  week = input("What week is it? ")
+  
  
   espn.main()
   fp.main()
-  cbs.main()
+  cbs.main(week)
   
   print("\nALL DONE :)")
 
