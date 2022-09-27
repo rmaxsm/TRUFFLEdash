@@ -145,7 +145,8 @@ weekly <- weekly[order(-Season,-Week,-FPts)][, `:=`(PosRk = 1:.N), by = .(Season
 #add current season
 currentseason <-weekly[, !c("Opp", "OpRk")]
 currentseason <- currentseason[Season == max(weekly$Season),
-                               .(G = .N,
+                               .(NFL = NFL[1],
+                                 G = .N,
                                  PaCmp = sum(PaCmp),
                                  PaAtt = sum(PaAtt),
                                  PaYd = sum(PaYd),
