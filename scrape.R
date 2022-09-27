@@ -11,6 +11,7 @@ source_python('scrape/playerIDs.py')
 #scrape weekly and fantasy
 source_python('scrape/weekly.py')
 source_python('scrape/fantasy.py')
+source_python('scrape/advancedCombined.py')
 
 #scrape seasons (only need to do this end of year)
 #source_python('scrape/seasons.py')
