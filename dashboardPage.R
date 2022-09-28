@@ -138,14 +138,14 @@ dashboardPageUI <-
                                          ),
                                          tabPanel("Extra Stats",
                                                   wellPanel(class = "well",
-                                                            #reactableOutput('tpextradash'),
+                                                            reactableOutput('tpextradash'),
                                                             hr(),
                                                             em("Additional weekly context stats, including Yards per Carry/Catch, 20+ and 40+ yard plays, and others. Hover over column header for definition.")
                                                   )
                                          ),
                                          tabPanel("ESPN xFP/xTD",
                                                   wellPanel(class = "well",
-                                                            #reactableOutput('tpxfpxtd'),
+                                                            reactableOutput('tpxfpxtd'),
                                                             hr(),
                                                             em("Expected Fantasy Points and Expected Touchdown stats scraped from ESPN. Hover over column header for definition.")
                                                   )
@@ -212,10 +212,10 @@ dashboardPageUI <-
                                   tabPanel("Consistency", reactableOutput('ppconsistency'),
                                            hr(),
                                            em("Week-to-week consistency stats by scoring output and weekly positional rank. Hover over column header for definition.")),
-                                  tabPanel("Extra Stats", #reactableOutput('ppextradash'),
+                                  tabPanel("Extra Stats", reactableOutput('ppextradash'),
                                            hr(),
                                            em("Additional weekly context stats, including Yards per Carry/Catch, 20+ and 40+ yard plays, and others. Hover over column header for definition.")),
-                                  tabPanel("ESPN xFP/xTD", #reactableOutput('ppxfpxtd'),
+                                  tabPanel("ESPN xFP/xTD", reactableOutput('ppxfpxtd'),
                                            hr(),
                                            em("Expected Fantasy Points and Expected Touchdown stats scraped from ESPN. Hover over column header for definition.")),
                                   tabPanel("Snap Share", reactableOutput('ppsnapshare'),
@@ -353,14 +353,14 @@ dashboardPageUI <-
                                          ),
                                          tabPanel("Extra Stats",
                                                   wellPanel(class = "well",
-                                                            #reactableOutput('scextradash'),
+                                                            reactableOutput('scextradash'),
                                                             hr(),
                                                             em("Additional weekly context stats, including Yards per Carry/Catch, 20+ and 40+ yard plays, and others. Hover over column header for definition.")
                                                   )
                                          ),
                                          tabPanel("ESPN xFDP/xTD",
                                                   wellPanel(class = "well",
-                                                            #reactableOutput('scxfpxtd'),
+                                                            reactableOutput('scxfpxtd'),
                                                             hr(),
                                                             em("Expected Fantasy Points and Expected Touchdown stats scraped from ESPN. Hover over column header for definition.")
                                                   )

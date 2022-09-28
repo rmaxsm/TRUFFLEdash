@@ -439,6 +439,71 @@ shinyServer(function(input, output, session) {
         )
     })
     
+    #team portal extradash
+    output$tpextradash <- renderReactable({
+      reactable(extradashszn[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-TotYd)][, !c("TRUFFLE", "Season")],
+                pagination = F,
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                compact = T,
+                defaultColDef = colDef(
+                  minWidth = 55,
+                  align = "right"
+                ),
+                columns = list(
+                  Pos = posDef(),
+                  Player = playerDef(filt = T),
+                  G = gDef(),
+                  `Cmp%` = colDef(header = with_tt("Cmp%", "Completion Percentage"), format = colFormat(percent = T), minWidth = 75),
+                  Pa20 = colDef(header = with_tt("20+", "Passing Completions of 20+ Yd"), class = "border-left-grey"),
+                  Pa40 = colDef(header = with_tt("40+", "Passing Completions of 40+ Yd")),
+                  RuYPC = colDef(header = with_tt("YPC", "Rushing Yards per Carry"), class = "border-left-grey", minWidth = 60),
+                  Ru20 = colDef(header = with_tt("20+", "Rushes of 20+ Yd")),
+                  Tar = colDef(header = with_tt("Tar", "Targets"), class = "border-left-grey"),
+                  `Tar%` = colDef(header = with_tt("Tar%", "Percentage of Team Targets"), minWidth = 70, format = colFormat(suffix = "%")),
+                  ReYPC = colDef(header = with_tt("YPC", "Yards per Catch"), minWidth = 60),
+                  Re20 = colDef(header = with_tt("20+", "Receptions of 20+ Yd")),
+                  Re40 = colDef(header = with_tt("40+", "Receptions of 40+ Yd")),
+                  `ReFD%` = colDef(header = with_tt("FD%", "Percentage of Receptions resulting in First Down"), minWidth = 65, format = colFormat(percent = T)),
+                  TotYd = colDef(header = with_tt("TotYd", "Total Passing/Rushing/Receiving Yards"), minWidth = 70)
+                ),
+                columnGroups = list(
+                  colGroup(name = "Passing", columns = c("Cmp%","Pa20","Pa40"), align = 'left'),
+                  colGroup(name = "Rushing", columns = c("RuYPC", "Ru20"), align = 'left'),
+                  colGroup(name = "Receiving", columns = c("Tar", "Tar%", "ReYPC", "Re20", "Re40", "ReFD%"), align = 'left')
+                )
+      )
+    })
+    
+    #team portal xfpxtd
+    output$tpxfpxtd <- renderReactable({
+      reactable(espn[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-xFP)][, !c("TRUFFLE", "NFL")],
+                pagination = F,
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                compact = T,
+                defaultColDef = colDef(
+                  minWidth = 50,
+                  align = "right"
+                ),
+                columns = list(
+                  Pos = posDef(filt = T),
+                  Player = playerDef(minW = 125, filt = T),
+                  xFP = colDef(header = with_tt("xFP", "Expected ESPN Fantasy Points")),
+                  ActualPts = colDef(header = with_tt("aFP", "Actual ESPN Fantasy Points")),
+                  FPDiff = colDef(header = with_tt("Diff", "Difference between the player's total xFP and actual FP")),
+                  xTD = colDef(header = with_tt("xTD", "Expected Touchdowns"), class = "border-left-grey"),
+                  TD = colDef(header = with_tt("aTD", "Actual Touchdowns")),
+                  TDDiff = colDef(header = with_tt("Diff", "Difference between the player's total xTD and actual TD")),
+                  Looks = colDef(header = with_tt("Looks", "Carries + Targets")),
+                  In5 = colDef(header = with_tt("In5", "Carries inside 5-yard line")),
+                  EZ = colDef(header = with_tt("EZ", "End Zone Targets"))
+                )
+      )
+    })
+    
     #team portal snap share
     output$tpsnapshare <- renderReactable({
       reactable(snaps[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-`Total Snaps`)][, !c("TRUFFLE", "Team")],
@@ -446,7 +511,7 @@ shinyServer(function(input, output, session) {
                 height = 'auto',
                 filterable = F,
                 highlight = T,
-                ompact = T,
+                compact = T,
                 defaultColDef = colDef(
                   minWidth = 50,
                   align = "center",
@@ -766,13 +831,80 @@ shinyServer(function(input, output, session) {
       )
     })
     
+    #player portal extra dash
+    output$ppextradash <- renderReactable({
+      reactable(extradashszn[Player %in% input$player][order(TotYd)][, !c("TRUFFLE", "Pos")],
+                pagination = F,
+                defaultSorted = c("TotYd"),
+                defaultSortOrder = "desc",
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                defaultColDef = colDef(
+                  minWidth = 55,
+                  align = "right"
+                ),
+                columns = list(
+                  Season = seasonDef(),
+                  TRUFFLE = trfDef(),
+                  Pos = posDef(),
+                  Player = playerDef(filt = F),
+                  G = gDef(),
+                  `Cmp%` = colDef(header = with_tt("Cmp%", "Completion Percentage"), format = colFormat(percent = T), minWidth = 75),
+                  Pa20 = colDef(header = with_tt("20+", "Passing Completions of 20+ Yd"), class = "border-left-grey"),
+                  Pa40 = colDef(header = with_tt("40+", "Passing Completions of 40+ Yd")),
+                  RuYPC = colDef(header = with_tt("YPC", "Rushing Yards per Carry"), class = "border-left-grey", minWidth = 60),
+                  Ru20 = colDef(header = with_tt("20+", "Rushes of 20+ Yd")),
+                  Tar = colDef(header = with_tt("Tar", "Targets"), class = "border-left-grey"),
+                  `Tar%` = colDef(header = with_tt("Tar%", "Percentage of Team Targets"), minWidth = 70, format = colFormat(suffix = "%")),
+                  ReYPC = colDef(header = with_tt("YPC", "Yards per Catch"), minWidth = 60),
+                  Re20 = colDef(header = with_tt("20+", "Receptions of 20+ Yd")),
+                  Re40 = colDef(header = with_tt("40+", "Receptions of 40+ Yd")),
+                  `ReFD%` = colDef(header = with_tt("FD%", "Percentage of Receptions resulting in First Down"), minWidth = 65, format = colFormat(percent = T)),
+                  TotYd = colDef(header = with_tt("TotYd", "Total Passing/Rushing/Receiving Yards"), minWidth = 70)
+                ),
+                columnGroups = list(
+                  colGroup(name = "Passing", columns = c("Cmp%","Pa20","Pa40"), align = 'left'),
+                  colGroup(name = "Rushing", columns = c("RuYPC", "Ru20"), align = 'left'),
+                  colGroup(name = "Receiving", columns = c("Tar", "Tar%", "ReYPC", "Re20", "Re40", "ReFD%"), align = 'left')
+                )
+      )
+    })
+    
+    #player portal xfpxtd
+    output$ppxfpxtd <- renderReactable({
+      reactable(espn[Player %in% input$player][order(-xFP)][, !c("TRUFFLE", "Pos", "NFL")],
+                pagination = F,
+                defaultSorted = c("xFP"),
+                defaultSortOrder = "desc",
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                defaultColDef = colDef(
+                  minWidth = 50,
+                  align = "right"
+                ),
+                columns = list(
+                  Player = playerDef(minW = 125),
+                  xFP = colDef(header = with_tt("xFP", "Expected ESPN Fantasy Points")),
+                  ActualPts = colDef(header = with_tt("aFP", "Actual ESPN Fantasy Points")),
+                  FPDiff = colDef(header = with_tt("Diff", "Difference between the player's total xFP and actual FP")),
+                  xTD = colDef(header = with_tt("xTD", "Expected Touchdowns"), class = "border-left-grey"),
+                  TD = colDef(header = with_tt("aTD", "Actual Touchdowns")),
+                  TDDiff = colDef(header = with_tt("Diff", "Difference between the player's total xTD and actual TD")),
+                  Looks = colDef(header = with_tt("Looks", "Carries + Targets")),
+                  In5 = colDef(header = with_tt("In5", "Carries inside 5-yard line")),
+                  EZ = colDef(header = with_tt("EZ", "End Zone Targets"))
+                )
+      )
+    })
+    
     #player portal snap share
     output$ppsnapshare <- renderReactable({
             reactable(snaps[Player %in% input$player][order(-`Total Snaps`)][, !c("TRUFFLE", "Pos", "Team")],
                 pagination = F,
                 defaultSorted = c("Total Snaps"),
                 defaultSortOrder = "desc",
-                pageSizeOptions = c(10, 20, 50, 100),
                 height = 'auto',
                 filterable = F,
                 highlight = T,
@@ -1270,11 +1402,148 @@ shinyServer(function(input, output, session) {
         )
     })
     
+    #stat center extra stats
+    output$scextradash <- renderReactable({
+      extradashrange <- extradash[Season == input$scseason & Week %in% seq(input$scweekrange[1],input$scweekrange[2])][,
+        .(TRUFFLE = TRUFFLE[1],
+          G = .N,
+          `Cmp%` = ifelse(sum(PaAtt, na.rm = T) > 0, round(sum(PaCmp, na.rm = T) / sum(PaAtt, na.rm = T), 3), 0),
+          Pa20 = sum(Pa20, na.rm = T),
+          Pa40 = sum(Pa40, na.rm = T),
+          RuYPC = ifelse(sum(RuAtt, na.rm = T) > 0, round(sum(RuYd, na.rm = T) / sum(RuAtt, na.rm = T), 1), 0),
+          Ru20 = sum(Ru20, na.rm = T),
+          Tar = sum(Tar, na.rm = T),
+          `Tar%` = round(mean(`Tar%`, na.rm = T), 1),
+          ReYPC = ifelse(sum(Rec, na.rm = T) > 0, round(sum(ReYd, na.rm = T) / sum(Rec, na.rm = T), 1), 0),
+          Re20 = sum(Re20, na.rm = T),
+          Re40 = sum(Re40, na.rm = T),
+          `ReFD%` = ifelse(sum(Rec, na.rm = T) > 0, round(sum(ReFD, na.rm = T) / sum(Rec, na.rm = T),3), 0),
+          TotYd = sum(TotYd, na.rm = T)
+        ),
+        by = .(Season, Pos, Player)
+      ]
+      extradashrange$TRUFFLEdum <- ifelse(extradashrange$TRUFFLE == "FA", "FA", "Owned")
+      extradashrange <- extradashrange[TRUFFLEdum %in% input$scavailable & Pos %in% input$scpositions][, !"TRUFFLEdum"]
+      
+      extradashrange <- action_mod(extradashrange, team = globalteam)
+      
+      extradashrange <- extradashrange[, c(20, 2, 4, 3, 1, 5:19, 21)]
+      extradashrange <- extradashrange[order(-TotYd)]
+      
+      reactable(extradashrange[, !c("ActionLink", "playerID", "TeamNum", "Season")],
+                paginationType = "jump",
+                showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
+                defaultSorted = c("TotYd"),
+                defaultSortOrder = "desc",
+                pageSizeOptions = c(10, 20, 50, 100),
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                compact = T,
+                defaultColDef = colDef(
+                  minWidth = 55,
+                  align = "right"
+                ),
+                columns = list(
+                  Action = colDef(header = with_tt("A", "Action link to add, drop, or trade player"),
+                                  sortable = F,
+                                  filterable = F,
+                                  align="center",
+                                  minWidth = 30,
+                                  cell = function(value, index) {
+                                    action_url <- extradashrange$ActionLink[index]
+                                    img_src <- knitr::image_uri(value)
+                                    image <- img(src = img_src, height = "15px", alt = value)
+                                    tagList(
+                                      div(style = list(display = "inline-block"), image)
+                                    )
+                                    tags$a(href = action_url, target = "_blank", image)
+                                  }),
+                  TRUFFLE = trfDef(),
+                  Pos = posDef(),
+                  Player = playerDef(filt = T),
+                  G = gDef(),
+                  `Cmp%` = colDef(header = with_tt("Cmp%", "Completion Percentage"), format = colFormat(percent = T), minWidth = 75, class = "border-left-grey"),
+                  Pa20 = colDef(header = with_tt("20+", "Passing Completions of 20+ Yd")),
+                  Pa40 = colDef(header = with_tt("40+", "Passing Completions of 40+ Yd")),
+                  RuYPC = colDef(header = with_tt("YPC", "Rushing Yards per Carry"), class = "border-left-grey", minWidth = 60),
+                  Ru20 = colDef(header = with_tt("20+", "Rushes of 20+ Yd")),
+                  Tar = colDef(header = with_tt("Tar", "Targets"), class = "border-left-grey"),
+                  `Tar%` = colDef(header = with_tt("Tar%", "Percentage of Team Targets"), minWidth = 70, format = colFormat(suffix = "%")),
+                  ReYPC = colDef(header = with_tt("YPC", "Yards per Catch"), minWidth = 60),
+                  Re20 = colDef(header = with_tt("20+", "Receptions of 20+ Yd")),
+                  Re40 = colDef(header = with_tt("40+", "Receptions of 40+ Yd")),
+                  `ReFD%` = colDef(header = with_tt("FD%", "Percentage of Receptions resulting in First Down"), minWidth = 65, format = colFormat(percent = T)),
+                  TotYd = colDef(header = with_tt("TotYd", "Total Passing/Rushing/Receiving Yards"), minWidth = 70)
+                ),
+                columnGroups = list(
+                  colGroup(name = "Passing", columns = c("Cmp%","Pa20","Pa40"), align = 'left'),
+                  colGroup(name = "Rushing", columns = c("RuYPC", "Ru20"), align = 'left'),
+                  colGroup(name = "Receiving", columns = c("Tar", "Tar%", "ReYPC", "Re20", "Re40", "ReFD%"), align = 'left')
+                )
+      )
+      
+      
+    })
+    
+    #stat center xfpxtd
+    output$scxfpxtd <- renderReactable({
+      espnsc <-espn[order(-xFP)]
+      espnsc$TRUFFLEdum <- ifelse(espnsc$TRUFFLE == "FA", "FA", "Owned")
+      espnsc <- action_mod(espnsc, team = globalteam)
+      espnsc <- espnsc[, c(17, 2, 3, 1, 4:16, 18)]
+      
+      reactable(espnsc[TRUFFLEdum %in% input$scavailable & Pos %in% input$scpositions][, !c("TRUFFLEdum", "playerID", "TeamNum", "ActionLink")],
+                paginationType = "jump",
+                showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
+                defaultSorted = c("xFP"),
+                defaultSortOrder = "desc",
+                pageSizeOptions = c(10, 20, 50, 100),
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                compact = T,
+                defaultColDef = colDef(
+                  minWidth = 50,
+                  align = "right"
+                ),
+                columns = list(
+                  Action = colDef(header = with_tt("A", "Action link to add, drop, or trade player"),
+                                  sortable = F,
+                                  filterable = F,
+                                  align="center",
+                                  minWidth = 30,
+                                  cell = function(value, index) {
+                                    action_url <- snapssc$ActionLink[index]
+                                    img_src <- knitr::image_uri(value)
+                                    image <- img(src = img_src, height = "15px", alt = value)
+                                    tagList(
+                                      div(style = list(display = "inline-block"), image)
+                                    )
+                                    tags$a(href = action_url, target = "_blank", image)
+                                  }),
+                  TRUFFLE = trfDef(),
+                  Pos = posDef(),
+                  Player = playerDef(minW = 125, filt = T),
+                  NFL = nflDef,
+                  xFP = colDef(header = with_tt("xFP", "Expected ESPN Fantasy Points")),
+                  ActualPts = colDef(header = with_tt("aFP", "Actual ESPN Fantasy Points")),
+                  FPDiff = colDef(header = with_tt("Diff", "Difference between the player's total xFP and actual FP")),
+                  xTD = colDef(header = with_tt("xTD", "Expected Touchdowns"), class = "border-left-grey"),
+                  TD = colDef(header = with_tt("aTD", "Actual Touchdowns")),
+                  TDDiff = colDef(header = with_tt("Diff", "Difference between the player's total xTD and actual TD")),
+                  Looks = colDef(header = with_tt("Looks", "Carries + Targets")),
+                  In5 = colDef(header = with_tt("In5", "Carries inside 5-yard line")),
+                  EZ = colDef(header = with_tt("EZ", "End Zone Targets"))
+                )
+      )
+    })
+    
     #stat center snap share
     output$scsnapshare <- renderReactable({
       snapssc <- snaps[order(-`Total Snaps`)]
       snapssc$TRUFFLEdum <- ifelse(snapssc$TRUFFLE == "FA", "FA", "Owned")
-      snapssc <- action_mod(snapssc, team = "FRR")
+      snapssc <- action_mod(snapssc, team = globalteam)
       snapssc <- snapssc[, c(28, 1:27, 29)]
       
       reactable(snapssc[TRUFFLEdum %in% input$scavailable & Pos %in% input$scpositions][, !c("TRUFFLEdum", "playerID", "TeamNum", "ActionLink")],
@@ -1309,7 +1578,7 @@ shinyServer(function(input, output, session) {
                                   }),
                   TRUFFLE = trfDef(),
                   Pos = posDef(),
-                  Player = playerDef(filt = T),
+                  Player = playerDef(minW = 125, filt = T),
                   Team = nflDef,
                   `Total Snaps` = colDef(minWidth = 150, format = colFormat(percent = F))
                 )

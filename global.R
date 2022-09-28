@@ -209,14 +209,44 @@ turkeyscorers <- rivfantasy[Thanksgiving == 1,
 
 #read in advanced combined files
 extradash <- as.data.table(read_csv("data/extraDash.csv", col_types = cols()))
-colnames(extradash)[5:18] <- c("Cmp%", "Pa20+", "Pa40+", "RuYPC", "Ru20+", "Tar", "Tar%", "ReYPC", "Re20+", "Re40+", "ReFD%", "TotYd", "Avg", "FPts")
-extradash <- extradash[, c(1, 3, 2, 4:18)]
+colnames(extradash)[7:20] <- c("Cmp%", "Pa20", "Pa40", "RuYPC", "Ru20", "Tar", "Tar%", "ReYPC", "Re20", "Re40", "ReFD%", "TotYd", "Avg", "FPts")
+extradash <- extradash[Avg != "-"]
+extradash$TRUFFLE[!(extradash$TRUFFLE %in% teams$Abbrev)] <- "FA"
+extradash <- extradash[, c(1:3, 5, 4, 6:20)][order(-Week, -TotYd)]
 
+#merge in other columns for calcs
+extradash <- merge(x = extradash, y = weekly[ , c("Season", "Week", "Pos", "Player", "PaCmp", "PaAtt", "RuAtt", "RuYd", "Rec", "ReYd", "ReFD")], by = c("Season", "Week", "Pos", "Player"))
+
+extradashszn <- extradash[,
+                          .(TRUFFLE = TRUFFLE[1],
+                            G = .N,
+                            `Cmp%` = ifelse(sum(PaAtt, na.rm = T) > 0, round(sum(PaCmp, na.rm = T) / sum(PaAtt, na.rm = T), 3), 0),
+                            Pa20 = sum(Pa20, na.rm = T),
+                            Pa40 = sum(Pa40, na.rm = T),
+                            RuYPC = ifelse(sum(RuAtt, na.rm = T) > 0, round(sum(RuYd, na.rm = T) / sum(RuAtt, na.rm = T), 1), 0),
+                            Ru20 = sum(Ru20, na.rm = T),
+                            Tar = sum(Tar, na.rm = T),
+                            `Tar%` = round(mean(`Tar%`, na.rm = T),1),
+                            ReYPC = ifelse(sum(Rec, na.rm = T) > 0, round(sum(ReYd, na.rm = T) / sum(Rec, na.rm = T), 1), 0),
+                            Re20 = sum(Re20, na.rm = T),
+                            Re40 = sum(Re40, na.rm = T),
+                            `ReFD%` = ifelse(sum(Rec, na.rm = T) > 0, round(sum(ReFD, na.rm = T) / sum(Rec, na.rm = T),3), 0),
+                            TotYd = sum(TotYd, na.rm = T)
+                            ),
+                          by = .(Season, Pos, Player)
+  
+]
+extradashszn <- extradashszn[, c(1, 4, 2:3, 5:17)][order(-TotYd)]
+
+#espn data
 espn <- as.data.table(read_csv("data/espnStats.csv", col_types = cols()))
+espn$FPDiff <- espn$ActualPts - espn$xFP
 espn <- merge(x = espn, y = rosters[ , c("Pos", "Player", "TRUFFLE")], by = c("Pos", "Player"), all.x=TRUE)
 espn$TRUFFLE[is.na(espn$TRUFFLE)] <- "FA"
-espn <- espn[, c(12, 1:11)]
+colnames(espn)[9] <- "TDDiff"
+espn <- espn[, c(13, 1:5, 12, 6:7, 9, 8, 10:11)]
 
+#snaps data
 snaps <- as.data.table(read_csv("data/snapPer.csv", col_types = cols()))
 snaps <- merge(x = snaps, y = rosters[ , c("Pos", "Player", "TRUFFLE")], by = c("Pos", "Player"), all.x=TRUE)
 snaps$TRUFFLE[is.na(snaps$TRUFFLE)] <- "FA"
@@ -346,7 +376,7 @@ consistency <- consistencystart[, `:=` (
      `>20 %` = sum(gt20dum)/.N,
      `>30 %` = sum(gt30dum)/.N
    ),
-   by = .(Season ,TRUFFLE, Pos, Player)][order(-Avg)][, c("Season","TRUFFLE","Pos","Player","Avg","RelSD",">10 %",">20 %",">30 %","AvgPosRk","Top5 %","Top12 %","Top24 %","Top36 %", "NonStart %")]
+   by = .(Season, TRUFFLE, Pos, Player)][order(-Avg)][, c("Season","TRUFFLE","Pos","Player","Avg","RelSD",">10 %",">20 %",">30 %","AvgPosRk","Top5 %","Top12 %","Top24 %","Top36 %", "NonStart %")]
 
 weeklytop5 <- weekly[, c("Season", "Week", "TRUFFLE", "Pos", "Player", "FPts")][order(Week,-FPts)][, .(TRUFFLE = TRUFFLE[1:30],
                                                                                                        Player = Player[1:30],
