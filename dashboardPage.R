@@ -218,7 +218,7 @@ dashboardPageUI <-
                                   tabPanel("ESPN xFP/xTD", #reactableOutput('ppxfpxtd'),
                                            hr(),
                                            em("Expected Fantasy Points and Expected Touchdown stats scraped from ESPN. Hover over column header for definition.")),
-                                  tabPanel("Consistency", reactableOutput('ppsnapshare'),
+                                  tabPanel("Snap Share", reactableOutput('ppsnapshare'),
                                            hr(),
                                            em("Week-to-week percentage of offensive team snaps played."))
                                 )
