@@ -210,14 +210,25 @@ turkeyscorers <- rivfantasy[Thanksgiving == 1,
 #read in advanced combined files
 extradash <- as.data.table(read_csv("data/extraDash.csv", col_types = cols()))
 colnames(extradash)[5:18] <- c("Cmp%", "Pa20+", "Pa40+", "RuYPC", "Ru20+", "Tar", "Tar%", "ReYPC", "Re20+", "Re40+", "ReFD%", "TotYd", "Avg", "FPts")
+extradash <- extradash[, c(1, 3, 2, 4:18)]
 
 espn <- as.data.table(read_csv("data/espnStats.csv", col_types = cols()))
 espn <- merge(x = espn, y = rosters[ , c("Pos", "Player", "TRUFFLE")], by = c("Pos", "Player"), all.x=TRUE)
 espn$TRUFFLE[is.na(espn$TRUFFLE)] <- "FA"
+espn <- espn[, c(12, 1:11)]
 
 snaps <- as.data.table(read_csv("data/snapPer.csv", col_types = cols()))
 snaps <- merge(x = snaps, y = rosters[ , c("Pos", "Player", "TRUFFLE")], by = c("Pos", "Player"), all.x=TRUE)
 snaps$TRUFFLE[is.na(snaps$TRUFFLE)] <- "FA"
+snaps <- snaps[, c(24, 1:21, 23, 22)]
+colnames(snaps)[23:24] <- c("Avg", "Total Snaps")
+#dividing snaps by 100 for percentage formatting
+for (i in 5:22) {
+  if(is.numeric(snaps[[i]])) {
+    snaps[[i]] <- snaps[[i]]/100
+  }
+}
+snaps$Avg <- snaps$Avg/100
 
 # modifying tables for display -----
 
@@ -635,9 +646,10 @@ actionDef <- colDef(header = with_tt("Act", "Drop players on your team\nTrade fo
                       )
                     })
 
-trfDef <- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE) {
+trfDef <- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE, minW = 75) {
   colDef(name = name,
          aggregate = "unique",
+         minWidth = minW,
          maxWidth = maxW,
          filterable = filt,
          sortable = sort,
@@ -683,6 +695,7 @@ playerDef <- function(minW = 200, filt = FALSE, sort = T) {
   colDef(minWidth = minW,
          filterable = filt,
          sortable = sort,
+         align = "left",
          cell = function(value) {
            playerid <- ids$playerID[ids$Player == value]
            player_url <- paste0("https://theradicalultimatefflexperience.football.cbssports.com/players/playerpage/", playerid, "/")

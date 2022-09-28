@@ -341,7 +341,6 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = T,
                   highlight = T,
-                  #borderless = T,
                   compact = T,
                   columns = list(
                       Pos = posDef(),
@@ -378,14 +377,10 @@ shinyServer(function(input, output, session) {
         perccolwidth <- 60
         othcolwidth <- 43
         reactable(advanced[Season == max(weekly$Season) & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-FPts)][, -c("TRUFFLE","Season")],
-                  paginationType = "jump",
-                  showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
-                  pageSizeOptions = c(10, 20, 50, 100),
+                  pagination = F,
                   height = 'auto',
-                  pagination = FALSE,
                   filterable = F,
                   highlight = T,
-                  #borderless = T,
                   compact = T,
                   columns = list(
                       Pos = posDef(),
@@ -418,14 +413,10 @@ shinyServer(function(input, output, session) {
     output$tpconsistency <- renderReactable({
         perccolwidth <- 60
         reactable(consistency[Season == max(weekly$Season) & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-Avg)][, -c("TRUFFLE","Season")],
-                  paginationType = "jump",
-                  showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
-                  pageSizeOptions = c(10, 20, 50, 100),
+                  pagination = F,
                   height = 'auto',
-                  pagination = FALSE,
                   filterable = F,
                   highlight = T,
-                  #borderless = T,
                   compact = T,
                   columns = list(
                       Pos = posDef(),
@@ -447,6 +438,27 @@ shinyServer(function(input, output, session) {
                       colGroup(name = "Weekly Position Rank", columns = c("AvgPosRk","Top5 %","Top12 %","Top24 %","Top36 %", "NonStart %"), align = 'left')
                   )
         )
+    })
+    
+    #team portal snap share
+    output$tpsnapshare <- renderReactable({
+      reactable(snaps[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-`Total Snaps`)][, !c("TRUFFLE", "Team")],
+                pagination = F,
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                compact = T,
+                defaultColDef = colDef(
+                  minWidth = 50,
+                  align = "center",
+                  format = colFormat(percent = T)
+                ),
+                columns = list(
+                  Pos = posDef(),
+                  Player = playerDef(minW = 125, filt = T),
+                  `Total Snaps` = colDef(minWidth = 150, format = colFormat(percent = F))
+                )
+      )
     })
     
     #team portal fantasy logs
@@ -751,6 +763,29 @@ shinyServer(function(input, output, session) {
                 columnGroups = list(
                   colGroup(name = "Fantasy Points", columns = c("Avg","RelSD",">10 %",">20 %",">30 %"), align = 'left'),
                   colGroup(name = "Weekly Position Rank", columns = c("AvgPosRk","Top5 %","Top12 %","Top24 %","Top36 %", "NonStart %"), align = 'left')
+                )
+      )
+    })
+    
+    #player portal snap share
+    output$ppsnapshare <- renderReactable({
+            reactable(snaps[Player %in% input$player][order(-`Total Snaps`)][, !c("TRUFFLE", "Pos", "Team")],
+                pagination = F,
+                defaultSorted = c("Total Snaps"),
+                defaultSortOrder = "desc",
+                pageSizeOptions = c(10, 20, 50, 100),
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                compact = T,
+                defaultColDef = colDef(
+                  minWidth = 50,
+                  align = "center",
+                  format = colFormat(percent = T)
+                ),
+                columns = list(
+                  Player = playerDef(minW = 120),
+                  `Total Snaps` = colDef(minWidth = 150, format = colFormat(percent = F))
                 )
       )
     })
@@ -1235,6 +1270,52 @@ shinyServer(function(input, output, session) {
                       colGroup(name = "Weekly Position Rank", columns = c("AvgPosRk","Top5 %","Top12 %","Top24 %","Top36 %", "NonStart %"), align = 'left')
                   )
         )
+    })
+    
+    #stat center snap share
+    output$scsnapshare <- renderReactable({
+      snapssc <- snaps[order(-`Total Snaps`)]
+      snapssc$TRUFFLEdum <- ifelse(snapssc$TRUFFLE == "FA", "FA", "Owned")
+      snapssc <- action_mod(snapssc, team = "FRR")
+      snapssc <- snapssc[, c(28, 1:27, 29)]
+      
+      reactable(snapssc[TRUFFLEdum %in% input$scavailable & Pos %in% input$scpositions][, !c("TRUFFLEdum", "playerID", "TeamNum", "ActionLink")],
+                paginationType = "jump",
+                showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
+                defaultSorted = c("Total Snaps"),
+                defaultSortOrder = "desc",
+                pageSizeOptions = c(10, 20, 50, 100),
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                compact = T,
+                defaultColDef = colDef(
+                  minWidth = 50,
+                  align = "center",
+                  format = colFormat(percent = T)
+                ),
+                columns = list(
+                  Action = colDef(header = with_tt("A", "Action link to add, drop, or trade player"),
+                                  sortable = F,
+                                  filterable = F,
+                                  align="center",
+                                  minWidth = 30,
+                                  cell = function(value, index) {
+                                    action_url <- snapssc$ActionLink[index]
+                                    img_src <- knitr::image_uri(value)
+                                    image <- img(src = img_src, height = "15px", alt = value)
+                                    tagList(
+                                      div(style = list(display = "inline-block"), image)
+                                    )
+                                    tags$a(href = action_url, target = "_blank", image)
+                                  }),
+                  TRUFFLE = trfDef(),
+                  Pos = posDef(),
+                  Player = playerDef(filt = T),
+                  Team = nflDef,
+                  `Total Snaps` = colDef(minWidth = 150, format = colFormat(percent = F))
+                )
+      )
     })
     
     #trademachine ----
@@ -2445,9 +2526,9 @@ shinyServer(function(input, output, session) {
       )
     })
     
-    #upcoming draft ----
+    #draft ----
     output$rd1 <- renderReactable({
-        reactable(draft[Season == input$draftseason & Round == 1][, -c("Season", "Round")],
+        reactable(draft[Season == input$draftseason & Round == 1][, -c("Season", "Round", "Extension")],
                   defaultSortOrder = "desc",
                   filterable = F,
                   showPageInfo = FALSE,
@@ -2467,7 +2548,7 @@ shinyServer(function(input, output, session) {
         )
     })
     output$rd2 <- renderReactable({
-        reactable(draft[Season == input$draftseason & Round == 2][, -c("Season", "Round")],
+        reactable(draft[Season == input$draftseason & Round == 2][, -c("Season", "Round", "Extension")],
                   defaultSortOrder = "desc",
                   filterable = F,
                   showPageInfo = FALSE,
@@ -2487,7 +2568,7 @@ shinyServer(function(input, output, session) {
         )
     })
     output$rd3 <- renderReactable({
-        reactable(draft[Season == input$draftseason & Round == 3][, -c("Season", "Round")],
+        reactable(draft[Season == input$draftseason & Round == 3][, -c("Season", "Round", "Extension")],
                   defaultSortOrder = "desc",
                   filterable = F,
                   showPageInfo = FALSE,

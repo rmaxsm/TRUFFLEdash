@@ -104,37 +104,59 @@ dashboardPageUI <-
                                 ), style = "background-color:#FFFFFF;padding-top:20px"), #end sidebarLayout
                               
                               navbarPage(title = strong(textOutput('tmportalabbrev'), class = "wayback"),
-                                         
+                                      
                                          tabPanel("Overview",
                                                   wellPanel(class = "well",
                                                             reactableOutput('tpoverview')
                                                   )
                                          ),
-                                         
                                          tabPanel("Contracts",
                                                   wellPanel(class = "well",
                                                             reactableOutput('tpcontracts')
                                                   )
                                          ),
-                                         
                                          tabPanel("Box Score",
                                                   wellPanel(class = "well",
-                                                            reactableOutput('tpboxscore')
+                                                            reactableOutput('tpboxscore'),
+                                                            hr(),
+                                                            em("Traditional Passing, Rushing, Receiving scoring stats. Hover over column header for definition.")
                                                   )
                                          ),
-                                         
                                          tabPanel("Advanced",
                                                   wellPanel(class = "well",
-                                                            reactableOutput('tpadvanced')
+                                                            reactableOutput('tpadvanced'),
+                                                            hr(),
+                                                            em("Advanced stats on per-touch efficiency, and point source breakdown (Yardage vs. TD vs. First Downs / Rushing vs. Receiving). Hover over column header for definition.")
                                                   )
                                          ),
-                                         
                                          tabPanel("Consistency",
                                                   wellPanel(class = "well",
-                                                            reactableOutput('tpconsistency')
+                                                            reactableOutput('tpconsistency'),
+                                                            hr(),
+                                                            em("Week-to-week consistency stats by scoring output and weekly positional rank. Hover over column header for definition.")
                                                   )
                                          ),
-                                         
+                                         tabPanel("Extra Stats",
+                                                  wellPanel(class = "well",
+                                                            #reactableOutput('tpextradash'),
+                                                            hr(),
+                                                            em("Additional weekly context stats, including Yards per Carry/Catch, 20+ and 40+ yard plays, and others. Hover over column header for definition.")
+                                                  )
+                                         ),
+                                         tabPanel("ESPN xFP/xTD",
+                                                  wellPanel(class = "well",
+                                                            #reactableOutput('tpxfpxtd'),
+                                                            hr(),
+                                                            em("Expected Fantasy Points and Expected Touchdown stats scraped from ESPN. Hover over column header for definition.")
+                                                  )
+                                         ),
+                                         tabPanel("Snap Shares",
+                                                  wellPanel(class = "well",
+                                                            reactableOutput('tpsnapshare'),
+                                                            hr(),
+                                                            em("Week-to-week percentage of offensive team snaps played.")
+                                                  )
+                                         ),
                                          tabPanel("Fantasy Logs",
                                                   wellPanel(class = "well",
                                                             reactableOutput('tpfantasylogs')
@@ -181,9 +203,24 @@ dashboardPageUI <-
                                   )
                                 ),
                                 tabsetPanel(
-                                  tabPanel("BoxScore", reactableOutput('ppseasons')),
-                                  tabPanel("Advanced", reactableOutput('ppadvanced')),
-                                  tabPanel("Consistency", reactableOutput('ppconsistency'))
+                                  tabPanel("BoxScore", reactableOutput('ppseasons'),
+                                           hr(),
+                                           em("Traditional Passing, Rushing, Receiving scoring stats. Hover over column header for definition.")),
+                                  tabPanel("Advanced", reactableOutput('ppadvanced'),
+                                           hr(),
+                                           em("Advanced stats on per-touch efficiency, and point source breakdown (Yardage vs. TD vs. First Downs / Rushing vs. Receiving). Hover over column header for definition.")),
+                                  tabPanel("Consistency", reactableOutput('ppconsistency'),
+                                           hr(),
+                                           em("Week-to-week consistency stats by scoring output and weekly positional rank. Hover over column header for definition.")),
+                                  tabPanel("Extra Stats", #reactableOutput('ppextradash'),
+                                           hr(),
+                                           em("Additional weekly context stats, including Yards per Carry/Catch, 20+ and 40+ yard plays, and others. Hover over column header for definition.")),
+                                  tabPanel("ESPN xFP/xTD", #reactableOutput('ppxfpxtd'),
+                                           hr(),
+                                           em("Expected Fantasy Points and Expected Touchdown stats scraped from ESPN. Hover over column header for definition.")),
+                                  tabPanel("Consistency", reactableOutput('ppsnapshare'),
+                                           hr(),
+                                           em("Week-to-week percentage of offensive team snaps played."))
                                 )
                       ),
                       fluidRow(
@@ -295,17 +332,44 @@ dashboardPageUI <-
                               navbarPage(title = HTML("<span style=color:#84A4D8>StatCenter</span>"),
                                          tabPanel("Box Score",
                                                   wellPanel(class = "well",
-                                                            reactableOutput('scboxscore')
+                                                            reactableOutput('scboxscore'),
+                                                            hr(),
+                                                            em("Traditional Passing, Rushing, Receiving scoring stats. Hover over column header for definition.")
                                                   )
                                          ),
                                          tabPanel("Advanced",
                                                   wellPanel(class = "well",
-                                                            reactableOutput('scadvanced')
+                                                            reactableOutput('scadvanced'),
+                                                            hr(),
+                                                            em("Advanced stats on per-touch efficiency, and point source breakdown (Yardage vs. TD vs. First Downs / Rushing vs. Receiving). Hover over column header for definition.")
                                                   )
                                          ),
                                          tabPanel("Consistency",
                                                   wellPanel(class = "well",
-                                                            reactableOutput('scconsistency')
+                                                            reactableOutput('scconsistency'),
+                                                            hr(),
+                                                            em("Week-to-week consistency stats by scoring output and weekly positional rank. Hover over column header for definition.")
+                                                  )
+                                         ),
+                                         tabPanel("Extra Stats",
+                                                  wellPanel(class = "well",
+                                                            #reactableOutput('scextradash'),
+                                                            hr(),
+                                                            em("Additional weekly context stats, including Yards per Carry/Catch, 20+ and 40+ yard plays, and others. Hover over column header for definition.")
+                                                  )
+                                         ),
+                                         tabPanel("ESPN xFDP/xTD",
+                                                  wellPanel(class = "well",
+                                                            #reactableOutput('scxfpxtd'),
+                                                            hr(),
+                                                            em("Expected Fantasy Points and Expected Touchdown stats scraped from ESPN. Hover over column header for definition.")
+                                                  )
+                                         ),
+                                         tabPanel("Snap Share",
+                                                  wellPanel(class = "well",
+                                                            reactableOutput('scsnapshare'),
+                                                            hr(),
+                                                            em("Week-to-week percentage of offensive team snaps played.")
                                                   )
                                          )
                                          
