@@ -267,7 +267,7 @@ shinyServer(function(input, output, session) {
                   pagination = FALSE,
                   highlight = T,
                   filterable = T,
-                  compact = T,
+                  #compact = T,
                   columns = list(
                       Action = colDef(header = with_tt("A", "Action link to add, drop, or trade player"),
                                       sortable = F,
@@ -311,8 +311,7 @@ shinyServer(function(input, output, session) {
                   pagination = FALSE,
                   filterable = T,
                   highlight = T,
-                  #borderless = T,
-                  compact = T,
+                  #compact = T,
                   columns = list(
                       Pos = posDef(foot = "Total"),
                       Player = playerDef(filt=T),
@@ -341,7 +340,7 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = T,
                   highlight = T,
-                  compact = T,
+                  #compact = T,
                   columns = list(
                       Pos = posDef(),
                       Player = playerDef(minW = 135, filt=T),
@@ -381,7 +380,7 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = F,
                   highlight = T,
-                  compact = T,
+                  #compact = T,
                   columns = list(
                       Pos = posDef(),
                       Player = playerDef(minW = 120, filt = T),
@@ -417,7 +416,7 @@ shinyServer(function(input, output, session) {
                   height = 'auto',
                   filterable = F,
                   highlight = T,
-                  compact = T,
+                  #compact = T,
                   columns = list(
                       Pos = posDef(),
                       Player = playerDef(minW = 125, filt = T),
@@ -447,7 +446,7 @@ shinyServer(function(input, output, session) {
                 height = 'auto',
                 filterable = F,
                 highlight = T,
-                compact = T,
+                #compact = T,
                 defaultColDef = colDef(
                   minWidth = 50,
                   align = "center",
@@ -777,7 +776,6 @@ shinyServer(function(input, output, session) {
                 height = 'auto',
                 filterable = F,
                 highlight = T,
-                compact = T,
                 defaultColDef = colDef(
                   minWidth = 50,
                   align = "center",
