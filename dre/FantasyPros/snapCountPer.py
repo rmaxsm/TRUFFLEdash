@@ -62,6 +62,5 @@ def main():
   runSnapPer()
   print("\nFP Snap Per DONE")
 
-if __name__ == "__main__":
-  main()
+main()
 

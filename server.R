@@ -306,29 +306,49 @@ shinyServer(function(input, output, session) {
     
     #team portal contracts
     output$tpcontracts <- renderReactable({
-        reactable(contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][, !"TRUFFLE"][order(match(Pos, positionorder), -Salary)],
+      futurecolDef <- function(maxW = 75, filt = T, foot = F, yr) {
+        colDef(header = with_tt(yr, "FA: Free Agent\nPurple: Rookie Extension Value"),
+               maxWidth = maxW,
+               filterable = filt,
+               align = 'right',
+               defaultSortOrder = "desc",
+               style = function(value, index) {
+                 df <- contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][, !c("TRUFFLE")][order(match(Pos, positionorder), -Salary)]
+                 ext <- df$Extension[index]
+                 col <- ifelse(value == "FA", textred, ifelse(value == ext, rookieextension, tabletextcol))
+                 list(color = col)},
+               #cell = function(value) {
+               #class <- paste0("tag status-", value)
+               #htmltools::div(class = class, value)},
+               footer = function(values) if(foot == T) {paste0("$", sum(as.numeric(values), na.rm=T))}
+        )
+      }
+      
+        reactable(contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][, !c("TRUFFLE")][order(match(Pos, positionorder), -Salary)],
                   defaultSortOrder = "desc",
                   pagination = FALSE,
                   filterable = T,
                   highlight = T,
                   compact = T,
                   columns = list(
-                      Pos = posDef(foot = "Total"),
-                      Player = playerDef(filt=T),
-                      Age = ageDef,
-                      NFL = nflDef,
-                      Salary = salaryDefBar(foot = T),
-                      Contract = contractDef(foot = T, name = "Yr"),
-                      `'22` = futurecolDef(yr = "'22", foot = T),
-                      `'23` = futurecolDef(yr = "'23",foot = T),
-                      `'24` = futurecolDef(yr = "'24",foot = T),
-                      `'25` = futurecolDef(yr = "'25",foot = T)
+                    Extension = colDef(show = F),
+                    Pos = posDef(foot = "Total"),
+                    Player = playerDef(filt = T),
+                    Age = ageDef,
+                    NFL = nflDef,
+                    Salary = salaryDefBar(foot = T),
+                    Contract = contractDef(name = "Yr", foot = T),
+                    `'22` = futurecolDef(yr = "'22", foot = T),
+                    `'23` = futurecolDef(yr = "'23", foot = T),
+                    `'24` = futurecolDef(yr = "'24", foot = T),
+                    `'25` = futurecolDef(yr = "'25", foot = T),
+                    `'26` = futurecolDef(yr = "'26", foot = T)
                   ),
-                  defaultColDef = colDef(footerStyle = list(fontWeight = "bold")),
                   columnGroups = list(
-                      colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
-                      colGroup(name = "Future Seasons", columns = c("'22","'23","'24","'25"), align = 'left')
-                  )
+                    colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
+                    colGroup(name = "Future Seasons", columns = c("'22","'23","'24","'25","'26"), align = 'left')
+                  ),
+                  defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
         )
     })
     
@@ -1587,10 +1607,10 @@ shinyServer(function(input, output, session) {
     
     #trademachine ----
     
-    tmoverviewtm1 <- reactive(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm1]][order(match(Pos, positionorder), -Salary)])
-    tmoverviewtm2 <- reactive(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm2]][order(match(Pos, positionorder), -Salary)])
-    contractstm1 <- reactive(contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm1]][order(match(Pos, positionorder), -Salary)][selectedtm1(), ])
-    contractstm2 <- reactive(contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm2]][order(match(Pos, positionorder), -Salary)][selectedtm2(), ])
+    tmoverviewtm1 <- reactive(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm1]][order(match(Pos, positionorder), -Salary, Player)])
+    tmoverviewtm2 <- reactive(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm2]][order(match(Pos, positionorder), -Salary, Player)])
+    contractstm1 <- reactive(contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm1]][order(match(Pos, positionorder), -Salary, Player)][selectedtm1(), ])
+    contractstm2 <- reactive(contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm2]][order(match(Pos, positionorder), -Salary, Player)][selectedtm2(), ])
     
     output$tmtm1 <- renderReactable({
       #formatted reactable output
@@ -1663,15 +1683,17 @@ shinyServer(function(input, output, session) {
                   compact = T,
                   resizable = F,
                   columns = list(
-                      Pos = posDef(maxW = 38, filt = FALSE),
-                      Player = playerDef(minW = 125),
-                      NFL = colDef(minWidth =  40),
-                      Salary = salaryDefNobar(minW = 45, foot = T),
-                      Contract = contractDef(minW = 30, foot = T, name = "Yr"),
-                      `'22` = futurecolDef(yr = "'22", maxW = 60, foot = T),
-                      `'23` = futurecolDef(yr = "'23", maxW = 60, foot = T),
-                      `'24` = futurecolDef(yr = "'24", maxW = 60, foot = T),
-                      `'25` = futurecolDef(yr = "'25", maxW = 60, foot = T)
+                    Extension = colDef(show = F),
+                    Pos = posDef(maxW = 38, filt = FALSE),
+                    Player = playerDef(minW = 125),
+                    NFL = colDef(minWidth =  40),
+                    Salary = salaryDefNobar(minW = 45, foot = T),
+                    Contract = contractDef(minW = 30, foot = T, name = "Yr"),
+                    `'22` = futurecolDef(yr = "'22", maxW = 60, foot = T),
+                    `'23` = futurecolDef(yr = "'23", maxW = 60, foot = T),
+                    `'24` = futurecolDef(yr = "'24", maxW = 60, foot = T),
+                    `'25` = futurecolDef(yr = "'25", maxW = 60, foot = T),
+                    `'26` = futurecolDef(yr = "'26", maxW = 60, foot = T)
                   ),
                   defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
         )
@@ -1693,15 +1715,17 @@ shinyServer(function(input, output, session) {
                       compact = T,
                       resizable = F,
                       columns = list(
-                          Pos = posDef(maxW = 38, filt = FALSE),
-                          Player = playerDef(minW = 125),
-                          NFL = colDef(minWidth =  40),
-                          Salary = salaryDefNobar(minW = 45, foot = T),
-                          Contract = contractDef(minW = 30, foot = T, name = "Yr"),
-                          `'22` = futurecolDef(yr = "'22", maxW = 60, foot = T),
-                          `'23` = futurecolDef(yr = "'23", maxW = 60, foot = T),
-                          `'24` = futurecolDef(yr = "'24", maxW = 60, foot = T),
-                          `'25` = futurecolDef(yr = "'25", maxW = 60, foot = T)
+                        Extension = colDef(show = F),
+                        Pos = posDef(maxW = 38, filt = FALSE),
+                        Player = playerDef(minW = 125),
+                        NFL = colDef(minWidth =  40),
+                        Salary = salaryDefNobar(minW = 45, foot = T),
+                        Contract = contractDef(minW = 30, foot = T, name = "Yr"),
+                        `'22` = futurecolDef(yr = "'22", maxW = 60, foot = T),
+                        `'23` = futurecolDef(yr = "'23", maxW = 60, foot = T),
+                        `'24` = futurecolDef(yr = "'24", maxW = 60, foot = T),
+                        `'25` = futurecolDef(yr = "'25", maxW = 60, foot = T),
+                        `'26` = futurecolDef(yr = "'26", maxW = 60, foot = T)
                       ),
                       defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
             )
@@ -1812,35 +1836,36 @@ shinyServer(function(input, output, session) {
     #capcorner ----
     #capcornercontracts
     output$capcornercontracts <- renderReactable({
-        reactable(contracts[order(-Salary)],
-                  defaultSortOrder = "desc",
-                  paginationType = "jump",
-                  showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
-                  pageSizeOptions = c(10, 20, 50, 100),
-                  height = 'auto',
-                  filterable = T,
-                  highlight = T,
-                  #borderless = T,
-                  compact = T,
-                  resizable = T,
-                  columns = list(
-                      TRUFFLE = trfDef(),
-                      Pos = posDef(),
-                      Player = playerDef(filt = T),
-                      Age = ageDef,
-                      NFL = nflDef,
-                      Salary = salaryDefBar(),
-                      Contract = contractDef(),
-                      `'22` = futurecolDef(yr = "'22"),
-                      `'23` = futurecolDef(yr = "'23"),
-                      `'24` = futurecolDef(yr = "'24"),
-                      `'25` = futurecolDef(yr = "'25")
-                  ),
-                  columnGroups = list(
-                      colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
-                      colGroup(name = "Future Seasons", columns = c("'22","'23","'24","'25"), align = 'left')
-                  )
-        )
+      reactable(contracts[, !c("Extension")],
+                defaultSortOrder = "desc",
+                paginationType = "jump",
+                showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
+                pageSizeOptions = c(10, 20, 50, 100),
+                height = 'auto',
+                filterable = T,
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                resizable = T,
+                columns = list(
+                  TRUFFLE = trfDef(),
+                  Pos = posDef(),
+                  Player = playerDef(filt = T),
+                  Age = ageDef,
+                  NFL = nflDef,
+                  Salary = salaryDefBar(),
+                  Contract = contractDef(name = "Yr"),
+                  `'22` = futurecolDef(yr = "'22"),
+                  `'23` = futurecolDef(yr = "'23"),
+                  `'24` = futurecolDef(yr = "'24"),
+                  `'25` = futurecolDef(yr = "'25"),
+                  `'26` = futurecolDef(yr = "'26")
+                ),
+                columnGroups = list(
+                  colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
+                  colGroup(name = "Future Seasons", columns = c("'22","'23","'24","'25","'26"), align = 'left')
+                )
+      )
     })
     
     #plot1
@@ -1874,6 +1899,442 @@ shinyServer(function(input, output, session) {
                             y = ~TRUFFLE,
                             text = ~TeamSalary,
                             showarrow = FALSE)
+    })
+    
+    output$extvalqb <- renderReactable({
+      
+      extvalqb <- extval[Pos == "QB"][, !"Pos"]
+      
+      extvaldraft <- draft
+      extvaldraft$Pick <- paste0(extvaldraft$Round,".",extvaldraft$`#`)
+      extvaldraft$ExtensionYr <- extvaldraft$Season + 3
+      
+      reactable(extvalqb,
+                sortable = F,
+                columns = list(
+                  Pick = colDef(align = "right", style = list(fontWeight = "bold"), minWidth = 50),
+                  Value = colDef(
+                    minWidth = 50,
+                    format = colFormat(prefix = "$"),
+                    style = function(value) {
+                      if (value == 70 | value == 60) {
+                        color <- rd1col
+                      } else if (value == 50) {
+                        color <- rd2col
+                      } else if (value == 30) {
+                        color <- rd3col
+                      } else {
+                        color <- 'white'
+                      }
+                      list(background = color)
+                    })
+                ),
+                details = function(index) {
+                  if (index == 1) {
+                    reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "QB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                              columns = list(
+                                Player = playerDef(minW = 150),
+                                Pick = colDef(minWidth = 50, align = 'right'),
+                                ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              )
+                              )
+                  } else if (index == 2) {
+                    reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "QB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                              columns = list(
+                                Player = playerDef(minW = 150),
+                                Pick = colDef(minWidth = 50, align = 'right'),
+                                ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              )
+                    )
+                  } else if (index == 3) {
+                    reactable(extvaldraft[Round == 2 & Pos == "QB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                              columns = list(
+                                Player = playerDef(minW = 150),
+                                Pick = colDef(minWidth = 50, align = 'right'),
+                                ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              )
+                    )
+                  } else if (index == 4) {
+                    reactable(extvaldraft[Round == 3 & Pos == "QB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                              columns = list(
+                                Player = playerDef(minW = 150),
+                                Pick = colDef(minWidth = 50, align = 'right'),
+                                ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              )
+                    )
+                  }
+                },
+                columnGroups = list(
+                  colGroup(name = "QB", columns = c("Pick", "Value"), align = 'left')
+                )
+      )
+    })
+    
+    output$extvalrb <- renderReactable({
+      
+      extvalrb <- extval[Pos == "RB"][, !"Pos"]
+      
+      extvaldraft <- draft
+      extvaldraft$Pick <- paste0(extvaldraft$Round,".",extvaldraft$`#`)
+      extvaldraft$ExtensionYr <- extvaldraft$Season + 3
+      
+      reactable(extvalrb,
+                sortable = F,
+                columns = list(
+                  Pick = colDef(align = "right", style = list(fontWeight = "bold"), minWidth = 50),
+                  Value = colDef(
+                    minWidth = 50,
+                    format = colFormat(prefix = "$"),
+                    style = function(value) {
+                      if (value == 70 | value == 60) {
+                        color <- rd1col
+                      } else if (value == 50) {
+                        color <- rd2col
+                      } else if (value == 30) {
+                        color <- rd3col
+                      } else {
+                        color <- 'white'
+                      }
+                      list(background = color)
+                    })
+                ),
+                details = function(index) {
+                  if (index == 1) {
+                    reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "RB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                              columns = list(
+                                Player = playerDef(minW = 150),
+                                Pick = colDef(minWidth = 50, align = 'right'),
+                                ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              )
+                    )
+                  } else if (index == 2) {
+                    reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "RB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                              columns = list(
+                                Player = playerDef(minW = 150),
+                                Pick = colDef(minWidth = 50, align = 'right'),
+                                ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              )
+                    )
+                  } else if (index == 3) {
+                    reactable(extvaldraft[Round == 2 & Pos == "RB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                              columns = list(
+                                Player = playerDef(minW = 150),
+                                Pick = colDef(minWidth = 50, align = 'right'),
+                                ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              )
+                    )
+                  } else if (index == 4) {
+                    reactable(extvaldraft[Round == 3 & Pos == "RB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                              columns = list(
+                                Player = playerDef(minW = 150),
+                                Pick = colDef(minWidth = 50, align = 'right'),
+                                ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              )
+                    )
+                  }
+                },
+                columnGroups = list(
+                  colGroup(name = "RB", columns = c("Pick", "Value"), align = 'left')
+                )
+      )
+    })
+    
+    output$extvalwr <- renderReactable({
+      
+      extvalwr <- extval[Pos == "WR"][, !"Pos"]
+      
+      extvaldraft <- draft
+      extvaldraft$Pick <- paste0(extvaldraft$Round,".",extvaldraft$`#`)
+      extvaldraft$ExtensionYr <- extvaldraft$Season + 3
+      
+      reactable(extvalwr,
+                sortable = F,
+                columns = list(
+                  Pick = colDef(align = "right", style = list(fontWeight = "bold"), minWidth = 50),
+                  Value = colDef(
+                    minWidth = 50,
+                    format = colFormat(prefix = "$"),
+                    style = function(value) {
+                      if (value == 60 | value == 50) {
+                        color <- rd1col
+                      } else if (value == 40) {
+                        color <- rd2col
+                      } else if (value == 30) {
+                        color <- rd3col
+                      } else {
+                        color <- 'white'
+                      }
+                      list(background = color)
+                    })
+                ),
+                details = function(index) {
+                  if (index == 1) {
+                    reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "WR" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                              columns = list(
+                                Player = playerDef(minW = 150),
+                                Pick = colDef(minWidth = 50, align = 'right'),
+                                ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              )
+                    )
+                  } else if (index == 2) {
+                    reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "WR" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                              columns = list(
+                                Player = playerDef(minW = 150),
+                                Pick = colDef(minWidth = 50, align = 'right'),
+                                ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              )
+                    )
+                  } else if (index == 3) {
+                    reactable(extvaldraft[Round == 2 & Pos == "WR" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                              columns = list(
+                                Player = playerDef(minW = 150),
+                                Pick = colDef(minWidth = 50, align = 'right'),
+                                ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              )
+                    )
+                  } else if (index == 4) {
+                    reactable(extvaldraft[Round == 3 & Pos == "WR" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                              columns = list(
+                                Player = playerDef(minW = 150),
+                                Pick = colDef(minWidth = 50, align = 'right'),
+                                ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              )
+                    )
+                  }
+                },
+                columnGroups = list(
+                  colGroup(name = "WR", columns = c("Pick", "Value"), align = 'left')
+                )
+      )
+    })
+    
+    output$extvalte <- renderReactable({
+      
+      extvalte <- extval[Pos == "TE"][, !"Pos"]
+      
+      extvaldraft <- draft
+      extvaldraft$Pick <- paste0(extvaldraft$Round,".",extvaldraft$`#`)
+      extvaldraft$ExtensionYr <- extvaldraft$Season + 3
+      
+      reactable(extvalte,
+                sortable = F,
+                columns = list(
+                  Pick = colDef(align = "right", style = list(fontWeight = "bold"), minWidth = 50),
+                  Value = colDef(
+                    minWidth = 50,
+                    format = colFormat(prefix = "$"),
+                    style = function(value) {
+                      if (value == 30 | value == 20) {
+                        color <- rd1col
+                      } else if (value == 10) {
+                        color <- rd2col
+                      } else if (value == 5) {
+                        color <- rd3col
+                      } else {
+                        color <- 'white'
+                      }
+                      list(background = color)
+                    })
+                ),
+                details = function(index) {
+                  if (index == 1) {
+                    reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "TE" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                              columns = list(
+                                Player = playerDef(minW = 150),
+                                Pick = colDef(minWidth = 50, align = 'right'),
+                                ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              )
+                    )
+                  } else if (index == 2) {
+                    reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "TE" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                              columns = list(
+                                Player = playerDef(minW = 150),
+                                Pick = colDef(minWidth = 50, align = 'right'),
+                                ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              )
+                              )
+                  } else if (index == 3) {
+                    reactable(extvaldraft[Round == 2 & Pos == "TE" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                              columns = list(
+                                Player = playerDef(minW = 150),
+                                Pick = colDef(minWidth = 50, align = 'right'),
+                                ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              )
+                    )
+                  } else if (index == 4) {
+                    reactable(extvaldraft[Round == 3 & Pos == "TE" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                              columns = list(
+                                Player = playerDef(minW = 150),
+                                Pick = colDef(minWidth = 50, align = 'right'),
+                                ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              )
+                    )
+                  }
+                },
+                columnGroups = list(
+                  colGroup(name = "TE", columns = c("Pick", "Value"), align = 'left')
+                )
+      )
+    })
+    
+    #tagvals output qb
+    output$tagvalsqb <- renderReactable({
+      tagvalsqb <- tagvals[Pos == "QB"][, !"Pos"]
+      
+      reactable(tagvalsqb,
+                sortable = F,
+                columns = list(
+                  Type = colDef(header = with_tt("Tag", "First vs. Second time franchising player"),
+                                minWidth = 50),
+                  TagVal = tagvalDefBar(minW = 100)
+                ),
+                columnGroups = list(
+                  colGroup(name = "QB", columns = c("Type", "TagVal"), align = 'left')
+                ),
+                details = function(index) {
+                  if (index == 1) {
+                    reactable(top5paid[Pos == "QB" & Season == currentyr][, c("Player", "Salary")], 
+                              columns = list(
+                                Player = colDef(minWidth = 150, footer = "Mean"),
+                                Salary = tagvalDefNobar()
+                              ),
+                              defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
+                    )
+                  } else if (index == 2) {
+                    reactable(top5paid[Pos == "QB" & Season == currentyr][, c("Player", "Salary")][1], 
+                              columns = list(
+                                Player = colDef(minWidth = 150),
+                                Salary = tagvalDefNobar(foot = F)
+                              ),
+                              defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
+                    )
+                  }
+                }
+      )
+    })
+    
+    #tagvals output rb
+    output$tagvalsrb <- renderReactable({
+      tagvalsrb <- tagvals[Pos == "RB"][, !"Pos"]
+      
+      reactable(tagvalsrb,
+                sortable = F,
+                columns = list(
+                  Type = colDef(header = with_tt("Tag", "First vs. Second time franchising player"),
+                                minWidth = 50),
+                  TagVal = tagvalDefBar(minW = 100)
+                ),
+                columnGroups = list(
+                  colGroup(name = "RB", columns = c("Type", "TagVal"), align = 'left')
+                ),
+                details = function(index) {
+                  if (index == 1) {
+                    reactable(top5paid[Pos == "RB" & Season == currentyr][, c("Player", "Salary")], 
+                              columns = list(
+                                Player = colDef(minWidth = 150, footer = "Mean"),
+                                Salary = tagvalDefNobar()
+                              ),
+                              defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
+                    )
+                  } else if (index == 2) {
+                    reactable(top5paid[Pos == "RB" & Season == currentyr][, c("Player", "Salary")][1], 
+                              columns = list(
+                                Player = colDef(minWidth = 150),
+                                Salary = tagvalDefNobar(foot = F)
+                              ),
+                              defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
+                    )
+                  }
+                }
+      )
+    })
+    
+    #tagvals output wr
+    output$tagvalswr <- renderReactable({
+      tagvalswr <- tagvals[Pos == "WR"][, !"Pos"]
+      
+      reactable(tagvalswr,
+                sortable = F,
+                columns = list(
+                  Type = colDef(header = with_tt("Tag", "First vs. Second time franchising player"),
+                                minWidth = 50),
+                  TagVal = tagvalDefBar(minW = 100)
+                ),
+                columnGroups = list(
+                  colGroup(name = "WR", columns = c("Type", "TagVal"), align = 'left')
+                ),
+                details = function(index) {
+                  if (index == 1) {
+                    reactable(top5paid[Pos == "WR" & Season == currentyr][, c("Player", "Salary")], 
+                              columns = list(
+                                Player = colDef(minWidth = 150, footer = "Mean"),
+                                Salary = tagvalDefNobar()
+                              ),
+                              defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
+                    )
+                  } else if (index == 2) {
+                    reactable(top5paid[Pos == "WR" & Season == currentyr][, c("Player", "Salary")][1], 
+                              columns = list(
+                                Player = colDef(minWidth = 150),
+                                Salary = tagvalDefNobar(foot = F)
+                              ),
+                              defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
+                    )
+                  }
+                }
+      )
+    })
+    
+    #output tag vals TE
+    output$tagvalste <- renderReactable({
+      tagvalste <- tagvals[Pos == "TE"][, !"Pos"]
+      
+      reactable(tagvalste,
+                sortable = F,
+                columns = list(
+                  Type = colDef(header = with_tt("Tag", "First vs. Second time franchising player"),
+                                minWidth = 50),
+                  TagVal = tagvalDefBar(minW = 100)
+                ),
+                columnGroups = list(
+                  colGroup(name = "TE", columns = c("Type", "TagVal"), align = 'left')
+                ),
+                details = function(index) {
+                  if (index == 1) {
+                    reactable(top5paid[Pos == "TE" & Season == currentyr][, c("Player", "Salary")], 
+                              columns = list(
+                                Player = colDef(minWidth = 150, footer = "Mean"),
+                                Salary = salaryDefNobar()
+                              ),
+                              defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
+                    )
+                  } else if (index == 2) {
+                    reactable(top5paid[Pos == "TE" & Season == currentyr][, c("Player", "Salary")][1], 
+                              columns = list(
+                                Player = colDef(minWidth = 150),
+                                Salary = salaryDefNobar(foot = F)
+                              ),
+                              defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
+                    )
+                  }
+                }
+      )
+    })
+    
+    #player look up tool for franchise tag
+    output$tagvalsplayer <- renderReactable({
+      reactable(ft[Player %in% input$tagvalplayer],
+                compact = T,
+                columns = list(
+                  Pos = posDef(filt = F),
+                  Player = playerDef(minW = 125),
+                  Salary = salaryDefBar(minW = 125),
+                  Contract = contractDef(filt = F, name = "Yr"),
+                  TagVal = colDef(header = with_tt("Tag Value", "Player Tag Value for Next Year"),
+                                  minWidth = 100,
+                                  align = "right")
+                )
+      )
     })
     
     #history books ----

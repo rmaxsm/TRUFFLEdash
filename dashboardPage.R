@@ -112,7 +112,9 @@ dashboardPageUI <-
                                          ),
                                          tabPanel("Contracts",
                                                   wellPanel(class = "well",
-                                                            reactableOutput('tpcontracts')
+                                                            reactableOutput('tpcontracts'),
+                                                            hr(),
+                                                            em("Purple values indicate player is eligible for a Rookie Extension in given year.")
                                                   )
                                          ),
                                          tabPanel("Box Score",
@@ -150,7 +152,7 @@ dashboardPageUI <-
                                                             em("Expected Fantasy Points and Expected Touchdown stats scraped from ESPN. Hover over column header for definition.")
                                                   )
                                          ),
-                                         tabPanel("Snap Shares",
+                                         tabPanel("Snap Share",
                                                   wellPanel(class = "well",
                                                             reactableOutput('tpsnapshare'),
                                                             hr(),
@@ -443,7 +445,9 @@ dashboardPageUI <-
                                          
                                          tabPanel("Contracts",
                                                   class = "well",
-                                                  reactableOutput('capcornercontracts')
+                                                  reactableOutput('capcornercontracts'),
+                                                  hr(),
+                                                  em("Purple values indicate player is eligible for a Rookie Extension in given year.")
                                          ),
                                          
                                          tabPanel("Cap Breakdown",
@@ -451,6 +455,77 @@ dashboardPageUI <-
                                                   #p("Salary Cap Breakdown by Team"),
                                                   plotlyOutput('plot1', height = 555)
                                                   
+                                         ),
+                                         
+                                         tabPanel("Rookie Extensions & Franchise Tag",
+                                                  wellPanel(class = "well",
+                                                            h2("Rookie Extension Values"),
+                                                            p("See the tables below for Rookie Extension contract values by Draft Pick and Position. Owners may trigger any eligible players' rookie extension during the offseason after their initial rookie contract expires. Extended players then receive an additional 2-year contract at the value specified below."),
+                                                            hr(),
+                                                            fluidRow(
+                                                              column(width = 3,
+                                                                     reactableOutput('extvalqb')
+                                                                     ),
+                                                              column(width = 3,
+                                                                     reactableOutput('extvalrb')
+                                                                     ),
+                                                              column(width = 3,
+                                                                     reactableOutput('extvalwr')
+                                                                     ),
+                                                              column(width = 3,
+                                                                     reactableOutput('extvalte')
+                                                                     )
+                                                            ),
+                                                            hr(),
+                                                            em("Expand Rows to see eligible players.")
+                                                  ),
+                                                  wellPanel(class = "well",
+                                                            h2("Franchise Tag Values"),
+                                                            p("See the tables below for projected Franchise Tag values for next season by Position. Use the 'Franchise Tag Value Player Lookup' tool to input a player and check his specific tag value."),
+                                                            hr(),
+                                                            h3("Franchise Tag Rules, as written in the constitution:"),
+                                                            p("When a non-rookie player contract expires at season’s end, the player automatically becomes a Free Agent and part of the player pool for the Free Agent Auction, unless the player is Franchise Tagged. 
+                                                              Similar to the NFL, a Franchise Tag gives owners the option to automatically extend a player’s contract by 1 year at a positionally predetermined Franchise Tag salary. Each offseason, any team may franchise tag up to 2 players. Any individual player may be franchise tagged 2 times before automatically entering Free Agency."),
+                                                            p("The positionally predetermined Franchise Tag salary is calculated as follows:"),
+                                                            tags$ul(
+                                                              tags$li("If the player in question has not been franchise tagged before, his additional 1-year contract salary becomes the average salary (rounded up) of the top 5 highest paid players at his position from the previous season."),
+                                                              tags$li("If the player in question has not been franchise tagged before AND his previous salary exceeded the average salary (rounded up) of the top 5 highest paid players at his position from the previous season, his additional 1-year contract salary becomes $1 more than his previous year salary"),
+                                                              tags$li("If the player in question was franchise tagged the previous year, his additional 1-year contract salary becomes $1 more than the previous highest salary in the league at his position.")
+                                                            ),
+                                                            hr(),
+                                                            h3("Positional Franchise Tag Values"),
+                                                            fluidRow(
+                                                              column(width = 3,
+                                                                     reactableOutput('tagvalsqb')
+                                                                     ),
+                                                              column(width = 3,
+                                                                     reactableOutput('tagvalsrb')
+                                                              ),
+                                                              column(width = 3,
+                                                                     reactableOutput('tagvalswr')
+                                                              ),
+                                                              column(width = 3,
+                                                                     reactableOutput('tagvalste')
+                                                              )
+                                                            ),
+                                                            hr(),
+                                                            em("Expand Rows to see top 5 highest paid players at poision that determine tag value.")
+                                                  ),
+                                                  wellPanel(class = "well",
+                                                            h2("Franchise Tag Value Player Lookup"),
+                                                            p("Use the tool below to type in specific player names and view their specific franchise tag value for next year."),
+                                                            #wellPanel(
+                                                            sidebarLayout(
+                                                              sidebarPanel(
+                                                                fluidRow(selectizeInput('tagvalplayer',h3("Select Player:"),choices = ft$Player, selected = NULL, multiple = T), style ="padding-top:00px;padding-left:20px;padding-right:20px;z-index:10000;")
+                                                              ),
+                                                              mainPanel(br(),
+                                                                        reactableOutput('tagvalsplayer')
+                                                                        )
+                                                              
+                                                            )#, style = "background-color:#FFFFFF;padding-top:20px" ), #end sidebarLayout
+                                                            
+                                                  )
                                          )
                                          
                               ) #end navbarpage
