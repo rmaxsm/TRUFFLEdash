@@ -6,11 +6,18 @@ import pandas as pd
 
 def main():
   
-  week = input("What week is it? ")
+  #get year and week for url/formatting
+  season = input("What SEASON is it..? ")
+  while(len(season) != 4):
+    season = input("What SEASON is it..? ")
+  
+  week = input("What WEEK is it..? ")
+  while(len(week) >= 3):
+    week = input("What WEEK is it..? ")
   
   espn.main()
   fp.main()
-  cbs.main(week)
+  cbs.main(week,season)
   
   print("\nALL DONE :)")
 
