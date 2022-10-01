@@ -1,9 +1,9 @@
 import dre.CBS.extraDash as ed
 
 
-def main(week):
-  # week = input("What week is it? ")
-  ed.main(week)
+def main(week, season):
+  
+  ed.main(week, season)
   print("\nCBS Done :)")
   
   

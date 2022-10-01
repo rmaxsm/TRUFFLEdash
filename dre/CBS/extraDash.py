@@ -42,7 +42,40 @@ def separateColumns(row):
   # allCols[1] = "Player"
   return allCols
 
-def getExtraDash(week):
+def appendToFile(df, week, season):
+  
+  masterFile = "dre/CBS/extraDash.csv"
+  currentWeekYear = week + season
+  
+  #read the existing csv as a pd df for error checking
+  masterDf = pd.read_csv(masterFile)
+  
+  #reassign the columns to be equal to that of the existing csv
+  df.columns = masterDf.columns
+
+  #reassign the columns to be equal to that of the existing csv
+  df.columns = masterDf.columns
+  
+  # save backup
+  backupFile = "data/backup/extraDashWeekly_backup.csv"
+  masterDf.to_csv(backupFile, index=False)
+  print("extra dash backup saved at {}".format(backupFile))
+  
+  #create weekyear column to conditionally remove existing data from week being scraped
+  masterDf["WeekYear"] = masterDf["Week"].astype(str) + masterDf["Season"].astype(str)
+  #remove
+  masterDf = masterDf[masterDf["WeekYear"] != currentWeekYear]
+  #drop the weekyear column post check
+  masterDf = masterDf.drop(['WeekYear'], axis=1)
+  
+  #concat scraped df and the masterDf
+  newmaster = pd.concat([masterDf, df], ignore_index=True)
+
+  # stores updated file as csv over previous 'master' 
+  newmaster.to_csv(masterFile, index=False)
+  print("extra dash saved at {}".format(masterFile))
+
+def getExtraDash(week, season):
   
   cookies = {
     'ppid': 'bf794872c9de88772307c75ceb0df52d',
@@ -175,15 +208,28 @@ def getExtraDash(week):
   
   df = df.drop(columns=["Action", "Opp", "OVP"])
   df = df.rename(columns={"Avail": "TRUFFLE"})
-  # df = df.sort_values(by=['Player','Total'])
-  filepath = "data/extraDash.csv"
-  
-  df.to_csv(filepath, index=False)
-  print("\nTRUFFLE EXTRA DASH SAVED TO {}".format(filepath))
 
-def main(week):
-  # week = input("What week is it? ")
-  getExtraDash(week)
+  # filepath = "data/extraDash.csv"
+  # df.to_csv(filepath, index=False)
+  # print("\nTRUFFLE EXTRA DASH SAVED TO {}".format(filepath))
+  
+
+  #add week and season to main pandas df
+  df.loc[:,'Season'] = season
+  df.loc[:,'Week'] = week
+  
+  #get column order lol
+  szn = df.pop("Season")
+  df.insert(0, szn.name, szn)
+  wk = df.pop("Week")
+  df.insert(1, wk.name, wk)
+
+  # # df.to_csv("dre/CBS/extraDash.csv", index=False)
+  appendToFile(df, week, season)
+
+def main(week, season):
+  getExtraDash(week, season)
   print("EXTRA DASH DONE")
 if __name__ == "__main__":
   main()
+  # main("3","2022")
