@@ -44,7 +44,8 @@ def separateColumns(row):
 
 def appendToFile(df, week, season):
   
-  masterFile = "dre/CBS/extraDash.csv"
+  # masterFile = "dre/CBS/extraDash.csv"
+  masterFile = "data/extraDash.csv"
   currentWeekYear = week + season
   
   #read the existing csv as a pd df for error checking
