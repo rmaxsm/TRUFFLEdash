@@ -338,7 +338,10 @@ pointsleaders <- weekly[order(-Season, Week)][,
                         .(ptslogs = list(FPts),
                           Avg = round(mean(FPts),1),
                           Total = round(sum(FPts),1)),
-                        by = .(Season, TRUFFLE, Pos, Player)][order(-Season, match(Pos, positionorder), -Total, -Avg)][, `:=`(PosRk = 1:.N), by = .(Season, Pos)][, c("Season", "TRUFFLE", "Player", "Pos", "PosRk", "ptslogs", "Avg", "Total")][order(-Total, -Avg)]
+                        by = .(Season, Pos, Player)][order(-Season, match(Pos, positionorder), -Total, -Avg)][, `:=`(PosRk = 1:.N), by = .(Season, Pos)]
+pointsleaders <- merge(x = pointsleaders, y = rosters[ , c("Pos", "Player", "TRUFFLE")], by = c("Pos", "Player"), all.x=TRUE)
+pointsleaders$TRUFFLE[is.na(pointsleaders$TRUFFLE)] <- "FA"
+pointsleaders <- pointsleaders[, c("Season", "TRUFFLE", "Player", "Pos", "PosRk", "ptslogs", "Avg", "Total")][order(-Total, -Avg)]
 
 ppbios <- weekly[Season == max(weekly$Season)][order(-Season,-Week)]
 ppbios <- ppbios[,
