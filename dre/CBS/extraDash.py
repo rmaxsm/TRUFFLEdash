@@ -226,7 +226,7 @@ def getExtraDash(week, season):
   df.insert(1, wk.name, wk)
 
   df = df.set_axis(['Season', 'Week', 'TRUFFLE', 'Player', 'Pos', 'NFL', 'Cmp%', 'Pa20',
-       'Pa40', 'RuYPC', 'Pa20', 'Tar', 'Tar%', 'ReYPC', 'Re20', 'Re40', 'ReFD%',
+       'Pa40', 'RuYPC', 'Ru20', 'Tar', 'Tar%', 'ReYPC', 'Re20', 'Re40', 'ReFD%',
        'TotYd', 'Avg', 'FPts'], axis=1, inplace=False)
 
   df = df[df['Avg'] != '-']
