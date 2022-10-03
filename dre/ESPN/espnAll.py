@@ -18,11 +18,12 @@ def main():
   wrDf = pd.read_pickle("dre/ESPN/wr.pkl")
   teDf = pd.read_pickle("dre/ESPN/te.pkl")
   xtdDf = pd.read_pickle("dre/ESPN/xtd.pkl")
+  # print(xtdDf["Player"].to_string())
 
   # combinedDf = pd.DataFrame(columns = qbDf.columns)
   combinedDf = pd.concat([qbDf, rbDf, wrDf, teDf], ignore_index=True, sort=False)
   
-  dupe = pd.merge(combinedDf, xtdDf, on='Player')
+  dupe = pd.merge(combinedDf, xtdDf, on='Player', how="outer")
 
   noDupe = dupe.drop_duplicates(subset=["Player", "NFL", "Pos"])
   noDupe = noDupe.loc[:, ["Player","NFL","Pos","xFP","ActualPts","xTD","TD", "Looks", "Diff","In5", "EZ"]]
@@ -34,10 +35,11 @@ def main():
   noDupe['Player'] = noDupe['Player'].str.replace(r' II', '', regex=True)
   noDupe['Player'] = noDupe['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
   
+  noDupe = noDupe.fillna('-')
+  
   filepath = "data/espnStats.csv"
   noDupe.to_csv(filepath, index=False)
-  # print(noDupe)
-  print("\nESPN FILE SAVED TO dre/ESPN/{}.csv".format(filepath))
+  print("\nESPN FILE SAVED TO {}".format(filepath))
   print("ESPN DONE :)\n")
   
 if __name__ == "__main__":
