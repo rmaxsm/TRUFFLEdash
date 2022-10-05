@@ -319,7 +319,7 @@ contracts <- contracts[, `:=`(`'22` = Salary,
 )][order(-Salary)]
 
 ppd <- teamportal[, `:=`(`PP$` = round(FPts/Salary,2),
-                         `wPP$`= round(Avg/Salary,2))]
+                         `wPP$`= round(Avg/Salary,2))][, c("TRUFFLE", "Pos", "Player", "Avg", "FPts", "PP$", "wPP$")]
 
 #aggregating fantasy data by team
 teamsfantasyweekly <- fantasy[,

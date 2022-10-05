@@ -24,7 +24,8 @@ dashboardPageUI <-
                     menuItem("History Books", tabName = "historybooks", icon = icon("book")),
                     menuItem("Database", tabName = "database", icon = icon("database")),
                     menuItem("Rookie Draft", tabName = "draft", icon = icon("business-time")),
-                    menuItem("Constitution", href = "https://docs.google.com/document/d/1-FyXq3HWtEETQlpF-_HnofCb2y1SGKUn7c7NVFlrx1E/", newtab = TRUE, icon = icon("paragraph"))
+                    menuItem("Constitution", href = "https://docs.google.com/document/d/1-FyXq3HWtEETQlpF-_HnofCb2y1SGKUn7c7NVFlrx1E/", newtab = TRUE, icon = icon("paragraph")),
+                    menuItem("Tutorials", tabName = "tutorials", icon = icon("fa-sharp fa-solid fa-info"))
                   )
                   ),
                   # Dashboard Body -----
@@ -708,6 +709,15 @@ dashboardPageUI <-
                                           column(width=4, reactableOutput('rd2')),
                                           column(width=4, reactableOutput('rd3'))
                                         )
+                              )
+                              
+                      ),
+                      
+                      #tutorials
+                      tabItem(tabName = "tutorials",
+                              wellPanel(class = "well",
+                                        tags$iframe(width="560", height="315", src="https://youtu.be/uU9hTNvvo9A", frameborder="0", allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", allowfullscreen=T),
+                                        HTML('<iframe width="560" height="315" src="https://youtu.be/uU9hTNvvo9A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
                               )
                               
                       )

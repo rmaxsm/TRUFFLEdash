@@ -1534,7 +1534,7 @@ shinyServer(function(input, output, session) {
                                   align="center",
                                   minWidth = 30,
                                   cell = function(value, index) {
-                                    action_url <- snapssc$ActionLink[index]
+                                    action_url <- espnsc$ActionLink[index]
                                     img_src <- knitr::image_uri(value)
                                     image <- img(src = img_src, height = "15px", alt = value)
                                     tagList(
