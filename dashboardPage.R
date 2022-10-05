@@ -24,8 +24,8 @@ dashboardPageUI <-
                     menuItem("History Books", tabName = "historybooks", icon = icon("book")),
                     menuItem("Database", tabName = "database", icon = icon("database")),
                     menuItem("Rookie Draft", tabName = "draft", icon = icon("business-time")),
-                    menuItem("Constitution", href = "https://docs.google.com/document/d/1-FyXq3HWtEETQlpF-_HnofCb2y1SGKUn7c7NVFlrx1E/", newtab = TRUE, icon = icon("paragraph")),
-                    menuItem("Tutorials", tabName = "tutorials", icon = icon("fa-sharp fa-solid fa-info"))
+                    menuItem("Constitution", href = "https://docs.google.com/document/d/1-FyXq3HWtEETQlpF-_HnofCb2y1SGKUn7c7NVFlrx1E/", newtab = TRUE, icon = icon("paragraph"))
+                    #menuItem("Tutorials", tabName = "tutorials", icon = icon("fa-sharp fa-solid fa-info"))
                   )
                   ),
                   # Dashboard Body -----
@@ -361,7 +361,7 @@ dashboardPageUI <-
                                                             em("Additional weekly context stats, including Yards per Carry/Catch, 20+ and 40+ yard plays, and others. Hover over column header for definition.")
                                                   )
                                          ),
-                                         tabPanel("ESPN xFDP/xTD",
+                                         tabPanel("ESPN xFP/xTD",
                                                   wellPanel(class = "well",
                                                             reactableOutput('scxfpxtd'),
                                                             hr(),
@@ -716,8 +716,7 @@ dashboardPageUI <-
                       #tutorials
                       tabItem(tabName = "tutorials",
                               wellPanel(class = "well",
-                                        tags$iframe(width="560", height="315", src="https://youtu.be/uU9hTNvvo9A", frameborder="0", allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", allowfullscreen=T),
-                                        HTML('<iframe width="560" height="315" src="https://youtu.be/uU9hTNvvo9A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
+                                        tags$iframe(width="560", height="315", src="https://www.youtube.com/embed/uU9hTNvvo9A", frameborder="0", allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", allowfullscreen=T)
                               )
                               
                       )

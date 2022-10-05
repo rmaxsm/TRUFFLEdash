@@ -250,6 +250,8 @@ extradashszn <- extradashszn[, c(1, 4, 2:3, 5:17)][order(-TotYd)]
 
 #espn data
 espn <- as.data.table(read_csv("data/espnStats.csv", col_types = cols()))
+espn$xFP <- as.numeric(espn$xFP); espn$ActualPts <- as.numeric(espn$ActualPts); espn$xTD <- as.numeric(espn$xTD); espn$TD <- as.numeric(espn$TD)
+espn$Looks <- as.numeric(espn$Looks); espn$Diff <- as.numeric(espn$Diff); espn$In5 <- as.numeric(espn$In5); espn$EZ <- as.numeric(espn$EZ)
 espn$FPDiff <- espn$ActualPts - espn$xFP
 espn <- merge(x = espn, y = rosters[ , c("Pos", "Player", "TRUFFLE")], by = c("Pos", "Player"), all.x=TRUE)
 espn$TRUFFLE[is.na(espn$TRUFFLE)] <- "FA"
