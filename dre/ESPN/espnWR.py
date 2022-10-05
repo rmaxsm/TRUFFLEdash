@@ -19,16 +19,17 @@ def separateColumns(row):
   return allCols
 
 #takes in a single row of html and returns the stats as list
-def separatePlayers(rows, idx, namesArray):
+def separatePlayers(row):
   itr = 0
   curRow = []
-  for i in rows:
+  for i in row:
     if itr == 0:
-      test = i.getText().split(",")
-      if len(test) > 1:
-        #need the idx field for this. workaround is weird ik..
-        curRow.append(namesArray[idx])
-        curRow.append(test[1].strip())
+      nameTeam = i.getText().split(",")
+      team = nameTeam[-1].strip()
+      name = nameTeam[0]
+      cleanName = name.split(' ', 1)[-1]
+      curRow.append(cleanName)
+      curRow.append(team)
     else:
       if len(i.getText()) > 0:
         curRow.append(i.getText())
@@ -128,17 +129,9 @@ def runWR():
   
   allRows = tbls.find_all("tr", class_="last")
   
-  players = tbls.find_all("a")    # this is a key to get the player names. was a nice fix for a huge pain.
-  allNames = [i.getText() for i in players]
-
-  #JAMES WEBB X IS NOT LINKED AND THEREFORE NOT FOUND. VERY VERY HARDCODED... NOT GREAT BOB
-  # the linked is caught in the find_all("a") query so.. hopefully that just gets fixed and we can remove this
-  allNames.insert(187,"James Webb X")
-  allNames.insert(173,"0")
-  
-  for i in range(len(allRows)):
-    allWRs.append(separatePlayers(allRows[i], i, allNames))
-
+  for i in allRows:
+    allWRs.append(separatePlayers(i))
+    
   #pandas df to represent team
 
   df = pd.DataFrame(allWRs, columns=colHeaders)
@@ -146,9 +139,9 @@ def runWR():
   df = df.loc[:, ["Player","NFL","Pos","xFP","ActualPts"]]
   # print(df)
   df.to_pickle("dre/ESPN/wr.pkl")
+  # df.to_csv("dre/ESPN/test_wr.csv", index=False)
   
 def main():
-  print("\nHARDCODING JAMES WEBB AND '0'. WILL NEED TO FIX THAT\n")
   runWR()
   print("WR DONE")
 
