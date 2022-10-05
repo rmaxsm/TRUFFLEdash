@@ -130,13 +130,15 @@ def runWR():
   
   players = tbls.find_all("a")    # this is a key to get the player names. was a nice fix for a huge pain.
   allNames = [i.getText() for i in players]
-  
+
   #JAMES WEBB X IS NOT LINKED AND THEREFORE NOT FOUND. VERY VERY HARDCODED... NOT GREAT BOB
   # the linked is caught in the find_all("a") query so.. hopefully that just gets fixed and we can remove this
-  allNames.insert(165,"James Webb X")
+  allNames.insert(187,"James Webb X")
+  allNames.insert(173,"0")
+  
   for i in range(len(allRows)):
     allWRs.append(separatePlayers(allRows[i], i, allNames))
-  
+
   #pandas df to represent team
 
   df = pd.DataFrame(allWRs, columns=colHeaders)
@@ -146,7 +148,7 @@ def runWR():
   df.to_pickle("dre/ESPN/wr.pkl")
   
 def main():
-  print("\nMESSAGE FROM THE WR FUNCTION:\nHEY BTW I'M STILL HARDCODING JAMES WEBB FOR NOW. IF THATS CHANGED DELETE ME. OTHERWISE IDK FIGURE IT OUT\n")
+  print("\nHARDCODING JAMES WEBB AND '0'. WILL NEED TO FIX THAT\n")
   runWR()
   print("WR DONE")
 
