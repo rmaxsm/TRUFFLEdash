@@ -32,6 +32,8 @@ options(reactable.language = reactableLang(
   pageNext = "\u276f"
 ))
 
+tdred <- "#8C2E26"
+tdblue <- "#84A4D8"
 globalcol <- "#84A4D8"
 QBcolor <- "#b7e1cd"
 RBcolor <- "#f4cccc"

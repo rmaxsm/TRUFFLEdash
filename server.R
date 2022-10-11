@@ -646,7 +646,7 @@ shinyServer(function(input, output, session) {
                   PaInt = paintDef(),
                   RuYd = ruydDef(borderL = T),
                   RuTD = rutdDef(),
-                  RuFD = patdDef(),
+                  RuFD = rufdDef(),
                   ReYd = reydDef(borderL = T),
                   ReTD = retdDef(),
                   ReFD = refdDef(),
@@ -1525,7 +1525,8 @@ shinyServer(function(input, output, session) {
                 compact = T,
                 defaultColDef = colDef(
                   minWidth = 50,
-                  align = "right"
+                  align = "right",
+                  sortNALast = TRUE
                 ),
                 columns = list(
                   Action = colDef(header = with_tt("A", "Action link to add, drop, or trade player"),
@@ -3375,7 +3376,7 @@ shinyServer(function(input, output, session) {
     # red error message if bad credentials
     output$pass <- renderUI({
       if (user_input$status == "bad_user") {
-        h5(strong("Team not found!", style = "color:red"), align = "center")
+        h5(strong("Team not found!", style = "color:#8C2E26"), align = "center")
       } else {
         ""
       }
