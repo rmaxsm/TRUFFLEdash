@@ -265,6 +265,7 @@ snaps <- as.data.table(read_csv("data/snapPer.csv", col_types = cols()))
 snaps <- merge(x = snaps, y = rosters[ , c("Pos", "Player", "TRUFFLE")], by = c("Pos", "Player"), all.x=TRUE)
 snaps$TRUFFLE[is.na(snaps$TRUFFLE)] <- "FA"
 snaps <- snaps[, c(24, 1:21, 23, 22)]
+snaps[snaps == "bye"] <- NA
 colnames(snaps)[23:24] <- c("Avg", "Total Snaps")
 #dividing snaps by 100 for percentage formatting
 for (i in 5:22) {
