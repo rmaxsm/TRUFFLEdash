@@ -95,7 +95,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2021,1,FA,WR,LV,Bryan Edwards,BAL,25,0,0,0,0,0,0,0,0,0,5,4,81,0,4,0,12.1,12.1
 2021,1,FA,QB,PIT,Ben Roethlisberger,@BUF,2,18,32,188,1,0,4,5,0,0,0,0,0,0,0,0,12.02,12.02
 2021,1,FRR,RB,BUF,Devin Singletary,PIT,27,0,0,0,0,0,11,72,0,4,5,3,8,0,0,0,12,12
-2021,1,WLW,WR,BUF,Gabriel Davis,PIT,16,0,0,0,0,0,0,0,0,0,5,2,40,1,2,0,12,12
+2021,1,WLW,WR,BUF,Gabe Davis,PIT,16,0,0,0,0,0,0,0,0,0,5,2,40,1,2,0,12,12
 2021,1,MCM,RB,ATL,Cordarrelle Patterson,PHI,4,0,0,0,0,0,7,54,0,4,2,2,13,0,1,0,11.7,11.7
 2021,1,FA,WR,CLE,Anthony Schwartz,@KC,12,0,0,0,0,0,1,17,0,1,5,3,69,0,2,0,11.6,11.6
 2021,1,VD,WR,PIT,Diontae Johnson,@BUF,1,0,0,0,0,0,0,0,0,0,10,5,36,1,2,0,11.6,11.6
@@ -757,7 +757,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2021,2,FA,TE,PIT,Eric Ebron,LV,30,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0
 2021,2,FA,TE,BAL,Eric Tomlinson,KC,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2021,2,FA,RB,LAC,Gabe Nabers,DAL,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-2021,2,WLW,WR,BUF,Gabriel Davis,@MIA,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2021,2,WLW,WR,BUF,Gabe Davis,@MIA,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2021,2,FA,TE,NO,Garrett Griffin,@CAR,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2021,2,FA,RB,NYG,Gary Brightwell,@WAS,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2021,2,FA,TE,CAR,Giovanni Ricci,NO,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -1047,7 +1047,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2021,3,FA,WR,CLE,Rashard Higgins,CHI,26,0,0,0,0,0,0,0,0,0,2,2,24,0,1,0,3.4,3.4
 2021,3,FA,RB,NE,Brandon Bolden,NO,1,0,0,0,0,0,3,-1,0,0,4,3,23,0,1,0,3.3,3.3
 2021,3,FA,TE,JAC,Dan Arnold,@HOU,26,0,0,0,0,0,0,0,0,0,4,2,23,0,1,0,3.3,3.3
-2021,3,WLW,WR,BUF,Gabriel Davis,WAS,29,0,0,0,0,0,0,0,0,0,1,1,23,0,1,0,3.3,3.3
+2021,3,WLW,WR,BUF,Gabe Davis,WAS,29,0,0,0,0,0,0,0,0,0,1,1,23,0,1,0,3.3,3.3
 2021,3,FA,RB,NYJ,Ty Johnson,@DEN,11,0,0,0,0,0,3,17,0,0,5,1,6,0,1,0,3.3,3.3
 2021,3,FA,WR,WAS,Cam Sims,@BUF,1,0,0,0,0,0,1,7,0,0,2,1,15,0,1,0,3.2,3.2
 2021,3,FRR,WR,NYJ,Elijah Moore,@DEN,7,0,0,0,0,0,0,0,0,0,6,3,22,0,1,0,3.2,3.2
@@ -1613,7 +1613,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2021,4,FA,TE,BAL,Eric Tomlinson,@DEN,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2021,4,FA,TE,LV,Foster Moreau,@LAC,31,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2021,4,FA,RB,LAC,Gabe Nabers,LV,26,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-2021,4,WLW,WR,BUF,Gabriel Davis,HOU,23,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+2021,4,WLW,WR,BUF,Gabe Davis,HOU,23,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
 2021,4,FA,TE,NO,Garrett Griffin,NYG,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2021,4,FA,RB,NYG,Gary Brightwell,@NO,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2021,4,FA,TE,TEN,Geoff Swaim,@NYJ,25,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
@@ -1911,7 +1911,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2021,5,FA,RB,LAC,Joshua Kelley,CLE,14,0,0,0,0,0,2,17,0,1,0,0,0,0,0,0,2.7,2.7
 2021,5,NN,TE,PIT,Pat Freiermuth,DEN,3,0,0,0,0,0,0,0,0,0,2,2,7,0,2,0,2.7,2.7
 2021,5,MWM,TE,CIN,CJ Uzomah,GB,21,0,0,0,0,0,0,0,0,0,2,2,16,0,1,0,2.6,2.6
-2021,5,WLW,WR,BUF,Gabriel Davis,@KC,12,0,0,0,0,0,0,0,0,0,1,1,16,0,1,0,2.6,2.6
+2021,5,WLW,WR,BUF,Gabe Davis,@KC,12,0,0,0,0,0,0,0,0,0,1,1,16,0,1,0,2.6,2.6
 2021,5,MWM,WR,LAR,Van Jefferson,@SEA,8,0,0,0,0,0,0,0,0,0,4,1,16,0,1,0,2.6,2.6
 2021,5,FA,TE,MIA,Adam Shaheen,@TB,19,0,0,0,0,0,0,0,0,0,2,2,15,0,1,0,2.5,2.5
 2021,5,FA,WR,TEN,Cameron Batson,@JAC,26,0,0,0,0,0,2,15,0,1,0,0,0,0,0,0,2.5,2.5
@@ -2288,7 +2288,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2021,6,MCM,WR,LAC,Mike Williams,@BAL,25,0,0,0,0,0,0,0,0,0,5,2,27,0,1,0,3.7,3.7
 2021,6,FA,TE,TB,Cameron Brate,@PHI,32,0,0,0,0,0,0,0,0,0,4,3,26,0,1,0,3.6,3.6
 2021,6,CC,WR,ARI,Rondale Moore,@CLE,11,0,0,0,0,0,3,10,0,0,4,3,16,0,1,0,3.6,3.6
-2021,6,WLW,WR,BUF,Gabriel Davis,@TEN,31,0,0,0,0,0,0,0,0,0,2,2,25,0,1,0,3.5,3.5
+2021,6,WLW,WR,BUF,Gabe Davis,@TEN,31,0,0,0,0,0,0,0,0,0,2,2,25,0,1,0,3.5,3.5
 2021,6,FA,TE,DEN,Eric Saubert,LV,30,0,0,0,0,0,0,0,0,0,5,3,23,0,1,0,3.3,3.3
 2021,6,CC,RB,IND,Nyheim Hines,HOU,28,0,0,0,0,0,4,13,0,1,2,1,9,0,0,0,3.2,3.2
 2021,6,FA,RB,DET,Jamaal Williams,CIN,15,0,0,0,0,0,4,11,0,2,2,1,-2,0,0,0,3.1,3.1
@@ -2908,7 +2908,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2021,8,MAM,TE,PHI,Dallas Goedert,@DET,17,0,0,0,0,0,0,0,0,0,7,6,72,0,4,0,11.2,11.2
 2021,8,VD,RB,CHI,Khalil Herbert,SF,12,0,0,0,0,0,23,72,0,4,2,2,-4,0,0,0,11.2,11.2
 2021,8,NN,QB,ARI,Kyler Murray,GB,29,22,33,274,0,2,6,21,0,2,0,0,0,0,0,0,11.06,11.06
-2021,8,WLW,WR,BUF,Gabriel Davis,MIA,27,0,0,0,0,0,0,0,0,0,5,4,29,1,2,0,10.9,10.9
+2021,8,WLW,WR,BUF,Gabe Davis,MIA,27,0,0,0,0,0,0,0,0,0,5,4,29,1,2,0,10.9,10.9
 2021,8,FA,RB,CLE,Nick Chubb,PIT,27,0,0,0,0,0,16,61,0,4,1,1,8,0,0,0,10.9,10.9
 2021,8,FA,RB,MIN,Dalvin Cook,DAL,3,0,0,0,0,0,18,78,0,3,2,0,0,0,0,0,10.8,10.8
 2021,8,VD,RB,TEN,Derrick Henry,@IND,5,0,0,0,0,0,28,68,0,4,0,0,0,0,0,0,10.8,10.8
@@ -3506,7 +3506,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2021,9,FA,WR,GB,Equanimeous St Brown,@KC,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2021,9,FA,TE,LV,Foster Moreau,@NYG,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2021,9,FA,WR,ATL,Frank Darby,@NO,21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-2021,9,WLW,WR,BUF,Gabriel Davis,@JAC,26,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0
+2021,9,WLW,WR,BUF,Gabe Davis,@JAC,26,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0
 2021,9,FA,TE,NO,Garrett Griffin,ATL,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2021,9,FA,TE,CAR,Giovanni Ricci,NE,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2021,9,FA,WR,ARI,Greg Dortch,@SF,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -3639,7 +3639,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2021,10,FA,WR,KC,Byron Pringle,@LV,5,0,0,0,0,0,0,0,0,0,5,4,46,1,3,0,13.6,13.6
 2021,10,FA,RB,DET,Godwin Igwebuike,@PIT,27,0,0,0,0,0,2,56,1,2,0,0,0,0,0,0,13.6,13.6
 2021,10,MCM,WR,LV,Hunter Renfrow,KC,12,0,0,0,0,0,0,0,0,0,9,7,46,1,3,0,13.6,13.6
-2021,10,WLW,WR,BUF,Gabriel Davis,@NYJ,9,0,0,0,0,0,0,0,0,0,3,3,105,0,3,0,13.5,13.5
+2021,10,WLW,WR,BUF,Gabe Davis,@NYJ,9,0,0,0,0,0,0,0,0,0,3,3,105,0,3,0,13.5,13.5
 2021,10,MAM,QB,MIA,Tua Tagovailoa,BAL,23,8,13,158,0,0,3,0,1,1,0,0,0,0,0,0,13.32,13.32
 2021,10,ELP,RB,PHI,Jordan Howard,@DEN,9,0,0,0,0,0,12,83,0,5,0,0,0,0,0,0,13.3,13.3
 2021,10,FA,RB,SF,Elijah Mitchell,LAR,17,0,0,0,0,0,27,91,0,4,0,0,0,0,0,0,13.1,13.1
@@ -4106,7 +4106,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2021,11,FA,TE,TB,Cameron Brate,NYG,16,0,0,0,0,0,0,0,0,0,6,2,27,0,2,0,4.7,4.7
 2021,11,FA,WR,BAL,Devin Duvernay,@CHI,28,0,0,0,0,0,0,0,0,0,6,4,37,0,1,0,4.7,4.7
 2021,11,FA,TE,MIA,Durham Smythe,@NYJ,25,0,0,0,0,0,0,0,0,0,5,4,37,0,1,0,4.7,4.7
-2021,11,WLW,WR,BUF,Gabriel Davis,IND,17,0,0,0,0,0,0,0,0,0,4,2,27,0,2,0,4.7,4.7
+2021,11,WLW,WR,BUF,Gabe Davis,IND,17,0,0,0,0,0,0,0,0,0,4,2,27,0,2,0,4.7,4.7
 2021,11,NN,WR,ARI,Christian Kirk,@SEA,8,0,0,0,0,0,0,0,0,0,5,2,25,0,2,0,4.5,4.5
 2021,11,ELP,WR,KC,Mecole Hardman,DAL,19,0,0,0,0,0,0,0,0,0,3,2,25,0,2,0,4.5,4.5
 2021,11,NN,WR,BUF,Cole Beasley,IND,17,0,0,0,0,0,0,0,0,0,5,4,23,0,2,0,4.3,4.3
@@ -4477,7 +4477,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2021,12,FA,WR,NYG,Darius Slayton,PHI,4,0,0,0,0,0,1,-13,0,0,4,3,40,0,3,0,7,7
 2021,12,FA,WR,GB,Marquez Valdes-Scantling,LAR,18,0,0,0,0,0,0,0,0,0,9,4,50,0,2,0,7,7
 2021,12,MCM,WR,LAC,Mike Williams,@DEN,7,0,0,0,0,0,0,0,0,0,8,4,39,0,3,0,6.9,6.9
-2021,12,WLW,WR,BUF,Gabriel Davis,@NO,21,0,0,0,0,0,0,0,0,0,3,2,47,0,2,0,6.7,6.7
+2021,12,WLW,WR,BUF,Gabe Davis,@NO,21,0,0,0,0,0,0,0,0,0,3,2,47,0,2,0,6.7,6.7
 2021,12,FA,WR,NO,Lil'Jordan Humphrey,BUF,1,0,0,0,0,0,0,0,0,0,5,3,47,0,2,0,6.7,6.7
 2021,12,MWM,RB,NE,Rhamondre Stevenson,TEN,2,0,0,0,0,0,9,46,0,2,1,0,0,0,0,0,6.6,6.6
 2021,12,FA,TE,MIA,Durham Smythe,CAR,10,0,0,0,0,0,2,3,0,2,5,5,32,0,1,0,6.5,6.5
@@ -4821,7 +4821,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2021,13,FA,WR,ARI,DeAndre Hopkins,@CHI,28,0,0,0,0,0,0,0,0,0,2,2,32,1,2,0,11.2,11.2
 2021,13,AFL,WR,MIA,DeVante Parker,NYG,22,0,0,0,0,0,0,0,0,0,5,5,62,0,5,0,11.2,11.2
 2021,13,MCM,RB,KC,Darrel Williams,DEN,9,0,0,0,0,0,5,20,0,1,3,3,60,0,2,0,11,11
-2021,13,WLW,WR,BUF,Gabriel Davis,NE,2,0,0,0,0,0,0,0,0,0,4,2,30,1,2,0,11,11
+2021,13,WLW,WR,BUF,Gabe Davis,NE,2,0,0,0,0,0,0,0,0,0,4,2,30,1,2,0,11,11
 2021,13,NN,WR,LAR,Odell Beckham,JAC,26,0,0,0,0,0,0,0,0,0,5,2,28,1,2,0,10.8,10.8
 2021,13,FRR,WR,DEN,Jerry Jeudy,@KC,12,0,0,0,0,0,0,0,0,0,6,4,77,0,3,0,10.7,10.7
 2021,13,FA,RB,NYJ,Tevin Coleman,PHI,22,0,0,0,0,0,11,58,0,2,4,3,19,0,1,0,10.7,10.7
@@ -5164,7 +5164,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2021,14,ELP,WR,SF,Deebo Samuel,@CIN,13,0,0,0,0,0,8,37,1,2,1,1,22,0,1,0,14.9,14.9
 2021,14,MAM,WR,TB,Chris Godwin,BUF,1,0,0,0,0,0,0,0,0,0,15,10,105,0,4,0,14.5,14.5
 2021,14,FA,WR,PIT,James Washington,@MIN,32,0,0,0,0,0,0,0,0,0,6,4,65,1,2,0,14.5,14.5
-2021,14,WLW,WR,BUF,Gabriel Davis,@TB,14,0,0,0,0,0,0,0,0,0,8,5,43,1,4,0,14.3,14.3
+2021,14,WLW,WR,BUF,Gabe Davis,@TB,14,0,0,0,0,0,0,0,0,0,8,5,43,1,4,0,14.3,14.3
 2021,14,WLW,WR,BAL,Rashod Bateman,@CLE,10,0,0,0,0,0,0,0,0,0,8,7,103,0,4,0,14.3,14.3
 2021,14,AFL,WR,ARI,AJ Green,LAR,18,0,0,0,0,0,0,0,0,0,10,7,102,0,4,0,14.2,14.2
 2021,14,NN,WR,DAL,Amari Cooper,@WAS,30,0,0,0,0,0,0,0,0,0,7,5,51,1,3,0,14.1,14.1
@@ -5483,7 +5483,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2021,15,FA,WR,HOU,Brandin Cooks,@JAC,26,0,0,0,0,0,0,0,0,0,10,7,102,2,4,0,26.2,26.2
 2021,15,MCM,QB,LAC,Justin Herbert,KC,30,22,38,236,2,1,5,16,1,3,0,0,0,0,0,0,26.04,26.04
 2021,15,ELP,TE,NE,Hunter Henry,@IND,29,0,0,0,0,0,0,0,0,0,8,6,77,2,6,0,25.7,25.7
-2021,15,WLW,WR,BUF,Gabriel Davis,CAR,6,0,0,0,0,0,0,0,0,0,7,5,85,2,4,0,24.5,24.5
+2021,15,WLW,WR,BUF,Gabe Davis,CAR,6,0,0,0,0,0,0,0,0,0,7,5,85,2,4,0,24.5,24.5
 2021,15,WLW,RB,SF,Jeff Wilson,ATL,24,0,0,0,0,0,21,110,1,6,2,2,9,0,0,0,23.9,23.9
 2021,15,ELP,QB,GB,Aaron Rodgers,@BAL,23,23,31,268,3,0,4,11,0,0,0,0,0,0,0,0,23.82,23.82
 2021,15,VD,RB,TEN,D'Onta Foreman,@PIT,27,0,0,0,0,0,22,108,0,8,3,2,27,0,1,0,22.5,22.5
@@ -6448,7 +6448,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2021,17,ELP,WR,KC,Tyreek Hill,@CIN,13,0,0,0,0,0,1,2,0,0,10,6,40,0,3,0,7.2,7.2
 2021,17,WLW,WR,DAL,CeeDee Lamb,ARI,27,0,0,0,0,0,0,0,0,0,4,3,51,0,2,0,7.1,7.1
 2021,17,FA,TE,CLE,Harrison Bryant,@PIT,9,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,7.1,7.1
-2021,17,WLW,WR,BUF,Gabriel Davis,ATL,28,0,0,0,0,0,0,0,0,0,3,3,40,0,3,0,7,7
+2021,17,WLW,WR,BUF,Gabe Davis,ATL,28,0,0,0,0,0,0,0,0,0,3,3,40,0,3,0,7,7
 2021,17,FA,WR,TB,Tyler Johnson,@NYJ,16,0,0,0,0,0,0,0,0,0,6,4,50,0,2,0,7,7
 2021,17,FA,QB,PIT,Ben Roethlisberger,CLE,10,24,46,123,1,1,1,-1,0,0,0,0,0,0,0,0,6.92,6.92
 2021,17,FA,RB,NYJ,Austin Walter,TB,4,0,0,0,0,0,14,49,0,2,0,0,0,0,0,0,6.9,6.9
@@ -6896,7 +6896,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2021,18,FA,WR,CIN,Trent Taylor,@CLE,10,0,0,0,0,0,0,0,0,0,3,2,41,0,2,0,6.1,6.1
 2021,18,FA,TE,LV,Foster Moreau,LAC,32,0,0,0,0,0,0,0,0,0,2,2,50,0,1,0,6,6
 2021,18,FA,RB,MIA,Phillip Lindsay,NE,18,0,0,0,0,0,11,40,0,2,0,0,0,0,0,0,6,6
-2021,18,WLW,WR,BUF,Gabriel Davis,NYJ,16,0,0,0,0,0,0,0,0,0,14,3,39,0,2,0,5.9,5.9
+2021,18,WLW,WR,BUF,Gabe Davis,NYJ,16,0,0,0,0,0,0,0,0,0,14,3,39,0,2,0,5.9,5.9
 2021,18,FA,RB,NYG,Saquon Barkley,WAS,16,0,0,0,0,0,11,30,0,0,4,3,19,0,1,0,5.9,5.9
 2021,18,FA,TE,PIT,Zach Gentry,@BAL,25,0,0,0,0,0,0,0,0,0,5,4,39,0,2,0,5.9,5.9
 2021,18,CC,WR,CLE,Donovan Peoples-Jones,CIN,13,0,0,0,0,0,0,0,0,0,4,3,38,0,2,0,5.8,5.8
@@ -7396,7 +7396,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2020,1,FA,TE,SEA,Jacob Hollister,@ATL,28,0,0,0,0,0,0,0,0,0,1,1,9,0,1,0,1.9,1.9
 2020,1,FA,WR,SEA,Freddie Swain,@ATL,30,0,0,0,0,0,0,0,0,0,1,1,17,0,0,0,1.7,1.7
 2020,1,FA,RB,LAR,Darrell Henderson,DAL,27,0,0,0,0,0,3,6,0,1,0,0,0,0,0,0,1.6,1.6
-2020,1,WLW,WR,BUF,Gabriel Davis,NYJ,28,0,0,0,0,0,0,0,0,0,2,2,16,0,0,0,1.6,1.6
+2020,1,WLW,WR,BUF,Gabe Davis,NYJ,28,0,0,0,0,0,0,0,0,0,2,2,16,0,0,0,1.6,1.6
 2020,1,FA,TE,TEN,Anthony Firkser,@DEN,8,0,0,0,0,0,0,0,0,0,2,2,5,0,1,0,1.5,1.5
 2020,1,FA,TE,CLE,Austin Hooper,@BAL,18,0,0,0,0,0,0,0,0,0,2,2,15,0,0,0,1.5,1.5
 2020,1,FA,RB,LV,Jalen Richard,@CAR,25,0,0,0,0,0,0,0,0,0,1,1,15,0,0,0,1.5,1.5
@@ -7728,7 +7728,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2020,2,CRB,WR,DAL,Michael Gallup,ATL,30,0,0,0,0,0,0,0,0,0,5,2,58,0,2,0,7.8,7.8
 2020,2,FA,WR,DEN,KJ Hamler,@PIT,15,0,0,0,0,0,1,9,0,0,7,3,48,0,2,0,7.7,7.7
 2020,2,FA,RB,LAR,Malcolm Brown,@PHI,8,0,0,0,0,0,11,47,0,3,0,0,0,0,0,0,7.7,7.7
-2020,2,WLW,WR,BUF,Gabriel Davis,@MIA,19,0,0,0,0,0,1,0,0,0,1,1,6,1,1,0,7.6,7.6
+2020,2,WLW,WR,BUF,Gabe Davis,@MIA,19,0,0,0,0,0,1,0,0,0,1,1,6,1,1,0,7.6,7.6
 2020,2,FA,WR,GB,Allen Lazard,DET,31,0,0,0,0,0,0,0,0,0,5,3,45,0,3,0,7.5,7.5
 2020,2,FA,TE,TEN,Anthony Firkser,JAC,22,0,0,0,0,0,0,0,0,0,4,4,45,0,3,0,7.5,7.5
 2020,2,FA,TE,CIN,Drew Sample,@CLE,31,0,0,0,0,0,0,0,0,0,9,7,45,0,3,0,7.5,7.5
@@ -8100,7 +8100,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2020,3,CRB,RB,TB,Ronald Jones,@DEN,17,0,0,0,0,0,13,53,0,4,4,2,20,0,0,0,11.3,11.3
 2020,3,FA,RB,NYJ,Frank Gore,@IND,10,0,0,0,0,0,15,57,0,5,1,1,5,0,0,0,11.2,11.2
 2020,3,FA,WR,KC,Sammy Watkins,@BAL,14,0,0,0,0,0,0,0,0,0,8,7,62,0,5,0,11.2,11.2
-2020,3,WLW,WR,BUF,Gabriel Davis,LAR,1,0,0,0,0,0,0,0,0,0,4,4,81,0,3,0,11.1,11.1
+2020,3,WLW,WR,BUF,Gabe Davis,LAR,1,0,0,0,0,0,0,0,0,0,4,4,81,0,3,0,11.1,11.1
 2020,3,CRB,TE,PHI,Zach Ertz,CIN,30,0,0,0,0,0,0,0,0,0,10,7,70,0,4,0,11,11
 2020,3,AFL,WR,MIA,DeVante Parker,@JAC,25,0,0,0,0,0,0,0,0,0,5,5,69,0,4,0,10.9,10.9
 2020,3,FA,TE,DET,Jesse James,@ARI,4,0,0,0,0,0,0,0,0,0,4,3,28,1,2,0,10.8,10.8
@@ -8538,7 +8538,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2020,4,NN,WR,ARI,Christian Kirk,@CAR,16,0,0,0,0,0,0,0,0,0,5,3,19,1,2,0,9.9,9.9
 2020,4,FA,TE,LV,Jason Witten,BUF,29,0,0,0,0,0,0,0,0,0,2,2,18,1,2,0,9.8,9.8
 2020,4,FA,RB,MIN,Alexander Mattison,@HOU,32,0,0,0,0,0,7,17,1,2,0,0,0,0,0,0,9.7,9.7
-2020,4,WLW,WR,BUF,Gabriel Davis,@LV,23,0,0,0,0,0,0,0,0,0,1,1,26,1,1,0,9.6,9.6
+2020,4,WLW,WR,BUF,Gabe Davis,@LV,23,0,0,0,0,0,0,0,0,0,1,1,26,1,1,0,9.6,9.6
 2020,4,FA,RB,LAR,Malcolm Brown,NYG,21,0,0,0,0,0,9,38,0,3,6,5,19,0,1,0,9.6,9.6
 2020,4,GF,WR,LAC,Keenan Allen,@TB,20,0,0,0,0,0,0,0,0,0,11,8,62,0,3,0,9.2,9.2
 2020,4,CRB,TE,KC,Travis Kelce,NE,3,0,0,0,0,0,0,0,0,0,7,3,70,0,2,0,9,9
@@ -8936,7 +8936,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2020,5,FA,RB,JAC,James Robinson,@HOU,32,0,0,0,0,0,13,48,0,3,7,5,22,0,1,1,9,9
 2020,5,FA,TE,SEA,Will Dissly,MIN,17,0,0,0,0,0,0,0,0,0,1,1,19,1,1,0,8.9,8.9
 2020,5,WLW,QB,NYG,Daniel Jones,@DAL,23,20,33,222,0,0,2,-7,0,0,0,0,0,0,0,1,8.88,8.88
-2020,5,WLW,WR,BUF,Gabriel Davis,@TEN,27,0,0,0,0,0,0,0,0,0,9,5,58,0,3,0,8.8,8.8
+2020,5,WLW,WR,BUF,Gabe Davis,@TEN,27,0,0,0,0,0,0,0,0,0,9,5,58,0,3,0,8.8,8.8
 2020,5,FA,RB,LV,Devontae Booker,@KC,22,0,0,0,0,0,7,62,0,2,1,1,5,0,0,0,8.7,8.7
 2020,5,FA,WR,BUF,Isaiah McKenzie,@TEN,27,0,0,0,0,0,0,0,0,0,4,4,7,1,2,0,8.7,8.7
 2020,5,FA,WR,DAL,Ced Wilson,NYG,13,1,1,11,1,0,0,0,0,0,4,4,22,0,2,0,8.64,8.64
@@ -9426,7 +9426,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2020,6,FA,RB,SF,Kyle Juszczyk,LAR,5,0,0,0,0,0,0,0,0,0,2,1,8,0,0,0,0.8,0.8
 2020,6,CC,WR,DET,Marvin Jones,@JAC,25,0,0,0,0,0,0,0,0,0,5,2,8,0,0,0,0.8,0.8
 2020,6,FA,TE,CLE,David Njoku,@PIT,2,0,0,0,0,0,0,0,0,0,3,1,7,0,0,0,0.7,0.7
-2020,6,WLW,WR,BUF,Gabriel Davis,KC,2,0,0,0,0,0,0,0,0,0,1,1,7,0,0,0,0.7,0.7
+2020,6,WLW,WR,BUF,Gabe Davis,KC,2,0,0,0,0,0,0,0,0,0,1,1,7,0,0,0,0.7,0.7
 2020,6,FA,WR,CLE,Marvin Hall,@JAC,25,0,0,0,0,0,1,1,0,0,2,1,6,0,0,0,0.7,0.7
 2020,6,FA,TE,DEN,Nick Vannett,@NE,3,0,0,0,0,0,0,0,0,0,1,1,7,0,0,0,0.7,0.7
 2020,6,FA,TE,BUF,Tyler Kroft,KC,25,0,0,0,0,0,0,0,0,0,2,1,7,0,0,0,0.7,0.7
@@ -9767,7 +9767,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2020,7,FA,WR,PIT,Ray-Ray McCloud,@TEN,27,0,0,0,0,0,0,0,0,0,2,2,12,0,1,0,2.2,2.2
 2020,7,FA,TE,TB,Tanner Hudson,@LV,15,0,0,0,0,0,0,0,0,0,1,1,12,0,1,0,2.2,2.2
 2020,7,FA,RB,PHI,Corey Clement,NYG,21,0,0,0,0,0,2,9,0,0,1,1,12,0,0,0,2.1,2.1
-2020,7,WLW,WR,BUF,Gabriel Davis,@NYJ,28,0,0,0,0,0,0,0,0,0,3,1,11,0,1,0,2.1,2.1
+2020,7,WLW,WR,BUF,Gabe Davis,@NYJ,28,0,0,0,0,0,0,0,0,0,3,1,11,0,1,0,2.1,2.1
 2020,7,FA,TE,CAR,Ian Thomas,@NO,12,0,0,0,0,0,0,0,0,0,1,1,11,0,1,0,2.1,2.1
 2020,7,FA,WR,KC,Marcus Kemp,@DEN,7,0,0,0,0,0,0,0,0,0,1,1,11,0,1,0,2.1,2.1
 2020,7,FA,TE,JAC,Ben Ellefson,@LAC,26,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2
@@ -10226,7 +10226,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2020,8,FA,TE,LV,Foster Moreau,@CLE,31,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
 2020,8,FA,WR,DEN,Fred Brown,LAC,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2020,8,FA,WR,SEA,Freddie Swain,SF,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-2020,8,WLW,WR,BUF,Gabriel Davis,NE,8,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0
+2020,8,WLW,WR,BUF,Gabe Davis,NE,8,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0
 2020,8,FA,TE,SEA,Greg Olsen,SF,1,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0
 2020,8,FA,TE,GB,Isaac Nauta,IND,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2020,8,FA,WR,BUF,Isaiah McKenzie,NE,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -10343,7 +10343,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2020,9,FA,WR,GB,Marquez Valdes-Scantling,@SF,12,0,0,0,0,0,0,0,0,0,4,2,53,2,2,0,19.3,19.3
 2020,9,AFL,WR,TEN,AJ Brown,CHI,4,0,0,0,0,0,0,0,0,0,9,4,101,1,3,0,19.1,19.1
 2020,9,FA,RB,SF,Jerick McKinnon,GB,29,0,0,0,0,0,12,52,1,6,4,3,16,0,0,0,18.8,18.8
-2020,9,WLW,WR,BUF,Gabriel Davis,SEA,32,0,0,0,0,0,0,0,0,0,5,4,70,1,4,0,17,17
+2020,9,WLW,WR,BUF,Gabe Davis,SEA,32,0,0,0,0,0,0,0,0,0,5,4,70,1,4,0,17,17
 2020,9,FA,RB,LV,Devontae Booker,@LAC,16,0,0,0,0,0,8,68,1,4,0,0,0,0,0,0,16.8,16.8
 2020,9,FA,RB,LV,Josh Jacobs,@LAC,16,0,0,0,0,0,14,65,1,4,1,1,3,0,0,0,16.8,16.8
 2020,9,WLW,RB,BUF,Zack Moss,SEA,15,0,0,0,0,0,9,18,1,4,2,2,30,0,2,0,16.8,16.8
@@ -10967,7 +10967,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2020,10,FA,RB,NYG,Elijhaa Penny,PHI,8,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
 2020,10,FA,WR,GB,Equanimeous St Brown,JAC,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2020,10,FA,TE,LV,Foster Moreau,DEN,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-2020,10,WLW,WR,BUF,Gabriel Davis,@ARI,18,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0
+2020,10,WLW,WR,BUF,Gabe Davis,@ARI,18,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0
 2020,10,FA,TE,TEN,Geoff Swaim,IND,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2020,10,FA,WR,NE,Gunner Olszewski,BAL,14,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2020,10,FA,TE,CLE,Harrison Bryant,HOU,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -11457,7 +11457,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2020,12,ELP,WR,SF,Deebo Samuel,@LAR,1,0,0,0,0,0,0,0,0,0,13,11,133,0,4,0,17.3,17.3
 2020,12,FA,QB,DET,Matthew Stafford,HOU,21,28,42,295,1,1,1,3,0,1,1,0,0,0,0,0,17.1,17.1
 2020,12,FA,RB,HOU,Duke Johnson,@DET,31,0,0,0,0,0,9,37,0,1,4,3,43,1,2,0,17,17
-2020,12,WLW,WR,BUF,Gabriel Davis,LAC,5,0,0,0,0,0,0,0,0,0,4,3,79,1,3,0,16.9,16.9
+2020,12,WLW,WR,BUF,Gabe Davis,LAC,5,0,0,0,0,0,0,0,0,0,4,3,79,1,3,0,16.9,16.9
 2020,12,MCM,QB,LAC,Justin Herbert,@BUF,24,31,52,316,1,1,2,-2,0,0,0,0,0,0,0,0,16.64,16.64
 2020,12,NN,RB,LAR,Cam Akers,SF,6,0,0,0,0,0,9,84,1,2,0,0,0,0,0,0,16.4,16.4
 2020,12,VD,WR,GB,Davante Adams,CHI,4,0,0,0,0,0,0,0,0,0,9,6,61,1,4,0,16.1,16.1
@@ -11899,7 +11899,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2020,13,FA,RB,MIA,Myles Gaskin,CIN,24,0,0,0,0,0,21,90,0,2,2,2,51,0,2,1,16.1,16.1
 2020,13,FA,WR,PIT,James Washington,WAS,3,0,0,0,0,0,0,0,0,0,4,2,80,1,2,0,16,16
 2020,13,FA,QB,WAS,Alex Smith,@PIT,2,31,46,296,1,0,0,0,0,0,0,0,0,0,0,0,15.84,15.84
-2020,13,WLW,WR,BUF,Gabriel Davis,@SF,12,0,0,0,0,0,0,0,0,0,4,3,68,1,3,0,15.8,15.8
+2020,13,WLW,WR,BUF,Gabe Davis,@SF,12,0,0,0,0,0,0,0,0,0,4,3,68,1,3,0,15.8,15.8
 2020,13,FA,TE,TEN,MyCole Pruitt,CLE,31,0,0,0,0,0,0,0,0,0,2,1,22,1,1,0,15.2,15.2
 2020,13,MCM,WR,BUF,Stefon Diggs,@SF,12,0,0,0,0,0,0,0,0,0,10,10,92,0,6,0,15.2,15.2
 2020,13,FA,WR,HOU,Chad Hansen,IND,10,0,0,0,0,0,0,0,0,0,7,5,101,0,5,0,15.1,15.1
@@ -12328,7 +12328,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2020,14,FA,RB,NYG,Wayne Gallman,ARI,20,0,0,0,0,0,12,57,0,2,4,3,16,0,1,0,10.3,10.3
 2020,14,FA,TE,SEA,Will Dissly,NYJ,32,0,0,0,0,0,0,0,0,0,2,2,23,1,2,0,10.3,10.3
 2020,14,FA,TE,DEN,Nick Vannett,@CAR,24,0,0,0,0,0,0,0,0,0,4,4,20,1,2,0,10,10
-2020,14,WLW,WR,BUF,Gabriel Davis,PIT,15,0,0,0,0,0,0,0,0,0,8,3,19,1,2,0,9.9,9.9
+2020,14,WLW,WR,BUF,Gabe Davis,PIT,15,0,0,0,0,0,0,0,0,0,8,3,19,1,2,0,9.9,9.9
 2020,14,FA,RB,SF,Kyle Juszczyk,WAS,7,0,0,0,0,0,1,3,0,1,3,2,15,1,1,0,9.8,9.8
 2020,14,FA,RB,JAC,James Robinson,TEN,26,0,0,0,0,0,12,67,0,1,4,4,16,0,0,0,9.3,9.3
 2020,14,FA,RB,DET,Kerryon Johnson,GB,28,0,0,0,0,0,2,3,1,1,1,1,10,0,1,0,9.3,9.3
@@ -12840,7 +12840,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2020,15,FA,WR,MIN,Chad Beebe,CHI,4,0,0,0,0,0,0,0,0,0,2,2,21,0,2,0,4.1,4.1
 2020,15,MAM,RB,ARI,Kenyan Drake,PHI,8,0,0,0,0,0,10,26,0,0,2,2,14,0,0,0,4,4
 2020,15,FA,TE,NO,Jared Cook,KC,21,0,0,0,0,0,0,0,0,0,5,2,29,0,1,0,3.9,3.9
-2020,15,WLW,WR,BUF,Gabriel Davis,@DEN,18,0,0,0,0,0,0,0,0,0,5,2,18,0,2,0,3.8,3.8
+2020,15,WLW,WR,BUF,Gabe Davis,@DEN,18,0,0,0,0,0,0,0,0,0,5,2,18,0,2,0,3.8,3.8
 2020,15,MAM,TE,LAR,Gerald Everett,NYJ,32,0,0,0,0,0,0,0,0,0,4,2,28,0,1,0,3.8,3.8
 2020,15,FA,WR,MIA,Mack Hollins,NE,5,0,0,0,0,0,0,0,0,0,3,2,18,0,2,0,3.8,3.8
 2020,15,FA,TE,SF,Ross Dwelley,@DAL,12,0,0,0,0,0,0,0,0,0,2,2,28,0,1,0,3.8,3.8
@@ -13244,7 +13244,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2020,16,ELP,WR,NE,Jakobi Meyers,BUF,4,0,0,0,0,0,0,0,0,0,6,4,45,0,1,0,5.5,5.5
 2020,16,MCM,WR,LV,Hunter Renfrow,MIA,18,0,0,0,0,0,0,0,0,0,5,5,34,0,2,0,5.4,5.4
 2020,16,FA,WR,NYG,Dante Pettis,@BAL,13,0,0,0,0,0,0,0,0,0,3,2,33,0,2,0,5.3,5.3
-2020,16,WLW,WR,BUF,Gabriel Davis,@NE,10,0,0,0,0,0,0,0,0,0,5,3,33,0,2,0,5.3,5.3
+2020,16,WLW,WR,BUF,Gabe Davis,@NE,10,0,0,0,0,0,0,0,0,0,5,3,33,0,2,0,5.3,5.3
 2020,16,CRB,WR,ATL,Russell Gage,@KC,2,0,0,0,0,0,0,0,0,0,5,4,23,0,3,0,5.3,5.3
 2020,16,FA,RB,SF,Jerick McKinnon,@ARI,23,0,0,0,0,0,1,4,0,0,4,3,28,0,2,0,5.2,5.2
 2020,16,FA,WR,MIA,Mack Hollins,@LV,22,0,0,0,0,0,0,0,0,0,4,2,42,0,1,0,5.2,5.2
@@ -13545,7 +13545,7 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2020,17,FA,RB,CLE,Nick Chubb,PIT,4,0,0,0,0,0,14,108,1,3,1,0,0,0,0,0,19.8,19.8
 2020,17,NN,WR,MIN,Justin Jefferson,@DET,32,0,0,0,0,0,0,0,0,0,12,9,133,0,6,0,19.3,19.3
 2020,17,CC,QB,BUF,Josh Allen,MIA,12,18,25,224,3,1,2,3,0,0,0,0,0,0,0,0,19.26,19.26
-2020,17,WLW,WR,BUF,Gabriel Davis,MIA,21,0,0,0,0,0,0,0,0,0,5,2,107,1,2,0,18.7,18.7
+2020,17,WLW,WR,BUF,Gabe Davis,MIA,21,0,0,0,0,0,0,0,0,0,5,2,107,1,2,0,18.7,18.7
 2020,17,FA,QB,PIT,Mason Rudolph,@CLE,27,22,39,315,2,1,1,1,0,0,0,0,0,0,0,0,18.7,18.7
 2020,17,MWM,RB,GB,Aaron Jones,@CHI,11,0,0,0,0,0,11,42,1,2,5,4,43,0,2,0,18.5,18.5
 2020,17,NN,RB,LAC,Justin Jackson,@KC,24,0,0,0,0,0,9,72,0,5,2,1,32,0,1,0,18.4,18.4
@@ -16709,3 +16709,385 @@ Season,Week,TRUFFLE,Pos,NFL,Player,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,Ru
 2022,7,W (9/1),RB,GB,Patrick Taylor,@WAS,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 2022,7,W (9/1),WR,LAC,Michael Bandy,SEA,5,0,0,0,0,0,0,0,0,0,6,1,-5,0,0,0,0,0
 2022,7,ELP,WR,KC,Skyy Moore,@SF,22,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,-2,-2
+2022,8,VD,RB,TEN,Derrick Henry,@HOU,32,0,0,0,0,0,32,219,2,10,1,1,9,0,0,0,44.8,44.8
+2022,8,FRR,RB,SF,Christian McCaffrey,@LAR,12,1,1,34,1,0,18,94,1,5,9,8,55,1,5,0,42.26,42.26
+2022,8,MAM,RB,CAR,D'Onta Foreman,@ATL,23,0,0,0,0,0,26,118,3,9,1,0,0,0,0,0,40.8,40.8
+2022,8,CC,RB,NO,Alvin Kamara,LV,26,0,0,0,0,0,18,62,1,4,10,9,96,2,3,0,40.8,40.8
+2022,8,VD,RB,DAL,Tony Pollard,CHI,29,0,0,0,0,0,14,131,3,6,1,1,16,0,1,0,39.7,39.7
+2022,8,AFL,WR,PHI,AJ Brown,PIT,32,0,0,0,0,0,0,0,0,0,11,6,156,3,4,0,37.6,37.6
+2022,8,MCM,RB,JAC,Travis Etienne,DEN,15,0,0,0,0,0,24,156,1,11,3,3,6,0,0,0,33.2,33.2
+2022,8,MAM,QB,CHI,Justin Fields,@DAL,8,17,23,151,2,0,8,60,1,5,0,0,0,0,0,0,31.04,31.04
+2022,8,CC,WR,ARI,DeAndre Hopkins,@MIN,26,0,0,0,0,0,0,0,0,0,13,12,159,1,9,0,30.9,30.9
+2022,8,MAM,QB,MIA,Tua Tagovailoa,@DET,31,29,36,382,3,0,5,19,0,1,0,0,0,0,0,0,30.18,30.18
+2022,8,FRR,WR,MIA,Jaylen Waddle,@DET,29,0,0,0,0,0,0,0,0,0,9,8,106,2,7,0,29.6,29.6
+2022,8,GF,RB,CLE,Nick Chubb,CIN,9,0,0,0,0,0,23,101,2,5,1,1,3,0,0,0,29.4,29.4
+2022,8,CRB,QB,PHI,Jalen Hurts,PIT,27,19,28,285,4,0,2,10,0,0,0,0,0,0,0,0,28.4,28.4
+2022,8,WLW,RB,MIN,Dalvin Cook,ARI,16,0,0,0,0,0,20,111,1,6,6,5,30,0,2,0,28.1,28.1
+2022,8,ELP,WR,MIA,Tyreek Hill,@DET,29,0,0,0,0,0,1,7,0,1,14,12,188,0,7,0,27.5,27.5
+2022,8,MCM,QB,DAL,Dak Prescott,CHI,15,21,27,250,2,1,5,34,1,2,0,0,0,0,0,0,27.4,27.4
+2022,8,ELP,RB,DET,Jamaal Williams,MIA,17,0,0,0,0,0,10,53,2,5,3,3,23,0,2,0,26.6,26.6
+2022,8,WLW,WR,CAR,DJ Moore,@ATL,31,0,0,0,0,0,1,3,0,0,11,6,152,1,5,0,26.5,26.5
+2022,8,CC,QB,MIN,Kirk Cousins,ARI,28,24,36,232,2,0,4,22,1,2,0,0,0,0,0,1,25.48,25.48
+2022,8,W (9/1),TE,NYJ,Tyler Conklin,NE,27,0,0,0,0,0,0,0,0,0,10,6,79,2,5,0,24.9,24.9
+2022,8,NN,QB,ARI,Kyler Murray,@MIN,24,31,44,326,3,2,6,36,0,0,0,0,0,0,0,0,24.64,24.64
+2022,8,WLW,QB,ATL,Marcus Mariota,CAR,13,20,28,253,3,2,6,43,0,2,0,0,0,0,0,0,24.42,24.42
+2022,8,MWM,QB,CLE,Jacoby Brissett,CIN,6,17,22,278,1,0,6,12,1,4,0,0,0,0,0,1,24.32,24.32
+2022,8,ELP,QB,WAS,Taylor Heinicke,@IND,17,23,31,279,1,1,6,29,1,2,0,0,0,0,0,0,24.06,24.06
+2022,8,WLW,QB,BAL,Lamar Jackson,@TB,14,27,38,238,2,0,9,43,0,2,0,0,0,0,0,0,23.82,23.82
+2022,8,MWM,RB,GB,Aaron Jones,@BUF,5,0,0,0,0,0,20,143,0,7,5,4,14,0,1,0,23.7,23.7
+2022,8,NN,WR,CLE,Amari Cooper,CIN,11,0,1,0,0,1,0,0,0,0,7,5,131,1,5,0,22.1,22.1
+2022,8,MWM,WR,LAR,Cooper Kupp,SF,23,0,0,0,0,0,2,10,0,1,12,8,79,1,6,0,21.9,21.9
+2022,8,CC,QB,BUF,Josh Allen,GB,5,13,25,218,2,2,6,49,0,3,0,0,0,0,0,0,20.62,20.62
+2022,8,CC,WR,ARI,Rondale Moore,@MIN,26,0,0,0,0,0,2,12,0,1,8,7,92,1,3,0,20.4,20.4
+2022,8,ELP,QB,SEA,Geno Smith,NYG,16,23,34,212,2,0,5,26,0,1,0,0,0,0,0,0,20.08,20.08
+2022,8,MCM,WR,BUF,Stefon Diggs,GB,9,0,0,0,0,0,0,0,0,0,8,6,108,1,3,0,19.8,19.8
+2022,8,CRB,RB,WAS,Antonio Gibson,@IND,20,0,0,0,0,0,7,19,0,1,7,7,58,1,5,0,19.7,19.7
+2022,8,FRR,RB,NE,Rhamondre Stevenson,@NYJ,10,0,0,0,0,0,16,71,0,3,8,7,72,0,2,0,19.3,19.3
+2022,8,VD,RB,CHI,Khalil Herbert,@DAL,3,0,0,0,0,0,16,99,1,3,0,0,0,0,0,0,18.9,18.9
+2022,8,GF,TE,BAL,Isaiah Likely,@TB,25,0,0,0,0,0,0,0,0,0,7,6,77,1,5,0,18.7,18.7
+2022,8,FRR,QB,SF,Jimmy Garoppolo,@LAR,7,21,25,235,2,0,1,3,0,1,0,0,0,0,0,0,18.7,18.7
+2022,8,NN,RB,ATL,Tyler Allgeier,CAR,24,0,0,0,0,0,14,39,0,2,3,3,46,1,2,0,18.5,18.5
+2022,8,AFL,QB,LAR,Matthew Stafford,SF,10,22,33,187,1,0,2,-1,1,1,0,0,0,0,0,0,18.48,18.48
+2022,8,VD,TE,ATL,Kyle Pitts,CAR,15,0,0,0,0,0,0,0,0,0,9,5,80,1,4,0,18,18
+2022,8,AFL,RB,PHI,Miles Sanders,PIT,18,0,0,0,0,0,9,78,1,4,0,0,0,0,0,0,17.8,17.8
+2022,8,WLW,WR,DAL,CeeDee Lamb,CHI,5,0,0,0,0,0,1,1,0,0,7,5,77,1,4,0,17.8,17.8
+2022,8,AFL,QB,CAR,PJ Walker,@ATL,29,19,36,317,1,1,1,20,0,1,0,0,0,0,0,0,17.68,17.68
+2022,8,FRR,QB,DET,Jared Goff,MIA,26,27,37,321,1,0,1,3,0,0,1,1,5,0,0,0,17.64,17.64
+2022,8,W (9/1),WR,BAL,Devin Duvernay,@TB,14,0,0,0,0,0,2,33,1,2,4,4,31,0,3,0,17.4,17.4
+2022,8,MAM,RB,NYG,Saquon Barkley,@SEA,27,0,0,0,0,0,20,53,1,4,5,3,9,0,1,0,17.2,17.2
+2022,8,MCM,QB,NO,Andy Dalton,LV,32,22,30,229,2,0,0,0,0,0,0,0,0,0,0,0,17.16,17.16
+2022,8,VD,WR,SF,Brandon Aiyuk,@LAR,17,0,0,0,0,0,0,0,0,0,6,6,81,1,3,0,17.1,17.1
+2022,8,MWM,QB,TB,Tom Brady,BAL,25,26,44,325,1,0,1,1,0,0,0,0,0,0,0,0,17.1,17.1
+2022,8,ELP,RB,TB,Leonard Fournette,BAL,13,0,0,0,0,0,9,24,1,3,3,3,34,0,2,0,16.8,16.8
+2022,8,GF,QB,DEN,Russell Wilson,@JAC,22,18,30,252,1,1,4,17,0,3,0,0,0,0,0,0,16.78,16.78
+2022,8,MWM,WR,SEA,DK Metcalf,NYG,4,0,0,0,0,0,0,0,0,0,10,6,55,1,5,0,16.5,16.5
+2022,8,MAM,WR,NYJ,Garrett Wilson,NE,12,0,0,0,0,0,0,0,0,0,7,6,115,0,5,0,16.5,16.5
+2022,8,VD,QB,NYJ,Zach Wilson,NE,23,20,41,355,2,3,1,2,0,0,0,0,0,0,0,0,16.4,16.4
+2022,8,MWM,WR,DEN,Jerry Jeudy,@JAC,19,0,0,0,0,0,0,0,0,0,7,6,63,1,4,0,16.3,16.3
+2022,8,MAM,WR,TB,Mike Evans,BAL,28,0,0,0,0,0,0,0,0,0,11,6,123,0,4,0,16.3,16.3
+2022,8,ELP,QB,GB,Aaron Rodgers,@BUF,4,19,30,203,2,1,1,11,0,1,0,0,0,0,0,0,16.22,16.22
+2022,8,FRR,RB,HOU,Dameon Pierce,TEN,2,0,0,0,0,0,15,35,0,4,5,3,16,1,1,0,16.1,16.1
+2022,8,VD,WR,NE,Jakobi Meyers,@NYJ,6,0,0,0,0,0,0,0,0,0,12,9,60,1,4,0,16,16
+2022,8,W (9/1),RB,BAL,Kenyan Drake,@TB,6,0,0,0,0,0,7,62,0,2,4,4,5,1,1,0,15.7,15.7
+2022,8,MAM,RB,DEN,Melvin Gordon,@JAC,25,0,0,0,0,0,9,29,1,2,4,3,23,0,2,0,15.2,15.2
+2022,8,CRB,WR,GB,Romeo Doubs,@BUF,10,0,0,0,0,0,0,0,0,0,7,4,62,1,3,0,15.2,15.2
+2022,8,W (9/1),WR,ATL,Damiere Byrd,CAR,22,0,0,0,0,0,0,0,0,0,6,3,67,1,2,0,14.7,14.7
+2022,8,FRR,QB,CIN,Joe Burrow,@CLE,11,25,35,232,2,1,1,2,0,1,0,0,0,0,0,1,14.48,14.48
+2022,8,CC,WR,SEA,Tyler Lockett,NYG,4,0,0,0,0,0,0,0,0,0,8,5,63,1,4,1,14.3,14.3
+2022,8,FRR,WR,WAS,Terry McLaurin,@IND,2,0,0,0,0,0,1,-7,0,0,8,6,113,0,3,0,14.3,14.3
+2022,8,ELP,RB,SEA,Kenneth Walker,NYG,11,0,0,0,0,0,18,51,1,3,2,1,1,0,0,0,14.2,14.2
+2022,8,MCM,RB,DEN,Latavius Murray,@JAC,25,0,0,0,0,0,14,46,1,2,2,1,13,0,0,0,13.9,13.9
+2022,8,W (9/1),WR,PHI,Zach Pascal,PIT,32,0,0,0,0,0,0,0,0,0,2,2,57,1,2,0,13.7,13.7
+2022,8,MWM,QB,NE,Mac Jones,@NYJ,9,24,35,194,1,1,7,19,0,2,0,0,0,0,0,0,13.66,13.66
+2022,8,MWM,RB,TEN,Dontrell Hilliard,@HOU,32,0,0,0,0,0,8,83,0,3,1,1,12,0,1,0,13.5,13.5
+2022,8,VD,TE,JAC,Evan Engram,DEN,14,0,0,0,0,0,0,0,0,0,6,4,55,1,2,0,13.5,13.5
+2022,8,MCM,TE,NO,Taysom Hill,LV,30,1,1,2,0,0,10,61,0,5,2,1,11,0,1,0,13.28,13.28
+2022,8,MCM,RB,MIN,Alexander Mattison,ARI,16,0,0,0,0,0,5,40,1,3,0,0,0,0,0,0,13,13
+2022,8,CC,RB,IND,Nyheim Hines,WAS,14,0,0,0,0,0,5,20,1,1,2,2,29,0,1,0,12.9,12.9
+2022,8,NN,WR,MIN,Justin Jefferson,ARI,15,0,0,0,0,0,0,0,0,0,8,6,98,0,3,0,12.8,12.8
+2022,8,MWM,WR,CIN,Tyler Boyd,@CLE,16,0,0,0,0,0,0,0,0,0,5,3,38,1,3,0,12.8,12.8
+2022,8,W (9/1),WR,CAR,Terrace Marshall,@ATL,31,0,0,0,0,0,0,0,0,0,9,4,87,0,4,0,12.7,12.7
+2022,8,WLW,TE,ARI,Zach Ertz,@MIN,29,0,0,0,0,0,0,0,0,0,5,4,34,1,3,0,12.4,12.4
+2022,8,MWM,RB,BUF,Devin Singletary,GB,22,0,0,0,0,0,14,67,0,3,2,1,16,0,1,0,12.3,12.3
+2022,8,W (9/1),RB,ATL,Caleb Huntley,CAR,24,0,0,0,0,0,16,91,0,3,0,0,0,0,0,0,12.1,12.1
+2022,8,AFL,WR,WAS,Curtis Samuel,@IND,2,0,0,0,0,0,4,29,0,1,4,3,50,0,3,0,11.9,11.9
+2022,8,WLW,WR,CIN,Tee Higgins,@CLE,16,0,0,0,0,0,0,0,0,0,6,3,49,1,1,0,11.9,11.9
+2022,8,AFL,TE,SF,George Kittle,@LAR,3,0,0,0,0,0,0,0,0,0,5,3,39,1,2,0,11.9,11.9
+2022,8,CC,TE,MIA,Mike Gesicki,@DET,28,0,0,0,0,0,0,0,0,0,4,3,38,1,2,0,11.8,11.8
+2022,8,FRR,TE,DEN,Greg Dulcich,@JAC,11,0,0,0,0,0,0,0,0,0,5,4,87,0,3,0,11.7,11.7
+2022,8,MAM,TE,PHI,Dallas Goedert,PIT,10,0,0,0,0,0,0,0,0,0,6,6,64,0,5,0,11.4,11.4
+2022,8,CRB,QB,PIT,Kenny Pickett,@PHI,2,25,38,191,0,1,7,37,0,4,0,0,0,0,0,1,11.34,11.34
+2022,8,FRR,RB,DET,D'Andre Swift,MIA,17,0,0,0,0,0,5,6,0,1,5,5,27,1,1,0,11.3,11.3
+2022,8,GF,WR,CLE,Donovan Peoples-Jones,CIN,11,0,0,0,0,0,0,0,0,0,4,4,81,0,3,0,11.1,11.1
+2022,8,CRB,WR,DET,Amon-Ra St Brown,MIA,21,0,0,0,0,0,0,0,0,0,10,7,69,0,4,0,10.9,10.9
+2022,8,W (9/1),WR,GB,Samori Toure,@BUF,10,0,0,0,0,0,0,0,0,0,4,1,37,1,1,0,10.7,10.7
+2022,8,MWM,WR,MIN,Adam Thielen,ARI,15,0,0,0,0,0,0,0,0,0,7,6,67,0,4,0,10.7,10.7
+2022,8,AFL,RB,MIA,Raheem Mostert,@DET,31,0,0,0,0,0,14,64,0,4,1,1,3,0,0,0,10.7,10.7
+2022,8,VD,WR,NYG,Darius Slayton,@SEA,3,0,0,0,0,0,0,0,0,0,6,5,66,0,4,0,10.6,10.6
+2022,8,CC,RB,BUF,James Cook,GB,22,0,0,0,0,0,5,35,0,2,1,1,41,0,1,0,10.6,10.6
+2022,8,CC,WR,PIT,Chase Claypool,@PHI,8,1,1,1,1,0,0,0,0,0,6,4,45,0,2,0,10.54,10.54
+2022,8,MWM,RB,BAL,Gus Edwards,@TB,6,0,0,0,0,0,11,65,0,4,0,0,0,0,0,0,10.5,10.5
+2022,8,VD,RB,CHI,David Montgomery,@DAL,3,0,0,0,0,0,15,53,0,5,3,3,22,0,0,1,10.5,10.5
+2022,8,W (9/1),RB,PIT,Jaylen Warren,@PHI,19,0,0,0,0,0,6,50,0,2,3,3,25,0,1,0,10.5,10.5
+2022,8,W (9/1),WR,BAL,Demarcus Robinson,@TB,14,0,0,0,0,0,0,0,0,0,8,6,64,0,4,0,10.4,10.4
+2022,8,W (9/1),WR,LV,Mack Hollins,@NO,24,0,0,0,0,0,0,0,0,0,8,7,64,0,4,0,10.4,10.4
+2022,8,MWM,RB,GB,AJ Dillon,@BUF,5,0,0,0,0,0,10,54,0,4,1,1,9,0,0,0,10.3,10.3
+2022,8,MCM,RB,CLE,Kareem Hunt,CIN,9,0,0,0,0,0,11,42,0,2,4,4,30,0,1,0,10.2,10.2
+2022,8,AFL,WR,NO,Chris Olave,LV,18,0,0,0,0,0,0,0,0,0,7,5,52,0,5,0,10.2,10.2
+2022,8,CRB,TE,DET,TJ Hockenson,MIA,22,0,0,0,0,0,0,0,0,0,4,3,80,0,2,0,10,10
+2022,8,W (9/1),WR,DET,Kalif Raymond,MIA,21,0,0,0,0,0,0,0,0,0,4,3,76,0,2,0,9.6,9.6
+2022,8,W (9/1),WR,NYJ,Denzel Mims,NE,12,0,0,0,0,0,0,0,0,0,3,2,76,0,2,0,9.6,9.6
+2022,8,MAM,WR,TB,Chris Godwin,BAL,28,0,0,0,0,0,0,0,0,0,11,6,75,0,2,0,9.5,9.5
+2022,8,W (9/1),WR,CHI,N'Keal Harry,@DAL,13,0,0,0,0,0,0,0,0,0,2,2,24,1,1,0,9.4,9.4
+2022,8,VD,TE,DAL,Dalton Schultz,CHI,8,0,0,0,0,0,0,0,0,0,7,6,74,0,2,0,9.4,9.4
+2022,8,MCM,WR,HOU,Brandin Cooks,TEN,27,0,0,0,0,0,0,0,0,0,6,4,73,0,2,0,9.3,9.3
+2022,8,MAM,WR,IND,Parris Campbell,WAS,25,0,0,0,0,0,1,28,0,1,2,2,43,0,1,0,9.1,9.1
+2022,8,W (9/1),WR,TB,Julio Jones,BAL,28,0,0,0,0,0,1,0,0,0,4,2,21,1,1,0,9.1,9.1
+2022,8,WLW,QB,NYG,Daniel Jones,@SEA,20,17,31,176,0,0,6,20,0,0,0,0,0,0,0,0,9.04,9.04
+2022,8,VD,WR,CHI,Darnell Mooney,@DAL,13,0,0,0,0,0,0,0,0,0,5,5,70,0,2,0,9,9
+2022,8,WLW,WR,BUF,Isaiah McKenzie,GB,9,0,0,0,0,0,2,2,1,1,1,1,8,0,1,0,9,9
+2022,8,WLW,RB,PIT,Najee Harris,@PHI,19,1,1,4,0,0,8,32,0,2,6,6,26,0,1,0,8.96,8.96
+2022,8,VD,QB,HOU,Davis Mills,TEN,21,17,29,152,1,1,3,8,0,0,0,0,0,0,0,0,8.88,8.88
+2022,8,W (9/1),TE,NYG,Tanner Hudson,@SEA,32,0,0,0,0,0,0,0,0,0,5,3,58,0,3,0,8.8,8.8
+2022,8,NN,TE,PIT,Pat Freiermuth,@PHI,17,0,0,0,0,0,0,0,0,0,7,4,57,0,3,0,8.7,8.7
+2022,8,CC,QB,IND,Sam Ehlinger,WAS,19,17,23,201,0,0,6,15,0,1,0,0,0,0,0,1,8.54,8.54
+2022,8,CRB,RB,ARI,Eno Benjamin,@MIN,8,0,0,0,0,0,9,22,0,2,7,4,23,0,2,0,8.5,8.5
+2022,8,FRR,WR,IND,Alec Pierce,WAS,25,0,0,0,0,0,0,0,0,0,5,3,65,0,2,0,8.5,8.5
+2022,8,CC,WR,LAR,Allen Robinson,SF,23,0,0,0,0,0,0,0,0,0,7,5,54,0,3,0,8.4,8.4
+2022,8,ELP,WR,IND,Michael Pittman,WAS,25,0,0,0,0,0,0,0,0,0,9,7,53,0,3,0,8.3,8.3
+2022,8,VD,RB,NE,Damien Harris,@NYJ,10,0,0,0,0,0,11,37,0,3,2,2,15,0,0,0,8.2,8.2
+2022,8,W (9/1),TE,CHI,Cole Kmet,@DAL,9,0,0,0,0,0,0,0,0,0,2,2,11,1,1,0,8.1,8.1
+2022,8,GF,RB,NYJ,Michael Carter,NE,4,0,0,0,0,0,7,26,0,1,7,4,35,0,1,0,8.1,8.1
+2022,8,GF,TE,BUF,Dawson Knox,GB,4,0,0,0,0,0,0,0,0,0,3,2,10,1,1,0,8,8
+2022,8,CRB,WR,DAL,Michael Gallup,CHI,5,0,0,0,0,0,0,0,0,0,6,4,49,0,3,0,7.9,7.9
+2022,8,AFL,RB,CIN,Joe Mixon,@CLE,28,0,0,0,0,0,8,27,0,1,9,7,32,0,1,0,7.9,7.9
+2022,8,NN,QB,JAC,Trevor Lawrence,DEN,1,18,31,133,1,2,3,15,0,1,0,0,0,0,0,0,7.82,7.82
+2022,8,W (9/1),WR,MIN,KJ Osborn,ARI,15,0,0,0,0,0,0,0,0,0,5,2,8,1,1,0,7.8,7.8
+2022,8,W (9/1),RB,PIT,Derek Watt,@PHI,19,0,0,0,0,0,0,0,0,0,2,2,6,1,1,0,7.6,7.6
+2022,8,W (9/1),RB,MIA,Alec Ingold,@DET,31,0,0,0,0,0,1,1,1,1,1,1,5,0,0,0,7.6,7.6
+2022,8,CC,RB,IND,Jonathan Taylor,WAS,14,0,0,0,0,0,16,76,0,2,1,0,0,0,0,1,7.6,7.6
+2022,8,NN,RB,LV,Josh Jacobs,@NO,7,0,0,0,0,0,10,43,0,2,4,2,11,0,0,0,7.4,7.4
+2022,8,MAM,RB,TB,Rachaad White,BAL,13,0,0,0,0,0,4,19,0,1,3,3,24,0,2,0,7.3,7.3
+2022,8,W (9/1),TE,MIN,Johnny Mundt,ARI,31,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,7.1,7.1
+2022,8,W (9/1),TE,DAL,Jake Ferguson,CHI,8,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,7.1,7.1
+2022,8,W (9/1),WR,DEN,KJ Hamler,@JAC,19,0,0,0,0,0,1,9,0,0,3,2,52,0,1,0,7.1,7.1
+2022,8,NN,WR,JAC,Christian Kirk,DEN,1,0,0,0,0,0,0,0,0,0,7,3,40,0,3,0,7,7
+2022,8,W (9/1),TE,SF,Ross Dwelley,@LAR,3,0,0,0,0,0,0,0,0,0,1,1,56,0,1,0,6.6,6.6
+2022,8,W (9/1),RB,SF,Jeff Wilson,@LAR,12,0,0,0,0,0,4,14,0,2,2,2,21,0,1,0,6.5,6.5
+2022,8,NN,TE,CIN,Hayden Hurst,@CLE,6,0,0,0,0,0,0,0,0,0,4,4,42,0,2,0,6.2,6.2
+2022,8,W (9/1),TE,LV,Foster Moreau,@NO,1,0,0,0,0,0,0,0,0,0,9,6,31,0,3,0,6.1,6.1
+2022,8,AFL,WR,ATL,Drake London,CAR,22,0,0,0,0,0,0,0,0,0,5,4,31,0,3,0,6.1,6.1
+2022,8,W (9/1),RB,DAL,Malik Davis,CHI,29,0,0,0,0,0,8,23,0,0,2,2,18,0,2,0,6.1,6.1
+2022,8,W (9/1),WR,NO,Rashid Shaheed,LV,18,0,0,0,0,0,0,0,0,0,3,3,38,0,2,0,5.8,5.8
+2022,8,W (9/1),WR,CHI,Velus Jones,@DAL,13,0,0,0,0,0,2,33,0,2,3,1,5,0,0,0,5.8,5.8
+2022,8,W (9/1),WR,LV,Keelan Cole,@NO,24,0,0,0,0,0,0,0,0,0,5,2,30,0,2,0,5,5
+2022,8,ELP,RB,WAS,Brian Robinson,@IND,20,0,0,0,0,0,8,20,0,3,0,0,0,0,0,0,5,5
+2022,8,GF,WR,CLE,David Bell,CIN,11,0,0,0,0,0,0,0,0,0,2,2,27,0,2,0,4.7,4.7
+2022,8,W (9/1),RB,LAR,Ronnie Rivers,SF,1,0,0,0,0,0,8,21,0,1,4,4,15,0,0,0,4.6,4.6
+2022,8,WLW,WR,BUF,Gabe Davis,GB,9,0,0,0,0,0,0,0,0,0,7,2,35,0,1,0,4.5,4.5
+2022,8,MWM,TE,GB,Robert Tonyan,@BUF,7,0,0,0,0,0,0,0,0,0,6,5,35,0,1,0,4.5,4.5
+2022,8,W (9/1),WR,JAC,Zay Jones,DEN,1,0,0,0,0,0,1,7,0,0,3,3,28,0,1,0,4.5,4.5
+2022,8,W (9/1),WR,MIA,Trent Sherfield,@DET,29,0,0,0,0,0,0,0,0,0,3,2,25,0,2,0,4.5,4.5
+2022,8,VD,WR,PIT,Diontae Johnson,@PHI,8,0,0,0,0,0,0,0,0,0,9,5,35,0,1,0,4.5,4.5
+2022,8,ELP,TE,BAL,Mark Andrews,@TB,25,0,0,0,0,0,0,0,0,0,5,3,33,0,1,0,4.3,4.3
+2022,8,CRB,WR,PHI,DeVonta Smith,PIT,32,0,0,0,0,0,0,0,0,0,8,5,23,0,2,0,4.3,4.3
+2022,8,W (9/1),TE,CAR,Stephen Sullivan,@ATL,24,0,0,0,0,0,0,0,0,0,2,1,33,0,1,0,4.3,4.3
+2022,8,NN,WR,SEA,Marquise Goodwin,NYG,4,0,0,0,0,0,0,0,0,0,5,4,33,0,1,0,4.3,4.3
+2022,8,W (9/1),RB,SEA,Travis Homer,NYG,11,0,0,0,0,0,2,10,0,0,1,1,21,0,1,0,4.1,4.1
+2022,8,AFL,RB,BAL,Justice Hill,@TB,6,0,0,0,0,0,4,28,0,1,0,0,0,0,0,0,3.8,3.8
+2022,8,W (9/1),WR,CIN,Trenton Irwin,@CLE,16,0,0,0,0,0,0,0,0,0,3,2,27,0,1,0,3.7,3.7
+2022,8,W (9/1),TE,NYJ,CJ Uzomah,NE,27,0,0,0,0,0,0,0,0,0,1,1,27,0,1,0,3.7,3.7
+2022,8,W (9/1),WR,CAR,Laviska Shenault,@ATL,31,0,0,0,0,0,0,0,0,0,6,5,26,0,1,0,3.6,3.6
+2022,8,W (9/1),RB,CIN,Chris Evans,@CLE,28,0,0,0,0,0,0,0,0,0,1,1,26,0,1,0,3.6,3.6
+2022,8,W (9/1),TE,DAL,Peyton Hendershot,CHI,8,0,0,0,0,0,0,0,0,0,2,2,15,0,2,0,3.5,3.5
+2022,8,W (9/1),TE,HOU,OJ Howard,TEN,23,0,0,0,0,0,0,0,0,0,3,2,24,0,1,0,3.4,3.4
+2022,8,W (9/1),RB,ARI,Darrel Williams,@MIN,8,0,0,0,0,0,5,8,0,2,3,2,6,0,0,0,3.4,3.4
+2022,8,W (9/1),WR,BAL,James Proche,@TB,14,0,0,0,0,0,0,0,0,0,4,3,24,0,1,0,3.4,3.4
+2022,8,W (9/1),WR,NYJ,Jeff Smith,NE,12,0,0,0,0,0,0,0,0,0,1,1,23,0,1,0,3.3,3.3
+2022,8,W (9/1),WR,GB,Amari Rodgers,@BUF,10,0,0,0,0,0,0,0,0,0,3,1,22,0,1,0,3.2,3.2
+2022,8,W (9/1),TE,NE,Hunter Henry,@NYJ,18,0,0,0,0,0,0,0,0,0,1,1,22,0,1,0,3.2,3.2
+2022,8,W (9/1),TE,SEA,Will Dissly,NYG,21,0,0,0,0,0,0,0,0,0,2,2,12,0,2,0,3.2,3.2
+2022,8,W (9/1),WR,PIT,Steven Sims,@PHI,8,0,0,0,0,0,2,21,0,1,3,2,-1,0,0,0,3.1,3.1
+2022,8,W (9/1),RB,PHI,Boston Scott,PIT,18,0,0,0,0,0,7,21,0,1,0,0,0,0,0,0,3.1,3.1
+2022,8,W (9/1),WR,WAS,Cam Sims,@IND,2,0,0,0,0,0,0,0,0,0,2,1,21,0,1,0,3.1,3.1
+2022,8,NN,RB,LAR,Darrell Henderson,SF,1,0,0,0,0,0,4,16,0,0,2,2,14,0,0,0,3,3
+2022,8,GF,TE,SEA,Noah Fant,NYG,21,0,0,0,0,0,0,0,0,0,2,2,19,0,1,0,2.9,2.9
+2022,8,W (9/1),TE,HOU,Brevin Jordan,TEN,23,0,0,0,0,0,0,0,0,0,4,2,19,0,1,0,2.9,2.9
+2022,8,W (9/1),QB,LV,Jarrett Stidham,@NO,18,8,13,72,0,0,0,0,0,0,0,0,0,0,0,0,2.88,2.88
+2022,8,W (9/1),RB,LV,Ameer Abdullah,@NO,7,0,0,0,0,0,0,0,0,0,5,4,28,0,0,0,2.8,2.8
+2022,8,FRR,TE,MIN,Irv Smith,ARI,31,0,0,0,0,0,0,0,0,0,4,4,28,0,0,0,2.8,2.8
+2022,8,W (9/1),RB,CIN,Samaje Perine,@CLE,28,0,0,0,0,0,1,7,0,1,3,3,10,0,0,0,2.7,2.7
+2022,8,W (9/1),RB,CAR,Spencer Brown,@ATL,23,0,0,0,0,0,6,27,0,0,1,0,0,0,0,0,2.7,2.7
+2022,8,W (9/1),TE,CAR,Tommy Tremble,@ATL,24,0,0,0,0,0,0,0,0,0,4,2,17,0,1,0,2.7,2.7
+2022,8,W (9/1),RB,CLE,D'Ernest Johnson,CIN,9,0,0,0,0,0,4,17,0,1,0,0,0,0,0,0,2.7,2.7
+2022,8,FRR,WR,TEN,Robert Woods,@HOU,7,0,0,0,0,0,0,0,0,0,2,2,26,0,2,1,2.6,2.6
+2022,8,CRB,TE,LAR,Tyler Higbee,SF,5,0,0,0,0,0,0,0,0,0,6,2,15,0,1,0,2.5,2.5
+2022,8,W (9/1),TE,TB,Cade Otton,BAL,16,0,0,0,0,0,0,0,0,0,5,2,15,0,1,0,2.5,2.5
+2022,8,ELP,WR,DET,Josh Reynolds,MIA,21,0,0,0,0,0,0,0,0,0,6,2,14,0,1,0,2.4,2.4
+2022,8,W (9/1),TE,DET,James Mitchell,MIA,22,0,0,0,0,0,0,0,0,0,1,1,14,0,1,0,2.4,2.4
+2022,8,CC,RB,MIA,Chase Edmonds,@DET,31,0,0,0,0,0,4,14,0,1,0,0,0,0,0,0,2.4,2.4
+2022,8,NN,WR,NE,Tyquan Thornton,@NYJ,6,0,0,0,0,0,0,0,0,0,2,1,13,0,1,0,2.3,2.3
+2022,8,MAM,WR,DEN,Courtland Sutton,@JAC,19,0,0,0,0,0,0,0,0,0,4,1,13,0,1,0,2.3,2.3
+2022,8,W (9/1),TE,WAS,Armani Rogers,@IND,20,0,0,0,0,0,0,0,0,0,2,1,13,0,1,0,2.3,2.3
+2022,8,W (9/1),TE,IND,Kylen Granson,WAS,2,0,0,0,0,0,0,0,0,0,3,3,11,0,1,0,2.1,2.1
+2022,8,W (9/1),WR,DAL,KaVontae Turpin,CHI,5,0,0,0,0,0,1,11,0,1,0,0,0,0,0,0,2.1,2.1
+2022,8,CC,RB,PHI,Kenneth Gainwell,PIT,18,0,0,0,0,0,1,3,0,1,1,1,8,0,0,0,2.1,2.1
+2022,8,W (9/1),WR,TB,Breshad Perriman,BAL,28,0,0,0,0,0,0,0,0,0,1,1,11,0,1,0,2.1,2.1
+2022,8,GF,QB,LV,Derek Carr,@NO,18,15,26,101,0,1,1,-1,0,0,0,0,0,0,0,0,2.04,2.04
+2022,8,W (9/1),WR,ATL,Olamide Zaccheaus,CAR,22,0,0,0,0,0,1,-6,0,0,1,1,10,0,1,0,2,2
+2022,8,W (9/1),TE,NYG,Chris Myarick,@SEA,32,0,0,0,0,0,0,0,0,0,1,1,10,0,1,0,2,2
+2022,8,W (9/1),RB,WAS,JD McKissic,@IND,20,0,0,0,0,0,2,6,0,0,5,3,14,0,0,0,2,2
+2022,8,W (9/1),WR,NO,Marquez Callaway,LV,18,0,0,0,0,0,0,0,0,0,1,1,10,0,1,0,2,2
+2022,8,W (9/1),TE,NE,Jonnu Smith,@NYJ,18,0,0,0,0,0,0,0,0,0,4,3,10,0,1,0,2,2
+2022,8,W (9/1),WR,LAR,Ben Skowronek,SF,23,0,0,0,0,0,0,0,0,0,1,1,10,0,1,0,2,2
+2022,8,W (9/1),TE,ATL,Parker Hesse,CAR,15,0,0,0,0,0,0,0,0,0,1,1,9,0,1,0,1.9,1.9
+2022,8,W (9/1),WR,CHI,Dante Pettis,@DAL,13,0,0,0,0,0,0,0,0,0,5,4,18,0,0,0,1.8,1.8
+2022,8,WLW,RB,NYJ,James Robinson,NE,4,0,0,0,0,0,5,17,0,0,1,0,0,0,0,0,1.7,1.7
+2022,8,W (9/1),RB,ATL,Avery Williams,CAR,24,0,0,0,0,0,0,0,0,0,2,2,7,0,1,0,1.7,1.7
+2022,8,W (9/1),WR,CLE,Michael Woods,CIN,11,0,0,0,0,0,0,0,0,0,2,1,6,0,1,0,1.6,1.6
+2022,8,MAM,RB,NYG,Matt Breida,@SEA,27,0,0,0,0,0,2,5,0,0,2,1,10,0,0,0,1.5,1.5
+2022,8,GF,WR,NYG,Wan'Dale Robinson,@SEA,3,0,0,0,0,0,0,0,0,0,3,2,15,0,0,0,1.5,1.5
+2022,8,WLW,QB,TEN,Malik Willis,@HOU,3,6,10,55,0,1,5,12,0,0,0,0,0,0,0,0,1.4,1.4
+2022,8,W (9/1),TE,NO,Juwan Johnson,LV,30,0,0,0,0,0,0,0,0,0,4,2,14,0,0,0,1.4,1.4
+2022,8,W (9/1),WR,TB,Scott Miller,BAL,28,0,0,0,0,0,0,0,0,0,2,2,13,0,0,0,1.3,1.3
+2022,8,W (9/1),RB,JAC,JaMycal Hasty,DEN,15,0,0,0,0,0,4,13,0,0,4,3,-3,0,0,0,1.3,1.3
+2022,8,W (9/1),RB,NO,Dwayne Washington,LV,26,0,0,0,0,0,4,13,0,0,0,0,0,0,0,0,1.3,1.3
+2022,8,W (9/1),WR,GB,Sammy Watkins,@BUF,10,0,0,0,0,0,0,0,0,0,1,1,3,0,1,0,1.3,1.3
+2022,8,GF,WR,GB,Christian Watson,@BUF,10,0,0,0,0,0,0,0,0,0,1,1,12,0,0,0,1.2,1.2
+2022,8,W (9/1),WR,SF,Ray-Ray McCloud,@LAR,17,0,0,0,0,0,0,0,0,0,2,1,11,0,0,0,1.1,1.1
+2022,8,W (9/1),RB,LAR,Malcolm Brown,SF,1,0,0,0,0,0,5,10,0,0,0,0,0,0,0,0,1,1
+2022,8,W (9/1),QB,PHI,Gardner Minshew,PIT,27,1,2,23,0,0,1,-1,0,0,0,0,0,0,0,0,0.92,0.92
+2022,8,W (9/1),TE,TB,Ko Kieft,BAL,16,0,0,0,0,0,0,0,0,0,1,1,9,0,0,0,0.9,0.9
+2022,8,W (9/1),TE,GB,Josiah Deguara,@BUF,7,0,0,0,0,0,0,0,0,0,1,1,9,0,0,0,0.9,0.9
+2022,8,W (9/1),TE,NO,Nick Vannett,LV,30,0,0,0,0,0,0,0,0,0,1,1,8,0,0,0,0.8,0.8
+2022,8,W (9/1),TE,JAC,Dan Arnold,DEN,14,0,0,0,0,0,0,0,0,0,1,1,8,0,0,0,0.8,0.8
+2022,8,W (9/1),RB,DET,Craig Reynolds,MIA,17,0,0,0,0,0,2,7,0,0,1,0,0,0,0,0,0.7,0.7
+2022,8,W (9/1),WR,DET,Maurice Alexander,MIA,21,0,0,0,0,0,0,0,0,0,1,1,7,0,0,0,0.7,0.7
+2022,8,W (9/1),TE,SF,Tyler Kroft,@LAR,3,0,0,0,0,0,0,0,0,0,1,1,6,0,0,0,0.6,0.6
+2022,8,W (9/1),RB,NYJ,Ty Johnson,NE,4,0,0,0,0,0,2,6,0,0,2,0,0,0,0,0,0.6,0.6
+2022,8,FRR,WR,LV,Hunter Renfrow,@NO,24,0,0,0,0,0,0,0,0,0,2,1,6,0,0,0,0.6,0.6
+2022,8,W (9/1),WR,CHI,Equanimeous St Brown,@DAL,13,0,0,0,0,0,0,0,0,0,3,1,6,0,0,0,0.6,0.6
+2022,8,W (9/1),TE,DET,Brock Wright,MIA,22,0,0,0,0,0,0,0,0,0,1,1,6,0,0,0,0.6,0.6
+2022,8,W (9/1),WR,HOU,Phillip Dorsett,TEN,27,0,0,0,0,0,0,0,0,0,5,1,6,0,0,0,0.6,0.6
+2022,8,W (9/1),TE,WAS,John Bates,@IND,20,0,0,0,0,0,0,0,0,0,1,1,6,0,0,0,0.6,0.6
+2022,8,W (9/1),WR,CIN,Trent Taylor,@CLE,16,0,0,0,0,0,0,0,0,0,1,1,5,0,0,0,0.5,0.5
+2022,8,W (9/1),WR,NYG,David Sills,@SEA,3,0,0,0,0,0,0,0,0,0,2,1,5,0,0,0,0.5,0.5
+2022,8,W (9/1),TE,TEN,Austin Hooper,@HOU,13,0,0,0,0,0,0,0,0,0,1,1,5,0,0,0,0.5,0.5
+2022,8,W (9/1),TE,SEA,Colby Parkinson,NYG,21,0,0,0,0,0,0,0,0,0,1,1,5,0,0,0,0.5,0.5
+2022,8,W (9/1),TE,HOU,Jordan Akins,TEN,23,0,0,0,0,0,0,0,0,0,2,1,5,0,0,0,0.5,0.5
+2022,8,W (9/1),WR,WAS,Dax Milne,@IND,2,0,0,0,0,0,0,0,0,0,1,1,4,0,0,0,0.4,0.4
+2022,8,W (9/1),TE,BAL,Josh Oliver,@TB,25,0,0,0,0,0,0,0,0,0,1,1,4,0,0,0,0.4,0.4
+2022,8,W (9/1),WR,ATL,Bryan Edwards,CAR,22,0,0,0,0,0,0,0,0,0,1,1,3,0,0,0,0.3,0.3
+2022,8,W (9/1),TE,TEN,Chigoziem Okonkwo,@HOU,13,0,0,0,0,0,0,0,0,0,2,1,3,0,0,0,0.3,0.3
+2022,8,W (9/1),WR,SEA,D'Wayne Eskridge,NYG,4,0,0,0,0,0,0,0,0,0,2,1,3,0,0,0,0.3,0.3
+2022,8,W (9/1),WR,NYG,Marcus Johnson,@SEA,3,0,0,0,0,0,0,0,0,0,6,1,3,0,0,0,0.3,0.3
+2022,8,MCM,WR,LV,Davante Adams,@NO,24,0,0,0,0,0,1,-1,0,0,5,1,3,0,0,0,0.3,0.3
+2022,8,W (9/1),TE,CIN,Mitchell Wilcox,@CLE,6,0,0,0,0,0,0,0,0,0,1,1,3,0,0,0,0.3,0.3
+2022,8,W (9/1),TE,PIT,Zach Gentry,@PHI,17,0,0,0,0,0,0,0,0,0,1,1,3,0,0,0,0.3,0.3
+2022,8,W (9/1),QB,CHI,Trevor Siemian,@DAL,8,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,0.2,0.2
+2022,8,W (9/1),RB,HOU,Rex Burkhead,TEN,2,0,1,0,0,0,0,0,0,0,1,1,2,0,0,0,0.2,0.2
+2022,8,MWM,RB,NO,Mark Ingram,LV,26,0,0,0,0,0,0,0,0,0,1,1,2,0,0,0,0.2,0.2
+2022,8,W (9/1),WR,NE,Nelson Agholor,@NYJ,6,0,0,0,0,0,0,0,0,0,1,1,2,0,0,0,0.2,0.2
+2022,8,W (9/1),TE,CAR,Ian Thomas,@ATL,24,0,0,0,0,0,0,0,0,0,1,1,2,0,0,0,0.2,0.2
+2022,8,W (9/1),RB,MIA,Salvon Ahmed,@DET,31,0,0,0,0,0,1,2,0,0,0,0,0,0,0,0,0.2,0.2
+2022,8,W (9/1),WR,DEN,Montrell Washington,@JAC,19,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0.1,0.1
+2022,8,W (9/1),RB,CAR,Raheem Blackshear,@ATL,23,0,0,0,0,0,2,1,0,0,0,0,0,0,0,0,0.1,0.1
+2022,8,W (9/1),TE,WAS,Logan Thomas,@IND,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,CHI,Ryan Griffin,@DAL,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,LV,Jesper Horsted,@NO,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,IND,Keke Coutee,WAS,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,DEN,Kendall Hinton,@JAC,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,NE,Matthew Slater,@NYJ,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,BUF,Quintin Morris,GB,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,CRB,WR,NE,DeVante Parker,@NYJ,6,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,GB,Tyler Davis,@BUF,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,SF,Tay Martin,@LAR,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,WAS,Alex Armah,@IND,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,SF,Danny Gray,@LAR,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,LAR,Brandon Powell,SF,23,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,ATL,Keith Smith,CAR,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,IND,Deon Jackson,WAS,14,0,0,0,0,0,1,-4,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,MIN,Jalen Reagor,ARI,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,HOU,Chris Moore,TEN,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,DAL,Qadree Ollison,CHI,29,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,SF,Willie Snead,@LAR,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,MCM,RB,LV,Zamir White,@NO,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,IND,Jelani Woods,WAS,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,DET,Stanley Berryhill,MIA,21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,CLE,Harrison Bryant,CIN,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,IND,Mo Alie-Cox,WAS,2,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,JAC,Snoop Conner,DEN,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,NYG,Lawrence Cager,@SEA,3,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,PIT,Miles Boykin,@PHI,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,MIN,Jalen Nailor,ARI,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,MCM,WR,NYJ,Braxton Berrios,NE,12,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,NYJ,Jeremy Ruckert,NE,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,NE,Pierre Strong,@NYJ,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,BAL,Patrick Ricard,@TB,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,JAC,Chris Manhertz,DEN,14,0,0,0,0,0,0,0,0,0,1,1,-1,0,0,0,0,0
+2022,8,W (9/1),TE,CHI,Trevon Wesco,@DAL,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,MIN,Jacob Hollister,ARI,31,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,TB,Jaelon Darden,BAL,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,MAM,TE,ARI,Trey McBride,@MIN,29,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,PIT,Benny Snell,@PHI,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,BAL,Nick Boyle,@TB,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,SEA,Cullen Gillaspia,NYG,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,IND,Mike Strachan,WAS,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,NYG,Gary Brightwell,@SEA,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,WLW,WR,BUF,Khalil Shakir,GB,9,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,DAL,Sean McKeon,CHI,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,ATL,MyCole Pruitt,CAR,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,SEA,Dareke Young,NYG,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,ARI,Robbie Anderson,@MIN,26,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,DEN,Devine Ozigbo,@JAC,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,BUF,Jake Kumerow,GB,9,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,CLE,Demetric Felton,CIN,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,DET,Justin Jackson,MIA,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,GB,Patrick Taylor,@BUF,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,LV,Jakob Johnson,@NO,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,PHI,Quez Watkins,PIT,32,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,NO,Kevin White,LV,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,WLW,WR,BAL,Rashod Bateman,@TB,14,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,PHI,Britain Covey,PIT,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,ARI,AJ Green,@MIN,26,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,TEN,Geoff Swaim,@HOU,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,PIT,Gunner Olszewski,@PHI,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,NO,Tre'Quan Smith,LV,18,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+2022,8,MCM,RB,HOU,Dare Ogunbowale,TEN,2,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0
+2022,8,W (9/1),WR,JAC,Tim Jones,DEN,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,TEN,Nick Westbrook-Ikhine,@HOU,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,SEA,DeeJay Dallas,NYG,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,CIN,Mike Thomas,@CLE,16,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,DEN,Andrew Beck,@JAC,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,SF,Charlie Woerner,@LAR,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,CLE,Miller Forristall,CIN,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,JAC,Marvin Jones,DEN,1,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,BUF,Taiwan Jones,GB,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,TB,Ke'Shawn Vaughn,BAL,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,ARI,Stephen Anderson,@MIN,29,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,ARI,Keaontay Ingram,@MIN,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,AFL,RB,TEN,Hassan Haskins,@HOU,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,TEN,Chris Conley,@HOU,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,CLE,Anthony Schwartz,CIN,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,MIN,Kene Nwangwu,ARI,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,HOU,Tyron Johnson,TEN,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,CRB,WR,NYJ,Elijah Moore,NE,12,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,MIA,Durham Smythe,@DET,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,CC,WR,PIT,George Pickens,@PHI,8,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,GB,Marcedes Lewis,@BUF,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,NE,Raleigh Webb,@NYJ,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,CAR,Shi Smith,@ATL,31,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,CHI,Khari Blasingame,@DAL,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,MIA,Tanner Conner,@DET,29,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,PIT,Connor Heyward,@PHI,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,TEN,Cody Hollister,@HOU,7,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,LAR,Brycen Hopkins,SF,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,JAC,Luke Farrell,DEN,14,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,NE,Kendrick Bourne,@NYJ,6,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,SF,Jordan Mason,@LAR,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,DEN,Eric Tomlinson,@JAC,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),QB,ATL,Feleipe Franks,CAR,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,MWM,WR,LAR,Van Jefferson,SF,23,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,PHI,Jack Stoll,PIT,10,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,MIA,Cedrick Wilson,@DET,29,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,SEA,Cade Johnson,NYG,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,GF,WR,DAL,Jalen Tolbert,CHI,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,WAS,Kyric McGowan,@IND,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,CAR,Giovanni Ricci,@ATL,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,TEN,Kevin Rader,@HOU,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,DEN,Eric Saubert,@JAC,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,CIN,Devin Asiasi,@CLE,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,CLE,Pharaoh Brown,CIN,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,ATL,Khadarel Hodge,CAR,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,MIN,CJ Ham,ARI,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,CHI,Trestan Ebner,@DAL,3,0,0,0,0,0,2,-5,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,NO,JP Holtz,LV,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,LV,DJ Turner,@NO,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,TB,Kyle Rudolph,BAL,16,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+2022,8,W (9/1),RB,LV,Brandon Bolden,@NO,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,BUF,Reggie Gilliam,GB,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,MIA,Hunter Long,@DET,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),TE,PHI,Grant Calcaterra,PIT,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+2022,8,W (9/1),WR,MIA,Braylon Sanders,@DET,29,0,0,0,0,0,0,0,0,0,2,2,17,0,0,1,-0.3,-0.3
+2022,8,W (9/1),WR,ARI,Greg Dortch,@MIN,26,0,0,0,0,0,0,0,0,0,3,2,12,0,0,1,-0.8,-0.8
+2022,8,W (9/1),WR,NYG,Richie James,@SEA,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,-4,-4

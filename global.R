@@ -130,7 +130,13 @@ cleanRosters <- function(file) {
 rosters <- cleanRosters(rosters)
 
 #get old rosters and merge in current teams to see what TRUFFLE team players were on which year
-oldrosters <- read_csv("data/oldrosters.csv", col_types = cols())
+oldrosters <- as.data.table(read_csv("data/oldrosters.csv", col_types = cols()))
+rings <- oldrosters
+ringtot <- rings[,
+                .(Rings = sum(Ring)),
+                by = Player]
+oldrosters$Ring <- NULL; oldrosters$BenchCup <- NULL
+
 mergerosters <- rosters[, c("TRUFFLE", "Pos", "Player", "NFL", "Salary", "Contract")]
 mergerosters$Season <- currentyr
 mergerosters <- mergerosters[, c("Season", "TRUFFLE", "Pos", "Player", "NFL", "Salary", "Contract")]
