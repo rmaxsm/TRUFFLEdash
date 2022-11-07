@@ -92,18 +92,6 @@ while(len(season) != 4):
   print("get the SEASON right dumbass")
   season = input("What SEASON is it..? ")
 
-# week = input("What WEEK is it..? ")
-# while(len(week) >= 3):
-#   print("get the week right dumbass")
-#   week = input("What WEEK is it..? ")
-#season = 2021
-# week = 1
-
-
-begin_time = datetime.datetime.now()
-todays_date = datetime.datetime.today()
-
-
 #get information from teams document to refer to for shortcuts ext
 teamsPd = pd.read_csv("dre/teams_copy.csv")
 
@@ -214,7 +202,6 @@ allPuffins = tbls.find_all("tr", class_="bgFan")
 allPlayers.extend([separatePlayers(i) for i in allPuffins])
 
 
-
 #lamba functions to split player name team and position
 getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
 getPosition = lambda y: pd.Series([i for i in y.split(" ")][-1])
@@ -274,7 +261,7 @@ dfCleaned = dfCleaned.dropna()
 games = dfCleaned.loc[:,"G"].astype('int')
 dfCleaned.loc[:,"G"] = games
 
-print(dfCleaned)
+# print(dfCleaned)
 
-# dfCleaned.to_csv("dre/yearlyScripts/seasons_2021_POC.csv", index=False)
+#appending to the file - adds at begining will overwrite though. 
 appendToFile(dfCleaned, season)
