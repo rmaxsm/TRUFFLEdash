@@ -115,13 +115,13 @@ for index, row in teamsPd.iterrows():
 #returns team abbreviation from team name
 def getTeamAbbreviation(team):
   try:
-    if(team == "W "):
-      ##NEED TO CHECK IF THIS IS WHAT IS CORRECT. WANT SEASON NOT YEAR???
-      return "W ({}/{})".format(todays_date.month, todays_date.day) 
+    waived =  re.compile("W ")
+    if(waived.match(team)):
+      return team
     return teamsDict[team]
   except Exception as exp:
     print("An Error Occuring while trying to get the team abbreviation for " + team)
-    return "err"
+    return 
 
 #separates the column names
 #returns list representing the columns for tables 
@@ -146,6 +146,41 @@ def separatePlayers(rows):
     itr += 1
   return curRow
 
+#this will append to existing file, it will overwrite instead of erroring on existing years 
+def appendToFile(df, season):
+  
+  #CHANGE ME TO ACCURATE 
+  masterFile = "dre/yearlyScripts/seasons_fixed.csv"
+  backupFile = "dre/yearlyScripts/seasons_backup.csv"
+
+  #read the existing csv as a pd df for error checking
+  masterDf = pd.read_csv(masterFile)
+  
+  #reassign the columns to be equal to that of the existing csv
+  df.columns = masterDf.columns
+
+  #reassign the columns to be equal to that of the existing csv
+  df.columns = masterDf.columns
+  
+  # save backup
+  masterDf.to_csv(backupFile, index=False)
+  print("season backup saved at {}".format(backupFile))
+  
+  #create weekyear column to conditionally remove existing data from week being scraped
+  masterDf["yr"] = masterDf["Season"].astype(str)
+  
+  #remove
+  masterDf = masterDf[masterDf["yr"] != season]
+  #drop the weekyear column post check
+  masterDf = masterDf.drop(['yr'], axis=1)
+  
+  #concat scraped df and the masterDf
+  newmaster = pd.concat([df, masterDf], ignore_index=True)
+
+  # stores updated file as csv over previous 'master' 
+  newmaster.to_csv(masterFile, index=False)
+  print("seasons saved at {}".format(masterFile))
+
 #where the connection is made to the truffle cbs website
 url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:FLEX/{}:p/TRUFFLEoffense/?print_rows=9999".format(season)
 response = requests.get(url, cookies=cookies, headers=headers)
@@ -169,6 +204,16 @@ allPlayers = []
 #for every player - clean the row and add to list of lists
 for i in allRows:
   allPlayers.append(separatePlayers(i))
+  
+#ADDING LOGIC TO CAPTURE PUFFINS
+
+#html is different for 'owned' teams. Metadata should always load puffins. 
+allPuffins = tbls.find_all("tr", class_="bgFan")
+
+#add puffins players to the master player list
+allPlayers.extend([separatePlayers(i) for i in allPuffins])
+
+
 
 #lamba functions to split player name team and position
 getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
@@ -212,35 +257,24 @@ masterDf = pd.read_csv(masterFile)
 
 years = [str(i) for i in masterDf["Season"]]
 
-#if year week trying to be written already exists print error output - will not write 
-#COMMENTED OUT BELOW IS CORRECT SYNTAX - NEED STR CONVERSTION OR IT WILL NOT WORK
-# if (str(season) in years):
-if (season in years):
-  print("AN ERROR WAS ENCOUNTERED. YOU ARE TRYING TO WRITE DATA SEASON {}.".format(season))
-  print("THIS DATA ALREADY EXISTS IN THE FILE {}. DOUBLE CHECK DUMBASS.".format(masterFile))
-  
-#if the data isn't in the legacy already append to it
-else:
-  #create backup file
-  shutil.copyfile(masterFile, masterPath+"seasons_backup.csv")
+dfCleaned = df[df.Avg != "-"].copy()
+avg = dfCleaned.loc[:,"Avg"].astype('float')
+total = dfCleaned.loc[:,"Total"].astype('float')
+dfCleaned.loc[:,"Avg"] = avg
+dfCleaned.loc[:,"Total"] = total
 
-  dfCleaned = df[df.Avg != "-"].copy()
-  avg = dfCleaned.loc[:,"Avg"].astype('float')
-  total = dfCleaned.loc[:,"Total"].astype('float')
-  dfCleaned.loc[:,"Avg"] = avg
-  dfCleaned.loc[:,"Total"] = total
+gamesPlayed = round(dfCleaned["Total"] / dfCleaned["Avg"], 0)
 
-  gamesPlayed = round(dfCleaned["Total"] / dfCleaned["Avg"], 0)
-  
-  dfCleaned["OVP"] = gamesPlayed
-  
-  dfCleaned.columns = masterDf.columns
-  
-  # dfCleaned = dfCleaned.replace(np.nan, 0.0, regex = True)
-  dfCleaned = dfCleaned.dropna()
-  games = dfCleaned.loc[:,"G"].astype('int')
-  dfCleaned.loc[:,"G"] = games
+dfCleaned["OVP"] = gamesPlayed
 
-  print(dfCleaned)
-  
-  dfCleaned.to_csv("dre/yearlyScripts/seasons_2021_POC.csv", index=False)
+dfCleaned.columns = masterDf.columns
+
+# dfCleaned = dfCleaned.replace(np.nan, 0.0, regex = True)
+dfCleaned = dfCleaned.dropna()
+games = dfCleaned.loc[:,"G"].astype('int')
+dfCleaned.loc[:,"G"] = games
+
+print(dfCleaned)
+
+# dfCleaned.to_csv("dre/yearlyScripts/seasons_2021_POC.csv", index=False)
+appendToFile(dfCleaned, season)
