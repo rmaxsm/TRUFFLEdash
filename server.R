@@ -1358,7 +1358,7 @@ shinyServer(function(input, output, session) {
              Avg = round(mean(FPts),1),
              RelSD = round(sd(FPts)/mean(FPts),2),
              AvgPosRk = round(mean(PosRk),1),
-             `Top5 %` = sum(top12dum)/.N,
+             `Top5 %` = sum(top5dum)/.N,
              `Top12 %` = sum(top12dum)/.N,
              `Top24 %` = sum(top24dum)/.N,
              `Top36 %` = sum(top36dum)/.N,
