@@ -1438,15 +1438,17 @@ shinyServer(function(input, output, session) {
           Re20 = sum(Re20, na.rm = T),
           Re40 = sum(Re40, na.rm = T),
           `ReFD%` = ifelse(sum(Rec, na.rm = T) > 0, round(sum(ReFD, na.rm = T) / sum(Rec, na.rm = T),3), 0),
-          TotYd = sum(TotYd, na.rm = T)
+          TotYd = sum(TotYd, na.rm = T),
+          Avg = round(sum(FPts, na.rm = T) / .N, 1)
         ),
         by = .(Season, Pos, Player)
       ]
       extradashrange$TRUFFLEdum <- ifelse(extradashrange$TRUFFLE == "FA", "FA", "Owned")
-      extradashrange <- extradashrange[TRUFFLEdum %in% input$scavailable & Pos %in% input$scpositions][, !"TRUFFLEdum"]
+      extradashrange <- extradashrange[TRUFFLEdum %in% input$scavailable & Pos %in% input$scpositions & Avg >= input$scavgmin][, !"TRUFFLEdum"]
       
       extradashrange <- action_mod(extradashrange, team = globalteam)
       
+      extradashrange$Avg <- NULL
       extradashrange <- extradashrange[, c(20, 2, 4, 3, 1, 5:19, 21)]
       extradashrange <- extradashrange[order(-TotYd)]
       
@@ -3346,6 +3348,7 @@ shinyServer(function(input, output, session) {
         globalteam <<- toupper(input$user_name)
         updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
         updateSelectInput(session, 'rivalry', choices = unique(teams$RivalryName), selected = teams$RivalryName[teams$Abbrev == globalteam])
+        updateSelectInput(session, 'tmtm1', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
       } else {
         user_input$authenticated <- FALSE
       }

@@ -228,9 +228,11 @@ turkeyscorers <- rivfantasy[Thanksgiving == 1,
 #read in advanced combined files
 extradash <- as.data.table(read_csv("data/extraDash.csv", col_types = cols()))
 colnames(extradash)[7:20] <- c("Cmp%", "Pa20", "Pa40", "RuYPC", "Ru20", "Tar", "Tar%", "ReYPC", "Re20", "Re40", "ReFD%", "TotYd", "Avg", "FPts")
-extradash <- extradash[Avg != "-"]
+extradash$TRUFFLE <- NULL
+extradash <- merge(x = extradash, y = rosters[ , c("Pos", "Player", "TRUFFLE")], by = c("Pos", "Player"), all.x=TRUE)
 extradash$TRUFFLE[!(extradash$TRUFFLE %in% teams$Abbrev)] <- "FA"
-extradash <- extradash[, c(1:3, 5, 4, 6:20)][order(-Week, -TotYd)]
+extradash <- extradash[Avg != "-"]
+extradash <- extradash[, c(3:4, 20, 1:2, 5:19)][order(-Week, -TotYd)]
 
 #merge in other columns for calcs
 extradash <- merge(x = extradash, y = weekly[ , c("Season", "Week", "Pos", "Player", "PaCmp", "PaAtt", "RuAtt", "RuYd", "Rec", "ReYd", "ReFD")], by = c("Season", "Week", "Pos", "Player"))
@@ -254,7 +256,7 @@ extradashszn <- extradash[,
                           by = .(Season, Pos, Player)
   
 ]
-extradashszn <- extradashszn[, c(1, 4, 2:3, 5:17)][order(-TotYd)]
+extradashszn <- extradashszn[order(-TotYd)]
 
 #espn data
 espn <- as.data.table(read_csv("data/espnStats.csv", col_types = cols()))
@@ -628,7 +630,7 @@ recordbookstm <- fantasy[,
                            ReFD = sum(ReFD),
                            Rec = sum(Rec)
                          ),
-                         by = .(TRUFFLE, Pos, Player)]
+                         by = .(TRUFFLE, Pos, Player)][Pos != "DST"]
 
 recordbookspl <- fantasy[,
                          .(FPts = round(sum(FPts),1),
@@ -648,7 +650,7 @@ recordbookspl <- fantasy[,
                            ReFD = sum(ReFD),
                            Rec = sum(Rec)
                          ),
-                         by = .(Pos, Player)]
+                         by = .(Pos, Player)][Pos != "DST"]
 
 salarybyteam <- rosters[,
                         .(TeamSalary = sum(Salary)),
@@ -664,8 +666,8 @@ recordtmfpts <- recordbookstm[, c("TRUFFLE","Pos","Player","FPts")][order(-FPts)
 recordplgames <- recordbookspl[, c("Pos","Player","Games")][order(-Games)][1:100, ]
 recordtmgames <- recordbookstm[, c("TRUFFLE","Pos","Player","Games")][order(-Games)]
 #Avg
-recordplavg <- recordbookspl[, c("Pos","Player","Avg")][order(-Avg)][1:100, ]
-recordtmavg <- recordbookstm[, c("TRUFFLE","Pos","Player","Avg")][order(-Avg)]
+recordplavg <- recordbookspl[, c("Pos","Player","Games","Avg")][Games > 10][, c("Pos", "Player", "Avg")][order(-Avg)][1:100, ]
+recordtmavg <- recordbookstm[, c("TRUFFLE","Pos","Player","Games","Avg")][Games > 10][, c("Pos", "Player", "Avg")][order(-Avg)]
 #FD
 recordplfd <- recordbookspl[, c("Pos","Player","FD")][order(-FD)][1:100, ]
 recordtmfd <- recordbookstm[, c("TRUFFLE","Pos","Player","FD")][order(-FD)]
