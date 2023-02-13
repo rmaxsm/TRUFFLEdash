@@ -2968,92 +2968,57 @@ shinyServer(function(input, output, session) {
     
     #awards
     output$historybooksawards <- renderReactable({
-        if(input$awardseason == 2020) {
-            reactable(
-                award2020,
-                sortable = FALSE,
-                showPageInfo = FALSE,
-                paginationType = "simple", defaultPageSize = 11,
-                compact = T,
-                columns = list(
-                    Season = colDef(show = FALSE),
-                    Logo = colDef(name = "", 
-                                  align="center", 
-                                  minWidth = 30, 
-                                  cell = function(value) {
-                                      img_src <- knitr::image_uri(value)
-                                      image <- img(src = img_src, height = "47px", alt = value)
-                                      tagList(
-                                          div(style = list(display = "inline-block"), image)
-                                      )
-                                  }),
-                    Award = colDef(
-                        # Show species under character names
-                        cell = function(value, index) {
-                            winner <- award2020$Winner[index]
-                            pos <- award2020$Pos[index]
-                            trf <- award2020$TRUFFLE[index]
-                            div(
-                                div(style = list(fontWeight = 600, fontSize=16, color = "#84A4D8"), value),
-                                div(style = list(fontSize = 14), paste0(winner, ", ", pos, "  |  ", trf))
-                            )
-                        }
-                    ),
-                    Winner = colDef(show = FALSE),
-                    Image = colDef(name = "", align="center", minWidth = 50, cell = function(value) {
-                        img_src <- knitr::image_uri(value)
-                        image <- img(src = img_src, height = "47px", alt = value)
-                        tagList(
-                            div(style = list(display = "inline-block"), image)
-                        )
-                    }),
-                    Pos = colDef(show = FALSE),
-                    TRUFFLE = colDef(show = FALSE)
-                )
-            ) } else {
-                reactable(
-                    award2021,
-                    sortable = FALSE,
-                    showPageInfo = FALSE,
-                    paginationType = "simple", defaultPageSize = 11,
-                    compact = T,
-                    columns = list(
-                        Season = colDef(show = FALSE),
-                        Logo = colDef(name = "", 
-                                      align="center", 
-                                      minWidth = 30, 
-                                      cell = function(value) {
-                                          img_src <- knitr::image_uri(value)
-                                          image <- img(src = img_src, height = "47px", alt = value)
-                                          tagList(
-                                              div(style = list(display = "inline-block"), image)
-                                          )
-                                      }),
-                        Award = colDef(
-                            # Show species under character names
-                            cell = function(value, index) {
-                                winner <- award2021$Winner[index]
-                                pos <- award2021$Pos[index]
-                                trf <- award2021$TRUFFLE[index]
-                                div(
-                                    div(style = list(fontWeight = 600, fontSize=16, color = "#84A4D8"), value),
-                                    div(style = list(fontSize = 14), paste0(winner, ", ", pos, "  |  ", trf))
-                                )
-                            }
-                        ),
-                        Winner = colDef(show = FALSE),
-                        Image = colDef(name = "", align="center", minWidth = 50, cell = function(value) {
+      selectedawards <- awards[Award!="1stTm" & Award!="2ndTm"][Season == input$awardseason]
+      
+      reactable(
+        selectedawards,
+          sortable = FALSE,
+          showPageInfo = FALSE,
+          paginationType = "simple", defaultPageSize = 11,
+          compact = T,
+          columns = list(
+            Season = colDef(show = FALSE),
+            Logo = colDef(name = "", 
+                          align="center", 
+                          minWidth = 30, 
+                          cell = function(value) {
                             img_src <- knitr::image_uri(value)
                             image <- img(src = img_src, height = "47px", alt = value)
                             tagList(
-                                div(style = list(display = "inline-block"), image)
+                              div(style = list(display = "inline-block"), image)
                             )
-                        }),
-                        Pos = colDef(show = FALSE),
-                        TRUFFLE = colDef(show = FALSE)
-                    )
+                          }),
+            Award = colDef(
+              # Show species under character names
+              cell = function(value, index) {
+                winner <- selectedawards$Winner[index]
+                pos <- selectedawards$Pos[index]
+                trf <- selectedawards$TRUFFLE[index]
+                if(winner == "-") {
+                  div(
+                    div(style = list(fontWeight = 600, fontSize=16, color = "#84A4D8"), value),
+                    div(style = list(fontSize = 14, color = "#BFBFBF"), paste0("N/A"))
+                  )
+                } else {
+                div(
+                  div(style = list(fontWeight = 600, fontSize=16, color = "#84A4D8"), value),
+                  div(style = list(fontSize = 14), paste0(winner, ", ", pos, "  |  ", trf))
                 )
-            }
+              }
+              }
+            ),
+            Winner = colDef(show = FALSE),
+            Image = colDef(name = "", align="center", minWidth = 50, cell = function(value) {
+              img_src <- knitr::image_uri(value)
+              image <- img(src = img_src, height = "47px", alt = value)
+              tagList(
+                div(style = list(display = "inline-block"), image)
+              )
+            }),
+            Pos = colDef(show = FALSE),
+            TRUFFLE = colDef(show = FALSE)
+          )
+        )
     })
     
     output$allt1 <- renderReactable({
@@ -3076,6 +3041,83 @@ shinyServer(function(input, output, session) {
                   ),
                   columnGroups = list(colGroup(name = "2nd Team", columns = c("Pos", "Winner", "TRUFFLE"), align = 'left')
                   ))
+    })
+    
+    #homepage version
+    output$homeawards <- renderReactable({
+      homeawards <- awards[Award!="1stTm" & Award!="2ndTm"][Season == input$homeseason]
+      
+      reactable(
+        homeawards,
+        sortable = FALSE,
+        showPageInfo = FALSE,
+        paginationType = "simple", defaultPageSize = 11,
+        compact = T,
+        columns = list(
+          Season = colDef(show = FALSE),
+          Logo = colDef(name = "", 
+                        align="center", 
+                        minWidth = 30, 
+                        cell = function(value) {
+                          img_src <- knitr::image_uri(value)
+                          image <- img(src = img_src, height = "47px", alt = value)
+                          tagList(
+                            div(style = list(display = "inline-block"), image)
+                          )
+                        }),
+          Award = colDef(
+            # Show species under character names
+            cell = function(value, index) {
+              winner <- homeawards$Winner[index]
+              pos <- homeawards$Pos[index]
+              trf <- homeawards$TRUFFLE[index]
+              if(winner == "-") {
+                div(
+                  div(style = list(fontWeight = 600, fontSize=16, color = "#84A4D8"), value),
+                  div(style = list(fontSize = 14, color = "#BFBFBF"), paste0("N/A"))
+                )
+              } else {
+                div(
+                  div(style = list(fontWeight = 600, fontSize=16, color = "#84A4D8"), value),
+                  div(style = list(fontSize = 14), paste0(winner, ", ", pos, "  |  ", trf))
+                )
+              }
+            }
+          ),
+          Winner = colDef(show = FALSE),
+          Image = colDef(name = "", align="center", minWidth = 50, cell = function(value) {
+            img_src <- knitr::image_uri(value)
+            image <- img(src = img_src, height = "47px", alt = value)
+            tagList(
+              div(style = list(display = "inline-block"), image)
+            )
+          }),
+          Pos = colDef(show = FALSE),
+          TRUFFLE = colDef(show = FALSE)
+        )
+      )
+    })
+    
+    output$homeallt1 <- renderReactable({
+      reactable(allt1[Season == input$homeseason][, -"Season"],
+                compact = T,
+                columns = list(
+                  Pos = posDef(maxW = 80, filt = FALSE),
+                  TRUFFLE = trfDef(filt = FALSE)
+                ),
+                columnGroups = list(colGroup(name = "1st Team", columns = c("Pos", "Winner", "TRUFFLE"), align = 'left')
+                ))
+    })
+    
+    output$homeallt2 <- renderReactable({
+      reactable(allt2[Season == input$homeseason][, -"Season"],
+                compact = T,
+                columns = list(
+                  Pos = posDef(maxW = 80, filt = FALSE),
+                  TRUFFLE = trfDef(filt = FALSE)
+                ),
+                columnGroups = list(colGroup(name = "2nd Team", columns = c("Pos", "Winner", "TRUFFLE"), align = 'left')
+                ))
     })
     
     #rivheader

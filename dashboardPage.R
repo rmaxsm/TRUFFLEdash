@@ -52,6 +52,28 @@ dashboardPageUI <-
                                         )
                               ),
                               
+                              #Whenever we need bench cup on home page
+                              #wellPanel(class = "well",
+                              #          htmlOutput("bcgsheet")
+                              #),
+                              
+                              #awards home page tab for during offseason
+                              wellPanel(class = "well",
+                                        fluidRow(
+                                          column(width=6,
+                                                 h2("Award Winners"),
+                                                 br(),
+                                                 reactableOutput('homeawards')
+                                          ),
+                                          column(width=6,
+                                                 h2("All-TRUFFLE"),
+                                                 em("* denotes unanimous 1st Team selection"),
+                                                 reactableOutput('homeallt1'),
+                                                 reactableOutput('homeallt2')
+                                          )
+                                        )
+                              ),
+                              
                               fluidRow(
                                 column(width = 6,
                                        wellPanel(class = "well",
@@ -624,7 +646,7 @@ dashboardPageUI <-
                                                                      p("Awards and All-TRUFFLE Teams annually voted for by TRUFFLE owners.")
                                                               ),
                                                               column(width = 3,
-                                                                     selectInput("awardseason", "Season", unique(awards$Season), selected = max(awards$Season))
+                                                                     selectInput("awardseason", "Season", sort(unique(awards$Season), decreasing = T), selected = max(awards$Season))
                                                               )
                                                             )
                                                   ),
@@ -632,10 +654,12 @@ dashboardPageUI <-
                                                             fluidRow(
                                                               column(width=6,
                                                                      h2("Award Winners"),
+                                                                     br(),
                                                                      reactableOutput('historybooksawards')
                                                               ),
                                                               column(width=6,
                                                                      h2("All-TRUFFLE"),
+                                                                     em("* denotes unanimous 1st Team selection"),
                                                                      reactableOutput('allt1'),
                                                                      reactableOutput('allt2')
                                                               )

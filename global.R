@@ -42,6 +42,8 @@ TEcolor <- "#fce5cd"
 DSTcolor <- "#D9D2E9"
 DCcolor <- "#D9D9D9"
 IRcolor <- "#ea9999"
+SFcolor <- QBcolor
+FLcolor <- DSTcolor
 minscale <- "#E8F4EE"
 maxscale <-"#529667"
 greenscale <- "#57E19F"
@@ -805,6 +807,10 @@ posDef <- function(maxW = 48, filt = T, foot = "", sort = T) {
              color <- DCcolor
            }  else if (grepl("IR", value)) {
              color <- IRcolor
+           } else if (grepl("FL", value)) {
+             color <- FLcolor
+           } else if (grepl("SF", value)) {
+             color <- SFcolor
            } else {
              color <- "white"
            }
