@@ -5,12 +5,85 @@ shinyServer(function(input, output, session) {
   output$ui <- renderUI({
     if (user_input$authenticated == FALSE) {
       loginPageUI
-      
-    } else {
+    } else if (isguest == T) {
       #### Your app's UI code goes here!
+      guestUI
+    } else {
       dashboardPageUI
     }
   })
+  
+  #### password server code ---------------------------------------------------- 
+  # reactive value containing user's authentication status
+  user_input <- reactiveValues(authenticated = FALSE, valid_credentials = FALSE, 
+                               user_locked_out = FALSE, status = "")
+  
+  
+  
+  # authenticate user by:
+  #   1. checking whether their team is in the credentials
+  observeEvent(input$login_button, {
+    credentials <- data.frame(user = c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW","GUEST"),
+                              stringsAsFactors = FALSE)
+    
+    # if user name row and password name row are same, credentials are valid
+    #   and retrieve locked out status
+    if (toupper(input$user_name) %in% credentials$user) {
+      user_input$valid_credentials <- TRUE
+    }
+    
+    # if user is not currently locked out but has now failed login too many times:
+    #   1. set current lockout status to TRUE
+    #   2. if username is present in credentials DF, set locked out status in 
+    #     credentials DF to TRUE and save DF
+    
+    # if a user has valid credentials and is not locked out, he is authenticated   
+    if (user_input$valid_credentials == TRUE & toupper(input$user_name) == toupper("guest")) {
+      isguest <<- TRUE
+      user_input$authenticated <- TRUE
+    }
+    else if (user_input$valid_credentials == TRUE & input$user_name != "guest") {
+      isguest <<- FALSE
+      user_input$authenticated <- TRUE
+      globalteam <<- toupper(input$user_name)
+      updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
+      updateSelectInput(session, 'rivalry', choices = unique(teams$RivalryName), selected = teams$RivalryName[teams$Abbrev == globalteam])
+      updateSelectInput(session, 'tmtm1', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
+    } else {
+      user_input$authenticated <- FALSE
+    }
+    
+    # if user is not authenticated, set login status variable for error messages below
+    if (user_input$authenticated == FALSE) {
+      if (input$user_name == "" || !(input$user_name %in% credentials$user)) {
+        user_input$status <- "bad_user"
+      } 
+    }
+  })   
+  
+  # password entry UI componenets:
+  #   username and password text fields, login button
+  output$uiLogin <- renderUI({
+    wellPanel(
+      p("Welcome to"),
+      HTML("<span style=color:#84A4D8;font-size:32px>truffle</span><span style =color:#8C2E26;font-weight:bold;font-size:60px;font-family:'Audiowide'>dash</span>  "),
+      hr(),
+      textInput("user_name", "Enter Your Team:"),
+      
+      #passwordInput("password", "Password:"),
+      
+      actionButton("login_button", "Log in")
+    )
+  })
+  
+  # red error message if bad credentials
+  output$pass <- renderUI({
+    if (user_input$status == "bad_user") {
+      h5(strong("Team not found!", style = "color:#8C2E26"), align = "center")
+    } else {
+      ""
+    }
+  })  
   
   #testing my team function for stuff
   # observe({
@@ -28,6 +101,28 @@ shinyServer(function(input, output, session) {
     #home page ----
     #home page standings
     output$hometeamsfantasy <- renderReactable({
+      mod <- teamsfantasyweekly
+      
+      if(input$homescoring == "PPR") {
+        mod$FPts <- mod$PPR
+      } else if (input$homescoring == ".5 PPR") {
+        mod$FPts <- mod$hPPR
+      } else if (input$homescoring == "Standard") {
+        mod$FPts <- mod$STD
+      } else if (input$homescoring == "PPFD") {
+        mod$FPts <- mod$PPFD
+      }
+      
+      teamsfantasy <- mod[,
+                         .(Weekly = list(FPts),
+                           Low = min(FPts),
+                           High = max(FPts),
+                           StdDev = round(sd(FPts)),
+                           Avg = round(mean(FPts)),
+                           Total = round(sum(FPts))
+                         ),
+                         by = .(Season, TRUFFLE)][order(-Total)]
+      
       reactable(teamsfantasy[Season == input$homeseason, c("TRUFFLE", "Weekly", "Low", "High", "Avg", "Total")],
                 defaultSorted = c("Total"),
                 defaultSortOrder = "desc",
@@ -46,7 +141,7 @@ shinyServer(function(input, output, session) {
                                     sparkline(values,
                                               type = "bar",
                                               chartRangeMin = 0,
-                                              chartRangeMax = max(teamsfantasyweekly$FPts))
+                                              chartRangeMax = max(mod$FPts))
                                   }),
                   Low = colDef(header = with_tt("Low", "Lowest weekly score"),
                                minWidth = 50,
@@ -81,7 +176,25 @@ shinyServer(function(input, output, session) {
     
     #home page season leaders
     output$homepointsleaders <- renderReactable({
-        reactable(pointsleaders[Season == input$homeseason, c("TRUFFLE", "Pos", "Player", "PosRk", "ptslogs", "Avg", "Total")],
+      mod <- pointsleaders
+      
+      if(input$homescoring == "PPR") {
+        mod$Total <- mod$PPR
+        mod$Avg <- mod$Total / mod$G
+      } else if (input$homescoring == ".5 PPR") {
+        mod$Total <- mod$hPPR
+        mod$Avg <- mod$Total / mod$G
+      } else if (input$homescoring == "Standard") {
+        mod$Total <- mod$STD
+        mod$Avg <- mod$Total / mod$G
+      } else if (input$homescoring == "PPFD") {
+        mod$Total <- mod$PPFD
+        mod$Avg <- mod$Total / mod$G
+      }
+      
+      mod <- mod[order(-Season, match(Pos, positionorder), -Total, -Avg)][, `:=`(PosRk = 1:.N), by = .(Season, Pos)][order(-Total, -Avg)]
+      
+        reactable(mod[Season == input$homeseason, c("TRUFFLE", "Pos", "Player", "PosRk", "ptslogs", "Avg", "Total")],
                   height = 420,
                   defaultSorted = c("Total", "Avg"),
                   defaultSortOrder = "desc",
@@ -112,7 +225,17 @@ shinyServer(function(input, output, session) {
     
     #home weekly top 5 qb
     output$homeweeklytop5qb <- renderReactable({
-        reactable(weeklytop5qb[Season == input$homeseason & Week == input$weeklytop5week][, -c("Season","Week","Pos")],
+      mod <- weeklytop5
+      if(input$homescoring == "PPR") {
+        mod$FPts <- mod$PPR
+      } else if (input$homescoring == ".5 PPR") {
+        mod$FPts <- mod$hPPR
+      } else if (input$homescoring == "Standard") {
+        mod$FPts <- mod$STD
+      } else if (input$homescoring == "PPFD") {
+        mod$FPts <- mod$PPFD
+      }
+        reactable(na.omit(mod[Season == input$homeseason & Week == input$weeklytop5week & Pos == "QB"][1:30, -c("Season","Week","Pos","PPFD","PPR","hPPR","STD")][order(-FPts)]),
                   defaultSortOrder = "desc",
                   filterable = F,
                   showPageInfo = FALSE,
@@ -133,7 +256,17 @@ shinyServer(function(input, output, session) {
     
     #home weekly top 5 rb
     output$homeweeklytop5rb <- renderReactable({
-        reactable(weeklytop5rb[Season == input$homeseason & Week == input$weeklytop5week][, -c("Season","Week","Pos")],
+      mod <- weeklytop5
+      if(input$homescoring == "PPR") {
+        mod$FPts <- mod$PPR
+      } else if (input$homescoring == ".5 PPR") {
+        mod$FPts <- mod$hPPR
+      } else if (input$homescoring == "Standard") {
+        mod$FPts <- mod$STD
+      } else if (input$homescoring == "PPFD") {
+        mod$FPts <- mod$PPFD
+      }
+      reactable(na.omit(mod[Season == input$homeseason & Week == input$weeklytop5week & Pos == "RB"][1:30, -c("Season","Week","Pos","PPFD","PPR","hPPR","STD")][order(-FPts)]),
                   defaultSortOrder = "desc",
                   filterable = F,
                   showPageInfo = FALSE,
@@ -154,7 +287,17 @@ shinyServer(function(input, output, session) {
     
     #home weekly top 5 wr
     output$homeweeklytop5wr <- renderReactable({
-        reactable(weeklytop5wr[Season == input$homeseason & Week == input$weeklytop5week][, -c("Season","Week","Pos")],
+      mod <- weeklytop5
+      if(input$homescoring == "PPR") {
+        mod$FPts <- mod$PPR
+      } else if (input$homescoring == ".5 PPR") {
+        mod$FPts <- mod$hPPR
+      } else if (input$homescoring == "Standard") {
+        mod$FPts <- mod$STD
+      } else if (input$homescoring == "PPFD") {
+        mod$FPts <- mod$PPFD
+      }
+      reactable(na.omit(mod[Season == input$homeseason & Week == input$weeklytop5week & Pos == "WR"][1:30, -c("Season","Week","Pos","PPFD","PPR","hPPR","STD")][order(-FPts)]),
                   defaultSortOrder = "desc",
                   filterable = F,
                   showPageInfo = FALSE,
@@ -175,7 +318,17 @@ shinyServer(function(input, output, session) {
     
     #home weekly top 5 te
     output$homeweeklytop5te <- renderReactable({
-        reactable(weeklytop5te[Season == input$homeseason & Week == input$weeklytop5week][, -c("Season","Week","Pos")],
+      mod <- weeklytop5
+      if(input$homescoring == "PPR") {
+        mod$FPts <- mod$PPR
+      } else if (input$homescoring == ".5 PPR") {
+        mod$FPts <- mod$hPPR
+      } else if (input$homescoring == "Standard") {
+        mod$FPts <- mod$STD
+      } else if (input$homescoring == "PPFD") {
+        mod$FPts <- mod$PPFD
+      }
+      reactable(na.omit(mod[Season == input$homeseason & Week == input$weeklytop5week & Pos == "TE"][1:30, -c("Season","Week","Pos","PPFD","PPR","hPPR","STD")][order(-FPts)]),
                   defaultSortOrder = "desc",
                   filterable = F,
                   showPageInfo = FALSE,
@@ -260,16 +413,31 @@ shinyServer(function(input, output, session) {
     #team portal overview
     output$tpoverview <- renderReactable({
       tpoverview <- action_mod(df = tpoverview, team = globalteam)
-      selectedteam <- tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder), -Avg)]
+      mod <- tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder), -Avg)]
+      
+      if(input$homescoring == "PPR") {
+        mod$FPts <- mod$PPR
+        mod$Avg <- mod$FPts / mod$G
+      } else if (input$homescoring == ".5 PPR") {
+        mod$FPts <- mod$hPPR
+        mod$Avg <- mod$FPts / mod$G
+      } else if (input$homescoring == "Standard") {
+        mod$FPts <- mod$STD
+        mod$Avg <- mod$FPts / mod$G
+      } else if (input$homescoring == "PPFD") {
+        mod$FPts <- mod$PPFD
+        mod$Avg <- mod$FPts / mod$G
+      }
 
-        reactable(selectedteam[, .(Action, TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][, !"TRUFFLE"],
+        reactable(mod[, .(Action, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][order(match(Pos, positionorder), -Avg)],
                   defaultSortOrder = "desc",
                   pagination = FALSE,
                   highlight = T,
                   filterable = T,
                   compact = T,
                   columns = list(
-                      Action = colDef(header = with_tt("A", "Action link to add, drop, or trade player"),
+                      Action = colDef(show = !isguest,
+                                      header = with_tt("A", "Action link to add, drop, or trade player"),
                                       sortable = F,
                                       filterable = F,
                                       align="center",
@@ -354,8 +522,24 @@ shinyServer(function(input, output, session) {
     
     #team portal boxscore
     output$tpboxscore <- renderReactable({
-        reactable(seasons[Player %in% rosters$Player[rosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]] 
-                          & Season == max(seasons$Season)][order(match(Pos, positionorder), -FPts)][, !c("Season","NFL", "PosRk", "FL")],
+      mod <- seasons[Player %in% rosters$Player[rosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]] 
+                     & Season == max(seasons$Season)][order(match(Pos, positionorder), -FPts)][, !c("Season","NFL", "PosRk", "FL")]
+      
+      if(input$homescoring == "PPR") {
+        mod$FPts <- mod$PPR
+        mod$Avg <- mod$FPts / mod$G
+      } else if (input$homescoring == ".5 PPR") {
+        mod$FPts <- mod$hPPR
+        mod$Avg <- mod$FPts / mod$G
+      } else if (input$homescoring == "Standard") {
+        mod$FPts <- mod$STD
+        mod$Avg <- mod$FPts / mod$G
+      } else if (input$homescoring == "PPFD") {
+        mod$FPts <- mod$PPFD
+        mod$Avg <- mod$FPts / mod$G
+      }
+      
+        reactable(mod[, !c("PPFD", "PPR", "hPPR", "STD", "maxFPts")][order(match(Pos, positionorder), -FPts)],
                   pagination = F,
                   height = 'auto',
                   filterable = T,
@@ -587,6 +771,8 @@ shinyServer(function(input, output, session) {
     #player portal ----
     #player portal bios
     output$ppbios <- renderReactable({
+      if (isguest == F) {
+      
       ppbios <- action_mod(df = ppbios, team = globalteam)
       selectedplayers <- ppbios[Player %in% input$player][order(-Salary)]
       
@@ -598,7 +784,8 @@ shinyServer(function(input, output, session) {
                   highlight = T,
                   compact = T,
                   columns = list(
-                    Action = colDef(header = with_tt("A", "Action link to add, drop, or trade player"),
+                    Action = colDef(show = !isguest,
+                                    header = with_tt("A", "Action link to add, drop, or trade player"),
                                     sortable = F,
                                     filterable = F,
                                     align="center",
@@ -624,6 +811,27 @@ shinyServer(function(input, output, session) {
                       ptslogs = ptsLogDef(maxW = 100)
                   )
         )
+      } else { 
+      selectedplayers <- ppbios[Player %in% input$player][order(Player)]
+      
+      reactable(selectedplayers[, .(Pos, Player, NFL, AgePH, DynRk, DynPosRk, ptslogs)],
+                pagination = F,
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                compact = T,
+                columns = list(
+                  Pos = posDef(filt = FALSE),
+                  Player = playerDef(minW = 140),
+                  NFL = colDef(align = 'left'),
+                  AgePH = colDef(name = "Age"),
+                  DynRk = colDef(header = with_tt("DynRk", "Fantasy Pros Overall Dynasty Rank"), align = 'left'),
+                  DynPosRk = colDef(header = with_tt("DynRk", "Fantasy Pros Positional Dynasty Rank"), align = 'left'),
+                  ptslogs = ptsLogDef(maxW = 100)
+                )
+      )
+        
+      }
     })
     
     #player portal TRUFFLE Career Stats
@@ -1215,7 +1423,8 @@ shinyServer(function(input, output, session) {
                 highlight = T,
                 compact = T,
                 columns = list(
-                  Action = colDef(header = with_tt("A", "Action link to add, drop, or trade player"),
+                  Action = colDef(show = !isguest,
+                                  header = with_tt("A", "Action link to add, drop, or trade player"),
                                   sortable = F,
                                   filterable = F,
                                   align="center",
@@ -1296,7 +1505,8 @@ shinyServer(function(input, output, session) {
                 highlight = T,
                 compact = T,
                 columns = list(
-                  Action = colDef(header = with_tt("A", "Action link to add, drop, or trade player"),
+                  Action = colDef(show = !isguest,
+                                  header = with_tt("A", "Action link to add, drop, or trade player"),
                                   sortable = F,
                                   filterable = F,
                                   align="center",
@@ -1385,7 +1595,8 @@ shinyServer(function(input, output, session) {
                   highlight = T,
                   compact = T,
                   columns = list(
-                    Action = colDef(header = with_tt("A", "Action link to add, drop, or trade player"),
+                    Action = colDef(show = !isguest,
+                                    header = with_tt("A", "Action link to add, drop, or trade player"),
                                     sortable = F,
                                     filterable = F,
                                     align="center",
@@ -1467,7 +1678,8 @@ shinyServer(function(input, output, session) {
                   align = "right"
                 ),
                 columns = list(
-                  Action = colDef(header = with_tt("A", "Action link to add, drop, or trade player"),
+                  Action = colDef(show = !isguest,
+                                  header = with_tt("A", "Action link to add, drop, or trade player"),
                                   sortable = F,
                                   filterable = F,
                                   align="center",
@@ -1531,7 +1743,8 @@ shinyServer(function(input, output, session) {
                   sortNALast = TRUE
                 ),
                 columns = list(
-                  Action = colDef(header = with_tt("A", "Action link to add, drop, or trade player"),
+                  Action = colDef(show = !isguest,
+                                  header = with_tt("A", "Action link to add, drop, or trade player"),
                                   sortable = F,
                                   filterable = F,
                                   align="center",
@@ -1585,7 +1798,8 @@ shinyServer(function(input, output, session) {
                   format = colFormat(percent = T)
                 ),
                 columns = list(
-                  Action = colDef(header = with_tt("A", "Action link to add, drop, or trade player"),
+                  Action = colDef(show = !isguest,
+                                  header = with_tt("A", "Action link to add, drop, or trade player"),
                                   sortable = F,
                                   filterable = F,
                                   align="center",
@@ -3360,71 +3574,5 @@ shinyServer(function(input, output, session) {
                   )
         )
     })
-    
-    #### password server code ---------------------------------------------------- 
-    # reactive value containing user's authentication status
-    user_input <- reactiveValues(authenticated = FALSE, valid_credentials = FALSE, 
-                                 user_locked_out = FALSE, status = "")
-    
-    
-    
-    # authenticate user by:
-    #   1. checking whether their team is in the credentials
-    observeEvent(input$login_button, {
-      credentials <- readRDS("credentials/credentials.rds")
-      
-      # if user name row and password name row are same, credentials are valid
-      #   and retrieve locked out status
-      if (toupper(input$user_name) %in% credentials$user) {
-        user_input$valid_credentials <- TRUE
-      }
-      
-      # if user is not currently locked out but has now failed login too many times:
-      #   1. set current lockout status to TRUE
-      #   2. if username is present in credentials DF, set locked out status in 
-      #     credentials DF to TRUE and save DF
-      
-      # if a user has valid credentials and is not locked out, he is authenticated      
-      if (user_input$valid_credentials == TRUE) {
-        user_input$authenticated <- TRUE
-        globalteam <<- toupper(input$user_name)
-        updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
-        updateSelectInput(session, 'rivalry', choices = unique(teams$RivalryName), selected = teams$RivalryName[teams$Abbrev == globalteam])
-        updateSelectInput(session, 'tmtm1', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
-      } else {
-        user_input$authenticated <- FALSE
-      }
-      
-      # if user is not authenticated, set login status variable for error messages below
-      if (user_input$authenticated == FALSE) {
-        if (input$user_name == "" || !(input$user_name %in% credentials$user)) {
-          user_input$status <- "bad_user"
-        } 
-      }
-    })   
-    
-    # password entry UI componenets:
-    #   username and password text fields, login button
-    output$uiLogin <- renderUI({
-      wellPanel(
-        p("Welcome to"),
-        HTML("<span style=color:#84A4D8;font-size:32px>truffle</span><span style =color:#8C2E26;font-weight:bold;font-size:60px;font-family:'Audiowide'>dash</span>  "),
-        hr(),
-        textInput("user_name", "Enter Your Team:"),
-        
-        #passwordInput("password", "Password:"),
-        
-        actionButton("login_button", "Log in")
-      )
-    })
-    
-    # red error message if bad credentials
-    output$pass <- renderUI({
-      if (user_input$status == "bad_user") {
-        h5(strong("Team not found!", style = "color:#8C2E26"), align = "center")
-      } else {
-        ""
-      }
-    })  
     
 })

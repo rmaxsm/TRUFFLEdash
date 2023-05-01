@@ -84,6 +84,11 @@ fantasy <- as.data.table(read_csv("data/fantasy.csv", col_types = cols()))
 cleanFantasy <- function(file) {
   #deselect columns to delete and modify avg
   file$Avg <- as.numeric(file$Avg)
+  file$PPFD <- file$FPts
+  file$PPR <- file$FPts - file$RuFD - file$ReFD + file$Rec
+  file$hPPR <- file$FPts - file$RuFD - file$ReFD + 0.5 * file$Rec
+  file$STD <- file$FPts - file$RuFD - file$ReFD
+  file$maxFPts <- file$FPts + file$Rec
   
   return(file)
 }
@@ -91,6 +96,11 @@ fantasy <- as.data.table(cleanFantasy(fantasy))
 
 #file of full season data for players dating back to 2015
 seasons <- as.data.table(read_csv("data/seasons.csv", col_types = cols()))
+seasons$PPFD <- seasons$FPts
+seasons$PPR <- seasons$FPts - seasons$RuFD - seasons$ReFD + seasons$Rec
+seasons$hPPR <- seasons$FPts - seasons$RuFD - seasons$ReFD + 0.5 * seasons$Rec
+seasons$STD <- seasons$FPts - seasons$RuFD - seasons$ReFD
+seasons$maxFPts <- seasons$FPts + seasons$Rec
 
 
 #import fantasy pros file to use for age
@@ -150,6 +160,11 @@ weekly <- as.data.table(read_csv("data/weekly.csv", col_types = cols()))
 cleanWeekly <- function(file) {
   #remove players that didnt play in a week
   file <- filter(file, is.na(Avg) == F)
+  file$PPFD <- file$FPts
+  file$PPR <- file$FPts - file$RuFD - file$ReFD + file$Rec
+  file$hPPR <- file$FPts - file$RuFD - file$ReFD + 0.5 * file$Rec
+  file$STD <- file$FPts - file$RuFD - file$ReFD
+  file$maxFPts <- file$FPts + file$Rec
   
   file$TRUFFLE[!(file$TRUFFLE %in% teams$Abbrev)]  <- "FA"
 
@@ -185,7 +200,12 @@ currentseason <- currentseason[Season == max(weekly$Season),
                                  ReFD = sum(ReFD),
                                  FL = sum(FL),
                                  Avg = round(mean(FPts),2),
-                                 FPts = sum(FPts)
+                                 FPts = sum(FPts),
+                                 PPFD = sum(PPFD),
+                                 PPR = sum(PPR),
+                                 hPPR = sum(hPPR),
+                                 STD = sum(STD),
+                                 maxFPts = sum(maxFPts)
                                ),
                                by = .(Season, Pos, Player)]
 
@@ -212,7 +232,7 @@ riv <- as.data.table(read_csv("data/rivalries.csv", col_types = cols()))
 rivscores <- as.data.table(read_csv("data/rivalryscores.csv", col_types = cols()))
 rivscores$Winner <- ifelse(rivscores$Team1Score > rivscores$Team2Score, rivscores$Team1, rivscores$Team2)
 
-rivfantasy <- merge(fantasy, rivscores)
+rivfantasy <- merge(fantasy[, !c("PPFD", "PPR", "hPPR", "STD", "maxFPts")], rivscores)
 rivfantasy <- rivfantasy[TRUFFLE == Team1 | TRUFFLE == Team2]
 rivscorers <- rivfantasy[,
           .(G = .N,
@@ -295,15 +315,15 @@ morethan10 <- currentseason$Player[currentseason$FPts > 10]
 teamportal<- rosters[, .(TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract)]
 teamportal <- merge(teamportal, currentseason[, !c( "Season","Pos", "NFL")], by = 'Player', all.x = T)
 teamportal$Avg[teamportal$Pos == "DST"] <- rosters$Avg[rosters$Pos == "DST"]
-tpoverview <- teamportal[, .(TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
+tpoverview <- teamportal[, .(TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, Avg, FPts, PPFD, PPR, hPPR, STD)][order(match(Pos, positionorder), -Avg)]
 
-ptslogs <- weekly[order(-Season, Week)][is.element(Player, rosters$Player),
+ptslogs <- weekly[, !c("PPFD", "PPR", "hPPR", "STD", "maxFPts")][order(-Season, Week)][is.element(Player, rosters$Player),
                   .(ptslog = rev(list(FPts))),
                   by = .(Season, Pos, Player)]
 
 tpoverview <- merge(tpoverview, ptslogs[Season == max(seasons$Season), c("Player","ptslog")], by = 'Player', all.x = T)
 tpoverview <- merge(tpoverview, seasons[Season == max(seasons$Season)][, c("Player","PosRk")], by = 'Player', all.x = T)
-tpoverview <- tpoverview[, .(TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
+tpoverview <- tpoverview[, .(TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts, PPFD, PPR, hPPR, STD)][order(match(Pos, positionorder), -Avg)]
 #tpoverview <- merge(tpoverview, ids[, c("Player","playerID")], by = 'Player', all.x = T)
 #tpoverview <- tpoverview[, .(playerID, TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 #colnames(tpoverview)[1] <- "Action"
@@ -338,27 +358,31 @@ ppd <- teamportal[, `:=`(`PP$` = round(FPts/Salary,2),
 
 #aggregating fantasy data by team
 teamsfantasyweekly <- fantasy[,
-                              .(FPts = sum(FPts)),
+                              .(FPts = sum(FPts, na.rm = T),
+                                PPFD = sum(PPFD, na.rm = T),
+                                PPR = sum(PPR, na.rm = T),
+                                hPPR = sum(hPPR, na.rm = T),
+                                STD = sum(STD, na.rm = T),
+                                maxFPts = sum(maxFPts, na.rm = T)),
                               by = .(TRUFFLE, Season, Week)]
-teamsfantasy <- teamsfantasyweekly[,
-                                   .(Weekly = list(FPts),
-                                     Low = min(FPts),
-                                     High = max(FPts),
-                                     StdDev = round(sd(FPts)),
-                                     Avg = round(mean(FPts)),
-                                     Total = round(sum(FPts))),
-                                   by = .(Season, TRUFFLE)][order(-Total)]
 
 pointsleaders <- weekly[order(-Season, Week)][,
-                        .(ptslogs = list(FPts),
+                        .(G = .N,
+                          ptslogs = list(FPts),
                           Avg = round(mean(FPts),1),
-                          Total = round(sum(FPts),1)),
+                          Total = round(sum(FPts),1),
+                          PPFD = round(sum(PPFD),1),
+                          PPR = round(sum(PPR),1),
+                          hPPR = round(sum(hPPR),1),
+                          STD = round(sum(STD),1),
+                          maxFPts = round(sum(maxFPts),1)
+                          ),
                         by = .(Season, Pos, Player)][order(-Season, match(Pos, positionorder), -Total, -Avg)][, `:=`(PosRk = 1:.N), by = .(Season, Pos)]
 pointsleaders <- merge(x = pointsleaders, y = rosters[ , c("Pos", "Player", "TRUFFLE")], by = c("Pos", "Player"), all.x=TRUE)
 pointsleaders$TRUFFLE[is.na(pointsleaders$TRUFFLE)] <- "FA"
-pointsleaders <- pointsleaders[, c("Season", "TRUFFLE", "Player", "Pos", "PosRk", "ptslogs", "Avg", "Total")][order(-Total, -Avg)]
+pointsleaders <- pointsleaders[, c("Season", "TRUFFLE", "Player", "Pos", "PosRk", "G", "ptslogs", "Avg", "Total","PPFD","PPR","hPPR","STD")][order(-Total, -Avg)]
 
-ppbios <- weekly[Season == max(weekly$Season)][order(-Season,-Week)]
+ppbios <- weekly[, !c("PPFD", "PPR", "hPPR", "STD", "maxFPts")][Season == max(weekly$Season)][order(-Season,-Week)]
 ppbios <- ppbios[,
                  .(TRUFFLE = TRUFFLE[1],
                    NFL = NFL[1],
@@ -370,7 +394,7 @@ ppbios <- merge(ppbios, rosters[, c("Player","Salary", "Contract")], by = 'Playe
 ppbios <- merge(ppbios, fprosage[, c("Player", "AgePH", "DynRk", "DynPosRk")])
 ppbios <- ppbios[, c("TRUFFLE","Pos","Player", "NFL", "AgePH", "DynRk", "DynPosRk","Salary", "Contract", "ptslogs")]
 
-advanced <- weeklysc[, .(FPts = sum(FPts),
+advanced <- weeklysc[, !c("PPFD", "PPR", "hPPR", "STD", "maxFPts")][, .(FPts = sum(FPts),
                        YdPts = round(.04*sum(PaYd) + .1*(sum(RuYd) + sum(ReYd)),1),
                        TDPts = 4*sum(PaTD) + 6*(sum(RuTD) + sum(ReTD)),
                        FDPts = sum(RuFD) + sum(ReFD),
@@ -388,7 +412,7 @@ by = .(Season,TRUFFLE,Pos,Player)][, `:=`(`YdPt%` = YdPts / FPts,
                                           `FPts/Opp` = round(FPts/Opp, 3)
 )][order(-FPts)][, c("Season","TRUFFLE","Pos","Player","FPts","Touch","Opp","FPts/Touch","FPts/Opp","YdPts","TDPts","FDPts","RuPts","RePts","YdPt%","TDPt%","FDPt%","RuPt%","RePt%")]
 
-consistencystart <- as.data.frame(weeklysc)
+consistencystart <- as.data.frame(weeklysc[, !c("PPFD", "PPR", "hPPR", "STD", "maxFPts")])
 consistencystart <- as.data.table(consistencystart)
 consistency <- consistencystart[, `:=` (
   top5dum = ifelse(PosRk <= 5, 1, 0),
@@ -419,6 +443,8 @@ weeklytop5 <- weekly[, c("Season", "Week", "TRUFFLE", "Pos", "Player", "FPts")][
                                                                                                        Player = Player[1:30],
                                                                                                        FPts = FPts[1:30]), 
                                                                                                    by = .(Season,Week, Pos)][, .(Season,Week,TRUFFLE,Pos,Player,FPts)]
+
+weeklytop5 <- weekly[, c("Season", "Week", "TRUFFLE", "Pos", "Player", "FPts", "PPFD", "PPR", "hPPR", "STD")][order(Season, Week,-FPts)]
 
 weeklytop5qb <- na.omit(weeklytop5[Pos == "QB"])
 weeklytop5rb <- na.omit(weeklytop5[Pos == "RB"])
@@ -481,7 +507,7 @@ for (i in 1:nrow(ft)) {
 }
 
 #fantasy portal table
-truffleanalysis <- fantasy[,
+truffleanalysis <- fantasy[, !c("PPFD", "PPR", "hPPR", "STD", "maxFPts")][,
                            .(FPts = sum(FPts),
                              QBpts = sum(FPts[Pos == "QB"]),
                              RBpts = sum(FPts[Pos == "RB"]),
@@ -495,7 +521,7 @@ truffleanalysis <- fantasy[,
                            ),
                            by = .(Season, TRUFFLE)][order(-FPts)]
 
-truffleanalysisperc <- fantasy[,
+truffleanalysisperc <- fantasy[, !c("PPFD", "PPR", "hPPR", "STD", "maxFPts")][,
                                .(FPts = sum(FPts),
                                  QBpts = sum(FPts[Pos == "QB"])/sum(FPts),
                                  RBpts = sum(FPts[Pos == "RB"])/sum(FPts),
@@ -758,7 +784,9 @@ with_tt <- function(value, tooltip) {
 }
 
 #column definitions / definition functions
-actionDef <- colDef(header = with_tt("Act", "Drop players on your team\nTrade for players on other teams\nAdd Free Agents"),
+actionDef <- function() {
+    colDef(header = with_tt("Act", "Drop players on your team\nTrade for players on other teams\nAdd Free Agents"),
+                    show = !isguest,
                     align="center", 
                     minWidth = 35, 
                     cell = function(value) {
@@ -768,9 +796,11 @@ actionDef <- colDef(header = with_tt("Act", "Drop players on your team\nTrade fo
                         div(style = list(display = "inline-block"), image)
                       )
                     })
+    }
 
 trfDef <- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE, minW = 75) {
   colDef(name = name,
+         show = !isguest,
          aggregate = "unique",
          minWidth = minW,
          maxWidth = maxW,
@@ -1405,9 +1435,10 @@ g30pDef <- colDef(header = with_tt(">30 %", "Percentage of Weeks scoring >30 FPt
 # Source UI files ----
 source("dashboardPage.R")
 source("loginPage.R")
+source("guestUI.R")
 
 #password stuff
-num_fails_to_lockout <- 1000
-# credentials <- data.frame(user = c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW"),
-#                           stringsAsFactors = FALSE)
+# num_fails_to_lockout <- 1000
+# credentials <- data.frame(user = c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW","GUEST"),
+#                              stringsAsFactors = FALSE)
 # saveRDS(credentials, "credentials/credentials.rds")
