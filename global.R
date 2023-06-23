@@ -180,8 +180,7 @@ weeklysc <- merge(x = weeklysc, y = rosters[ , c("Pos", "Player", "TRUFFLE")], b
 weeklysc$TRUFFLE[is.na(weeklysc$TRUFFLE)] <- "FA"
 
 #add current season
-currentseason <-weekly[, !c("Opp", "OpRk")]
-currentseason <- currentseason[Season == max(weekly$Season),
+currentseason <- weekly[Season == max(weekly$Season),
                                .(NFL = NFL[1],
                                  G = .N,
                                  PaCmp = sum(PaCmp),
@@ -333,20 +332,20 @@ tpoverview$Avg[tpoverview$Pos == "DST"] <- NA
 #contracts table
 contracts <- rosters[, .(TRUFFLE, Pos, Player, Age, NFL, Salary, Contract)]
 contracts <- merge(x = contracts, y = draft[, .(Pos, Player, Extension)], by = c("Pos", "Player"), all.x = T)[order(Player)]
-contracts <- contracts[, `:=`(`'22` = Salary,
-                              `'23` = ifelse(Contract > 1, Salary,
+contracts <- contracts[, `:=`(`'23` = Salary,
+                              `'24` = ifelse(Contract > 1, Salary,
                                              ifelse(Contract == 1 & is.element(Player, rookierights) == T, Extension,
                                                     ifelse(Contract == 1 & is.element(Player, rookierights) == F, "FA", "-"))),
-                              `'24` = ifelse(Contract > 2, Salary,
+                              `'25` = ifelse(Contract > 2, Salary,
                                              ifelse(Contract == 1 & is.element(Player, rookierights) == T, Extension,
                                                     ifelse(Contract == 2 & is.element(Player, rookierights) == T, Extension,
                                                            ifelse(Contract == 2 & is.element(Player, rookierights) == F, "FA", "-")))),
-                              `'25` = ifelse(Contract > 3, Salary,
+                              `'26` = ifelse(Contract > 3, Salary,
                                              ifelse(Contract == 1 & is.element(Player, rookierights) == T, "FA",
                                              ifelse(Contract == 2 & is.element(Player, rookierights) == T, Extension,
                                                     ifelse(Contract == 3 & is.element(Player, rookierights) == T, Extension,
                                                            ifelse(Contract == 3 & is.element(Player, rookierights) == F, "FA", "-"))))),
-                              `'26` = ifelse(Contract > 4, Salary,
+                              `'27` = ifelse(Contract > 4, Salary,
                                              ifelse(Contract == 2 & is.element(Player, rookierights) == T, "FA",
                                                     ifelse(Contract == 3 & is.element(Player, rookierights) == T, Extension,
                                                            ifelse(Contract == 4 & is.element(Player, rookierights) == T, Extension,

@@ -443,7 +443,7 @@ shinyServer(function(input, output, session) {
                                       align="center",
                                       minWidth = 30,
                                       cell = function(value, index) {
-                                        action_url <- selectedteam$ActionLink[index]
+                                        action_url <- mod$ActionLink[index]
                                         img_src <- knitr::image_uri(value)
                                         image <- img(src = img_src, height = "15px", alt = value)
                                         tagList(
@@ -506,15 +506,15 @@ shinyServer(function(input, output, session) {
                     NFL = nflDef,
                     Salary = salaryDefBar(foot = T),
                     Contract = contractDef(name = "Yr", foot = T),
-                    `'22` = futurecolDef(yr = "'22", foot = T),
                     `'23` = futurecolDef(yr = "'23", foot = T),
                     `'24` = futurecolDef(yr = "'24", foot = T),
                     `'25` = futurecolDef(yr = "'25", foot = T),
-                    `'26` = futurecolDef(yr = "'26", foot = T)
+                    `'26` = futurecolDef(yr = "'26", foot = T),
+                    `'27` = futurecolDef(yr = "'27", foot = T)
                   ),
                   columnGroups = list(
                     colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
-                    colGroup(name = "Future Seasons", columns = c("'22","'23","'24","'25","'26"), align = 'left')
+                    colGroup(name = "Future Seasons", columns = c("'23","'24","'25","'26","'27"), align = 'left')
                   ),
                   defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
         )
@@ -731,7 +731,19 @@ shinyServer(function(input, output, session) {
     
     #team portal fantasy logs
     output$tpfantasylogs <- renderReactable({
-        reactable(fantasy[Season == max(weekly$Season) & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(Week, -FPts)][, !c("TRUFFLE", "Season", "NFL", "Avg","FL")],
+      mod <- fantasy[Season == max(weekly$Season) & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]]
+      
+      if(input$homescoring == "PPR") {
+        mod$FPts <- mod$PPR
+      } else if (input$homescoring == ".5 PPR") {
+        mod$FPts <- mod$hPPR
+      } else if (input$homescoring == "Standard") {
+        mod$FPts <- mod$STD
+      } else if (input$homescoring == "PPFD") {
+        mod$FPts <- mod$PPFD
+      }
+      
+        reactable(mod[order(Week, -FPts)][, !c("TRUFFLE", "Season", "NFL", "Avg","FL", "PPFD", "PPR", "hPPR", "STD", "maxFPts")],
                   paginationType = "jump", defaultPageSize = 10, showPageInfo = FALSE,
                   height = 'auto',
                   filterable = T,
@@ -937,12 +949,22 @@ shinyServer(function(input, output, session) {
     #player portal seasons
     output$ppseasons <- renderReactable({
       if(input$ppstatcenterseason == "All") {
-        df <- seasons[Season >= 2020]
+        mod <- seasons[Season >= 2020]
       } else {
-        df <- seasons[Season == as.numeric(input$ppstatcenterseason)]
+        mod <- seasons[Season == as.numeric(input$ppstatcenterseason)]
       }
       
-        reactable(df[Player %in% input$player][order(-Season, -FPts)][, !c("NFL", "Pos","FL", "PosRk")],
+      if(input$homescoring == "PPR") {
+        mod$FPts <- mod$PPR
+      } else if (input$homescoring == ".5 PPR") {
+        mod$FPts <- mod$hPPR
+      } else if (input$homescoring == "Standard") {
+        mod$FPts <- mod$STD
+      } else if (input$homescoring == "PPFD") {
+        mod$FPts <- mod$PPFD
+      }
+      
+        reactable(mod[Player %in% input$player][order(-Season, -FPts)][, !c("NFL", "Pos","FL", "PosRk", "PPFD", "PPR", "hPPR", "STD", "maxFPts")],
                   defaultSorted = c("Season", "FPts"),
                   pagination = F,
                   height = 'auto',
@@ -1229,10 +1251,23 @@ shinyServer(function(input, output, session) {
     
     #create week by week runchart
     output$ppwbw <- renderPlotly({
+      mod <- weekly
+      
+      if(input$homescoring == "PPR") {
+        mod$FPts <- mod$PPR
+      } else if (input$homescoring == ".5 PPR") {
+        mod$FPts <- mod$hPPR
+      } else if (input$homescoring == "Standard") {
+        mod$FPts <- mod$STD
+      } else if (input$homescoring == "PPFD") {
+        mod$FPts <- mod$PPFD
+      }
+      
+      
       if (length(input$player) == 0) {
-        ggplotly(ggplot(weekly,aes(Week,FPts)) + geom_blank() +theme_minimal() + scale_x_continuous(labels=as.character(0:18),breaks=c(0:18)))
+        ggplotly(ggplot(mod,aes(Week,FPts)) + geom_blank() +theme_minimal() + scale_x_continuous(labels=as.character(0:18),breaks=c(0:18)))
       } else {
-        df <- weekly[Season == input$ppwbwseason & Player %in% input$player]
+        df <- mod[Season == input$ppwbwseason & Player %in% input$player]
         df$Stat <- df[[input$ppwbwstat]]
         ggplotly(ggplot(df, aes(x = Week, y = Stat, color = Player)) +
                    geom_point(size = 4) +
@@ -1245,13 +1280,23 @@ shinyServer(function(input, output, session) {
     
     #player portal weekly logs
     output$ppgamelogweekly <- renderReactable({
-      if(input$ppgamelogsseason == "All") {
-        df <- weekly
+      if(input$ppstatcenterseason == "All") {
+        mod <- weekly
       } else {
-        df <- weekly[Season == as.numeric(input$ppgamelogsseason)]
+        mod <- weekly[Season == as.numeric(input$ppgamelogsseason)]
+      }
+      
+      if(input$homescoring == "PPR") {
+        mod$FPts <- mod$PPR
+      } else if (input$homescoring == ".5 PPR") {
+        mod$FPts <- mod$hPPR
+      } else if (input$homescoring == "Standard") {
+        mod$FPts <- mod$STD
+      } else if (input$homescoring == "PPFD") {
+        mod$FPts <- mod$PPFD
       }
 
-        reactable(df[Player %in% input$player][order(Season, Week, -FPts)][, !c("TRUFFLE", "PaCmp", "PaAtt", "NFL", "Avg", "FL", "PosRk")],
+        reactable(mod[Player %in% input$player][order(Season, Week, -FPts)][, !c("TRUFFLE", "PaCmp", "PaAtt", "NFL", "Avg", "FL", "PosRk", "PPFD", "PPR", "hPPR", "STD", "maxFPts")],
                   pagination = F,
                   height = 'auto',
                   filterable = F,
@@ -1289,12 +1334,22 @@ shinyServer(function(input, output, session) {
     
     output$ppgamelogfantasy <- renderReactable({
       if(input$ppgamelogsseason == "All") {
-        df <- fantasy
+        mod <- fantasy
       } else {
-        df <- fantasy[Season == as.numeric(input$ppgamelogsseason)]
+        mod <- fantasy[Season == as.numeric(input$ppgamelogsseason)]
       }
       
-      reactable(df[Player %in% input$player][order(Season, Week, -FPts)][, !c("PaAtt", "PaCmp", "Opp", "OpRk", "Tar","NFL", "Avg")],       
+      if(input$homescoring == "PPR") {
+        mod$FPts <- mod$PPR
+      } else if (input$homescoring == ".5 PPR") {
+        mod$FPts <- mod$hPPR
+      } else if (input$homescoring == "Standard") {
+        mod$FPts <- mod$STD
+      } else if (input$homescoring == "PPFD") {
+        mod$FPts <- mod$PPFD
+      }
+      
+      reactable(mod[Player %in% input$player][order(Season, Week, -FPts)][, !c("PaAtt", "PaCmp", "Opp", "OpRk", "Tar","NFL", "Avg", "PPFD", "PPR", "hPPR", "STD", "maxFPts")],       
                 pagination = F,
                 height = 'auto',
                 filterable = F,
@@ -1830,8 +1885,24 @@ shinyServer(function(input, output, session) {
     contractstm2 <- reactive(contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm2]][order(match(Pos, positionorder), -Salary, Player)][selectedtm2(), ])
     
     output$tmtm1 <- renderReactable({
+      mod <- tmoverviewtm1()
+      
+      if(input$homescoring == "PPR") {
+        mod$FPts <- mod$PPR
+        mod$Avg <- mod$FPts / mod$G
+      } else if (input$homescoring == ".5 PPR") {
+        mod$FPts <- mod$hPPR
+        mod$Avg <- mod$FPts / mod$G
+      } else if (input$homescoring == "Standard") {
+        mod$FPts <- mod$STD
+        mod$Avg <- mod$FPts / mod$G
+      } else if (input$homescoring == "PPFD") {
+        mod$FPts <- mod$PPFD
+        mod$Avg <- mod$FPts / mod$G
+      }
+      
       #formatted reactable output
-        reactable(tmoverviewtm1()[,!c("TRUFFLE", "G", "Bye", "PosRk")],
+        reactable(mod[,!c("TRUFFLE", "G", "Bye", "PosRk", "PPFD", "PPR", "hPPR", "STD")],
                   selection = "multiple", onClick = "select",
                   defaultSortOrder = "desc",
                   sortable = F,
@@ -1856,7 +1927,23 @@ shinyServer(function(input, output, session) {
     })
     
     output$tmtm2 <- renderReactable({
-        reactable(tmoverviewtm2()[,!c("TRUFFLE", "G", "Bye", "PosRk")],
+      mod <- tmoverviewtm2()
+      
+      if(input$homescoring == "PPR") {
+        mod$FPts <- mod$PPR
+        mod$Avg <- mod$FPts / mod$G
+      } else if (input$homescoring == ".5 PPR") {
+        mod$FPts <- mod$hPPR
+        mod$Avg <- mod$FPts / mod$G
+      } else if (input$homescoring == "Standard") {
+        mod$FPts <- mod$STD
+        mod$Avg <- mod$FPts / mod$G
+      } else if (input$homescoring == "PPFD") {
+        mod$FPts <- mod$PPFD
+        mod$Avg <- mod$FPts / mod$G
+      }
+      
+        reactable(mod[,!c("TRUFFLE", "G", "Bye", "PosRk", "PPFD", "PPR", "hPPR", "STD")],
                   selection = "multiple", onClick = "select",
                   defaultSortOrder = "desc",
                   sortable = F,
@@ -1906,11 +1993,11 @@ shinyServer(function(input, output, session) {
                     NFL = colDef(minWidth =  40),
                     Salary = salaryDefNobar(minW = 45, foot = T),
                     Contract = contractDef(minW = 30, foot = T, name = "Yr"),
-                    `'22` = futurecolDef(yr = "'22", maxW = 60, foot = T),
                     `'23` = futurecolDef(yr = "'23", maxW = 60, foot = T),
                     `'24` = futurecolDef(yr = "'24", maxW = 60, foot = T),
                     `'25` = futurecolDef(yr = "'25", maxW = 60, foot = T),
-                    `'26` = futurecolDef(yr = "'26", maxW = 60, foot = T)
+                    `'26` = futurecolDef(yr = "'26", maxW = 60, foot = T),
+                    `'27` = futurecolDef(yr = "'27", maxW = 60, foot = T)
                   ),
                   defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
         )
@@ -1938,11 +2025,11 @@ shinyServer(function(input, output, session) {
                         NFL = colDef(minWidth =  40),
                         Salary = salaryDefNobar(minW = 45, foot = T),
                         Contract = contractDef(minW = 30, foot = T, name = "Yr"),
-                        `'22` = futurecolDef(yr = "'22", maxW = 60, foot = T),
                         `'23` = futurecolDef(yr = "'23", maxW = 60, foot = T),
                         `'24` = futurecolDef(yr = "'24", maxW = 60, foot = T),
                         `'25` = futurecolDef(yr = "'25", maxW = 60, foot = T),
-                        `'26` = futurecolDef(yr = "'26", maxW = 60, foot = T)
+                        `'26` = futurecolDef(yr = "'26", maxW = 60, foot = T),
+                        `'27` = futurecolDef(yr = "'27", maxW = 60, foot = T)
                       ),
                       defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
             )
@@ -2072,15 +2159,15 @@ shinyServer(function(input, output, session) {
                   NFL = nflDef,
                   Salary = salaryDefBar(),
                   Contract = contractDef(name = "Yr"),
-                  `'22` = futurecolDef(yr = "'22"),
                   `'23` = futurecolDef(yr = "'23"),
                   `'24` = futurecolDef(yr = "'24"),
                   `'25` = futurecolDef(yr = "'25"),
-                  `'26` = futurecolDef(yr = "'26")
+                  `'26` = futurecolDef(yr = "'26"),
+                  `'27` = futurecolDef(yr = "'27")
                 ),
                 columnGroups = list(
                   colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
-                  colGroup(name = "Future Seasons", columns = c("'22","'23","'24","'25","'26"), align = 'left')
+                  colGroup(name = "Future Seasons", columns = c("'23","'24","'25","'26","'27"), align = 'left')
                 )
       )
     })
@@ -3390,7 +3477,20 @@ shinyServer(function(input, output, session) {
     #database ----
     #data hub weekly logs
     output$dhweekly <- renderReactable({
-        reactable(weekly[order(-FPts)][, !c("TRUFFLE", "NFL", "Avg", "PosRk")],
+      
+      mod <- weekly
+      
+      if(input$homescoring == "PPR") {
+        mod$FPts <- mod$PPR
+      } else if (input$homescoring == ".5 PPR") {
+        mod$FPts <- mod$hPPR
+      } else if (input$homescoring == "Standard") {
+        mod$FPts <- mod$STD
+      } else if (input$homescoring == "PPFD") {
+        mod$FPts <- mod$PPFD
+      }
+      
+        reactable(mod[order(-FPts)][, !c("TRUFFLE", "NFL", "Avg", "PosRk","PPFD","PPR","hPPR","STD","maxFPts")],
                   paginationType = "jump",
                   showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
                   pageSizeOptions = c(10, 20, 50, 100),
@@ -3432,7 +3532,24 @@ shinyServer(function(input, output, session) {
     
     #datahub seasons
     output$dhseasons <- renderReactable({
-        reactable(seasons[order(-FPts)][, !"PosRk"],
+      
+      mod <- seasons
+      
+      if(input$homescoring == "PPR") {
+        mod$FPts <- mod$PPR
+        mod$Avg <- mod$FPts / mod$G
+      } else if (input$homescoring == ".5 PPR") {
+        mod$FPts <- mod$hPPR
+        mod$Avg <- mod$FPts / mod$G
+      } else if (input$homescoring == "Standard") {
+        mod$FPts <- mod$STD
+        mod$Avg <- mod$FPts / mod$G
+      } else if (input$homescoring == "PPFD") {
+        mod$FPts <- mod$PPFD
+        mod$Avg <- mod$FPts / mod$G
+      }
+      
+        reactable(mod[order(-FPts)][, !c("PosRk","PPFD","PPR","hPPR","STD","maxFPts")],
                   paginationType = "jump",
                   showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
                   pageSizeOptions = c(10, 20, 50, 100),
@@ -3474,7 +3591,20 @@ shinyServer(function(input, output, session) {
     
     #data hub fantasy logs
     output$dhfantasy <- renderReactable({
-      reactable(fantasy[order(-Season, -Week, -FPts)][, !c("Opp", "OpRk", "NFL", "Avg")],
+      
+      mod <- fantasy
+      
+      if(input$homescoring == "PPR") {
+        mod$FPts <- mod$PPR
+      } else if (input$homescoring == ".5 PPR") {
+        mod$FPts <- mod$hPPR
+      } else if (input$homescoring == "Standard") {
+        mod$FPts <- mod$STD
+      } else if (input$homescoring == "PPFD") {
+        mod$FPts <- mod$PPFD
+      }
+      
+      reactable(mod[order(-Season, -Week, -FPts)][, !c("Opp", "OpRk", "NFL", "Avg","PPFD","PPR","hPPR","STD","maxFPts")],
                 paginationType = "jump",
                 showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
                 pageSizeOptions = c(10, 20, 50, 100),
@@ -3573,6 +3703,68 @@ shinyServer(function(input, output, session) {
                   columnGroups = list(colGroup(name = "Round 3", columns = c("#","TRF","Player","Pos","Salary"), align = 'left')
                   )
         )
+    })
+    
+    #draft ----
+    output$homerd1 <- renderReactable({
+      reactable(draft[Season == input$homedraftseason & Round == 1][, -c("Season", "Round", "Extension")],
+                defaultSortOrder = "desc",
+                filterable = F,
+                showPageInfo = FALSE,
+                pagination = F,
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                columns = list(
+                  `#` = colDef(minWidth = 30, align = "right"),
+                  TRF = trfDef(filt = FALSE),
+                  Player = colDef(minWidth = 150, align = "left"),
+                  Pos = posDef(maxW = 40, filt = FALSE),
+                  Salary = salaryDefNobar(minW = 60)
+                ),
+                columnGroups = list(colGroup(name = "Round 1", columns = c("#","TRF","Player","Pos","Salary"), align = 'left')
+                )
+      )
+    })
+    output$homerd2 <- renderReactable({
+      reactable(draft[Season == input$homedraftseason & Round == 2][, -c("Season", "Round", "Extension")],
+                defaultSortOrder = "desc",
+                filterable = F,
+                showPageInfo = FALSE,
+                pagination = F,
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                columns = list(
+                  `#` = colDef(minWidth = 30, align = "right"),
+                  TRF = trfDef(filt = FALSE),
+                  Player = colDef(minWidth = 150, align = "left"),
+                  Pos = posDef(maxW = 40, filt = FALSE),
+                  Salary = salaryDefNobar(minW = 60)
+                ),
+                columnGroups = list(colGroup(name = "Round 2", columns = c("#","TRF","Player","Pos","Salary"), align = 'left')
+                )
+      )
+    })
+    output$homerd3 <- renderReactable({
+      reactable(draft[Season == input$homedraftseason & Round == 3][, -c("Season", "Round", "Extension")],
+                defaultSortOrder = "desc",
+                filterable = F,
+                showPageInfo = FALSE,
+                pagination = F,
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                columns = list(
+                  `#` = colDef(minWidth = 30, align = "right"),
+                  TRF = trfDef(filt = FALSE),
+                  Player = colDef(minWidth = 150, align = "left"),
+                  Pos = posDef(maxW = 40, filt = FALSE),
+                  Salary = salaryDefNobar(minW = 60)
+                ),
+                columnGroups = list(colGroup(name = "Round 3", columns = c("#","TRF","Player","Pos","Salary"), align = 'left')
+                )
+      )
     })
     
 })

@@ -26,7 +26,6 @@ dashboardPageUI <-
                     menuItem("Rookie Draft", tabName = "draft", icon = icon("business-time")),
                     menuItem("Constitution", href = "https://docs.google.com/document/d/1-FyXq3HWtEETQlpF-_HnofCb2y1SGKUn7c7NVFlrx1E/", newtab = TRUE, icon = icon("paragraph")),
                     br(),
-                    br(),
                     selectInput("homescoring", HTML("<span style=color:#84A4D8;font-size:14px>Scoring System</span>"), c("PPFD", "PPR", ".5 PPR", "Standard"), selected ="PPFD" )
                     #menuItem("Tutorials", tabName = "tutorials", icon = icon("fa-sharp fa-solid fa-info"))
                   )
@@ -61,19 +60,32 @@ dashboardPageUI <-
                               #),
                               
                               #awards home page tab for during offseason
+                              # wellPanel(class = "well",
+                              #           fluidRow(
+                              #             column(width=6,
+                              #                    h2("Award Winners"),
+                              #                    br(),
+                              #                    reactableOutput('homeawards')
+                              #             ),
+                              #             column(width=6,
+                              #                    h2("All-TRUFFLE"),
+                              #                    em("* denotes unanimous 1st Team selection"),
+                              #                    reactableOutput('homeallt1'),
+                              #                    reactableOutput('homeallt2')
+                              #             )
+                              #           )
+                              # ),
+                              
+                              #draft homepage around draft time
                               wellPanel(class = "well",
                                         fluidRow(
-                                          column(width=6,
-                                                 h2("Award Winners"),
-                                                 br(),
-                                                 reactableOutput('homeawards')
-                                          ),
-                                          column(width=6,
-                                                 h2("All-TRUFFLE"),
-                                                 em("* denotes unanimous 1st Team selection"),
-                                                 reactableOutput('homeallt1'),
-                                                 reactableOutput('homeallt2')
-                                          )
+                                          column(width=8, h2("Rookie Draft")),
+                                          column(width=4, selectInput("homedraftseason", "Season", unique(draft$Season), selected = max(draft$Season) ))
+                                        ),
+                                        fluidRow(
+                                          column(width=4, reactableOutput('homerd1')),
+                                          column(width=4, reactableOutput('homerd2')),
+                                          column(width=4, reactableOutput('homerd3'))
                                         )
                               ),
                               
@@ -706,7 +718,7 @@ dashboardPageUI <-
                       # Database -----
                       tabItem(tabName = "database",
                               
-                              navbarPage(title = HTML("<span style=color:#84A4D8>DataHub</span>"),
+                              navbarPage(title = HTML("<span style=color:#84A4D8>Database</span>"),
                                          
                                          tabPanel("Weekly",
                                                   reactableOutput('dhweekly')
