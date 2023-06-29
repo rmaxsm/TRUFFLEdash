@@ -577,9 +577,19 @@ shinyServer(function(input, output, session) {
     
     #team portal advanced
     output$tpadvanced <- renderReactable({
+      if(input$homescoring == "PPR") {
+        mod <- advancedPPR
+      } else if (input$homescoring == ".5 PPR") {
+        mod <- advancedHPPR
+      } else if (input$homescoring == "Standard") {
+        mod <- advancedSTD
+      } else if (input$homescoring == "PPFD") {
+        mod <- advancedPPFD
+      }
+      
         perccolwidth <- 60
         othcolwidth <- 43
-        reactable(advanced[Season == max(weekly$Season) & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-FPts)][, -c("TRUFFLE","Season")],
+        reactable(mod[Season == max(weekly$Season) & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-FPts)][, -c("TRUFFLE","Season")],
                   pagination = F,
                   height = 'auto',
                   filterable = F,
@@ -1003,10 +1013,20 @@ shinyServer(function(input, output, session) {
     
     #player portal advanced
     output$ppadvanced <- renderReactable({
+      if(input$homescoring == "PPR") {
+        mod <- advancedPPR
+      } else if (input$homescoring == ".5 PPR") {
+        mod <- advancedHPPR
+      } else if (input$homescoring == "Standard") {
+        mod <- advancedSTD
+      } else if (input$homescoring == "PPFD") {
+        mod <- advancedPPFD
+      }
+      
       if(input$ppstatcenterseason == "All") {
-        df <- advanced[Season >= 2020]
+        df <- mod[Season >= 2020]
       } else {
-        df <- advanced[Season == as.numeric(input$ppstatcenterseason)]
+        df <- mod[Season == as.numeric(input$ppstatcenterseason)]
       }
       
       reactable(df[Player %in% input$player][, -c("TRUFFLE","Pos")][order(-FPts)],

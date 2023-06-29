@@ -393,7 +393,8 @@ ppbios <- merge(ppbios, rosters[, c("Player","Salary", "Contract")], by = 'Playe
 ppbios <- merge(ppbios, fprosage[, c("Player", "AgePH", "DynRk", "DynPosRk")])
 ppbios <- ppbios[, c("TRUFFLE","Pos","Player", "NFL", "AgePH", "DynRk", "DynPosRk","Salary", "Contract", "ptslogs")]
 
-advanced <- weeklysc[, !c("PPFD", "PPR", "hPPR", "STD", "maxFPts")][, .(FPts = sum(FPts),
+#creating advanced tables across scoring systems ----
+advancedPPFD <- weeklysc[, !c("PPFD", "PPR", "hPPR", "STD", "maxFPts")][, .(FPts = sum(FPts),
                        YdPts = round(.04*sum(PaYd) + .1*(sum(RuYd) + sum(ReYd)),1),
                        TDPts = 4*sum(PaTD) + 6*(sum(RuTD) + sum(ReTD)),
                        FDPts = sum(RuFD) + sum(ReFD),
@@ -401,6 +402,60 @@ advanced <- weeklysc[, !c("PPFD", "PPR", "hPPR", "STD", "maxFPts")][, .(FPts = s
                        RePts = .1*sum(ReYd) + 6*sum(ReTD) + sum(ReFD),
                        Touch = sum(PaCmp + RuAtt + Rec),
                        Opp = sum(PaAtt + RuAtt + Tar)
+),
+by = .(Season,TRUFFLE,Pos,Player)][, `:=`(`YdPt%` = YdPts / FPts,
+                                          `TDPt%` = TDPts / FPts,
+                                          `FDPt%` = FDPts / FPts,
+                                          `RuPt%` = RuPts / FPts,
+                                          `RePt%` = RePts / FPts,
+                                          `FPts/Touch` = round(FPts/Touch, 3),
+                                          `FPts/Opp` = round(FPts/Opp, 3)
+)][order(-FPts)][, c("Season","TRUFFLE","Pos","Player","FPts","Touch","Opp","FPts/Touch","FPts/Opp","YdPts","TDPts","FDPts","RuPts","RePts","YdPt%","TDPt%","FDPt%","RuPt%","RePt%")]
+
+advancedPPR <- weeklysc[, .(FPts = sum(PPR),
+                            YdPts = round(.04*sum(PaYd) + .1*(sum(RuYd) + sum(ReYd)),1),
+                            TDPts = 4*sum(PaTD) + 6*(sum(RuTD) + sum(ReTD)),
+                            FDPts = 0,
+                            RuPts = .1*sum(RuYd) + 6*sum(RuTD),
+                            RePts = .1*sum(ReYd) + 6*sum(ReTD) + sum(Rec),
+                            Touch = sum(PaCmp + RuAtt + Rec),
+                            Opp = sum(PaAtt + RuAtt + Tar)
+),
+by = .(Season,TRUFFLE,Pos,Player)][, `:=`(`YdPt%` = YdPts / FPts,
+                                          `TDPt%` = TDPts / FPts,
+                                          `FDPt%` = FDPts / FPts,
+                                          `RuPt%` = RuPts / FPts,
+                                          `RePt%` = RePts / FPts,
+                                          `FPts/Touch` = round(FPts/Touch, 3),
+                                          `FPts/Opp` = round(FPts/Opp, 3)
+)][order(-FPts)][, c("Season","TRUFFLE","Pos","Player","FPts","Touch","Opp","FPts/Touch","FPts/Opp","YdPts","TDPts","FDPts","RuPts","RePts","YdPt%","TDPt%","FDPt%","RuPt%","RePt%")]
+
+advancedHPPR <- weeklysc[, .(FPts = sum(hPPR),
+                            YdPts = round(.04*sum(PaYd) + .1*(sum(RuYd) + sum(ReYd)),1),
+                            TDPts = 4*sum(PaTD) + 6*(sum(RuTD) + sum(ReTD)),
+                            FDPts = 0,
+                            RuPts = .1*sum(RuYd) + 6*sum(RuTD),
+                            RePts = .1*sum(ReYd) + 6*sum(ReTD) + 0.5*sum(Rec),
+                            Touch = sum(PaCmp + RuAtt + Rec),
+                            Opp = sum(PaAtt + RuAtt + Tar)
+),
+by = .(Season,TRUFFLE,Pos,Player)][, `:=`(`YdPt%` = YdPts / FPts,
+                                          `TDPt%` = TDPts / FPts,
+                                          `FDPt%` = FDPts / FPts,
+                                          `RuPt%` = RuPts / FPts,
+                                          `RePt%` = RePts / FPts,
+                                          `FPts/Touch` = round(FPts/Touch, 3),
+                                          `FPts/Opp` = round(FPts/Opp, 3)
+)][order(-FPts)][, c("Season","TRUFFLE","Pos","Player","FPts","Touch","Opp","FPts/Touch","FPts/Opp","YdPts","TDPts","FDPts","RuPts","RePts","YdPt%","TDPt%","FDPt%","RuPt%","RePt%")]
+
+advancedSTD <- weeklysc[, .(FPts = sum(STD),
+                             YdPts = round(.04*sum(PaYd) + .1*(sum(RuYd) + sum(ReYd)),1),
+                             TDPts = 4*sum(PaTD) + 6*(sum(RuTD) + sum(ReTD)),
+                             FDPts = 0,
+                             RuPts = .1*sum(RuYd) + 6*sum(RuTD),
+                             RePts = .1*sum(ReYd) + 6*sum(ReTD),
+                             Touch = sum(PaCmp + RuAtt + Rec),
+                             Opp = sum(PaAtt + RuAtt + Tar)
 ),
 by = .(Season,TRUFFLE,Pos,Player)][, `:=`(`YdPt%` = YdPts / FPts,
                                           `TDPt%` = TDPts / FPts,
