@@ -81,142 +81,143 @@ headers = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36',
 }
 
-#get year and week for url/formatting
-# season = input("What SEASON is it..? ")
-# while(len(season) != 4):
-#   print("get the SEASON right dumbass")
-#   season = input("What SEASON is it..? ")
-season="2023"
-
-
-begin_time = datetime.datetime.now()
-
-#get information from teams document to refer to for shortcuts ext
-teamsPd = pd.read_csv("data/teams.csv")
-
-teamsDict = {}
-for index, row in teamsPd.iterrows():
-  teamsDict[row["FullName"]] = row["Abbrev"]
+def runStandings(szn):
+  # season="2023"
+  season = szn
   
-divisonsDict = {}
-for index,row in teamsPd.iterrows():
-  divisonsDict[row["Division"]] = row["DivAbbrev"]
-
-#returns team abbreviation from team name
-def getTeamAbbreviation(team):
-  try:
-    waived =  re.compile("W ")
-    if(waived.match(team)):
-      return team
-    return teamsDict[team]
-  except Exception as exp:
-    print("An Error Occuring while trying to get the team abbreviation for " + team)
-    return "err"
   
-#returns div abbreviation from team name
-def getDivAbbrev(div):
-  try:
-    return divisonsDict[div]
-  except Exception as exp:
-    print("An Error Occuring while trying to get the Divison abbreviation for " + div)
-    return "err"
+  begin_time = datetime.datetime.now()
   
-#takes in a single row of html and returns the stats as list. 
-#adds div and szn as not dynamic on page
-def separatePlayers(rows, season, division):
-  curRow = []
-  for i in rows:
-    curRow.append(i.getText())
-  curRow.insert(0, division)
-  curRow.insert(0, season)
-  return curRow
-
-
-#separates the column names
-#returns list representing the columns for tables 
-def separateColumns(row):
-  allCols = []
-  for i in row:
-    allCols.append(i.getText())
-  allCols.insert(0, "DivAbbrev")
-  allCols.insert(0, "Season")
-  return allCols
+  #get information from teams document to refer to for shortcuts ext
+  teamsPd = pd.read_csv("data/teams.csv")
   
-#where the connection is made to the truffle cbs website
-url = "https://theradicalultimatefflexperience.football.cbssports.com/standings/overall/{}".format(season)
-response = requests.get(url, cookies=cookies, headers=headers)
-soup = BeautifulSoup(response.content, 'html.parser')
-
-tbls =  soup.findAll("table", {"class":"data borderTop"})
-
-for tbl in tbls:
-  
-  cols = []
-  teams = []
-  division = "N/A"
-  
-  tableRows = tbl.findAll('tr')
-  
-  for row in tableRows:
+  teamsDict = {}
+  for index, row in teamsPd.iterrows():
+    teamsDict[row["FullName"]] = row["Abbrev"]
     
-    #the 'subtitle' attribute indicates a new division. 
-    #store division for each 3 and update when new is found
-    if row.has_attr('class') and row['class'][0] == "subtitle":
-      #we want to drop the 'division' at the end for our teams.csv file
-      curDiv = row.text.strip()
-      curDiv = curDiv.split(" ")[0:-1]
-     
-      if curDiv[-1] == '+':
-         #this will combine the '+' of 'carriage house+' without a space
-        plus = curDiv.pop()
-        curDiv[-1] = curDiv[-1] + plus
-        curDiv = ' '.join(curDiv)
-      else:
-        #otherwise just combine after the 'division' is dropped
-        curDiv = ' '.join(curDiv)
-      division = getDivAbbrev(curDiv)
-
-    elif row.has_attr('class') and row['class'][0] == "label" and len(row['class']) == 1:
-      # print("THIS IS THE COLUMN HEADERS")
-      cols = separateColumns(row)
-    else:
-      # print("THESE ARE THE TEAMS IN THAT DIVISION")
-      teams.append(separatePlayers(row, season, division))
+  divisonsDict = {}
+  for index,row in teamsPd.iterrows():
+    divisonsDict[row["Division"]] = row["DivAbbrev"]
+  
+  #returns team abbreviation from team name
+  def getTeamAbbreviation(team):
+    try:
+      waived =  re.compile("W ")
+      if(waived.match(team)):
+        return team
+      return teamsDict[team]
+    except Exception as exp:
+      print("An Error Occuring while trying to get the team abbreviation for " + team)
+      return "err"
+    
+  #returns div abbreviation from team name
+  def getDivAbbrev(div):
+    try:
+      return divisonsDict[div]
+    except Exception as exp:
+      print("An Error Occuring while trying to get the Divison abbreviation for " + div)
+      return "err"
+    
+  #takes in a single row of html and returns the stats as list. 
+  #adds div and szn as not dynamic on page
+  def separatePlayers(rows, season, division):
+    curRow = []
+    for i in rows:
+      curRow.append(i.getText())
+    curRow.insert(0, division)
+    curRow.insert(0, season)
+    return curRow
+  
+  
+  #separates the column names
+  #returns list representing the columns for tables 
+  def separateColumns(row):
+    allCols = []
+    for i in row:
+      allCols.append(i.getText())
+    allCols.insert(0, "DivAbbrev")
+    allCols.insert(0, "Season")
+    return allCols
+    
+  #where the connection is made to the truffle cbs website
+  url = "https://theradicalultimatefflexperience.football.cbssports.com/standings/overall/{}".format(season)
+  response = requests.get(url, cookies=cookies, headers=headers)
+  soup = BeautifulSoup(response.content, 'html.parser')
+  
+  tbls =  soup.findAll("table", {"class":"data borderTop"})
+  
+  for tbl in tbls:
+    
+    cols = []
+    teams = []
+    division = "N/A"
+    
+    tableRows = tbl.findAll('tr')
+    
+    for row in tableRows:
       
-#create df to house all info for current season, apply lambda to get truffle abbrev's
-df = pd.DataFrame(teams, columns = cols)
-df["Team"] = df["Team"].apply(lambda x: getTeamAbbreviation(x))
-
-
-masterFile = "data/standings.csv"
-
-#read the existing csv as a pd df for error checking
-masterDf = pd.read_csv(masterFile)
-#create backup copy
-backupFilepath = "data/backup/standings_backup.csv"
-print("SAVING BACKUP OF STANDINGS TO " + backupFilepath)
-masterDf.to_csv(backupFilepath, index=False)
-
-#reassign the columns to be equal to that of the existing csv
-df.columns = masterDf.columns
-
-#create column to conditionally remove existing data from season being scraped
-masterDf["szn"] = masterDf["Season"].astype(str)
-#remove
-masterDf = masterDf[masterDf["szn"] != season]
-#drop the season column post check
-masterDf = masterDf.drop(['szn'], axis=1)
-
-#concat scraped df and the masterDf
-newmaster = pd.concat([masterDf, df], ignore_index=True)
-
-# stores as csv
-filepath = "data/backup/standings_backup.csv"
-print("SAVING NEW STANDINGS WITH OVERRIDE on season {} at location {}".format(season, masterFile))
-newmaster.to_csv(masterFile, index=False)
-# print(newmaster)
-# 
-# print("STANDINGS ARE DONE, it took...")
-# print(datetime.datetime.now() - begin_time)
-print("STANDINGS FINISHED")
-
+      #the 'subtitle' attribute indicates a new division. 
+      #store division for each 3 and update when new is found
+      if row.has_attr('class') and row['class'][0] == "subtitle":
+        #we want to drop the 'division' at the end for our teams.csv file
+        curDiv = row.text.strip()
+        curDiv = curDiv.split(" ")[0:-1]
+       
+        if curDiv[-1] == '+':
+           #this will combine the '+' of 'carriage house+' without a space
+          plus = curDiv.pop()
+          curDiv[-1] = curDiv[-1] + plus
+          curDiv = ' '.join(curDiv)
+        else:
+          #otherwise just combine after the 'division' is dropped
+          curDiv = ' '.join(curDiv)
+        division = getDivAbbrev(curDiv)
+  
+      elif row.has_attr('class') and row['class'][0] == "label" and len(row['class']) == 1:
+        # print("THIS IS THE COLUMN HEADERS")
+        cols = separateColumns(row)
+      else:
+        # print("THESE ARE THE TEAMS IN THAT DIVISION")
+        teams.append(separatePlayers(row, season, division))
+        
+  #create df to house all info for current season, apply lambda to get truffle abbrev's
+  df = pd.DataFrame(teams, columns = cols)
+  df["Team"] = df["Team"].apply(lambda x: getTeamAbbreviation(x))
+  
+  
+  masterFile = "data/standings.csv"
+  
+  #read the existing csv as a pd df for error checking
+  masterDf = pd.read_csv(masterFile)
+  #create backup copy
+  backupFilepath = "data/backup/standings_backup.csv"
+  print("SAVING BACKUP OF STANDINGS TO " + backupFilepath)
+  masterDf.to_csv(backupFilepath, index=False)
+  
+  #reassign the columns to be equal to that of the existing csv
+  df.columns = masterDf.columns
+  
+  #create column to conditionally remove existing data from season being scraped
+  masterDf["szn"] = masterDf["Season"].astype(str)
+  #remove
+  masterDf = masterDf[masterDf["szn"] != season]
+  #drop the season column post check
+  masterDf = masterDf.drop(['szn'], axis=1)
+  
+  #concat scraped df and the masterDf
+  newmaster = pd.concat([masterDf, df], ignore_index=True)
+  
+  # stores as csv
+  filepath = "data/backup/standings_backup.csv"
+  print("SAVING NEW STANDINGS WITH OVERRIDE on season {} at location {}".format(season, masterFile))
+  newmaster.to_csv(masterFile, index=False)
+  # print(newmaster)
+  # 
+  # print("STANDINGS ARE DONE, it took...")
+  # print(datetime.datetime.now() - begin_time)
+  print("STANDINGS FINISHED")
+def main(szn):
+  runStandings(szn)
+  print("EXTRA DASH DONE")
+if __name__ == "__main__":
+  main()
