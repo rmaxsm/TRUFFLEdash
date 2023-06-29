@@ -218,6 +218,5 @@ def runStandings(szn):
   print("STANDINGS FINISHED")
 def main(szn):
   runStandings(szn)
-  print("EXTRA DASH DONE")
 if __name__ == "__main__":
   main()
