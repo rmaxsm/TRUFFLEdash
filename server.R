@@ -1,6 +1,8 @@
 
 shinyServer(function(input, output, session) {
   
+  options(timeout = 0)
+  
   #### UI code --------------------------------------------------------------
   output$ui <- renderUI({
     if (user_input$authenticated == FALSE) {
