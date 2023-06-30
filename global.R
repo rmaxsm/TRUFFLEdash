@@ -70,10 +70,10 @@ pal <- setNames(pal, c("QB", "RB", "WR", "TE", "DST", "DC", "IR"))
 
 #file of TRUFFLE team info
 #teams <- read_excel("data/oldexcel/teams.xlsx")
-teams <- read_csv("data/teams.csv", col_types = cols())
+teams <- as.data.table(read_csv("data/teams.csv", col_types = cols()))
 
 #file of CBS player IDs
-ids <- read_csv("data/playerIDs.csv", col_types = cols())
+ids <- as.data.table(read_csv("data/playerIDs.csv", col_types = cols()))
 ids$playerID <- as.character(ids$playerID)
 ids$TRUFFLE[!(ids$TRUFFLE %in% c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW"))] <- "FA"
 ids <- merge(ids, teams[, c("Abbrev", "TeamNum")], by.x = "TRUFFLE", by.y = "Abbrev", all.x = T)
@@ -376,7 +376,13 @@ positionorder <- c("QB","RB","WR","TE", "DST", "IR", "DC")
 #possibly need to do this in server
 #team portal tables
 tpoverview <- rosters[, .(TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract)]
-tpoverview <- merge(currentseason[Player %in% rosters$Player][, !c("Season","Pos", "NFL")], tpoverview, by = 'Player', all.x = T)
+tpoverview$Scoring <- "PPFD"
+tpoverviewPPR <- tpoverview; tpoverviewPPR$Scoring <- "PPR"
+tpoverviewhPPR <- tpoverview; tpoverviewhPPR$Scoring <- "hPPR"
+tpoverviewSTD <- tpoverview; tpoverviewSTD$Scoring <- "STD"
+tpoverview <- rbind(tpoverview, tpoverviewPPR, tpoverviewhPPR, tpoverviewSTD); rm(tpoverviewPPR,tpoverviewhPPR,tpoverviewSTD)
+
+tpoverview <- merge(tpoverview, currentseason[Player %in% rosters$Player][, !c("Season", "NFL")], by = c('Scoring','Pos','Player'), all.x = T)
 tpoverview$Avg[tpoverview$Pos == "DST"] <- NA
 tpoverview <- tpoverview[, .(Scoring,TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 
@@ -455,27 +461,31 @@ advanced <- weekly[, .(FPts = sum(FPts),
                        Touch = sum(PaCmp + RuAtt + Rec),
                        Opp = sum(PaAtt + RuAtt + Tar)
 ),
-by = .(Scoring, Season,TRUFFLE,Pos,Player)][, `:=`(`YdPt%` = YdPts / FPts,
+by = .(Scoring,Season,TRUFFLE,Pos,Player)][, `:=`(`YdPt%` = YdPts / FPts,
                                                    `TDPt%` = TDPts / FPts,
                                                    `FDPt%` = FDPts / FPts,
                                                    `RuPt%` = RuPts / FPts,
                                                    `RePt%` = RePts / FPts,
                                                    `FPts/Touch` = round(FPts/Touch, 3),
                                                    `FPts/Opp` = round(FPts/Opp, 3)
-)][order(-FPts)][, .(Scoring,Season,TRUFFLE,Pos,Player,FPts,Touch,Opp,FPts/Touch,FPts/Opp,YdPts,TDPts,FDPts,RuPts,RePts,`YdPt%`,`TDPt%`,`FDPt%`,`RuPt%`,`RePt%`)]
+)][order(-FPts)][, .(Scoring,Season,TRUFFLE,Pos,Player,FPts,Touch,Opp,`FPts/Touch`,`FPts/Opp`,YdPts,TDPts,FDPts,RuPts,RePts,`YdPt%`,`TDPt%`,`FDPt%`,`RuPt%`,`RePt%`)]
 
 #consistencystats
-consistency <- weekly[, `:=` (
-  top5dum = ifelse(PosRk <= 5, 1, 0),
-  top12dum = ifelse(PosRk <= 12, 1, 0),
-  top24dum = ifelse(PosRk <= 24, 1, 0),
-  top36dum = ifelse(PosRk <= 36, 1, 0),
-  nonStartdum = ifelse(PosRk > 36, 1, 0),
-  lt10dum = ifelse(FPts < 10, 1, 0),
-  gt10dum = ifelse(FPts >= 10, 1, 0),
-  gt20dum = ifelse(FPts >= 20, 1, 0),
-  gt30dum = ifelse(FPts >= 30, 1, 0)
-)][,
+consistencystart <- weekly
+#posrank dummies
+consistencystart$top5dum <- ifelse(consistencystart$PosRk <= 5, 1, 0)
+consistencystart$top12dum <- ifelse(consistencystart$PosRk <= 12, 1, 0)
+consistencystart$top24dum <- ifelse(consistencystart$PosRk <= 24, 1, 0)
+consistencystart$top36dum <- ifelse(consistencystart$PosRk <= 36, 1, 0)
+consistencystart$nonStartdum <- ifelse(consistencystart$PosRk > 36, 1, 0)
+#point threshold dummies
+consistencystart$lt10dum <- ifelse(consistencystart$FPts < 10, 1, 0)
+consistencystart$gt10dum <- ifelse(consistencystart$FPts >= 10, 1, 0)
+consistencystart$gt20dum <- ifelse(consistencystart$FPts >= 20, 1, 0)
+consistencystart$gt30dum <- ifelse(consistencystart$FPts >= 30, 1, 0)
+
+#creating consistencytable
+consistency <- consistencystart[,
    .(G = .N,
      Avg = round(mean(FPts),1),
      RelSD = round(sd(FPts)/mean(FPts),2),
@@ -491,6 +501,7 @@ consistency <- weekly[, `:=` (
    ),
    by = .(Scoring, Season, TRUFFLE, Pos, Player)][order(-Avg)][, .(Scoring, Season,TRUFFLE,Pos,Player,G,Avg,RelSD,`>10 %`,`>20 %`,`>30 %`,`AvgPosRk`,`Top5 %`,`Top12 %`,`Top24 %`,`Top36 %`, `NonStart %`)]
 
+#weeklytop5s
 weeklytop5 <- weeklyogteams[order(Week,-FPts)][, .(TRUFFLE = TRUFFLE[1:30],
                                                    Player = Player[1:30],
                                                    FPts = FPts[1:30]), 

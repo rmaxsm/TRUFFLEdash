@@ -342,7 +342,7 @@ shinyServer(function(input, output, session) {
   #team portal overview
   output$tpoverview <- renderReactable({
     tpoverview <- action_mod(df = tpoverview[Scoring == input$homescoring], team = globalteam)
-    reactable(tpoverview[Scoring == input$homescoring & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][, .(Action, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][order(match(Pos, positionorder), -Avg)],
+    reactable(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][, c("Action", "Pos", "Player", "Age", "NFL", "Bye", "Salary", "Contract", "G", "PosRk", "ptslog", "Avg", "FPts")][order(match(Pos, positionorder), -Avg)],
               defaultSortOrder = "desc",
               pagination = FALSE,
               highlight = T,
@@ -477,7 +477,8 @@ shinyServer(function(input, output, session) {
   output$tpadvanced <- renderReactable({
     perccolwidth <- 60
     othcolwidth <- 43
-    reactable(advanced[Scoring == input$homescoring & Season == max(weekly$Season) & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-FPts)][, -c("Scoring","TRUFFLE","Season")],
+    #reactable(advanced[Scoring == input$homescoring & Season == max(weekly$Season) & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-FPts)][, -c("Scoring","TRUFFLE","Season")],
+    reactable(advanced[Scoring == "PPFD" & Season == "2022" & TRUFFLE == "FRR"][order(match(Pos, positionorder),-FPts)][, -c("Scoring","TRUFFLE","Season")],
               pagination = F,
               height = 'auto',
               filterable = F,
@@ -1397,8 +1398,8 @@ shinyServer(function(input, output, session) {
     
     advancedrange <- action_mod(df = advancedrange, team = globalteam)
     
-    reactable(advancedrange[, c("Action","TRUFFLE","Pos","Player","Touch","Opp","FPts/Touch","FPts/Opp","YdPts","TDPts","FDPts","YdPt%","TDPt%","FDPt%","RuPts",
-                                "RePts","RuPt%","RePt%","Avg")],
+    reactable(advancedrange[, .(Action,TRUFFLE,Pos,Player,Touch,Opp,`FPts/Touch`,`FPts/Opp`,YdPts,TDPts,FDPts,`YdPt%`,`TDPt%`,`FDPt%`,RuPts,
+                                RePts,`RuPt%`,`RePt%`,Avg)],
               paginationType = "jump",
               showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
               pageSizeOptions = c(10, 20, 50, 100),
@@ -1454,19 +1455,9 @@ shinyServer(function(input, output, session) {
   #consistency range filtered table
   output$scconsistency <- renderReactable({
     perccolwidth <- 60
-    consistencyrange <- weekly[Scoring == input$homescoring & Season == input$scseason &
+    consistencyrange <- consistencystart[Scoring == input$homescoring & Season == input$scseason &
                                  Week %in% seq(input$scweekrange[1],input$scweekrange[2])
-    ][, `:=` (
-      top5dum = ifelse(PosRk <= 5, 1, 0),
-      top12dum = ifelse(PosRk <= 12, 1, 0),
-      top24dum = ifelse(PosRk <= 24, 1, 0),
-      top36dum = ifelse(PosRk <= 36, 1, 0),
-      nonStartdum = ifelse(PosRk > 36, 1, 0),
-      lt10dum = ifelse(FPts < 10, 1, 0),
-      gt10dum = ifelse(FPts >= 10, 1, 0),
-      gt20dum = ifelse(FPts >= 20, 1, 0),
-      gt30dum = ifelse(FPts >= 30, 1, 0)
-    )][,
+    ][,
        .(G = .N,
          FPts = sum(FPts, na.rm = T),
          Avg = round(mean(FPts),1),
