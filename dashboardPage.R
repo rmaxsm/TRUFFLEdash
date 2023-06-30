@@ -26,7 +26,7 @@ dashboardPageUI <-
                     menuItem("Rookie Draft", tabName = "draft", icon = icon("business-time")),
                     menuItem("Constitution", href = "https://docs.google.com/document/d/1-FyXq3HWtEETQlpF-_HnofCb2y1SGKUn7c7NVFlrx1E/", newtab = TRUE, icon = icon("paragraph")),
                     br(),
-                    selectInput("homescoring", HTML("<span style=color:#84A4D8;font-size:14px>Scoring System</span>"), c("PPFD", "PPR", ".5 PPR", "Standard"), selected ="PPFD" )
+                    selectInput("homescoring", HTML("<span style=color:#84A4D8;font-size:14px>Scoring System</span>"), c("PPFD", "PPR", "hPPR", "STD"), selected ="PPFD" )
                     #menuItem("Tutorials", tabName = "tutorials", icon = icon("fa-sharp fa-solid fa-info"))
                   )
                   ),
@@ -285,7 +285,7 @@ dashboardPageUI <-
                                            column(width = 6,
                                                   h2("Week-by-Week")),
                                            column(width = 3,
-                                                  selectInput("ppwbwstat", "Stat", colnames(weekly)[c(9:23, 25)], selected = colnames(weekly)[25])),
+                                                  selectInput("ppwbwstat", "Stat", colnames(weekly)[c(8:22, 24)], selected = colnames(weekly)[24])),
                                            column(width = 3,
                                                   selectInput("ppwbwseason", "Season", c(unique(weekly$Season)), selected = max(weekly$Season)))
                                          ),
