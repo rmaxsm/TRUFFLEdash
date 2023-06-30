@@ -1,5 +1,3 @@
-Server.R
-
 shinyServer(function(input, output, session) {
   
   #### UI code --------------------------------------------------------------

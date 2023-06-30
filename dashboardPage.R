@@ -1,4 +1,3 @@
-DashboardPage.R
 library(shinydashboard)
 
 dashboardPageUI <-
