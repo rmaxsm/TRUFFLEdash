@@ -46,7 +46,7 @@ dashboardPageUI <-
                                                  HTML(" Welcome to <span style=color:#84A4D8;font-size:14px>truffle</span><span style =color:#8C2E26;font-weight:bold;font-size:30px;font-family:'Audiowide'>dash</span>")
                                           ),
                                           column(width = 4,
-                                                 selectInput("homeseason", HTML("<span style=color:#84A4D8;font-size:14px>Season</span>"), unique(weekly$Season), selected = max(weekly$Season) )
+                                                 selectInput("homeseason", HTML("<span style=color:#84A4D8;font-size:14px>Season</span>"), sort(unique(weekly$Season), decreasing = T), selected = max(weekly$Season) )
                                           )
                                           ,
                                           column(width=4, align = "right",
@@ -80,7 +80,7 @@ dashboardPageUI <-
                               wellPanel(class = "well",
                                         fluidRow(
                                           column(width=8, h2("Rookie Draft")),
-                                          column(width=4, selectInput("homedraftseason", "Season", unique(draft$Season), selected = max(draft$Season) ))
+                                          column(width=4, selectInput("homedraftseason", "Season", sort(unique(draft$Season), decreasing = T), selected = max(draft$Season) ))
                                         ),
                                         fluidRow(
                                           column(width=4, reactableOutput('homerd1')),
@@ -109,7 +109,7 @@ dashboardPageUI <-
                                                  h2("Weekly Leaders")
                                           ),
                                           column(width = 2,
-                                                 selectInput("weeklytop5week", "Week", unique(weekly$Week), selected = max(weekly$Week[weekly$Season == max(weekly$Season)]) )
+                                                 selectInput("weeklytop5week", "Week", sort(unique(weekly$Week)), selected = max(weekly$Week[weekly$Season == max(weekly$Season)]) )
                                           )
                                         ),
                                         fluidRow(
@@ -209,7 +209,7 @@ dashboardPageUI <-
                       # Player Portal -----
                       tabItem(tabName = "playerportal",
                               wellPanel(style = "background-color:#FFFFFF, padding-top:0px",
-                                        selectizeInput('player',h2("Select Player:"),choices = sort(unique(weekly$Player)), selected = NULL, multiple = T)
+                                        selectizeInput('player',h2("Select Player:"), choices = sort(unique(weekly$Player)), selected = NULL, multiple = T)
                               ),
                               wellPanel(class = "well",
                                         h2("Player Info"),
@@ -239,7 +239,7 @@ dashboardPageUI <-
                                                  h2("Stat Center")
                                           ),
                                           column(width = 2,
-                                                 selectInput("ppstatcenterseason", "Season", c(as.character(unique(weekly$Season)), "All"), selected = as.character(max(weekly$Season)) )
+                                                 selectInput("ppstatcenterseason", "Season", c(as.character(sort(unique(weekly$Season), decreasing = T)), "All"), selected = as.character(max(weekly$Season)) )
                                           )
                                         ),
                                         tabsetPanel(
@@ -270,7 +270,7 @@ dashboardPageUI <-
                                                    column(width = 8,
                                                           h2("Percentile Radar Chart")),
                                                    column(width = 4,
-                                                          selectInput("ppradarplotseason", "Season", c(unique(weekly$Season)), selected = max(weekly$Season)))
+                                                          selectInput("ppradarplotseason", "Season", sort(unique(weekly$Season), decreasing = T), selected = max(weekly$Season)))
                                                  ),
                                                  plotOutput('ppradarplot',
                                                             width = "100%",
@@ -287,7 +287,7 @@ dashboardPageUI <-
                                                    column(width = 3,
                                                           selectInput("ppwbwstat", "Stat", colnames(weekly)[c(8:22, 24)], selected = colnames(weekly)[24])),
                                                    column(width = 3,
-                                                          selectInput("ppwbwseason", "Season", c(unique(weekly$Season)), selected = max(weekly$Season)))
+                                                          selectInput("ppwbwseason", "Season", sort(unique(weekly$Season), decreasing = T), selected = max(weekly$Season)))
                                                  ),
                                                  plotlyOutput('ppwbw',
                                                               width = "100%",
@@ -303,9 +303,9 @@ dashboardPageUI <-
                                                  h2("Game Logs")
                                           ),
                                           column(width = 2,
-                                                 selectInput("ppgamelogsseason", "Season", as.character(unique(weekly$Season)), "All"), selected = as.character(max(weekly$Season)) )
+                                                 selectInput("ppgamelogsseason", "Season", c(as.character(sort(unique(weekly$Season), decreasing = T)), "All"), selected = as.character(max(weekly$Season)) )
+                                        )
                                         ),
-                                        
                                         tabsetPanel(
                                           tabPanel("Weekly", reactableOutput('ppgamelogweekly')),
                                           tabPanel("Fantasy",
@@ -314,7 +314,7 @@ dashboardPageUI <-
                                                    reactableOutput('ppgamelogfantasy'))
                                         )
                               )
-                      ),
+                      ), #end player portal tab item
                       
                       # Fantasy Portal -----
                       tabItem(tabName = "fantasyportal",
@@ -324,7 +324,7 @@ dashboardPageUI <-
                                                  h2("Fantasy Portal")
                                           ),
                                           column(width = 2,
-                                                 selectInput("fantasyportalseason", "Season", unique(weekly$Season), selected = max(weekly$Season) )
+                                                 selectInput("fantasyportalseason", "Season", sort(unique(weekly$Season), decreasing = T), selected = max(weekly$Season))
                                           ),
                                           column(width = 2,
                                                  selectInput("totalorperc", "View", c("Totals","Percentages"), selected = "Totals" )
@@ -334,7 +334,7 @@ dashboardPageUI <-
                                         
                               )
                               
-                      ),
+                      ), #end fantasy portal tab item
                       # Stat Center -----
                       tabItem(tabName = "statcenter",
                               wellPanel(
@@ -344,7 +344,7 @@ dashboardPageUI <-
                                 ),
                                 fluidRow(
                                   column(width = 2,
-                                         selectInput("scseason", "Season", unique(weekly$Season), selected = max(weekly$Season) )
+                                         selectInput("scseason", "Season", sort(unique(weekly$Season), decreasing = T), selected = max(weekly$Season) )
                                   ),
                                   column(width = 3,
                                          sliderInput("scweekrange", "Weeks",
@@ -415,7 +415,7 @@ dashboardPageUI <-
                                          
                               )
                               
-                      ),
+                      ), #end stat center tab item
                       
                       # Trade Machine -----
                       tabItem(tabName = "trademachine",
@@ -741,7 +741,7 @@ dashboardPageUI <-
                               wellPanel(class = "well",
                                         fluidRow(
                                           column(width=8, h2("Rookie Draft Records")),
-                                          column(width=4, selectInput("draftseason", "Season", unique(draft$Season), selected = max(draft$Season) ))
+                                          column(width=4, selectInput("draftseason", "Season", sort(unique(draft$Season), decreasing = T), selected = max(draft$Season) ))
                                         ),
                                         fluidRow(
                                           column(width=4, reactableOutput('rd1')),
