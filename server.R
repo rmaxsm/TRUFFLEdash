@@ -341,8 +341,9 @@ shinyServer(function(input, output, session) {
   
   #team portal overview
   output$tpoverview <- renderReactable({
+    if(input$tmportalyr == currentyr) {
     tpoverview <- action_mod(df = tpoverview[Scoring == input$homescoring], team = globalteam)
-    reactable(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][, c("Action", "Pos", "Player", "Age", "NFL", "Bye", "Salary", "Contract", "G", "PosRk", "ptslog", "Avg", "FPts")][order(match(Pos, positionorder), -Avg)],
+    reactable(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm], .(Action, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][order(match(Pos, positionorder), -Avg)],
               defaultSortOrder = "desc",
               pagination = FALSE,
               highlight = T,
@@ -383,10 +384,59 @@ shinyServer(function(input, output, session) {
               ),
               defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
     )
+    }
+    else if (input$tmportalyr < 2020) {
+      reactable(wayoldrosterstp[Scoring == input$homescoring & Season == input$tmportalyr & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm], .(Pos, Player, NFL, G, PosRk, Avg, FPts)][order(match(Pos, positionorder), -Avg)],
+                defaultSortOrder = "desc",
+                pagination = FALSE,
+                highlight = T,
+                filterable = T,
+                compact = T,
+                columns = list(
+                  Pos = posDef(),
+                  Player = playerDef(filt=T),
+                  NFL = nflDef,
+                  G = gDef(),
+                  PosRk = posRkDef(filt = T),
+                  Avg = avgDef(),
+                  FPts = fptsSeasDef()
+                ),
+                columnGroups = list(
+                  colGroup(name = "Fantasy", columns = c("G", "PosRk", "Avg", "FPts"), align = 'left')
+                ),
+                defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
+      )
+    } else {
+      reactable(oldrosterstp[Scoring == input$homescoring & Season == input$tmportalyr & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm], .(Pos, Player, NFL, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][order(match(Pos, positionorder), -Avg)],
+                defaultSortOrder = "desc",
+                pagination = FALSE,
+                highlight = T,
+                filterable = T,
+                compact = T,
+                columns = list(
+                  Pos = posDef(foot = "Total"),
+                  Player = playerDef(filt=T),
+                  NFL = nflDef,
+                  Salary = salaryDefBar(foot = T),
+                  Contract = contractDef(foot = T, name = "Yr"),
+                  G = gDef(),
+                  PosRk = posRkDef(filt = T),
+                  ptslog = ptsLogDef(),
+                  Avg = avgDef(),
+                  FPts = fptsSeasDef()
+                ),
+                columnGroups = list(
+                  colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
+                  colGroup(name = "Fantasy", columns = c("G", "PosRk", "ptslog", "Avg", "FPts"), align = 'left')
+                ),
+                defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
+      )
+    }
   })
   
   #team portal contracts
   output$tpcontracts <- renderReactable({
+    if (input$tmportalyr == currentyr) {
     futurecolDef <- function(maxW = 75, filt = T, foot = F, yr) {
       colDef(header = with_tt(yr, "FA: Free Agent\nPurple: Rookie Extension Value"),
              maxWidth = maxW,
@@ -431,13 +481,38 @@ shinyServer(function(input, output, session) {
               ),
               defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
     )
+    }
+    else if (input$tmportalyr < 2020) {
+      emptydf <- as.data.table("Sorry, no data available. Salaries & contracts only introduced in 2020.")
+      colnames(emptydf) <- c("Error")
+      reactable(emptydf)
+    } else {
+      reactable(oldrosterstp[Scoring == input$homescoring & Season == input$tmportalyr & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm], .(Pos, Player, NFL, Salary, Contract)][order(match(Pos, positionorder), -Salary)],
+                defaultSortOrder = "desc",
+                pagination = FALSE,
+                highlight = T,
+                filterable = T,
+                compact = T,
+                columns = list(
+                  Pos = posDef(foot = "Total"),
+                  Player = playerDef(filt=T),
+                  NFL = nflDef,
+                  Salary = salaryDefBar(foot = T),
+                  Contract = contractDef(foot = T, name = "Yr")
+                ),
+                columnGroups = list(
+                  colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left')
+                ),
+                defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
+      )
+    }
   })
   
   #team portal boxscore
   #change to include not exclude columns
   output$tpboxscore <- renderReactable({
-    reactable(seasons[Scoring == input$homescoring & Player %in% rosters$Player[rosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]] 
-                      & Season == max(seasons$Season)][order(match(Pos, positionorder), -FPts)][, !c("Scoring", "Season","NFL", "PosRk", "FL")],
+    reactable(seasons[Scoring == input$homescoring & Player %in% oldrosters$Player[oldrosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm] & oldrosters$Season == input$tmportalyr] 
+                      & Season == input$tmportalyr][order(match(Pos, positionorder), -FPts)][, !c("Scoring", "Season","NFL", "PosRk", "FL")],
               pagination = F,
               height = 'auto',
               filterable = T,
@@ -475,10 +550,10 @@ shinyServer(function(input, output, session) {
   
   #team portal advanced
   output$tpadvanced <- renderReactable({
+    if (input$tmportalyr >= 2020) {
     perccolwidth <- 60
     othcolwidth <- 43
-    #reactable(advanced[Scoring == input$homescoring & Season == max(weekly$Season) & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-FPts)][, -c("Scoring","TRUFFLE","Season")],
-    reactable(advanced[Scoring == "PPFD" & Season == "2022" & TRUFFLE == "FRR"][order(match(Pos, positionorder),-FPts)][, -c("Scoring","TRUFFLE","Season")],
+    reactable(advanced[Scoring == input$homescoring & Season == input$tmportalyr & Player %in% oldrosters$Player[oldrosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm] & oldrosters$Season == input$tmportalyr]][order(match(Pos, positionorder),-FPts)][, -c("Scoring","TRUFFLE","Season")],
               pagination = F,
               height = 'auto',
               filterable = F,
@@ -509,12 +584,19 @@ shinyServer(function(input, output, session) {
                                                                       "RePts","RuPt%","RePt%"), align = 'left')
               )
     )
+    }
+    else {
+      emptydf <- as.data.table("Sorry, no data available. Advanced statistics only introduced in 2020.")
+      colnames(emptydf) <- c("Error")
+      reactable(emptydf)
+    }
   })
   
   #team portal consistency
   output$tpconsistency <- renderReactable({
+    if (input$tmportalyr >= 2020) {
     perccolwidth <- 60
-    reactable(consistency[Scoring == input$homescoring & Season == max(weekly$Season) & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-Avg)][, -c("Scoring","TRUFFLE","Season")],
+    reactable(consistency[Scoring == input$homescoring & Season == input$tmportalyr & Player %in% oldrosters$Player[oldrosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm] & oldrosters$Season == input$tmportalyr]][order(match(Pos, positionorder),-Avg)][, -c("Scoring","TRUFFLE","Season")],
               pagination = F,
               height = 'auto',
               filterable = F,
@@ -541,11 +623,17 @@ shinyServer(function(input, output, session) {
                 colGroup(name = "Weekly Position Rank", columns = c("AvgPosRk","Top5 %","Top12 %","Top24 %","Top36 %", "NonStart %"), align = 'left')
               )
     )
+    } else {
+      emptydf <- as.data.table("Sorry, no data available. Consistency statistics only introduced in 2020.")
+      colnames(emptydf) <- c("Error")
+      reactable(emptydf)
+    }
   })
   
   #team portal extradash
   output$tpextradash <- renderReactable({
-    reactable(extradashszn[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-TotYd)][, !c("TRUFFLE", "Season")],
+    if (input$tmportalyr >= 2022) {
+    reactable(extradashszn[Season == input$tmportalyr & Player %in% oldrosters$Player[oldrosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm] & oldrosters$Season == input$tmportalyr]][order(match(Pos, positionorder),-TotYd)][, !c("TRUFFLE", "Season")],
               pagination = F,
               height = 'auto',
               filterable = F,
@@ -578,6 +666,11 @@ shinyServer(function(input, output, session) {
                 colGroup(name = "Receiving", columns = c("Tar", "Tar%", "ReYPC", "Re20", "Re40", "ReFD%"), align = 'left')
               )
     )
+    } else {
+      emptydf <- as.data.table("Sorry, no data available. Extradash statistics only introduced in 2022.")
+      colnames(emptydf) <- c("Error")
+      reactable(emptydf)
+    }
   })
   
   #team portal xfpxtd
@@ -631,7 +724,8 @@ shinyServer(function(input, output, session) {
   
   #team portal fantasy logs
   output$tpfantasylogs <- renderReactable({
-    reactable(fantasy[Scoring == input$homescoring & Season == max(weekly$Season) & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(Week, -FPts)][, !c("Scoring","TRUFFLE", "Season", "NFL", "Avg","FL")],
+    if (input$tmportalyr >= 2020) {
+    reactable(fantasy[Scoring == input$homescoring & Season == input$tmportalyr & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(Week, -FPts)][, !c("Scoring","TRUFFLE", "Season", "NFL", "Avg","FL")],
               paginationType = "jump", defaultPageSize = 10, showPageInfo = FALSE,
               height = 'auto',
               filterable = T,
@@ -666,6 +760,11 @@ shinyServer(function(input, output, session) {
                 colGroup(name = "Receiving", columns = c("Tar", "Rec", "ReYd", "ReTD", "ReFD"), align = 'left')
               )
     )
+    } else {
+      emptydf <- as.data.table("Sorry, no data available. Weekly fantasy logs only introduced in 2020.")
+      colnames(emptydf) <- c("Error")
+      reactable(emptydf)
+    }
   })
   
   #player portal ----
@@ -2451,6 +2550,90 @@ shinyServer(function(input, output, session) {
   })
   
   #history books ----
+  #record books rings
+  output$recordrings <- renderReactable({
+    if (input$recordteams == "TRUFFLE") {
+      reactable(rings[, !c("BenchCups","BCYears","BCTeams")][order(-Rings)],
+                defaultSortOrder = "desc",
+                filterable = F,
+                sortable = F,
+                showPageInfo = FALSE,
+                paginationType = "simple", defaultPageSize = 5,
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                columns = list(
+                  Pos = posDef(maxW = 40, filt = FALSE),
+                  Player = playerDef(minW = 140),
+                  Rings = colDef(minWidth = 60, align = "left"),
+                  RingYears = colDef(name = "Years"),
+                  RingTeams = colDef(name = "Teams")
+                ),
+                columnGroups = list(colGroup(name = "TRUFFLE Championships", columns = c("Pos", "Player", "Rings","RingYears","RingTeams"), align = 'left')
+                )
+      )
+    } else {
+      reactable(ringsbyteam[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams], !c("TRUFFLE","BenchCups","BCYears","BCTeams")][order(-Rings)],
+                defaultSortOrder = "desc",
+                filterable = F,
+                sortable = F,
+                showPageInfo = FALSE,
+                paginationType = "simple", defaultPageSize = 5,
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                columns = list(
+                  Pos = posDef(maxW = 40, filt = FALSE),
+                  Player = playerDef(minW = 140),
+                  Rings = colDef(minWidth = 60, align = "left"),
+                  RingYears = colDef(name = "Years")
+                ),
+                columnGroups = list(colGroup(name = "TRUFFLE Championships", columns = c("Pos", "Player", "Rings","RingYears"), align = 'left')
+                ))
+    }
+  })
+  #record books rings
+  output$recordbenchcups <- renderReactable({
+    if (input$recordteams == "TRUFFLE") {
+      reactable(rings[, !c("Rings","RingYears","RingTeams")][order(-BenchCups)],
+                defaultSortOrder = "desc",
+                filterable = F,
+                sortable = F,
+                showPageInfo = FALSE,
+                paginationType = "simple", defaultPageSize = 5,
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                columns = list(
+                  Pos = posDef(maxW = 40, filt = FALSE),
+                  Player = playerDef(minW = 140),
+                  BenchCups = colDef(name = "Cups", minWidth = 60, align = "left"),
+                  BCYears = colDef(name = "Years"),
+                  BCTeams = colDef(name = "Teams")
+                ),
+                columnGroups = list(colGroup(name = "TRUFFLE Bench Cups", columns = c("Pos", "Player", "BenchCups","BCYears","BCTeams"), align = 'left')
+                )
+      )
+    } else {
+      reactable(ringsbyteam[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams], !c("TRUFFLE","Rings","RingYears","RingTeams")][order(-BenchCups)],
+                defaultSortOrder = "desc",
+                filterable = F,
+                sortable = F,
+                showPageInfo = FALSE,
+                paginationType = "simple", defaultPageSize = 5,
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                columns = list(
+                  Pos = posDef(maxW = 40, filt = FALSE),
+                  Player = playerDef(minW = 140),
+                  BenchCups = colDef(name = "Cups", minWidth = 60, align = "left"),
+                  BCYears = colDef(name = "Years")
+                ),
+                columnGroups = list(colGroup(name = "TRUFFLE Bench Cups", columns = c("Pos", "Player", "BenchCups", "BCYears"), align = 'left')
+                ))
+    }
+  })
   #record books fantasy points
   output$recordfpts <- renderReactable({
     if (input$recordteams == "TRUFFLE") {

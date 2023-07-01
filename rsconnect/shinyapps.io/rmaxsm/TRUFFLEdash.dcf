@@ -5,9 +5,9 @@ account: rmaxsm
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3422920
-bundleId: 7407002
+bundleId: 7409451
 url: https://rmaxsm.shinyapps.io/truffledash/
-when: 1688142987.99595
-lastSyncTime: 1688142987.99619
+when: 1688221074.06077
+lastSyncTime: 1688221074.06082
 asMultiple: FALSE
 asStatic: FALSE

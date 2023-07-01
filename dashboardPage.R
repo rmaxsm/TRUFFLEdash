@@ -134,7 +134,10 @@ dashboardPageUI <-
                                 
                                 sidebarLayout(
                                   sidebarPanel(
-                                    fluidRow(selectInput("tmportaltm",HTML("<span style=color:#84A4D8;font-size:14px>Select Team:</span>"), unique(teams$FullName)), style ="padding-top:10px;padding-left:20px;padding-right:20px;z-index:10000;")
+                                    fluidRow(
+                                      column(width = 8, selectInput("tmportaltm",HTML("<span style=color:#84A4D8;font-size:14px>Select Team:</span>"), unique(teams$FullName))),
+                                      column(width = 4, selectInput("tmportalyr",HTML("<span style=color:#84A4D8;font-size:14px>Year:</span>"), sort(c(unique(seasons$Season), currentyr), decreasing = T), selected = currentyr))       
+                                             , style ="padding-top:10px;padding-left:20px;padding-right:20px;z-index:10000;")
                                   ),
                                   mainPanel(br(),
                                             reactableOutput('tpheader'))
@@ -589,6 +592,14 @@ dashboardPageUI <-
                                                             )),
                                                   wellPanel(class = "well",
                                                             h2("Overall"),
+                                                            fluidRow(
+                                                              column(width = 6,
+                                                                     reactableOutput('recordrings')
+                                                              ),
+                                                              column(width = 6,
+                                                                     reactableOutput('recordbenchcups')
+                                                              )
+                                                            ),
                                                             fluidRow(
                                                               column(width = 3,
                                                                      reactableOutput('recordfpts')

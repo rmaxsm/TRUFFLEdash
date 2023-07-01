@@ -98,6 +98,37 @@ cleanRosters <- function(file) {
 }
 rosters <- cleanRosters(rosters)
 
+#get old rosters and merge in current teams to see what TRUFFLE team players were on which year
+oldrosters <- as.data.table(read_csv("data/oldrosters.csv", col_types = cols()))
+#calculate rings and bench cup wins to display in record books
+rings <- oldrosters[,
+                    .(Rings = sum(Ring),
+                      RingYears = lapply(list(paste0(" '",substr(Season[Ring == 1],3,4))), sort, decreasing = T),
+                      RingTeams = list(unique(paste0(" ",TRUFFLE[Ring == 1]))),
+                      BenchCups = sum(BenchCup),
+                      BCYears = lapply(list(paste0(" '",substr(Season[BenchCup == 1],3,4))), sort, decreasing = T),
+                      BCTeams = list(unique(paste0(" ",TRUFFLE[BenchCup == 1])))
+                    ),
+                    by = .(Pos, Player)]
+rings$RingYears[rings$RingYears == " '"] <- NA; rings$BCYears[rings$BCYears == " '"] <- NA
+ringsbyteam <- oldrosters[,
+                          .(Rings = sum(Ring),
+                            RingYears = lapply(list(paste0(" '",substr(Season[Ring == 1],3,4))), sort, decreasing = T),
+                            BenchCups = sum(BenchCup),
+                            BCYears = lapply(list(paste0(" '",substr(Season[BenchCup == 1],3,4))), sort, decreasing = T)
+                          ),
+                          by = .(TRUFFLE, Pos, Player)]
+ringsbyteam$RingYears[ringsbyteam$RingYears == " '"] <- NA; ringsbyteam$BCYears[ringsbyteam$BCYears == " '"] <- NA
+#delete rings and bench cup columns after use
+oldrosters$Ring <- NULL; oldrosters$BenchCup <- NULL
+
+#add current year rosters
+mergerosters <- rosters[, .(TRUFFLE, Pos, Player, NFL, Salary, Contract)]
+mergerosters$Season <- currentyr
+mergerosters <- mergerosters[, .(Season, TRUFFLE, Pos, Player, NFL, Salary, Contract)]
+oldrosters <- as.data.table(rbind(oldrosters, mergerosters))[order(Player,Season)]
+rm(mergerosters)
+
 #file of weekly scoring for players started/active in TRUFFLE
 fantasy <- as.data.table(read_csv("data/fantasy.csv", col_types = cols()))
 #fantasy <- read_excel("data/fantasy2022test.xlsx")
@@ -196,7 +227,14 @@ cleanWeekly <- function(file) {
   return(file)
 }
 weekly <- as.data.table(cleanWeekly(weekly))
+
+
+
 weeklyogteams <- weekly
+weeklyogteams$TRUFFLE <- NULL
+weeklyogteams <- merge(x = weeklyogteams, y = oldrosters[ , .(Season, Pos, Player, TRUFFLE)], by = c("Season", "Pos", "Player"), all.x=TRUE)
+weeklyogteams$TRUFFLE[is.na(weeklyogteams$TRUFFLE)] <- "FA"
+
 
 #add current truffle teams
 weekly$TRUFFLE <- NULL
@@ -250,20 +288,6 @@ cleanFprosage <- function(file) {
   return(file)
 }
 fprosage <- as.data.table(cleanFprosage(fprosage))
-
-#get old rosters and merge in current teams to see what TRUFFLE team players were on which year
-oldrosters <- as.data.table(read_csv("data/oldrosters.csv", col_types = cols()))
-rings <- oldrosters
-ringtot <- rings[,
-                 .(Rings = sum(Ring)),
-                 by = Player]
-oldrosters$Ring <- NULL; oldrosters$BenchCup <- NULL
-
-mergerosters <- rosters[, .(TRUFFLE, Pos, Player, NFL, Salary, Contract)]
-mergerosters$Season <- currentyr
-mergerosters <- mergerosters[, .(Season, TRUFFLE, Pos, Player, NFL, Salary, Contract)]
-oldrosters <- as.data.table(rbind(oldrosters, mergerosters))[order(Player,Season)]
-rm(mergerosters)
 
 #file to indicate what players have rookie rights
 rookierights <- read_csv("data/rookierights.csv", col_types = cols())
@@ -386,13 +410,41 @@ tpoverview <- merge(tpoverview, currentseason[Player %in% rosters$Player][, !c("
 tpoverview$Avg[tpoverview$Pos == "DST"] <- NA
 tpoverview <- tpoverview[, .(Scoring,TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 
-ptslogs <- weekly[order(-Season, Week)][is.element(Player, rosters$Player),
+ptslogs <- weekly[order(-Season, Week)][,
                                         .(ptslog = rev(list(FPts))),
                                         by = .(Scoring, Season, Pos, Player)]
 
 tpoverview <- merge(tpoverview, ptslogs[Season == max(seasons$Season), .(Player,Scoring,ptslog)], by = c('Player','Scoring'), all.x = T)
 tpoverview <- merge(tpoverview, seasons[Season == max(seasons$Season)][, .(Player,Scoring,PosRk)], by = c('Player','Scoring'), all.x = T)
 tpoverview <- tpoverview[, .(Scoring, TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
+
+#create oldrosters views to be used in teamportal for prior years selected
+oldrosterstp <- oldrosters[Season >= 2020, .(Season, TRUFFLE, Pos, Player, NFL, Salary, Contract)]
+oldrosterstp$Scoring <- "PPFD"
+oldrosterstpPPR <- oldrosterstp; oldrosterstpPPR$Scoring <- "PPR"
+oldrosterstphPPR <- oldrosterstp; oldrosterstphPPR$Scoring <- "hPPR"
+oldrosterstpSTD <- oldrosterstp; oldrosterstpSTD$Scoring <- "STD"
+oldrosterstp <- rbind(oldrosterstp, oldrosterstpPPR, oldrosterstphPPR, oldrosterstpSTD); rm(oldrosterstpPPR,oldrosterstphPPR,oldrosterstpSTD)
+
+#merge in other columns for oldrosters team portal
+oldrosterstp <- merge(oldrosterstp, seasons[Player %in% oldrosterstp$Player, -"NFL"], by = c('Scoring','Season','Pos','Player'), all.x = T)
+oldrosterstp$Avg[oldrosterstp$Pos == "DST"] <- NA
+oldrosterstp <- oldrosterstp[, .(Scoring,Season,TRUFFLE, Pos, Player, NFL, Salary, Contract, G, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
+#merge in ptslogs and posrks
+oldrosterstp <- merge(oldrosterstp, ptslogs[, .(Scoring,Season,Pos,Player,ptslog)], by = c('Scoring','Season','Pos','Player'), all.x = T)
+oldrosterstp <- merge(oldrosterstp, seasons[, .(Scoring,Season,Pos,Player,PosRk)], by = c('Scoring','Season','Pos','Player'), all.x = T)
+
+#create wayoldrostersview for before 2020
+wayoldrosterstp <- oldrosters[Season < 2020, .(Season, TRUFFLE, Pos, Player, NFL)]
+wayoldrosterstp$Scoring <- "PPFD"
+wayoldrosterstpPPR <- wayoldrosterstp; wayoldrosterstpPPR$Scoring <- "PPR"
+wayoldrosterstphPPR <- wayoldrosterstp; wayoldrosterstphPPR$Scoring <- "hPPR"
+wayoldrosterstpSTD <- wayoldrosterstp; wayoldrosterstpSTD$Scoring <- "STD"
+wayoldrosterstp <- rbind(wayoldrosterstp, wayoldrosterstpPPR, wayoldrosterstphPPR, wayoldrosterstpSTD); rm(wayoldrosterstpPPR,wayoldrosterstphPPR,wayoldrosterstpSTD)
+
+#merge in stats for wayoldrosters
+wayoldrosterstp <- merge(wayoldrosterstp, seasons[Player %in% wayoldrosterstp$Player, -"NFL"], by = c('Scoring','Season','Pos','Player'), all.x = T)
+wayoldrosterstp <- wayoldrosterstp[, .(Scoring, Season, TRUFFLE, Pos, Player, NFL, G, PosRk, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 
 #contracts table
 contracts <- rosters[, .(TRUFFLE, Pos, Player, Age, NFL, Salary, Contract)]
@@ -752,7 +804,7 @@ recordplgames <- recordbookspl[, .(Pos,Player,Games)][order(-Games)][1:100, ]
 recordtmgames <- recordbookstm[, .(TRUFFLE,Pos,Player,Games)][order(-Games)]
 #Avg
 recordplavg <- recordbookspl[, .(Pos,Player,Games,Avg)][Games > 10][, .(Pos, Player, Avg)][order(-Avg)][1:100, ]
-recordtmavg <- recordbookstm[, .(TRUFFLE,Pos,Player,Games,Avg)][Games > 10][, .(Pos, Player, Avg)][order(-Avg)]
+recordtmavg <- recordbookstm[, .(TRUFFLE,Pos,Player,Games,Avg)][Games > 10][, .(TRUFFLE, Pos, Player, Avg)][order(-Avg)]
 #FD
 recordplfd <- recordbookspl[, .(Pos,Player,FD)][order(-FD)][1:100, ]
 recordtmfd <- recordbookstm[, .(TRUFFLE,Pos,Player,FD)][order(-FD)]
@@ -888,7 +940,7 @@ posDef <- function(maxW = 48, filt = T, foot = "", sort = T) {
              color <- WRcolor
            } else if (value == "TE") {
              color <- TEcolor
-           } else if (value == "DST") {
+           } else if (value == "DST" | value == "K") {
              color <- DSTcolor
            }  else if (value == "DC") {
              color <- DCcolor
