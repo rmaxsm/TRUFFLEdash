@@ -18,6 +18,7 @@ dashboardPageUI <-
                     menuItem("Team Portal", tabName = "teamportal", icon = icon("users")),
                     menuItem("Player Portal", tabName = "playerportal", icon = icon("user")),
                     menuItem("Stat Center", tabName = "statcenter", icon = icon("chart-bar")),
+                    menuItem("BYOG", tabName = "byog", icon = icon("chart-bar")),
                     menuItem("Trade Machine", tabName = "trademachine" , icon = icon("gears")),
                     menuItem("Fantasy Portal", tabName = "fantasyportal", icon = icon("facebook-f")),
                     menuItem("Cap Corner", tabName = "capcorner", icon = icon("dollar-sign")),
@@ -130,7 +131,7 @@ dashboardPageUI <-
                       ),
                       # Team Portal -----
                       tabItem(tabName = "teamportal",
-                              wellPanel(
+                              wellPanel(class = "well",
                                 
                                 sidebarLayout(
                                   sidebarPanel(
@@ -340,7 +341,7 @@ dashboardPageUI <-
                       ), #end fantasy portal tab item
                       # Stat Center -----
                       tabItem(tabName = "statcenter",
-                              wellPanel(
+                              wellPanel(class = "well",
                                 fluidRow(
                                   column(width = 12,
                                          h2("Stat Center"))
@@ -420,14 +421,60 @@ dashboardPageUI <-
                               
                       ), #end stat center tab item
                       
+                      #Build Your Own Graph -----
+                      tabItem(tabName = "byog",
+                              wellPanel(class = "well",
+                                        fluidRow(column(h2("Build Your Own Graph"), width = 12),
+                                                 column(p("An interactive graphing tool, designed for you to graphically compare and analyze any two statistics featured on TRUFFLEdash by player season."), width = 12)
+                                        )
+                                        
+                              ),
+                              wellPanel(class = "well",
+                                
+                                sidebarLayout(
+                                  sidebarPanel(
+                                    fluidRow(
+                                      h2("Select Graphing X- & Y-Axis Satistics"),
+                                      column(width = 6, selectInput("byogX", "X-Axis", colnames(byog)[7:74], selected = colnames(byog)[69])),
+                                      column(width = 6, selectInput("byogY", "Y-Axis", colnames(byog)[7:74], selected = colnames(byog)[23]))    
+                                      , style ="padding-top:10px;padding-left:20px;padding-right:20px;z-index:10000;")
+                                  ),
+                                  mainPanel(br(),
+                                            h2("Apply Filters"),
+                                            fluidRow(
+                                              column(width = 2,
+                                                     selectInput("byogseason", "Season", c(sort(unique(weekly$Season), decreasing = T), "All"), selected = max(weekly$Season))),
+                                              column(width = 4,
+                                                     checkboxGroupInput("byogpositions", "Positions", choices = c("QB","RB","WR","TE"), selected = c("QB","RB","WR","TE"),
+                                                                        inline = T)
+                                              ),
+                                              column(width = 2,
+                                                     selectInput("byoggamesmin", "Min. G", choices = c(1:17), selected = 1)),
+                                              column(width = 4,
+                                                     sliderInput("byogavgmin", "Min. Average FPts",
+                                                                 min = 0, max = 30,
+                                                                 value = 5,
+                                                                 step = 1, round = T)
+                                              )
+                                            )
+                                            )
+                                  
+                                ), style = "background-color:#FFFFFF;padding-top:20px", #end sidebarLayout
+                              #wellPanel(
+                                plotlyOutput('byog',
+                                  width = "100%",
+                                  height = "500px"),
+                                hr(),
+                                em("Details revealed by hovering over specific data points, color coded by position")
+                              )
+                      ), #end byog tab item
+                      
                       # Trade Machine -----
                       tabItem(tabName = "trademachine",
                               wellPanel(class = "well",
-                                        fluidRow(column(width = 9,
-                                                        h2("Trade Machine"),
-                                                        p("An interactive, and helpful tool, designed to be a peace offering from the Commissioner for making the rules so complicated."),),
-                                                 column(width = 3
-                                                 )
+                                        fluidRow(column(h2("Trade Machine"), width = 12),
+                                                  column(p("An interactive, and helpful tool, designed to be a peace offering from the Commissioner for making the rules so complicated."), width = 12)
+                                                 
                                         )
                                         
                               ),
@@ -705,12 +752,16 @@ dashboardPageUI <-
                                                   fluidRow(
                                                     column(width = 6,
                                                            wellPanel(class = "well",
-                                                                     h2("History")
+                                                                     h2("History"),
+                                                                     reactableOutput('rivscores')
                                                            )
                                                     ),
                                                     column(width = 6,
                                                            wellPanel(class = "well",
-                                                                     h2("Leading Scorers")
+                                                                     h2("Leading Scorers *"),
+                                                                     reactableOutput('rivleaders'),
+                                                                     hr(),
+                                                                     em("*since 2020")
                                                            ))
                                                   )
                                          ), #end tabpanel

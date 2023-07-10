@@ -83,6 +83,10 @@ hr {
   border-left: 1px solid #000000;
 }
 
+.border-left-bold {
+  border-left: 3px solid #BFBFBF;
+}
+
 .border-right {
   border-right: 1px solid #000000;
 }

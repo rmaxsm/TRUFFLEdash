@@ -1817,6 +1817,51 @@ shinyServer(function(input, output, session) {
     )
   })
   
+  #byog ----
+  #create week by week runchart
+  output$byog <- renderPlotly({
+    if(input$byogseason == "All") {
+      df <- byog
+    } else {
+      df <- byog[Season == as.numeric(input$byogseason)]
+    }
+    
+      df <- df[Scoring == input$homescoring & Pos %in% input$byogpositions & G > input$byoggamesmin & Avg > input$byogavgmin]
+      df$X <- df[[input$byogX]]
+      df$Y <- df[[input$byogY]]
+      ggplotly(ggplot(df, aes(x = X, y = Y, group = Player,  color = Pos,
+                              text = paste0("</br><i>Season:</i> <b>", Season,
+                                            "</b></br><i>Player:</i> <b>", Player,
+                                            "</b></br><i>", input$byogX, "</i>: <b>", X,
+                                            "</b></br><i>", input$byogY, "</i>: <b>", Y, "</b>")
+                              )) +
+                 geom_point(size = 2) +
+                 xlim(min(df[[input$byogX]], na.rm=T), max(df[[input$byogX]], na.rm=T)) + ylim(min(df[[input$byogY]], na.rm=T), max(df[[input$byogY]], na.rm=T)) +
+                 ylab(input$byogY) + xlab(input$byogX) +
+                 theme_minimal() + scale_color_manual(values=ggpal), tooltip = "text"
+               )
+  })
+  
+  # df <- byog[Scoring == "PPFD" & Season == 2022 & Pos %in% c("QB", "RB", "WR", "TE") & G > 1 & Avg > 5]
+  # df$X <- df[["Salary"]]
+  # df$Y <- df[["FPts"]]
+  # df <- df[, .(Pos, Player, X, Y)]
+  # test1 <- "Salary"
+  # test2 <- "FPts"
+  # 
+  # ggpal <- c(QB = "#b7e1cd", RB = "#f4cccc", WR = "#9633FF", "#E2FF33")
+  # ggplotly(ggplot(df, aes(x = X, y = Y, group = Player,
+  #                         text = paste0("</br><i>Season:</i> <b>", Season,
+  #                                      "</b></br><i>Player:</i> <b>", Player,
+  #                                      "</b></br><i>", test1, "</i>: <b>", X,
+  #                                      "</b></br><i>", test2, "</i>: <b>", Y, "</b>")
+  #                         )) +
+  #            geom_point(aes(col = Pos), size = 2) +
+  #            xlim(min(df[["Salary"]], na.rm=T), max(df[["Salary"]], na.rm=T)) + ylim(min(df[["FPts"]], na.rm=T), max(df[["FPts"]], na.rm=T)) +
+  #            ylab("FPts") + xlab("Salary") +
+  #            theme_minimal() + scale_color_manual(values=ggpal), tooltip = "text"
+  # )
+  
   #trademachine ----
   
   tmoverviewtm1 <- reactive(tpoverview[Scoring == input$homescoring & TRUFFLE == teams$Abbrev[teams$FullName == input$tmtm1]][order(match(Pos, positionorder), -Salary, Player)])
@@ -3454,6 +3499,135 @@ shinyServer(function(input, output, session) {
         cellStyle = list(display = "flex", flexDirection = "column", justifyContent = "center")
       )
     )
+  })
+  
+  output$rivscores <- renderReactable({
+    df <- rivscores[Rivalry == riv$Rivalry[riv$RivalryName == input$rivalry], .(Season, Week, Icon, Team1, Team1Score, Team2Score, Team2)][order(-Season, - Week)]
+    
+    reactable(df,
+              compact = T,
+              pagination = F,
+              defaultSortOrder = "desc",
+              highlight = T,
+              columns = list(
+                Season = colDef(name="Yr",
+                                maxWidth = 50,
+                                defaultSortOrder = "desc",
+                                align = 'center',
+                                footer = "Total:"),
+                Week = colDef("Wk", maxWidth = 50, align = 'center', defaultSortOrder = "desc"),
+                Icon = colDef(name = "", 
+                              align="center", 
+                              minWidth = 40,
+                              class = "border-right-grey",
+                              cell = function(value) {
+                                img_src <- knitr::image_uri(value)
+                                image <- img(src = img_src, height = "20px", alt = value)
+                                tagList(
+                                  div(style = list(display = "inline-block"), image)
+                                )
+                              }),
+                Team1 = trfDefRivScores(filt = FALSE, maxW = 100),
+                Team1Score = colDef(name = "Score",
+                                    #minWidth = 100,
+                                    format = colFormat(digits = 2),
+                                    align = 'center',
+                                    footer = function(values) {sum(as.numeric(values), na.rm=T)},
+                                    style = function(value, index) {
+                                      df <- rivscores[Rivalry == riv$Rivalry[riv$RivalryName == input$rivalry], .(Season, Week, Team1, Team1Score, Team2Score, Team2)][order(-Season, - Week)]
+                                      oppscore <- df$Team2Score[index]
+                                      col <- ifelse(value > oppscore, QBcolor, NA)
+                                      list(background = col)}
+                ),
+                Team2Score = colDef(name = "Score",
+                                    #minWidth = 100,
+                                    format = colFormat(digits = 2),
+                                    align = 'center',
+                                    class = "border-left-grey",
+                                    footer = function(values) {sum(as.numeric(values), na.rm=T)},
+                                    style = function(value, index) {
+                                      df <- rivscores[Rivalry == riv$Rivalry[riv$RivalryName == input$rivalry], .(Season, Week, Team1, Team1Score, Team2Score, Team2)][order(-Season, - Week)]
+                                      oppscore <- df$Team1Score[index]
+                                      col <- ifelse(value > oppscore, QBcolor, NA)
+                                      list(background = col)}
+                ),
+                Team2 = trfDefRivScores(filt = FALSE, maxW = 100)
+              ),
+              details = function(index) {
+                season <- df$Season[index]
+                week <- df$Week[index]
+                teams <- c(df$Team1[index], df$Team2[index])
+                reactable(rivfantasy[Season == season & Week == week & TRUFFLE %in% teams][, .(TRUFFLE, Pos, Player, FPts)][order(TRUFFLE, match(Pos, positionorder))],
+                          compact = T,
+                          defaultSortOrder = "desc",
+                          sortable = F,
+                          pagination = F,
+                          highlight = T,
+                          columns = list(
+                            TRUFFLE = trfDef(filt=F),
+                            Pos = posDef(filt = FALSE, foot = " "),
+                            Player = playerDef(minW = 160),
+                            FPts = fptsWeekDef()
+                          ))
+              },
+              defaultColDef = colDef(footerStyle = list(fontWeight = "bold")),
+              )
+  })
+  
+  output$rivleaders <- renderReactable({
+    df <- rivscorers[Rivalry == riv$Rivalry[riv$RivalryName == input$rivalry], .(TRUFFLE, Pos, Player, G, Avg, FPts)][order(-FPts)]
+    
+    reactable(df,
+              compact = T,
+              showPageInfo = FALSE,
+              defaultSortOrder = "desc",
+              defaultPageSize = 10,
+              paginationType = 'simple',
+              highlight = T,
+              columns = list(
+                TRUFFLE = trfDef(filt = FALSE),
+                Pos = posDef(filt = FALSE),
+                Player = playerDef(minW = 160),
+                G = gDef(),
+                FPts = fptsDef(),
+                Avg = avgDef()
+              ),
+              details = function(index) {
+                team <- df$TRUFFLE[index]
+                pos <- df$Pos[index]
+                player <- df$Player[index]
+                
+                reactable(rivfantasy[Player == player & Pos == pos & TRUFFLE == team][, .(Season, Week, Icon, Yd, TD, FD, FPts)][order(-Season, -Week)],
+                          compact = T,
+                          defaultSortOrder = "desc",
+                          sortable = F,
+                          pagination = F,
+                          highlight = T,
+                          columns = list(
+                            Season = colDef(name="Yr",
+                                            maxWidth = 70,
+                                            defaultSortOrder = "desc",
+                                            align = 'center',
+                                            footer = " "),
+                            Week = colDef("Wk", maxWidth = 70, align = 'center', defaultSortOrder = "desc"),
+                            Icon = colDef(name = "", 
+                                          align="center", 
+                                          minWidth = 40,
+                                          class = "border-right-grey",
+                                          cell = function(value) {
+                                            img_src <- knitr::image_uri(value)
+                                            image <- img(src = img_src, height = "20px", alt = value)
+                                            tagList(
+                                              div(style = list(display = "inline-block"), image)
+                                            )
+                                          }),
+                            Yd = colDef(header = with_tt("Yd", "Tot Yards = Pa + Ru + Re"), maxWidth = 80),
+                            TD = colDef(header = with_tt("TD", "Tot TD = Pa + Ru + Re"), maxWidth = 80),
+                            FD = colDef(header = with_tt("FD", "Tot FD = Ru + Re"), maxWidth = 80),
+                            FPts = fptsWeekDef()
+                          ))
+              }
+              )
   })
   
   #Bench Cup Output
