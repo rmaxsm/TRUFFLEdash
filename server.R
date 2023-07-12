@@ -97,6 +97,12 @@ shinyServer(function(input, output, session) {
       alt = "softdrink",
       width = "100%")}, deleteFile = FALSE)
   
+  output$guestintro <- renderImage({
+    list(
+      src = "www/graphics/guestintro.png",
+      alt = "guestinfo",
+      width = "100%")}, deleteFile = FALSE)
+  
   #home page ----
   #home page standings
   output$hometeamsfantasy <- renderReactable({
@@ -194,6 +200,7 @@ shinyServer(function(input, output, session) {
   
   #home weekly top 5 qb
   output$homeweeklytop5qb <- renderReactable({
+    if (isguest == F) {
     reactable(na.omit(weeklytop5[Scoring == input$homescoring & Season == input$homeseason & Week == input$weeklytop5week & Pos == "QB"][1:30, .(TRUFFLE, Player, FPts)][order(-FPts)]),
               defaultSortOrder = "desc",
               filterable = F,
@@ -211,69 +218,152 @@ shinyServer(function(input, output, session) {
               ),
               columnGroups = list(colGroup(name = "QB", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
     )
+    } else if (isguest == T) {
+      reactable(na.omit(weeklytop5[Scoring == input$homescoring & Season == input$homeseason & Week == input$weeklytop5week & Pos == "QB"][1:30, .(TRUFFLE, Pos, Player, FPts)][order(-FPts)]),
+                defaultSortOrder = "desc",
+                filterable = F,
+                showPageInfo = FALSE,
+                defaultPageSize = 10,
+                paginationType = 'simple',
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                resizable = F,
+                columns = list(
+                  TRUFFLE = trfDef(filt = FALSE),
+                  Pos = posDef(filt = F),
+                  Player = playerDef(minW = 125, filt = F, sort = F),
+                  FPts = fptsWeekDef(maxW = 40, borderL = F)
+                ),
+                columnGroups = list(colGroup(name = "QB", columns = c("TRUFFLE", "Pos", "Player", "FPts"), align = 'left'))
+      )
+    }
   })
   
   #home weekly top 5 rb
   output$homeweeklytop5rb <- renderReactable({
-    reactable(na.omit(weeklytop5[Scoring == input$homescoring & Season == input$homeseason & Week == input$weeklytop5week & Pos == "RB"][1:30, .(TRUFFLE, Player, FPts)][order(-FPts)]),
-              defaultSortOrder = "desc",
-              filterable = F,
-              showPageInfo = FALSE,
-              defaultPageSize = 10,
-              paginationType = 'simple',
-              highlight = T,
-              #borderless = T,
-              compact = T,
-              resizable = F,
-              columns = list(
-                TRUFFLE = trfDef(filt = FALSE),
-                Player = playerDef(minW = 125, filt = F, sort = F),
-                FPts = fptsWeekDef(maxW = 40, borderL = F)
-              ),
-              columnGroups = list(colGroup(name = "RB", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
-    )
+    if (isguest == F) {
+      reactable(na.omit(weeklytop5[Scoring == input$homescoring & Season == input$homeseason & Week == input$weeklytop5week & Pos == "RB"][1:30, .(TRUFFLE, Player, FPts)][order(-FPts)]),
+                defaultSortOrder = "desc",
+                filterable = F,
+                showPageInfo = FALSE,
+                defaultPageSize = 10,
+                paginationType = 'simple',
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                resizable = F,
+                columns = list(
+                  TRUFFLE = trfDef(filt = FALSE),
+                  Player = playerDef(minW = 125, filt = F, sort = F),
+                  FPts = fptsWeekDef(maxW = 40, borderL = F)
+                ),
+                columnGroups = list(colGroup(name = "RB", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
+      )
+    } else if (isguest == T) {
+      reactable(na.omit(weeklytop5[Scoring == input$homescoring & Season == input$homeseason & Week == input$weeklytop5week & Pos == "RB"][1:30, .(TRUFFLE, Pos, Player, FPts)][order(-FPts)]),
+                defaultSortOrder = "desc",
+                filterable = F,
+                showPageInfo = FALSE,
+                defaultPageSize = 10,
+                paginationType = 'simple',
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                resizable = F,
+                columns = list(
+                  TRUFFLE = trfDef(filt = FALSE),
+                  Pos = posDef(filt = F),
+                  Player = playerDef(minW = 125, filt = F, sort = F),
+                  FPts = fptsWeekDef(maxW = 40, borderL = F)
+                ),
+                columnGroups = list(colGroup(name = "RB", columns = c("TRUFFLE", "Pos", "Player", "FPts"), align = 'left'))
+      )
+    }
   })
   
   #home weekly top 5 wr
   output$homeweeklytop5wr <- renderReactable({
-    reactable(na.omit(weeklytop5[Scoring == input$homescoring & Season == input$homeseason & Week == input$weeklytop5week & Pos == "WR"][1:30, .(TRUFFLE, Player, FPts)][order(-FPts)]),
-              defaultSortOrder = "desc",
-              filterable = F,
-              showPageInfo = FALSE,
-              defaultPageSize = 10,
-              paginationType = 'simple',
-              highlight = T,
-              #borderless = T,
-              compact = T,
-              resizable = F,
-              columns = list(
-                TRUFFLE = trfDef(filt = FALSE),
-                Player = playerDef(minW = 125, filt = F, sort = F),
-                FPts = fptsWeekDef(maxW = 40, borderL = F)
-              ),
-              columnGroups = list(colGroup(name = "WR", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
-    )
+    if (isguest == F) {
+      reactable(na.omit(weeklytop5[Scoring == input$homescoring & Season == input$homeseason & Week == input$weeklytop5week & Pos == "WR"][1:30, .(TRUFFLE, Player, FPts)][order(-FPts)]),
+                defaultSortOrder = "desc",
+                filterable = F,
+                showPageInfo = FALSE,
+                defaultPageSize = 10,
+                paginationType = 'simple',
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                resizable = F,
+                columns = list(
+                  TRUFFLE = trfDef(filt = FALSE),
+                  Player = playerDef(minW = 125, filt = F, sort = F),
+                  FPts = fptsWeekDef(maxW = 40, borderL = F)
+                ),
+                columnGroups = list(colGroup(name = "WR", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
+      )
+    } else if (isguest == T) {
+      reactable(na.omit(weeklytop5[Scoring == input$homescoring & Season == input$homeseason & Week == input$weeklytop5week & Pos == "WR"][1:30, .(TRUFFLE, Pos, Player, FPts)][order(-FPts)]),
+                defaultSortOrder = "desc",
+                filterable = F,
+                showPageInfo = FALSE,
+                defaultPageSize = 10,
+                paginationType = 'simple',
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                resizable = F,
+                columns = list(
+                  TRUFFLE = trfDef(filt = FALSE),
+                  Pos = posDef(filt = F),
+                  Player = playerDef(minW = 125, filt = F, sort = F),
+                  FPts = fptsWeekDef(maxW = 40, borderL = F)
+                ),
+                columnGroups = list(colGroup(name = "WR", columns = c("TRUFFLE", "Pos", "Player", "FPts"), align = 'left'))
+      )
+    }
   })
   
   #home weekly top 5 te
   output$homeweeklytop5te <- renderReactable({
-    reactable(na.omit(weeklytop5[Scoring == input$homescoring & Season == input$homeseason & Week == input$weeklytop5week & Pos == "TE"][1:30, .(TRUFFLE, Player, FPts)][order(-FPts)]),
-              defaultSortOrder = "desc",
-              filterable = F,
-              showPageInfo = FALSE,
-              defaultPageSize = 10,
-              paginationType = 'simple',
-              highlight = T,
-              #borderless = T,
-              compact = T,
-              resizable = F,
-              columns = list(
-                TRUFFLE = trfDef(filt = FALSE),
-                Player = playerDef(minW = 125, filt = F, sort = F),
-                FPts = fptsWeekDef(maxW = 40, borderL = F)
-              ),
-              columnGroups = list(colGroup(name = "TE", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
-    )
+    if (isguest == F) {
+      reactable(na.omit(weeklytop5[Scoring == input$homescoring & Season == input$homeseason & Week == input$weeklytop5week & Pos == "TE"][1:30, .(TRUFFLE, Player, FPts)][order(-FPts)]),
+                defaultSortOrder = "desc",
+                filterable = F,
+                showPageInfo = FALSE,
+                defaultPageSize = 10,
+                paginationType = 'simple',
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                resizable = F,
+                columns = list(
+                  TRUFFLE = trfDef(filt = FALSE),
+                  Player = playerDef(minW = 125, filt = F, sort = F),
+                  FPts = fptsWeekDef(maxW = 40, borderL = F)
+                ),
+                columnGroups = list(colGroup(name = "TE", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
+      )
+    } else if (isguest == T) {
+      reactable(na.omit(weeklytop5[Scoring == input$homescoring & Season == input$homeseason & Week == input$weeklytop5week & Pos == "TE"][1:30, .(TRUFFLE, Pos, Player, FPts)][order(-FPts)]),
+                defaultSortOrder = "desc",
+                filterable = F,
+                showPageInfo = FALSE,
+                defaultPageSize = 10,
+                paginationType = 'simple',
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                resizable = F,
+                columns = list(
+                  TRUFFLE = trfDef(filt = FALSE),
+                  Pos = posDef(filt = F),
+                  Player = playerDef(minW = 125, filt = F, sort = F),
+                  FPts = fptsWeekDef(maxW = 40, borderL = F)
+                ),
+                columnGroups = list(colGroup(name = "TE", columns = c("TRUFFLE", "Pos", "Player", "FPts"), align = 'left'))
+      )
+    }
   })
   
   #team portal ----

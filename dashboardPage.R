@@ -213,7 +213,9 @@ dashboardPageUI <-
                       # Player Portal -----
                       tabItem(tabName = "playerportal",
                               wellPanel(style = "background-color:#FFFFFF, padding-top:0px",
-                                        selectizeInput('player',h2("Select Player:"), choices = sort(unique(weekly$Player)), selected = NULL, multiple = T)
+                                        selectizeInput('player',h2("Select Player:"), choices = sort(unique(weekly$Player)), selected = NULL, multiple = T),
+                                        hr(),
+                                        em("Type and select player name(s) to view/compare player stats across all Player Portal tables & charts")
                               ),
                               wellPanel(class = "well",
                                         h2("Player Info"),
