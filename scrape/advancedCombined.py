@@ -1,6 +1,7 @@
 import dre.ESPN.espnAll as espn
 import dre.FantasyPros.fpAll as fp
 import dre.CBS.cbsAll as cbs
+import scrape.standingsScript as st
 import pandas as pd
 
 
@@ -18,6 +19,8 @@ def main():
   espn.main()
   fp.main()
   cbs.main(week,season)
+  ##UNCOMMENT BELOW WHEN WE ARE READY
+  # st.main(season)
   
   print("\nALL DONE :)")
 
