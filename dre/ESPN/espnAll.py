@@ -39,6 +39,9 @@ def appendToFile(df, season, filepath):
   print("EspnAll saved at {}".format(masterFile))
 
 def main():
+  
+  season = "2023"
+  
   qb.main()
   rb.main()
   wr.main()
@@ -57,7 +60,7 @@ def main():
   dupe = pd.merge(combinedDf, xtdDf, on='Player', how="outer")
 
   noDupe = dupe.drop_duplicates(subset=["Player", "NFL", "Pos"])
-  noDupe["Season"] = "2023"
+  noDupe["Season"] = season
   noDupe = noDupe.loc[:, ["Season", "Player","NFL","Pos","xFP","ActualPts","xTD","TD", "Looks", "Diff","In5", "EZ"]]
 
   noDupe['Player'] = noDupe['Player'].str.replace(r'.', '', regex=True)
@@ -73,7 +76,7 @@ def main():
   filepath = "data/espnStats.csv"
 
   # noDupe.to_csv(filepath, index=False)
-  appendToFile(noDupe, "2023", filepath)
+  appendToFile(noDupe, season, filepath)
   
   print("ESPN DONE :)\n")
   
