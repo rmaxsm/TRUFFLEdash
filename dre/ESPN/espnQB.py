@@ -116,7 +116,7 @@ def runQB():
       'Sec-Fetch-User': '?1',
       'If-None-Match': 'W/512483eb531a053b813e1053b334fca28b487287',
   }
-  response = requests.get('https://www.espn.com/fantasy/insider/football/insider/story/_/id/34586183/fantasy-football-2022-expected-fantasy-points-xfp-leaderboard-qbs', cookies=cookies, headers=headers)
+  response = requests.get('https://www.espn.com/fantasy/football/insider/story/_/id/38332865/fantasy-football-2023-expected-fantasy-points-xfp-leaderboard-qbs', cookies=cookies, headers=headers)
   soup = BeautifulSoup(response.content, 'html.parser')
   
   complete =  soup.find("section", {"id": "article-feed"})
