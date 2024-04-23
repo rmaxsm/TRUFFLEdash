@@ -2,3 +2,15 @@
 .Rhistory
 .RData
 .Ruserdata
+*.ini
+.DS_Store
+.DS_Store 2
+.RDataTmp
+data/.DS_Store
+data/.DS_Store 2
+dre/.DS_Store
+dre/.DS_Store 2
+www/.DS_Store
+www/.DS_Store 2
+www/graphics/.DS_Store
+www/graphics/.DS_Store 2
