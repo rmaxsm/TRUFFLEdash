@@ -25,7 +25,7 @@ dashboardPageUI <-
                     menuItem("History Books", tabName = "historybooks", icon = icon("book")),
                     menuItem("Database", tabName = "database", icon = icon("database")),
                     menuItem("Rookie Draft", tabName = "draft", icon = icon("business-time")),
-                    menuItem("Constitution", href = "https://docs.google.com/document/d/1-FyXq3HWtEETQlpF-_HnofCb2y1SGKUn7c7NVFlrx1E/", newtab = TRUE, icon = icon("paragraph")),
+                    menuItem("Constitution", href = "https://docs.google.com/document/d/1wUXsY3VRNCH9NPYeb1Vf9xm8AnJ9HJIiB85rvPTYjgo/", newtab = TRUE, icon = icon("paragraph")),
                     br(),
                     selectInput("homescoring", HTML("<span style=color:#84A4D8;font-size:14px>Scoring System</span>"), c("PPFD", "PPR", "hPPR", "STD"), selected ="PPFD" )
                     #menuItem("Tutorials", tabName = "tutorials", icon = icon("fa-sharp fa-solid fa-info"))
@@ -60,7 +60,7 @@ dashboardPageUI <-
                               #          htmlOutput("bcgsheet")
                               #),
                               
-                              #awards home page tab for during offseason
+                              # #awards home page tab for during offseason
                               # wellPanel(class = "well",
                               #           fluidRow(
                               #             column(width=6,
@@ -100,7 +100,7 @@ dashboardPageUI <-
                                 column(width = 6,
                                        wellPanel(class = "well",
                                                  h2("Season Leaders"),
-                                                 reactableOutput('homepointsleaders', height = "100%"),
+                                                 reactableOutput('homepointsleaders') #height = "100%"),
                                        ))
                                 
                               ),
@@ -137,7 +137,7 @@ dashboardPageUI <-
                                   sidebarPanel(
                                     fluidRow(
                                       column(width = 8, selectInput("tmportaltm",HTML("<span style=color:#84A4D8;font-size:14px>Select Team:</span>"), unique(teams$FullName))),
-                                      column(width = 4, selectInput("tmportalyr",HTML("<span style=color:#84A4D8;font-size:14px>Year:</span>"), sort(c(unique(seasons$Season), currentyr), decreasing = T), selected = currentyr))       
+                                      column(width = 4, selectInput("tmportalyr",HTML("<span style=color:#84A4D8;font-size:14px>Year:</span>"), sort(c(unique(seasons$Season), currentyr), decreasing = T), selected = max(weekly$Season)))       
                                              , style ="padding-top:10px;padding-left:20px;padding-right:20px;z-index:10000;")
                                   ),
                                   mainPanel(br(),
@@ -712,35 +712,35 @@ dashboardPageUI <-
                                                   
                                          ),
                                          
-                                         tabPanel("Awards",
-                                                  
-                                                  wellPanel(class = "well",
-                                                            fluidRow(
-                                                              column(width = 9,
-                                                                     h2("Annual End Of Season TRUFFLE Awards"),
-                                                                     p("Awards and All-TRUFFLE Teams annually voted for by TRUFFLE owners.")
-                                                              ),
-                                                              column(width = 3,
-                                                                     selectInput("awardseason", "Season", sort(unique(awards$Season), decreasing = T), selected = max(awards$Season))
-                                                              )
-                                                            )
-                                                  ),
-                                                  wellPanel(class = "well",
-                                                            fluidRow(
-                                                              column(width=6,
-                                                                     h2("Award Winners"),
-                                                                     br(),
-                                                                     reactableOutput('historybooksawards')
-                                                              ),
-                                                              column(width=6,
-                                                                     h2("All-TRUFFLE"),
-                                                                     em("* denotes unanimous 1st Team selection"),
-                                                                     reactableOutput('allt1'),
-                                                                     reactableOutput('allt2')
-                                                              )
-                                                            )
-                                                  )
-                                         ), #end tabpanel
+                                         # tabPanel("Awards",
+                                         #          
+                                         #          wellPanel(class = "well",
+                                         #                    fluidRow(
+                                         #                      column(width = 9,
+                                         #                             h2("Annual End Of Season TRUFFLE Awards"),
+                                         #                             p("Awards and All-TRUFFLE Teams annually voted for by TRUFFLE owners.")
+                                         #                      ),
+                                         #                      column(width = 3,
+                                         #                             selectInput("awardseason", "Season", sort(unique(awards$Season), decreasing = T), selected = max(awards$Season))
+                                         #                      )
+                                         #                    )
+                                         #          ),
+                                         #          wellPanel(class = "well",
+                                         #                    fluidRow(
+                                         #                      column(width=6,
+                                         #                             h2("Award Winners"),
+                                         #                             br(),
+                                         #                             reactableOutput('historybooksawards')
+                                         #                      ),
+                                         #                      column(width=6,
+                                         #                             h2("All-TRUFFLE"),
+                                         #                             em("* denotes unanimous 1st Team selection"),
+                                         #                             reactableOutput('allt1'),
+                                         #                             reactableOutput('allt2')
+                                         #                      )
+                                         #                    )
+                                         #          )
+                                         # ), #end tabpanel
                                          
                                          tabPanel("Rivalries",
                                                   wellPanel(

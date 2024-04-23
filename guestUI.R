@@ -53,13 +53,32 @@ guestUI <-
                                           ,
                                           column(width=4, align = "right",
                                                  imageOutput('sponsor',width = '170px',height='70px'))
-                                        )
+                                        ),
+                                        hr(),
+                                        HTML("<p  style='text-align: center;'><span style='font-size: 16px; font-family: Helvetica; color: rgb(130, 168, 223);'>truffle</span><span style='font-size: 16px; font-family: Audiowide; color: rgb(152, 36, 31);'>dash&nbsp;</span><span style='font-size: 16px; font-family: Helvetica; color: rgb(130, 168, 223); font-weight: bold; font-style: italic;'>was designed by Max Smith</span></p>"),
+                                        HTML("<p  style='text-align: center;'><span style='font-size: 14px; font-family: Helvetica; color: rgb(130, 168, 223);'>To view the non-guest version of the site, refresh and log in using <b>'FRR'</b>. For questions and feedback please email </span><a href='mailto:trufflecommish@gmail.com'><span style='font-size: 14px; font-family: Helvetica; color: rgb(130, 168, 223);'><u>trufflecommish@gmail.com</a></u></span></p>")
                               ),
                               
                               fluidRow(
+                                # column(width = 6,
+                                #        wellPanel(class = "well", height = '800px',
+                                #                  imageOutput('guestintro')
+                                #        )
+                                # ),
                                 column(width = 6,
-                                       wellPanel(class = "well", height = '800px',
-                                                 imageOutput('guestintro')
+                                       wellPanel(HTML("<h2>Introducing truffle<span style =color:#8C2E26;font-weight:bold;font-size:24px;font-family:'Audiowide'>dash</span></h2>"),
+                                                 HTML("<p><span style='font-size: 14px; font-family: Helvetica; color: rgb(64, 64, 64);'>Originally designed for our at-home salary cap dynasty league,&nbsp;</span><span style='font-size: 14px; font-family: Helvetica; color: rgb(130, 168, 223); font-weight: bold;'>TRUFFLE</span><span style='font-size: 14px; font-family: Helvetica; color: rgb(64, 64, 64);'>, this custom-built fantasy football analytics website provides a one-stop-shop for tabular &amp; graphical insight for all fantasy owners.</span></p>"),
+                                                 HTML("<p><span style='font-size: 14px; font-family: Helvetica; color: rgb(64, 64, 64);'>Stats range from traditional box score to <b>Advanced</b> stats (e.g. FPts/Touch or points via Yards vs. Touchdowns), and <b>Consistency</b> stats (e.g. % of weeks scoring 10+ FPts or finishing top-12 positionally).</span></p>"),
+                                                 HTML("<p><span style='font-size: 14px; font-family: Helvetica; color: rgb(64, 64, 64);'>As you use this guest version of the site, begin by selecting the <b>Season</b> (since 2020) and your preferred <b>Scoring System</b> using the dropdowns atop the page and in the side menu. PPFD (</span><span style='font-size: 14px; font-family: Helvetica; color: rgb(130, 168, 223); font-weight: bold;'>TRUFFLE</span><span style='font-size: 14px; font-family: Helvetica; color: rgb(64, 64, 64);'>’s default), awards 1 point for rushing/receiving first downs, and no points per reception.</span></p>"),
+                                                 HTML("<p><span style='font-size: 14px; font-family: Helvetica; color: rgb(64, 64, 64);'>With your year & scoring selections made explore the following tabs:</span></p>"),
+                                                 HTML("<p><span style='font-size: 14px; font-family: Helvetica; color: rgb(64, 64, 64);'>&bull; <b>Home</b> &ndash; Default landing page featuring both Year-to-Date and Weekly Scoring Leaders</span></p>"),
+                                                 HTML("<p><span style='font-size: 14px; font-family: Helvetica; color: rgb(64, 64, 64);'>&bull; <b>Player Portal</b> &ndash; Select specific player(s) and view/compare their stats across different tables &amp; visuals</span></p>"),
+                                                 HTML("<p><span style='font-size: 14px; font-family: Helvetica; color: rgb(64, 64, 64);'>&bull; <b>Stat Center</b> &ndash; View Box Score, Advanced, and Consistency stats across filterable player pool and week range</span></p>"),
+                                                 HTML("<p><span style='font-size: 14px; font-family: Helvetica; color: rgb(64, 64, 64);'>&bull; <b>BYOG</b> &ndash; <b>B</b>uild <b>Y</b>our <b>O</b>wn <b>G</b>raph comparing any 2 selected stats</span></p>"),
+                                                 HTML("<p><span style='font-size: 14px; font-family: Helvetica; color: rgb(64, 64, 64);'>&bull; <b>Database</b> &ndash; Full sortable logs of historical weekly &amp; seasonal data</span></p>"),
+                                                 br(),
+                                                 
+                                                 #HTML("<p><span style='font-size: 14px; font-family: Helvetica; color: rgb(130, 168, 223);'>To view the non-guest version of the site, refresh and log in using <b>'FRR'</b>. For questions and feedback please email </span><a href='mailto:trufflecommish@gmail.com'><span style='font-size: 14px; font-family: Helvetica; color: rgb(130, 168, 223);'><u>trufflecommish@gmail.com</a></u></span></p>")
                                        )
                                 ),
                                 column(width = 6,
@@ -67,7 +86,7 @@ guestUI <-
                                                  h2("Season Leaders"),
                                                  em("Year-to-date points leaders (select Season using dropdown above and use column position filter)"),
                                                  hr(),
-                                                 reactableOutput('homepointsleaders', height = "100%"),
+                                                 reactableOutput('homepointsleaders')
                                        ))
                                 
                               ),

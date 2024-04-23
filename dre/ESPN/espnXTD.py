@@ -111,7 +111,7 @@ def runXTD():
       'If-None-Match': 'W/512483eb531a053b813e1053b334fca28b487287',
   }
   
-  response = requests.get('https://www.espn.com/fantasy/insider/football/insider/story/_/id/34585389/fantasy-football-rankings-nfl-expected-touchdowns-opportunity-2022', cookies=cookies, headers=headers)
+  response = requests.get('https://www.espn.com/fantasy/insider/football/insider/story/_/id/38333212/fantasy-football-rankings-nfl-expected-td-opportunity-2023', cookies=cookies, headers=headers)
   soup = BeautifulSoup(response.content, 'html.parser')
   
   complete =  soup.find("section", {"id": "article-feed"})
@@ -137,7 +137,7 @@ def runXTD():
   
 def main():
   runXTD()
+  print("xTD ESPN DONE")
 
 if __name__ == "__main__":
   main()
-

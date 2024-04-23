@@ -53,6 +53,7 @@ fptscolor <- "#1E65D2"
 textgreen <- "#00B050"
 textred <- "#C00000"
 rookieextension <- "#8750AE"
+franchisetag <- "#00B0F0"
 tabletextcol <- "#3A3A3A"
 rd1col <- "#CCDAF5"
 rd2col <- "#FDF2D0"
@@ -371,7 +372,10 @@ extradashszn <- extradash[,
 extradashszn <- extradashszn[order(-TotYd)]
 
 #espn data
-espn <- as.data.table(read_csv("data/espnStats.csv", col_types = cols()))
+espn <- as.data.table(read_csv("data/espnStats.csv", col_types = cols(Season = col_double(), Player = col_character(), NFL = col_character(),
+                                                                      Pos = col_character(), xFP = col_double(), ActualPts = col_double(), xTD = col_double(),
+                                                                      TD = col_double(), Looks = col_double(), Diff = col_double(), In5 = col_double(), EZ = col_double())))
+espn <- espn[Player != "Jeffery Simmons"]
 espn <- espn[,
              .(
                xFP = sum(xFP, na.rm = T),
@@ -383,29 +387,30 @@ espn <- espn[,
                In5 = max(In5, na.rm = T),
                EZ = max(EZ, na.rm = T)
              ),
-             by = .(Pos, Player)]
+             by = .(Season, Pos, Player)]
 espn$xFP <- as.numeric(espn$xFP); espn$ActualPts <- as.numeric(espn$ActualPts); espn$xTD <- as.numeric(espn$xTD); espn$TD <- as.numeric(espn$TD)
 espn$Looks <- as.numeric(espn$Looks); espn$Diff <- as.numeric(espn$Diff); espn$In5 <- as.numeric(espn$In5); espn$EZ <- as.numeric(espn$EZ)
 espn$FPDiff <- espn$ActualPts - espn$xFP
-espn <- merge(x = espn, y = rosters[ , .(Pos, Player, TRUFFLE)], by = c("Pos", "Player"), all.x=TRUE)
+espn <- merge(x = espn, y = oldrosters[ , .(Season, Pos, Player, TRUFFLE)], by = c("Season", "Pos", "Player"), all.x=TRUE)
 espn$TRUFFLE[is.na(espn$TRUFFLE)] <- "FA"
-colnames(espn)[8] <- "TDDiff"
-espn <- espn[, .(TRUFFLE, Pos, Player, xFP, ActualPts, FPDiff, xTD, TD, TDDiff, Looks, `In5`, EZ)]
+colnames(espn)[9] <- "TDDiff"
+espn <- espn[, .(Season, TRUFFLE, Pos, Player, xFP, ActualPts, FPDiff, xTD, TD, TDDiff, Looks, `In5`, EZ)]
 
 #snaps data
 snaps <- as.data.table(read_csv("data/snapPer.csv", col_types = cols()))
 snaps <- merge(x = snaps, y = rosters[ , .(Pos, Player, TRUFFLE)], by = c("Pos", "Player"), all.x=TRUE)
 snaps$TRUFFLE[is.na(snaps$TRUFFLE)] <- "FA"
-snaps <- snaps[, c(24, 1:21, 23, 22)]
+snaps <- snaps[, c(3, 25, 1:2, 4:22, 24, 23)]
 snaps[snaps == "bye"] <- NA
-colnames(snaps)[23:24] <- c("Avg", "Total Snaps")
+colnames(snaps)[24:25] <- c("Avg", "Tot")
 #dividing snaps by 100 for percentage formatting
-for (i in 5:22) {
-  if(is.numeric(snaps[[i]])) {
+for (i in 5:24) {
+  #if(is.numeric(snaps[[i]])) {
+    snaps[[i]] <- as.numeric(snaps[[i]])
     snaps[[i]] <- snaps[[i]]/100
-  }
+  #}
 }
-snaps$Avg <- snaps$Avg/100
+snaps[snaps == 0] <- NA
 
 # modifying tables for display -----
 
@@ -462,27 +467,83 @@ wayoldrosterstp <- rbind(wayoldrosterstp, wayoldrosterstpPPR, wayoldrosterstphPP
 wayoldrosterstp <- merge(wayoldrosterstp, seasons[Player %in% wayoldrosterstp$Player, -"NFL"], by = c('Scoring','Season','Pos','Player'), all.x = T)
 wayoldrosterstp <- wayoldrosterstp[, .(Scoring, Season, TRUFFLE, Pos, Player, NFL, G, PosRk, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 
+#franchise tag vals
+tagvals <- as.data.table(
+  rbind(
+    c("QB", "First", round(mean(top5paid$Salary[top5paid$Pos == "QB" & top5paid$Season == currentyr]))),
+    c("QB", "Second", max(top5paid$Salary[top5paid$Pos == "QB" & top5paid$Season == currentyr]) + 1 ),
+    c("RB", "First", round(mean(top5paid$Salary[top5paid$Pos == "RB" & top5paid$Season == currentyr]))),
+    c("RB", "Second", max(top5paid$Salary[top5paid$Pos == "RB" & top5paid$Season == currentyr]) + 1 ),
+    c("WR", "First", round(mean(top5paid$Salary[top5paid$Pos == "WR" & top5paid$Season == currentyr]))),
+    c("WR", "Second", max(top5paid$Salary[top5paid$Pos == "WR" & top5paid$Season == currentyr]) + 1 ),
+    c("TE", "First", round(mean(top5paid$Salary[top5paid$Pos == "TE" & top5paid$Season == currentyr]))),
+    c("TE", "Second", max(top5paid$Salary[top5paid$Pos == "TE" & top5paid$Season == currentyr]) + 1 )
+  )
+)
+colnames(tagvals) <- c("Pos", "Type", "TagVal")
+tagvals$TagVal <- as.numeric(tagvals$TagVal)
+
+#table of players with franchise tag values
+ft <- rosters[, .(Pos, Player, Salary, Contract)][order(-Salary)][Pos %in% c("QB", "RB", "WR", "TE")]
+ft$TagVal <- NA
+
+for (i in 1:nrow(ft)) {
+  pos <- ft$Pos[i]
+  pl <- ft$Player[i]
+  csal <- ft$Salary[i]
+  ccon <- ft$Contract[i]
+  
+  #set players w >1 yr on contract to ineligible
+  if (ccon != 1) {
+    ft$TagVal[i] <- "Ineligible (>1 yr)"
+    #set players w expiring rookie contracts eligible for extensions to ineligible
+  } else if (ccon == 1 & pl %in% rookierights) {
+    ft$TagVal[i] <- "Ineligible (Rookie Ext)"
+    #set players franchise tagged 2 previous seasons to ineligible
+  } else if (pl %in% franchised$Player[franchised$Season == currentyr] & pl %in% franchised$Player[franchised$Season == currentyr - 1]) {
+    ft$TagVal[i] <- "Ineligible (tagged 2x)"
+    #set players franchise tagged previously to second tag value based on position
+  } else if (pl %in% franchised$Player[franchised$Season == currentyr]) {
+    ft$TagVal[i] <- tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "Second"]
+    #set players who's current salary is greater than first tag value, to current salary plus 1
+    #  } else if (csal >= tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "First"]) {
+    #ft$TagVal[i] <- csal + 1
+    #set all other players on 1 year contracts to first tag
+  } else {
+    ft$TagVal[i] <- tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "First"]
+  }
+}
+
 #contracts table
 contracts <- rosters[, .(TRUFFLE, Pos, Player, Age, NFL, Salary, Contract)]
 contracts <- merge(x = contracts, y = draft[, .(Pos, Player, Extension)], by = c("Pos", "Player"), all.x = T)[order(Player)]
+contracts <- merge(x = contracts, y = ft[, .(Pos, Player, TagVal)], by = c("Pos", "Player"), all.x = T)[order(Player)]
 contracts <- contracts[, `:=`(`'23` = Salary,
                               `'24` = ifelse(Contract > 1, Salary,
                                              ifelse(Contract == 1 & is.element(Player, rookierights) == T, Extension,
-                                                    ifelse(Contract == 1 & is.element(Player, rookierights) == F, "FA", "-"))),
+                                                    ifelse(Contract == 1 & as.numeric(TagVal) > 0 & is.na(as.numeric(TagVal)) == F, TagVal,
+                                                           ifelse(Contract == 1 & is.element(Player, rookierights) == F, "FA", "-")))),
                               `'25` = ifelse(Contract > 2, Salary,
                                              ifelse(Contract == 1 & is.element(Player, rookierights) == T, Extension,
                                                     ifelse(Contract == 2 & is.element(Player, rookierights) == T, Extension,
-                                                           ifelse(Contract == 2 & is.element(Player, rookierights) == F, "FA", "-")))),
+                                                           ifelse(Contract == 1 & is.element(Player, franchised$Player[franchised$Season == currentyr]) == F, "FT",
+                                                                  ifelse(Contract == 1 & is.element(Player, franchised$Player[franchised$Season == currentyr - 1]) == F, "FA",
+                                                                         ifelse(Contract == 2, "FT", "-")))))),
                               `'26` = ifelse(Contract > 3, Salary,
-                                             ifelse(Contract == 1 & is.element(Player, rookierights) == T, "FA",
+                                             ifelse(Contract == 1 & is.element(Player, rookierights) == T, "FT",
                                                     ifelse(Contract == 2 & is.element(Player, rookierights) == T, Extension,
                                                            ifelse(Contract == 3 & is.element(Player, rookierights) == T, Extension,
-                                                                  ifelse(Contract == 3 & is.element(Player, rookierights) == F, "FA", "-"))))),
+                                                                  ifelse(Contract == 1 & is.element(Player, franchised$Player[franchised$Season == currentyr]) == F, "FA",
+                                                                         ifelse(Contract == 2, "FT",
+                                                                                ifelse(Contract == 3 & is.element(Player, rookierights) == F, "FT", "-"))))))),
                               `'27` = ifelse(Contract > 4, Salary,
-                                             ifelse(Contract == 2 & is.element(Player, rookierights) == T, "FA",
-                                                    ifelse(Contract == 3 & is.element(Player, rookierights) == T, Extension,
-                                                           ifelse(Contract == 4 & is.element(Player, rookierights) == T, Extension,
-                                                                  ifelse(Contract == 4 & is.element(Player, rookierights) == F, "FA", "-")))))
+                                             ifelse(Contract == 1 & is.element(Player, rookierights) == T, "FT",
+                                                    ifelse(Contract == 2 & is.element(Player, rookierights) == T, "FT",
+                                                           ifelse(Contract == 3 & is.element(Player, rookierights) == T, Extension,
+                                                                  ifelse(Contract == 4 & is.element(Player, rookierights) == T, Extension,
+                                                                         ifelse(Contract == 3 & is.element(Player, rookierights) == F, "FT",
+                                                                         ifelse(Contract == 2 & is.element(Player, rookierights) == F, "FA",
+                                                                         ifelse(Contract == 4 & is.element(Player, rookierights) == F, "FT", "-"))))))))
 )][order(-Salary)]
 
 #ppd <- teamportal[, `:=`(`PP$` = round(FPts/Salary,2), `wPP$`= round(Avg/Salary,2))][, c("TRUFFLE", "Pos", "Player", "Avg", "FPts", "PP$", "wPP$")]
@@ -584,53 +645,6 @@ extval <- as.data.table(rbind(c("QB", "1.1-1.6", 70), c("QB", "1.7-1.12", 60), c
 colnames(extval) <- c("Pos","Pick", "Value")
 extval$Value <- as.numeric(extval$Value)
 
-#franchise tag vals
-tagvals <- as.data.table(
-  rbind(
-    c("QB", "First", round(mean(top5paid$Salary[top5paid$Pos == "QB" & top5paid$Season == currentyr - 1]))),
-    c("QB", "Second", max(top5paid$Salary[top5paid$Pos == "QB" & top5paid$Season == currentyr - 1]) + 1 ),
-    c("RB", "First", round(mean(top5paid$Salary[top5paid$Pos == "RB" & top5paid$Season == currentyr - 1]))),
-    c("RB", "Second", max(top5paid$Salary[top5paid$Pos == "RB" & top5paid$Season == currentyr - 1]) + 1 ),
-    c("WR", "First", round(mean(top5paid$Salary[top5paid$Pos == "WR" & top5paid$Season == currentyr - 1]))),
-    c("WR", "Second", max(top5paid$Salary[top5paid$Pos == "WR" & top5paid$Season == currentyr - 1]) + 1 ),
-    c("TE", "First", round(mean(top5paid$Salary[top5paid$Pos == "TE" & top5paid$Season == currentyr]))),
-    c("TE", "Second", max(top5paid$Salary[top5paid$Pos == "TE" & top5paid$Season == currentyr - 1]) + 1 )
-  )
-)
-colnames(tagvals) <- c("Pos", "Type", "TagVal")
-tagvals$TagVal <- as.numeric(tagvals$TagVal)
-
-#table of players with franchise tag values
-ft <- rosters[, .(Pos, Player, Salary, Contract)][order(-Salary)][Pos %in% c("QB", "RB", "WR", "TE")]
-ft$TagVal <- NA
-
-for (i in 1:nrow(ft)) {
-  pos <- ft$Pos[i]
-  pl <- ft$Player[i]
-  csal <- ft$Salary[i]
-  ccon <- ft$Contract[i]
-  
-  #set players w >1 yr on contract to ineligible
-  if (ccon != 1) {
-    ft$TagVal[i] <- "Ineligible (>1 yr)"
-    #set players w expiring rookie contracts eligible for extensions to ineligible
-  } else if (ccon == 1 & pl %in% rookierights) {
-    ft$TagVal[i] <- "Ineligible (Rookie Ext)"
-    #set players franchise tagged 2 previous seasons to ineligible
-  } else if (pl %in% franchised$Player[franchised$Season == currentyr - 1] & pl %in% franchised$Player[franchised$Season == currentyr - 2]) {
-    ft$TagVal[i] <- "Ineligible (tagged 2x)"
-    #set players franchise tagged previously to second tag value based on position
-  } else if (pl %in% franchised$Player[franchised$Season == currentyr - 1]) {
-    ft$TagVal[i] <- tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "Second"]
-    #set players who's current salary is greater than first tag value, to current salary plus 1
-    #  } else if (csal >= tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "First"]) {
-    #ft$TagVal[i] <- csal + 1
-    #set all other players on 1 year contracts to first tag
-  } else {
-    ft$TagVal[i] <- tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "First"]
-  }
-}
-
 #fantasy portal table
 truffleanalysis <- fantasy[Scoring == "PPFD",
                            .(FPts = sum(FPts),
@@ -693,13 +707,10 @@ pptrufflecareerteam <- fantasy[Pos != "DST" & Scoring == "PPFD",
 
 
 #byog master table set up -----
-espnforbyog <- espn
-espnforbyog$Season <- 2022
-
 byog <- merge(seasons[Season > 2020], advanced[, -c("FPts","TRUFFLE")], by = c('Scoring','Season','Pos','Player'), all.x = T)
 byog <- merge(byog, consistency[, -c("Avg","G","TRUFFLE")], by = c('Scoring','Season','Pos','Player'), all.x = T)
 byog <- merge(byog, extradashszn[, -c("Tar","G","TRUFFLE")], by = c('Season','Pos','Player'), all.x = T)
-byog <- merge(byog, espnforbyog[, -c("TRUFFLE")], by = c('Season','Pos','Player'), all.x = T)
+byog <- merge(byog, espn[, -c("TRUFFLE")], by = c('Season','Pos','Player'), all.x = T)
 byog <- merge(byog, oldrosters[, -c("TRUFFLE","NFL")], by = c('Season','Pos','Player'), all.x = T)
 byog$PPFD <- ifelse(byog$Scoring == "PPFD", byog$FPts,
                     ifelse(byog$Scoring == "PPR", byog$FPts - byog$Rec + byog$RuFD + byog$ReFD,
@@ -717,7 +728,6 @@ byog$STD <- ifelse(byog$Scoring == "PPFD", byog$FPts - byog$RuFD - byog$ReFD,
                     ifelse(byog$Scoring == "PPR", byog$FPts - byog$Rec,
                            ifelse(byog$Scoring == "hPPR", byog$FPts - 0.5*byog$Rec,
                                   ifelse(byog$Scoring == "STD", byog$FPts, NA))))
-rm(espnforbyog)
 
 #radar plot set up ----
 radchart_fill <- c(
@@ -991,7 +1001,7 @@ trfDefRivScores <- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE, m
   )
 }
 
-posDef <- function(maxW = 48, filt = T, foot = "", sort = T) {
+posDef <- function(maxW = 48, filt = T, foot = NULL, sort = T) {
   colDef(maxWidth = maxW,
          filterable = filt,
          footer = foot,
@@ -1115,10 +1125,10 @@ tagvalDefNobar <- function(minW = 45, foot = T, title = "$") {
   )
 }
 
-contractDef <- function(minW = 45, filt = T, foot = F, name = "Contract") {
+contractDef <- function(minW = 45, filt = T, foot = F, title = "Contract") {
   colDef(minWidth = minW,
-         filt = filt,
-         name = name,
+         filterable = filt,
+         name = title,
          style = function(value) {
            background <- ifelse(value == 1, RBcolor,
                                 ifelse(value == 2, TEcolor,
@@ -1130,18 +1140,19 @@ contractDef <- function(minW = 45, filt = T, foot = F, name = "Contract") {
 
 #formatting for future columns (including FA and RR tags)
 futurecolDef <- function(maxW = 75, filt = T, foot = F, yr) {
-  colDef(header = with_tt(yr, "FA: Free Agent\nPurple: Rookie Extension Value"),
+  colDef(header = with_tt(yr, "FA: Free Agent\nPurple: Rookie Extension Value\nBlue: Franchise Tag"),
          maxWidth = maxW,
          filterable = filt,
          align = 'right',
          defaultSortOrder = "desc",
          style = function(value, index) {
+           tag <- contracts$TagVal[index]
            ext <- contracts$Extension[index]
-           col <- ifelse(value == "FA", textred, ifelse(value == ext, rookieextension, tabletextcol))
+           col <- ifelse(as.character(value) == "FT", franchisetag,
+                         ifelse(as.character(value) == as.character(ext), rookieextension,
+                                ifelse(as.character(value) == "FA", textred,
+                                       ifelse(as.character(value) == as.character(tag), franchisetag, tabletextcol))))
            list(color = col)},
-         #cell = function(value) {
-         #class <- paste0("tag status-", value)
-         #htmltools::div(class = class, value)},
          footer = function(values) if(foot == T) {paste0("$", sum(as.numeric(values), na.rm=T))}
   )
 }
@@ -1205,6 +1216,7 @@ fptsSeasDef <- function(maxW = 65, borderL = F, digs = 1, filt = F, col = T) {
 
 seasonDef <- function(name = "Yr", maxW = 45, filt = F) {
   colDef(name=name,
+         format = colFormat(percent = F),
          maxWidth = maxW,
          defaultSortOrder = "desc",
          align = 'center',

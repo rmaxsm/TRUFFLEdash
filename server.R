@@ -22,7 +22,9 @@ shinyServer(function(input, output, session) {
   # authenticate user by:
   #   1. checking whether their team is in the credentials
   observeEvent(input$login_button, {
-    credentials <- data.frame(user = c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW","GUEST"),
+    credentials <- data.frame(user = c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW",
+                                       "ABT", "CLC", "CPC", "DDD", "LBC", "LC", "MB","NBB","PCP","PP","RR", "SBS",
+                                       "GUEST"),
                               stringsAsFactors = FALSE)
     
     # if user name row and password name row are same, credentials are valid
@@ -46,6 +48,7 @@ shinyServer(function(input, output, session) {
       user_input$authenticated <- TRUE
       globalteam <<- toupper(input$user_name)
       updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
+      updateSelectInput(session, 'tmportalyr', choices = sort(c(unique(seasons$Season), currentyr), decreasing = T), selected = currentyr)
       updateSelectInput(session, 'rivalry', choices = unique(teams$RivalryName), selected = teams$RivalryName[teams$Abbrev == globalteam])
       updateSelectInput(session, 'tmtm1', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
     } else {
@@ -107,7 +110,7 @@ shinyServer(function(input, output, session) {
   #home page standings
   output$hometeamsfantasy <- renderReactable({
     teamsfantasy <- teamsfantasyweekly[Scoring == input$homescoring,
-                                       .(Weekly = list(FPts),
+                                       .(Weekly = list(round(FPts,2)),
                                          Low = min(FPts, na.rm = T),
                                          High = max(FPts, na.rm = T),
                                          StdDev = round(sd(FPts, na.rm = T)),
@@ -134,14 +137,14 @@ shinyServer(function(input, output, session) {
                                   sparkline(values,
                                             type = "bar",
                                             chartRangeMin = 0,
-                                            chartRangeMax = max(teamsfantasy$FPts))
+                                            chartRangeMax = max(teamsfantasyweekly$FPts[teamsfantasy$Season == input$homeseason]))
                                 }),
                 Low = colDef(header = with_tt("Low", "Lowest weekly score"),
                              minWidth = 50,
                              align = 'right',
                              format = colFormat(digits=1),
                              style = function(value) {
-                               fontWeight <- ifelse(value == min(teamsfantasy$Low), 'bold', 'plain')
+                               fontWeight <- ifelse(value == min(teamsfantasy$Low[teamsfantasy$Season == input$homeseason], na.rm = T), 'bold', 'plain')
                                list(fontWeight = fontWeight)
                              }),
                 High = colDef(header = with_tt("High", "Highest weekly score"),
@@ -149,7 +152,7 @@ shinyServer(function(input, output, session) {
                               align = 'right',
                               format = colFormat(digits=1),
                               style = function(value) {
-                                fontWeight <- ifelse(value == max(teamsfantasy$High), 'bold', 'plain')
+                                fontWeight <- ifelse(value == max(teamsfantasy$High[teamsfantasy$Season == input$homeseason], na.rm = T), 'bold', 'plain')
                                 list(fontWeight = fontWeight)
                               }),
                 Avg = colDef(header = with_tt("Avg", "Weekly average team FPts"),
@@ -160,7 +163,7 @@ shinyServer(function(input, output, session) {
                                align = 'left',
                                format = colFormat(digits=0),
                                cell = function(value) {
-                                 width <- paste0(value / max(teamsfantasy$Total) * 100, "%")
+                                 width <- paste0(value / max(teamsfantasy$Total[teamsfantasy$Season == input$homeseason]) * 100, "%")
                                  bar_chart(value, width = width)
                                }
                 )
@@ -169,6 +172,8 @@ shinyServer(function(input, output, session) {
   
   #home page season leaders
   output$homepointsleaders <- renderReactable({
+    if(isguest == F) {
+    
     reactable(pointsleaders[Scoring == input$homescoring & Season == input$homeseason, .(TRUFFLE, Pos, Player, PosRk, ptslogs, Avg, Total)],
               height = 420,
               defaultSorted = c("Total", "Avg"),
@@ -196,6 +201,37 @@ shinyServer(function(input, output, session) {
                 )
               )
     )
+    }
+    else {
+      reactable(pointsleaders[Scoring == input$homescoring & Season == input$homeseason, .(TRUFFLE, Pos, Player, PosRk, ptslogs, Avg, Total)],
+                height = 420,
+                defaultSorted = c("Total", "Avg"),
+                defaultSortOrder = "desc",
+                filterable = T,
+                showPageInfo = FALSE,
+                defaultPageSize = 10,
+                paginationType = 'simple',
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                resizable = F,
+                columns = list(
+                  TRUFFLE = trfDef(),
+                  Pos = posDef(),
+                  Player = playerDef(minW = 130,
+                                     filt = T),
+                  PosRk = posRkDef(filt = F),
+                  ptslogs = ptsLogDef(),
+                  Avg = avgDef(maxW = 48),
+                  Total = colDef(header = with_tt("Tot", "Seasonal total FPts"),
+                                 maxWidth = 45,
+                                 format = colFormat(digits = 0),
+                                 filterable = F
+                  )
+                )
+      )
+      
+    }
   })
   
   #home weekly top 5 qb
@@ -461,7 +497,7 @@ shinyServer(function(input, output, session) {
                 Bye = byeDef,
                 NFL = nflDef,
                 Salary = salaryDefBar(foot = T),
-                Contract = contractDef(foot = T, name = "Yr"),
+                Contract = contractDef(foot = T, title ="Yr"),
                 G = gDef(),
                 PosRk = posRkDef(filt = T),
                 ptslog = ptsLogDef(),
@@ -508,7 +544,7 @@ shinyServer(function(input, output, session) {
                   Player = playerDef(filt=T),
                   NFL = nflDef,
                   Salary = salaryDefBar(foot = T),
-                  Contract = contractDef(foot = T, name = "Yr"),
+                  Contract = contractDef(foot = T, title ="Yr"),
                   G = gDef(),
                   PosRk = posRkDef(filt = T),
                   ptslog = ptsLogDef(),
@@ -524,19 +560,28 @@ shinyServer(function(input, output, session) {
     }
   })
   
+  contractsreact <- reactive(contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][, !c("TRUFFLE", "TagVal")][order(match(Pos, positionorder), -Salary, Player)])
+  
+  selectedguys <- reactive(getReactableState("tpcontracts", "selected"))
+  
   #team portal contracts
   output$tpcontracts <- renderReactable({
     if (input$tmportalyr == currentyr) {
     futurecolDef <- function(maxW = 75, filt = T, foot = F, yr) {
-      colDef(header = with_tt(yr, "FA: Free Agent\nPurple: Rookie Extension Value"),
+      colDef(header = with_tt(yr, "FA: Free Agent\nPurple: Rookie Extension Value\nBlue: Franchise Tag"),
              maxWidth = maxW,
              filterable = filt,
              align = 'right',
              defaultSortOrder = "desc",
              style = function(value, index) {
-               df <- contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][, !c("TRUFFLE")][order(match(Pos, positionorder), -Salary)]
+               df <- contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][, !c("TRUFFLE")][order(match(Pos, positionorder), -Salary, Player)]
+               pl <- as.numeric()
+               tag <- df$TagVal[index]
                ext <- df$Extension[index]
-               col <- ifelse(value == "FA", textred, ifelse(value == ext, rookieextension, tabletextcol))
+               col <- ifelse(as.character(value) == as.character("FT"), franchisetag,
+                             ifelse(as.character(value) == as.character(ext), rookieextension,
+                                    ifelse(as.character(value) == as.character("FA"), textred,
+                                           ifelse(as.character(value) == as.character(tag), franchisetag, tabletextcol))))
                list(color = col)},
              #cell = function(value) {
              #class <- paste0("tag status-", value)
@@ -545,7 +590,8 @@ shinyServer(function(input, output, session) {
       )
     }
     
-    reactable(contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][, !c("TRUFFLE")][order(match(Pos, positionorder), -Salary)],
+    reactable(contractsreact(),
+              selection = "multiple", onClick = "select",
               defaultSortOrder = "desc",
               pagination = FALSE,
               filterable = T,
@@ -558,7 +604,7 @@ shinyServer(function(input, output, session) {
                 Age = ageDef,
                 NFL = nflDef,
                 Salary = salaryDefBar(foot = T),
-                Contract = contractDef(name = "Yr", foot = T),
+                Contract = contractDef(title ="Yr", foot = T),
                 `'23` = futurecolDef(yr = "'23", foot = T),
                 `'24` = futurecolDef(yr = "'24", foot = T),
                 `'25` = futurecolDef(yr = "'25", foot = T),
@@ -588,7 +634,7 @@ shinyServer(function(input, output, session) {
                   Player = playerDef(filt=T),
                   NFL = nflDef,
                   Salary = salaryDefBar(foot = T),
-                  Contract = contractDef(foot = T, name = "Yr")
+                  Contract = contractDef(foot = T, title ="Yr")
                 ),
                 columnGroups = list(
                   colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left')
@@ -765,7 +811,8 @@ shinyServer(function(input, output, session) {
   
   #team portal xfpxtd
   output$tpxfpxtd <- renderReactable({
-    reactable(espn[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-xFP)][, !c("TRUFFLE")],
+    if (input$tmportalyr >= 2022) {
+    reactable(espn[Season == input$tmportalyr & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-xFP)][, !c("TRUFFLE", "Season")],
               pagination = F,
               height = 'auto',
               filterable = F,
@@ -789,27 +836,40 @@ shinyServer(function(input, output, session) {
                 EZ = colDef(header = with_tt("EZ", "End Zone Targets"))
               )
     )
+    } else {
+      emptydf <- as.data.table("Sorry, no data available. ESPN expected statistics only introduced in 2022.")
+      colnames(emptydf) <- c("Error")
+      reactable(emptydf)
+    }
+    
   })
   
   #team portal snap share
   output$tpsnapshare <- renderReactable({
-    reactable(snaps[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-`Total Snaps`)][, !c("TRUFFLE", "Team")],
+    if (input$tmportalyr >= 2022) {
+    reactable(snaps[Season == input$tmportalyr & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-Tot)][, !c("TRUFFLE", "Team", "Season")],
               pagination = F,
               height = 'auto',
               filterable = F,
               highlight = T,
               compact = T,
               defaultColDef = colDef(
-                minWidth = 50,
+                minWidth = 48,
                 align = "center",
                 format = colFormat(percent = T)
               ),
               columns = list(
                 Pos = posDef(),
                 Player = playerDef(minW = 125, filt = T),
-                `Total Snaps` = colDef(minWidth = 150, format = colFormat(percent = F))
+                `18` = colDef(class = "border-right-grey"),
+                Tot = colDef(minWidth = 50, format = colFormat(percent = F))
               )
     )
+    } else {
+      emptydf <- as.data.table("Sorry, no data available. Snap share statistics only introduced in 2022.")
+      colnames(emptydf) <- c("Error")
+      reactable(emptydf)
+    }
   })
   
   #team portal fantasy logs
@@ -977,9 +1037,9 @@ shinyServer(function(input, output, session) {
   #player portal Contract History
   output$ppcontracthistory <- renderReactable({
     df <- oldrosters[Player %in% input$player,
-                     .(TRUFFLE = TRUFFLE[Season == 2022],
-                       Salary = Salary[Season == 2022],
-                       Contract = Contract[Season == 2022]
+                     .(TRUFFLE = TRUFFLE[Season == currentyr],
+                       Salary = Salary[Season == currentyr],
+                       Contract = Contract[Season == currentyr]
                      ),
                      by = .(Player)][order(-Salary)]
     
@@ -994,7 +1054,7 @@ shinyServer(function(input, output, session) {
                 Player = playerDef(minW = 125),
                 TRUFFLE = trfDef(filt = FALSE),
                 Salary = salaryDefNobar(title = "$"),
-                Contract = contractDef(filt = F, name = "Yr")
+                Contract = contractDef(filt = F, title ="Yr")
               ),
               details = function(index) {
                 poi <- df$Player[index]
@@ -1151,7 +1211,7 @@ shinyServer(function(input, output, session) {
   
   #player portal extra dash
   output$ppextradash <- renderReactable({
-    reactable(extradashszn[Player %in% input$player][order(TotYd)][, !c("TRUFFLE", "Pos")],
+    reactable(extradashszn[Player %in% input$player][order(TotYd) & Season == as.numeric(input$ppstatcenterseason)][, !c("TRUFFLE", "Pos")],
               pagination = F,
               defaultSorted = c("TotYd"),
               defaultSortOrder = "desc",
@@ -1191,7 +1251,13 @@ shinyServer(function(input, output, session) {
   
   #player portal xfpxtd
   output$ppxfpxtd <- renderReactable({
-    reactable(espn[Player %in% input$player][order(-xFP)][, !c("TRUFFLE", "Pos")],
+    if(input$ppstatcenterseason == "All") {
+      df <- espn
+    } else {
+      df <- espn[Season == as.numeric(input$ppstatcenterseason)]
+    }
+    
+    reactable(df[Player %in% input$player][order(-xFP)][, !c("TRUFFLE", "Pos")],
               pagination = F,
               defaultSorted = c("xFP"),
               defaultSortOrder = "desc",
@@ -1203,6 +1269,7 @@ shinyServer(function(input, output, session) {
                 align = "right"
               ),
               columns = list(
+                Season = seasonDef(),
                 Player = playerDef(minW = 125),
                 xFP = colDef(header = with_tt("xFP", "Expected ESPN Fantasy Points")),
                 ActualPts = colDef(header = with_tt("aFP", "Actual ESPN Fantasy Points")),
@@ -1219,21 +1286,30 @@ shinyServer(function(input, output, session) {
   
   #player portal snap share
   output$ppsnapshare <- renderReactable({
-    reactable(snaps[Player %in% input$player][order(-`Total Snaps`)][, !c("TRUFFLE", "Pos", "Team")],
+    
+    if(input$ppstatcenterseason == "All") {
+      df <- snaps
+    } else {
+      df <- snaps[Season == as.numeric(input$ppstatcenterseason)]
+    }
+    
+    reactable(df[Player %in% input$player][order(-Tot)][, !c("TRUFFLE", "Pos", "Team")],
               pagination = F,
-              defaultSorted = c("Total Snaps"),
+              defaultSorted = c("Tot"),
               defaultSortOrder = "desc",
               height = 'auto',
               filterable = F,
               highlight = T,
               defaultColDef = colDef(
-                minWidth = 50,
+                minWidth = 48,
                 align = "center",
                 format = colFormat(percent = T)
               ),
               columns = list(
+                Season = seasonDef(),
                 Player = playerDef(minW = 120),
-                `Total Snaps` = colDef(minWidth = 150, format = colFormat(percent = F))
+                `18` = colDef(class = "border-right-grey"),
+                Tot = colDef(minWidth = 50, format = colFormat(percent = F))
               )
     )
   })
@@ -1807,10 +1883,10 @@ shinyServer(function(input, output, session) {
   
   #stat center xfpxtd
   output$scxfpxtd <- renderReactable({
-    espnsc <-espn[order(-xFP)]
+    espnsc <-espn[Season == input$scseason][order(-xFP)][, !c("Season")]
     espnsc$TRUFFLEdum <- ifelse(espnsc$TRUFFLE == "FA", "FA", "Owned")
     espnsc <- action_mod(espnsc, team = globalteam)
-    espnsc <- espnsc[, .(Action,TRUFFLE,Pos, Player,xFP,ActualPts,FPDiff,xTD,TD,TDDiff,Looks,In5,EZ,TRUFFLEdum,playerID,TeamNum,ActionLink)]
+    espnsc <- espnsc[, .(Action,TRUFFLE,Pos,Player,xFP,ActualPts,FPDiff,xTD,TD,TDDiff,Looks,In5,EZ,TRUFFLEdum,playerID,TeamNum,ActionLink)]
     
     reactable(espnsc[TRUFFLEdum %in% input$scavailable & Pos %in% input$scpositions][, !c("TRUFFLEdum", "playerID", "TeamNum", "ActionLink")],
               paginationType = "jump",
@@ -1862,15 +1938,15 @@ shinyServer(function(input, output, session) {
   
   #stat center snap share
   output$scsnapshare <- renderReactable({
-    snapssc <- snaps[order(-`Total Snaps`)]
+    snapssc <- snaps[Season == input$scseason][order(-Tot)][, !c("Season")]
     snapssc$TRUFFLEdum <- ifelse(snapssc$TRUFFLE == "FA", "FA", "Owned")
     snapssc <- action_mod(snapssc, team = globalteam)
-    snapssc <- snapssc[, c(28, 1:27, 29)]
+    snapssc <- snapssc[, c(28, 2, 3, 1, 4:27, 29)]
     
-    reactable(snapssc[TRUFFLEdum %in% input$scavailable & Pos %in% input$scpositions][, !c("TRUFFLEdum", "playerID", "TeamNum", "ActionLink")],
+    reactable(snapssc[TRUFFLEdum %in% input$scavailable & Pos %in% input$scpositions][, !c("TRUFFLEdum", "playerID", "TeamNum", "ActionLink", "Team")],
               paginationType = "jump",
               showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
-              defaultSorted = c("Total Snaps"),
+              defaultSorted = c("Tot"),
               defaultSortOrder = "desc",
               pageSizeOptions = c(10, 20, 50, 100),
               height = 'auto',
@@ -1878,7 +1954,7 @@ shinyServer(function(input, output, session) {
               highlight = T,
               compact = T,
               defaultColDef = colDef(
-                minWidth = 50,
+                minWidth = 48,
                 align = "center",
                 format = colFormat(percent = T)
               ),
@@ -1902,7 +1978,8 @@ shinyServer(function(input, output, session) {
                 Pos = posDef(),
                 Player = playerDef(minW = 125, filt = T),
                 Team = nflDef,
-                `Total Snaps` = colDef(minWidth = 150, format = colFormat(percent = F))
+                `18` = colDef(class = "border-right-grey"),
+                Tot = colDef(minWidth = 50, format = colFormat(percent = F))
               )
     )
   })
@@ -1976,7 +2053,7 @@ shinyServer(function(input, output, session) {
                 Age = colDef(minWidth =  40),
                 NFL = colDef(minWidth =  40),
                 Salary = salaryDefNobar(minW = 45, foot = T),
-                Contract = contractDef(minW = 30, foot = T, name = "Yr", filt = F),
+                Contract = contractDef(minW = 30, foot = T, title ="Yr", filt = F),
                 ptslog = ptsLogDef(maxW = 70),
                 Avg = avgDef(maxW = 45),
                 FPts = fptsSeasDef(maxW = 50)
@@ -2002,7 +2079,7 @@ shinyServer(function(input, output, session) {
                 Age = colDef(minWidth =  40),
                 NFL = colDef(minWidth =  40),
                 Salary = salaryDefNobar(minW = 45, foot = T),
-                Contract = contractDef(minW = 30, foot = T, name = "Yr", filt = F),
+                Contract = contractDef(minW = 30, foot = T, title ="Yr", filt = F),
                 ptslog = ptsLogDef(maxW = 70),
                 Avg = avgDef(maxW = 45),
                 FPts = fptsSeasDef(maxW = 50)
@@ -2020,7 +2097,7 @@ shinyServer(function(input, output, session) {
     
     if (length(selectedtm1()) >= 1) {
       
-      reactable(contractstm1()[, !c("TRUFFLE", "Age")],
+      reactable(contractstm1()[, !c("TRUFFLE", "Age", "TagVal")],
                 defaultSortOrder = "desc",
                 pagination = FALSE,
                 sortable = F,
@@ -2035,7 +2112,7 @@ shinyServer(function(input, output, session) {
                   Player = playerDef(minW = 125),
                   NFL = colDef(minWidth =  40),
                   Salary = salaryDefNobar(minW = 45, foot = T),
-                  Contract = contractDef(minW = 30, foot = T, name = "Yr", filt = F),
+                  Contract = contractDef(minW = 30, foot = T, title ="Yr", filt = F),
                   `'23` = futurecolDef(yr = "'23", maxW = 60, foot = T, filt = F),
                   `'24` = futurecolDef(yr = "'24", maxW = 60, foot = T, filt = F),
                   `'25` = futurecolDef(yr = "'25", maxW = 60, foot = T, filt = F),
@@ -2052,7 +2129,7 @@ shinyServer(function(input, output, session) {
     
     if (length(selectedtm2()) >= 1) {
       
-      reactable(contractstm2()[, !c("TRUFFLE", "Age")],
+      reactable(contractstm2()[, !c("TRUFFLE", "Age", "TagVal")],
                 defaultSortOrder = "desc",
                 pagination = FALSE,
                 sortable = F,
@@ -2067,7 +2144,7 @@ shinyServer(function(input, output, session) {
                   Player = playerDef(minW = 125),
                   NFL = colDef(minWidth =  40),
                   Salary = salaryDefNobar(minW = 45, foot = T),
-                  Contract = contractDef(minW = 30, foot = T, name = "Yr", filt = F),
+                  Contract = contractDef(minW = 30, foot = T, title ="Yr", filt = F),
                   `'23` = futurecolDef(yr = "'23", maxW = 60, foot = T, filt = F),
                   `'24` = futurecolDef(yr = "'24", maxW = 60, foot = T, filt = F),
                   `'25` = futurecolDef(yr = "'25", maxW = 60, foot = T, filt = F),
@@ -2183,7 +2260,7 @@ shinyServer(function(input, output, session) {
   #capcorner ----
   #capcornercontracts
   output$capcornercontracts <- renderReactable({
-    reactable(contracts[, !c("Extension")],
+    reactable(contracts[, !c("Extension","TagVal")],
               defaultSortOrder = "desc",
               paginationType = "jump",
               showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
@@ -2201,7 +2278,7 @@ shinyServer(function(input, output, session) {
                 Age = ageDef,
                 NFL = nflDef,
                 Salary = salaryDefBar(),
-                Contract = contractDef(name = "Yr"),
+                Contract = contractDef(title ="Yr"),
                 `'23` = futurecolDef(yr = "'23"),
                 `'24` = futurecolDef(yr = "'24"),
                 `'25` = futurecolDef(yr = "'25"),
@@ -2676,7 +2753,7 @@ shinyServer(function(input, output, session) {
                 Pos = posDef(filt = F),
                 Player = playerDef(minW = 125),
                 Salary = salaryDefBar(minW = 125),
-                Contract = contractDef(filt = F, name = "Yr"),
+                Contract = contractDef(filt = F, title ="Yr"),
                 TagVal = colDef(header = with_tt("Tag Value", "Player Tag Value for Next Year"),
                                 minWidth = 100,
                                 align = "right")
@@ -2688,7 +2765,7 @@ shinyServer(function(input, output, session) {
   #record books rings
   output$recordrings <- renderReactable({
     if (input$recordteams == "TRUFFLE") {
-      reactable(rings[, !c("BenchCups","BCYears","BCTeams")][order(-Rings)],
+      reactable(rings[Rings > 0, !c("BenchCups","BCYears","BCTeams")][order(-Rings)],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -2708,7 +2785,7 @@ shinyServer(function(input, output, session) {
                 )
       )
     } else {
-      reactable(ringsbyteam[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams], !c("TRUFFLE","BenchCups","BCYears","BCTeams")][order(-Rings)],
+      reactable(ringsbyteam[Rings > 0 & TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams], !c("TRUFFLE","BenchCups","BCYears","BCTeams")][order(-Rings)],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -2730,7 +2807,7 @@ shinyServer(function(input, output, session) {
   #record books rings
   output$recordbenchcups <- renderReactable({
     if (input$recordteams == "TRUFFLE") {
-      reactable(rings[, !c("Rings","RingYears","RingTeams")][order(-BenchCups)],
+      reactable(rings[BenchCups > 0, !c("Rings","RingYears","RingTeams")][order(-BenchCups)],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -2750,7 +2827,7 @@ shinyServer(function(input, output, session) {
                 )
       )
     } else {
-      reactable(ringsbyteam[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams], !c("TRUFFLE","Rings","RingYears","RingTeams")][order(-BenchCups)],
+      reactable(ringsbyteam[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] & BenchCups > 0, !c("TRUFFLE","Rings","RingYears","RingTeams")][order(-BenchCups)],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3723,7 +3800,7 @@ shinyServer(function(input, output, session) {
   #Bench Cup Output
   output$bcgsheet <- renderUI({
     tags$iframe(id = "bcgsheet", 
-                src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSyQkU3S-LR5J0QU2nb8Kh3hQPaax_TsIpVUantq6wFwvaoxcR6K5_moO4xqEqCcGx8vewMBcP3t3xG/pubhtml",
+                src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTjTy8adhC-I9-Pemw_oez5B5lO6BqogZ66H8sA10gW7kSoFg91pDudNP-Il7H5vzJr2WCyZT1RTp7G/pubhtml",
                 height=1020,
                 width='100%',
                 frameborder = 0,

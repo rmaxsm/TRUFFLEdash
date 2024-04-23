@@ -202,6 +202,7 @@ df = df[df['Avg'] != "-"]
 
 #rename columns
 df.columns = ["Season", "Week", "TRUFFLE", "Pos", "NFL", "Player", "Opp", "OpRk", "PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt", "RuAtt", "RuYd", "RuTD", "RuFD", "Tar", "Rec", "ReYd", "ReTD", "ReFD", "FL", "Avg", "FPts"]
+df['OpRk'] = df['OpRk'].replace('---', '33')
 
 df[df.columns[7:25]] = df[df.columns[7:25]].astype(float)
 
