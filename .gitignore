@@ -9,9 +9,5 @@
 data/
 demodata/
 www/
-<<<<<<< HEAD
 rsconnect/
-*dcf
-=======
-rsconnect/
->>>>>>> c5aed81073838c251ba6e2d974666c11f2cb50f1
+*.dcf
