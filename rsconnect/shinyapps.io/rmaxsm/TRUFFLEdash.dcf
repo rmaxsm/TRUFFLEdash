@@ -1,0 +1,11 @@
+name: TRUFFLEdash
+title: TRUFFLEdash
+username:
+account: rmaxsm
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3422920
+bundleId: 8507242
+url: https://rmaxsm.shinyapps.io/truffledash/
+asMultiple: FALSE
+asStatic: FALSE
