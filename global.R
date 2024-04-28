@@ -289,7 +289,7 @@ currentseason <- weekly[Season == max(weekly$Season),
                         ),
                         by = .(Scoring, Season, Pos, Player)]
 
-if (max(seasons$Season) != max(currentseason$Season)) {
+if (max(seasons$Season) != currentyr) {
   seasons <- rbind(seasons, currentseason)
 }
 
@@ -436,6 +436,8 @@ ptslogs <- weekly[order(-Season, Week)][,
                                         by = .(Scoring, Season, Pos, Player)]
 
 tpoverview <- merge(tpoverview, ptslogs[Season == max(seasons$Season), .(Player,Scoring,ptslog)], by = c('Player','Scoring'), all.x = T)
+#currentyrfix
+#if(max(currentseason$Season) > max(seasons$Season)) { tpoverview <- merge(tpoverview, seasons[Season == max(seasons$Season)][, .(Player,Scoring,PosRk)], by = c('Player','Scoring'), all.x = T) }
 tpoverview <- merge(tpoverview, seasons[Season == max(seasons$Season)][, .(Player,Scoring,PosRk)], by = c('Player','Scoring'), all.x = T)
 tpoverview <- tpoverview[, .(Scoring, TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 
@@ -453,6 +455,8 @@ oldrosterstp$Avg[oldrosterstp$Pos == "DST"] <- NA
 oldrosterstp <- oldrosterstp[, .(Scoring,Season,TRUFFLE, Pos, Player, NFL, Salary, Contract, G, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 #merge in ptslogs and posrks
 oldrosterstp <- merge(oldrosterstp, ptslogs[, .(Scoring,Season,Pos,Player,ptslog)], by = c('Scoring','Season','Pos','Player'), all.x = T)
+#currentyrfix
+#if(max(currentseason$Season) > max(seasons$Season)) { oldrosterstp <- merge(oldrosterstp, seasons[, .(Scoring,Season,Pos,Player,PosRk)], by = c('Scoring','Season','Pos','Player'), all.x = T) }
 oldrosterstp <- merge(oldrosterstp, seasons[, .(Scoring,Season,Pos,Player,PosRk)], by = c('Scoring','Season','Pos','Player'), all.x = T)
 
 #create wayoldrostersview for before 2020
