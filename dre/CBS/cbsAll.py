@@ -9,3 +9,4 @@ def main(week, season):
   
 if __name__ == "__main__":
   main()
+  # main("18", "2024")

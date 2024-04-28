@@ -211,7 +211,9 @@ nfl = pd.Series(playerTeam[1])
 
 
 #add/remove columns for TRUFFLE formatting
-df = df.drop(["Bye","Rost", "Start"],axis=1)
+# df = df.drop(["Bye","Rost", "Start"],axis=1)
+# FIND ME - this has been changed because 'Bye' is no longer on the website
+df = df.drop(["Rost", "Start"],axis=1)
 df["Player"] = player
 df.insert(0,"Season", season)
 df.insert(1,"Week", week)

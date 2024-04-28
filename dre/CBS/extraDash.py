@@ -43,7 +43,6 @@ def separateColumns(row):
   return allCols
 
 def appendToFile(df, week, season):
-  
   # masterFile = "dre/CBS/extraDash.csv"
   masterFile = "data/extraDash.csv"
   currentWeekYear = week + season
@@ -190,7 +189,10 @@ def getExtraDash(week, season):
   nfl = pd.Series(playerTeam[1])
    
   # #add/remove columns for TRUFFLE formatting
-  df = df.drop(["Bye","Rost", "Start"],axis=1)
+  # df = df.drop(["Bye","Rost", "Start"],axis=1)
+  # FIND ME - this has been changed because 'Bye' is no longer on the website
+  print(df)
+  df = df.drop(["Rost", "Start"],axis=1)
   df["Player"] = player
   # df.insert(0,"Season", season)
   # df.insert(1,"Week", week)
@@ -241,4 +243,4 @@ def main(week, season):
   print("EXTRA DASH DONE")
 if __name__ == "__main__":
   main()
-  # main("3","2022")
+  # main("18","2024")

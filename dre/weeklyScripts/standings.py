@@ -1,5 +1,4 @@
-#this is a python script. It will ask for the week then get all scoring data
-#it should append to a current csv file - can stay hardcoded or ask for filepath.
+#this is a python script that will get the current standings and store them in a CSV
 
 import os
 import requests
@@ -7,8 +6,9 @@ import datetime
 import pandas as pd
 import numpy as np
 import re
-import shutil
 from bs4 import BeautifulSoup
+from bs4 import NavigableString
+
 
 #below are 'keys' of some sort from copy and pasting - unclear how they fit in left for reference
 
@@ -81,170 +81,143 @@ headers = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36',
 }
 
-
-#get year and week for url/formatting
-season = input("What SEASON is it..? ")
-while(len(season) != 4):
-  print("get the SEASON right dumbass")
-  season = input("What SEASON is it..? ")
-
-week = input("What WEEK is it..? ")
-while(len(week) >= 3):
-  print("get the week right dumbass")
-  week = input("What WEEK is it..? ")
-# season = 2024
-# week = 18
-
-#setting current season
-currentWeekYear = week + season
-
-#time stamp
-begin_time = datetime.datetime.now()
-todays_date = datetime.datetime.today()
-
-#get information from teams document to refer to for shortcuts ext
-teamsPd = pd.read_csv("data/teams.csv")
-
-teamsDict = {}
-for index, row in teamsPd.iterrows():
-  teamsDict[row["LogsScrape"]] = row["Abbrev"]
-
-
-#returns team abbreviation from team name
-def getTeamAbbreviation(team):
-  try:
-    if(team == "W "):
-      ##NEED TO CHECK IF THIS IS WHAT IS CORRECT. WANT SEASON NOT YEAR???
-      return "W (9/1)"
-    return teamsDict[team]
-  except Exception as exp:
-    #print("An Error Occuring while trying to get the team abbreviation for " + team)
-    return "W (9/1)"
-
-#separates the column names
-#returns list representing the columns for tables 
-def separateColumns(row):
-  allCols = []
-  for i in row:
-    allCols.append(i.getText())
-  allCols[1] = "TRUFFLE"
-  return allCols
-
-#takes in a single row of html and returns the stats as list (for players/dst)
-def separatePlayers(rows):
-  itr = 0
-  curRow = []
-  for i in rows:
-    if itr == 0:    #first value always empty string
-      curRow.append("")
-    elif itr == 1:    #second value convert to team abbreviation
-      curRow.append(getTeamAbbreviation(i.getText()))
-    else:       #after first two iterations just get exact data from source
+def runStandings(szn):
+  # season="2023"
+  season = szn
+  
+  
+  begin_time = datetime.datetime.now()
+  
+  #get information from teams document to refer to for shortcuts ext
+  teamsPd = pd.read_csv("data/teams.csv")
+  
+  teamsDict = {}
+  for index, row in teamsPd.iterrows():
+    teamsDict[row["FullName"]] = row["Abbrev"]
+    
+  divisonsDict = {}
+  for index,row in teamsPd.iterrows():
+    divisonsDict[row["Division"]] = row["DivAbbrev"]
+  
+  #returns team abbreviation from team name
+  def getTeamAbbreviation(team):
+    try:
+      waived =  re.compile("W ")
+      if(waived.match(team)):
+        return team
+      return teamsDict[team]
+    except Exception as exp:
+      print("An Error Occuring while trying to get the team abbreviation for " + team)
+      return "err"
+    
+  #returns div abbreviation from team name
+  def getDivAbbrev(div):
+    try:
+      return divisonsDict[div]
+    except Exception as exp:
+      print("An Error Occuring while trying to get the Divison abbreviation for " + div)
+      return "err"
+    
+  #takes in a single row of html and returns the stats as list. 
+  #adds div and szn as not dynamic on page
+  def separatePlayers(rows, season, division):
+    curRow = []
+    for i in rows:
       curRow.append(i.getText())
-    itr += 1
-  return curRow
-
-#where the connection is made to the truffle cbs website
-url = "https://theradicalultimatefflexperience.football.cbssports.com/stats/stats-main/all:FLEX/period-{}:p/TRUFFLEoffense/?print_rows=9999".format(week)
-response = requests.get(url, cookies=cookies, headers=headers)
-soup = BeautifulSoup(response.content, 'html.parser')
-
-# complete =  soup.find("div", {"id": "sortableStats"})
-tbls =  soup.find("table", {"class":"data pinHeader"})
-combined = tbls.find_all("tr", class_="label")
-label = combined[1]
-
-#calls function to clean column headers stored as cols (used in pandas df)
-cols = separateColumns(label)
-
-# print(cols)
-
-#regex used to find row1/2 (\d means only numbers following exact match of row)
-allRows = tbls.find_all("tr", class_=re.compile("row\d"))
-
-#puffins players (/ logged in users players) display under 'bgFan' in html - locate thusly 
-puffinsRows = tbls.find_all("tr", class_=re.compile("bgFan"))
-
-allPlayers = []
-
-#for every player - clean the row and add to list of lists
-for i in allRows:
-  allPlayers.append(separatePlayers(i))
-#add puffins players too
-for i in puffinsRows:
-  #print(separatePlayers(i))
-  allPlayers.append(separatePlayers(i))
-
-#lamba functions to split player name team and position
-getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
-getPosition = lambda y: pd.Series([i for i in y.split(" ")][-1])
-getPlayer = lambda z: pd.Series(' '.join([i for i in z.split(" ")][:-1]))
-
-#pandas df to represent team
-df = pd.DataFrame(allPlayers, columns=cols)
-df = df.drop(columns=["Action"])
-
-#apply lambda fcts to correct columns
-playerTeam = df["Player"].apply(getNFLTeam)
-position = playerTeam[0].apply(getPosition)
-player =  playerTeam[0].apply(getPlayer)
-nfl = pd.Series(playerTeam[1])
-
-#add/remove columns for TRUFFLE formatting
-# df = df.drop(["Bye","Rost", "Start"],axis=1)
-# FIND ME - this has been changed because 'Bye' is no longer on the website
-df = df.drop(["Rost", "Start"],axis=1)
-df["Player"] = player
-df.insert(0,"Season", season)
-df.insert(1,"Week", week)
-df.insert(3,"Pos", position[0])
-df.insert(4,"NFL", nfl)
-
-df = df[df['Avg'] != "-"]
-
-#rename columns
-df.columns = ["Season", "Week", "TRUFFLE", "Pos", "NFL", "Player", "Opp", "OpRk", "PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt", "RuAtt", "RuYd", "RuTD", "RuFD", "Tar", "Rec", "ReYd", "ReTD", "ReFD", "FL", "Avg", "FPts"]
-df['OpRk'] = df['OpRk'].replace('---', '33')
-
-df[df.columns[7:25]] = df[df.columns[7:25]].astype(float)
-
-df['Player'] = df['Player'].str.replace(r'.', '', regex=True)
-df['Player'] = df['Player'].str.replace(r' Jr', '', regex=True)
-df['Player'] = df['Player'].str.replace(r' Sr', '', regex=True)
-df['Player'] = df['Player'].str.replace(r' III', '', regex=True)
-df['Player'] = df['Player'].str.replace(r' II', '', regex=True)
-df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
-
-df = df.sort_values(by="FPts", ascending = False)
-
-masterFile = "data/weekly.csv"
-
-#read the existing csv as a pd df for error checking
-masterDf = pd.read_csv(masterFile)
-#create backup copy
-filepath = "data/backup/weekly_backup.csv"
-masterDf.to_csv(filepath, index=False)
-
-#reassign the columns to be equal to that of the existing csv
-df.columns = masterDf.columns
-
-#create weekyear column to conditionally remove existing data from week being scraped
-masterDf["WeekYear"] = masterDf["Week"].astype(str) + masterDf["Season"].astype(str)
-#remove
-masterDf = masterDf[masterDf["WeekYear"] != currentWeekYear]
-#drop the weekyear column post check
-masterDf = masterDf.drop(['WeekYear'], axis=1)
-
-#concat scraped df and the masterDf
-newmaster = pd.concat([masterDf, df], ignore_index=True)
-
-# stores as csv
-filepath = "data/backup/weekly_scraperesult.csv"
-newmaster.to_csv(masterFile, index=False)
-df.to_csv(filepath, index=False)
-
-#ending print outs
-print(df)
-print("\nstored file in location {}".format(filepath))
-print("\n\nscript complete. execution time:")
-print(datetime.datetime.now() - begin_time)
+    curRow.insert(0, division)
+    curRow.insert(0, season)
+    return curRow
+  
+  
+  #separates the column names
+  #returns list representing the columns for tables 
+  def separateColumns(row):
+    allCols = []
+    for i in row:
+      allCols.append(i.getText())
+    allCols.insert(0, "DivAbbrev")
+    allCols.insert(0, "Season")
+    return allCols
+    
+  #where the connection is made to the truffle cbs website
+  url = "https://theradicalultimatefflexperience.football.cbssports.com/standings/overall/{}".format(season)
+  response = requests.get(url, cookies=cookies, headers=headers)
+  soup = BeautifulSoup(response.content, 'html.parser')
+  
+  tbls =  soup.findAll("table", {"class":"data borderTop"})
+  
+  for tbl in tbls:
+    
+    cols = []
+    teams = []
+    division = "N/A"
+    
+    tableRows = tbl.findAll('tr')
+    
+    for row in tableRows:
+      
+      #the 'subtitle' attribute indicates a new division. 
+      #store division for each 3 and update when new is found
+      if row.has_attr('class') and row['class'][0] == "subtitle":
+        #we want to drop the 'division' at the end for our teams.csv file
+        curDiv = row.text.strip()
+        curDiv = curDiv.split(" ")[0:-1]
+       
+        if curDiv[-1] == '+':
+           #this will combine the '+' of 'carriage house+' without a space
+          plus = curDiv.pop()
+          curDiv[-1] = curDiv[-1] + plus
+          curDiv = ' '.join(curDiv)
+        else:
+          #otherwise just combine after the 'division' is dropped
+          curDiv = ' '.join(curDiv)
+        division = getDivAbbrev(curDiv)
+  
+      elif row.has_attr('class') and row['class'][0] == "label" and len(row['class']) == 1:
+        # print("THIS IS THE COLUMN HEADERS")
+        cols = separateColumns(row)
+      else:
+        # print("THESE ARE THE TEAMS IN THAT DIVISION")
+        teams.append(separatePlayers(row, season, division))
+        
+  #create df to house all info for current season, apply lambda to get truffle abbrev's
+  df = pd.DataFrame(teams, columns = cols)
+  df["Team"] = df["Team"].apply(lambda x: getTeamAbbreviation(x))
+  
+  
+  masterFile = "data/standings.csv"
+  
+  #read the existing csv as a pd df for error checking
+  masterDf = pd.read_csv(masterFile)
+  #create backup copy
+  backupFilepath = "data/backup/standings_backup.csv"
+  print("SAVING BACKUP OF STANDINGS TO " + backupFilepath)
+  masterDf.to_csv(backupFilepath, index=False)
+  
+  #reassign the columns to be equal to that of the existing csv
+  df.columns = masterDf.columns
+  
+  #create column to conditionally remove existing data from season being scraped
+  masterDf["szn"] = masterDf["Season"].astype(str)
+  #remove
+  masterDf = masterDf[masterDf["szn"] != season]
+  #drop the season column post check
+  masterDf = masterDf.drop(['szn'], axis=1)
+  
+  #concat scraped df and the masterDf
+  newmaster = pd.concat([masterDf, df], ignore_index=True)
+  
+  # stores as csv
+  filepath = "data/backup/standings_backup.csv"
+  print("SAVING NEW STANDINGS WITH OVERRIDE on season {} at location {}".format(season, masterFile))
+  newmaster.to_csv(masterFile, index=False)
+  # print(newmaster)
+  # 
+  # print("STANDINGS ARE DONE, it took...")
+  # print(datetime.datetime.now() - begin_time)
+  print("STANDINGS FINISHED")
+def main(szn):
+  runStandings(szn)
+if __name__ == "__main__":
+  main()
+  # main("2024")

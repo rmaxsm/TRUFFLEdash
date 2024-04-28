@@ -85,17 +85,17 @@ headers = {
 
 
 #get year and week for url/formatting
-# season = input("What SEASON is it..? ")
-# while(len(season) != 4):
-#   print("get the SEASON right dumbass")
-#   season = input("What SEASON is it..? ")
-# 
-# week = input("What WEEK is it..? ")
-# while(len(week) >= 3):
-#   print("get the week right dumbass")
-#   week = input("What WEEK is it..? ")
-season = 2022
-week = 1
+season = input("What SEASON is it..? ")
+while(len(season) != 4):
+  print("get the SEASON right dumbass")
+  season = input("What SEASON is it..? ")
+
+week = input("What WEEK is it..? ")
+while(len(week) >= 3):
+  print("get the week right dumbass")
+  week = input("What WEEK is it..? ")
+# season = 2024
+# week = 18
 
 
 begin_time = datetime.datetime.now()
@@ -211,7 +211,9 @@ nfl = pd.Series(playerTeam[1])
 
 
 #add/remove columns for TRUFFLE formatting
-df = df.drop(["Bye","Rost", "Start"],axis=1)
+# df = df.drop(["Bye","Rost", "Start"],axis=1)
+# FIND ME - this has been changed because 'Bye' is no longer on the website
+df = df.drop(["Rost", "Start"],axis=1)
 df["Player"] = player
 df.insert(0,"Season", season)
 df.insert(1,"Week", week)
