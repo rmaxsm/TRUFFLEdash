@@ -2,3 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+*.ini
+.DS_Store
+.DS_Store 2
+.RDataTmp

@@ -18,15 +18,16 @@ dashboardPageUI <-
                     menuItem("Team Portal", tabName = "teamportal", icon = icon("users")),
                     menuItem("Player Portal", tabName = "playerportal", icon = icon("user")),
                     menuItem("Stat Center", tabName = "statcenter", icon = icon("chart-bar")),
+                    menuItem("BYOG", tabName = "byog", icon = icon("chart-bar")),
                     menuItem("Trade Machine", tabName = "trademachine" , icon = icon("gears")),
                     menuItem("Fantasy Portal", tabName = "fantasyportal", icon = icon("facebook-f")),
                     menuItem("Cap Corner", tabName = "capcorner", icon = icon("dollar-sign")),
                     menuItem("History Books", tabName = "historybooks", icon = icon("book")),
                     menuItem("Database", tabName = "database", icon = icon("database")),
                     menuItem("Rookie Draft", tabName = "draft", icon = icon("business-time")),
-                    menuItem("Constitution", href = "https://docs.google.com/document/d/1-FyXq3HWtEETQlpF-_HnofCb2y1SGKUn7c7NVFlrx1E/", newtab = TRUE, icon = icon("paragraph")),
+                    menuItem("Constitution", href = "https://docs.google.com/document/d/1wUXsY3VRNCH9NPYeb1Vf9xm8AnJ9HJIiB85rvPTYjgo/", newtab = TRUE, icon = icon("paragraph")),
                     br(),
-                    selectInput("homescoring", HTML("<span style=color:#84A4D8;font-size:14px>Scoring System</span>"), c("PPFD", "PPR", ".5 PPR", "Standard"), selected ="PPFD" )
+                    selectInput("homescoring", HTML("<span style=color:#84A4D8;font-size:14px>Scoring System</span>"), c("PPFD", "PPR", "hPPR", "STD"), selected ="PPFD" )
                     #menuItem("Tutorials", tabName = "tutorials", icon = icon("fa-sharp fa-solid fa-info"))
                   )
                   ),
@@ -46,7 +47,7 @@ dashboardPageUI <-
                                                  HTML(" Welcome to <span style=color:#84A4D8;font-size:14px>truffle</span><span style =color:#8C2E26;font-weight:bold;font-size:30px;font-family:'Audiowide'>dash</span>")
                                           ),
                                           column(width = 4,
-                                                 selectInput("homeseason", HTML("<span style=color:#84A4D8;font-size:14px>Season</span>"), unique(weekly$Season), selected = max(weekly$Season) )
+                                                 selectInput("homeseason", HTML("<span style=color:#84A4D8;font-size:14px>Season</span>"), sort(unique(weekly$Season), decreasing = T), selected = max(weekly$Season) )
                                           )
                                           ,
                                           column(width=4, align = "right",
@@ -59,7 +60,7 @@ dashboardPageUI <-
                               #          htmlOutput("bcgsheet")
                               #),
                               
-                              #awards home page tab for during offseason
+                              # #awards home page tab for during offseason
                               # wellPanel(class = "well",
                               #           fluidRow(
                               #             column(width=6,
@@ -80,7 +81,7 @@ dashboardPageUI <-
                               wellPanel(class = "well",
                                         fluidRow(
                                           column(width=8, h2("Rookie Draft")),
-                                          column(width=4, selectInput("homedraftseason", "Season", unique(draft$Season), selected = max(draft$Season) ))
+                                          column(width=4, selectInput("homedraftseason", "Season", sort(unique(draft$Season), decreasing = T), selected = max(draft$Season) ))
                                         ),
                                         fluidRow(
                                           column(width=4, reactableOutput('homerd1')),
@@ -99,7 +100,7 @@ dashboardPageUI <-
                                 column(width = 6,
                                        wellPanel(class = "well",
                                                  h2("Season Leaders"),
-                                                 reactableOutput('homepointsleaders', height = "100%"),
+                                                 reactableOutput('homepointsleaders') #height = "100%"),
                                        ))
                                 
                               ),
@@ -109,7 +110,7 @@ dashboardPageUI <-
                                                  h2("Weekly Leaders")
                                           ),
                                           column(width = 2,
-                                                 selectInput("weeklytop5week", "Week", unique(weekly$Week), selected = max(weekly$Week[weekly$Season == max(weekly$Season)]) )
+                                                 selectInput("weeklytop5week", "Week", sort(unique(weekly$Week)), selected = max(weekly$Week[weekly$Season == max(weekly$Season)]) )
                                           )
                                         ),
                                         fluidRow(
@@ -130,11 +131,14 @@ dashboardPageUI <-
                       ),
                       # Team Portal -----
                       tabItem(tabName = "teamportal",
-                              wellPanel(
+                              wellPanel(class = "well",
                                 
                                 sidebarLayout(
                                   sidebarPanel(
-                                    fluidRow(selectInput("tmportaltm",HTML("<span style=color:#84A4D8;font-size:14px>Select Team:</span>"), unique(teams$FullName)), style ="padding-top:10px;padding-left:20px;padding-right:20px;z-index:10000;")
+                                    fluidRow(
+                                      column(width = 8, selectInput("tmportaltm",HTML("<span style=color:#84A4D8;font-size:14px>Select Team:</span>"), unique(teams$FullName))),
+                                      column(width = 4, selectInput("tmportalyr",HTML("<span style=color:#84A4D8;font-size:14px>Year:</span>"), sort(c(unique(seasons$Season), currentyr), decreasing = T), selected = max(weekly$Season)))       
+                                             , style ="padding-top:10px;padding-left:20px;padding-right:20px;z-index:10000;")
                                   ),
                                   mainPanel(br(),
                                             reactableOutput('tpheader'))
@@ -142,7 +146,7 @@ dashboardPageUI <-
                                 ), style = "background-color:#FFFFFF;padding-top:20px"), #end sidebarLayout
                               
                               navbarPage(title = strong(textOutput('tmportalabbrev'), class = "wayback"),
-                                      
+                                         
                                          tabPanel("Overview",
                                                   wellPanel(class = "well",
                                                             reactableOutput('tpoverview')
@@ -209,112 +213,114 @@ dashboardPageUI <-
                       # Player Portal -----
                       tabItem(tabName = "playerportal",
                               wellPanel(style = "background-color:#FFFFFF, padding-top:0px",
-                                        selectizeInput('player',h2("Select Player:"),choices = sort(unique(weekly$Player)), selected = NULL, multiple = T)
+                                        selectizeInput('player',h2("Select Player:"), choices = sort(unique(weekly$Player)), selected = NULL, multiple = T),
+                                        hr(),
+                                        em("Type and select player name(s) to view/compare player stats across all Player Portal tables & charts")
                               ),
                               wellPanel(class = "well",
                                         h2("Player Info"),
                                         reactableOutput('ppbios')
                               ),
-                      fluidRow(
-                        column(width = 8,
-                               wellPanel(class = "well",
-                                         h2("TRUFFLE Career Stats"),
-                                         reactableOutput('pptrufflecareerstats'),
-                                         hr(),
-                                         em("Statistics only based on stats produced in active TRUFFLE lineups. Expand for career stats by team.")
-                               )
-                        ),
-                        column(width = 4,
-                               wellPanel(class = "well",
-                                         h2("Contract Details"),
-                                         reactableOutput('ppcontracthistory'),
-                                         hr(),
-                                         em("Expand for year-by-year contract overview.")
-                               )
-                               )
-                        ),
-                      wellPanel(class = "well",
-                                fluidRow(
-                                  column(width = 10,
-                                         h2("Stat Center")
-                                  ),
-                                  column(width = 2,
-                                         selectInput("ppstatcenterseason", "Season", c(as.character(unique(weekly$Season)), "All"), selected = as.character(max(weekly$Season)) )
-                                  )
+                              fluidRow(
+                                column(width = 8,
+                                       wellPanel(class = "well",
+                                                 h2("TRUFFLE Career Stats"),
+                                                 reactableOutput('pptrufflecareerstats'),
+                                                 hr(),
+                                                 em("Statistics only based on stats produced in active TRUFFLE lineups. Expand for career stats by team.")
+                                       )
                                 ),
-                                tabsetPanel(
-                                  tabPanel("BoxScore", reactableOutput('ppseasons'),
-                                           hr(),
-                                           em("Traditional Passing, Rushing, Receiving scoring stats. Hover over column header for definition.")),
-                                  tabPanel("Advanced", reactableOutput('ppadvanced'),
-                                           hr(),
-                                           em("Advanced stats on per-touch efficiency, and point source breakdown (Yardage vs. TD vs. First Downs / Rushing vs. Receiving). Hover over column header for definition.")),
-                                  tabPanel("Consistency", reactableOutput('ppconsistency'),
-                                           hr(),
-                                           em("Week-to-week consistency stats by scoring output and weekly positional rank. Hover over column header for definition.")),
-                                  tabPanel("Extra Stats", reactableOutput('ppextradash'),
-                                           hr(),
-                                           em("Additional weekly context stats, including Yards per Carry/Catch, 20+ and 40+ yard plays, and others. Hover over column header for definition.")),
-                                  tabPanel("ESPN xFP/xTD", reactableOutput('ppxfpxtd'),
-                                           hr(),
-                                           em("Expected Fantasy Points and Expected Touchdown stats scraped from ESPN. Hover over column header for definition.")),
-                                  tabPanel("Snap Share", reactableOutput('ppsnapshare'),
-                                           hr(),
-                                           em("Week-to-week percentage of offensive team snaps played."))
+                                column(width = 4,
+                                       wellPanel(class = "well",
+                                                 h2("Contract Details"),
+                                                 reactableOutput('ppcontracthistory'),
+                                                 hr(),
+                                                 em("Expand for year-by-year contract overview.")
+                                       )
                                 )
-                      ),
-                      fluidRow(
-                        column(width = 4,
-                               wellPanel(class = "well",
-                                         fluidRow(
-                                           column(width = 8,
-                                                  h2("Percentile Radar Chart")),
-                                           column(width = 4,
-                                                  selectInput("ppradarplotseason", "Season", c(unique(weekly$Season)), selected = max(weekly$Season)))
-                                           ),
-                                         plotOutput('ppradarplot',
-                                                    width = "100%",
-                                                    height = "400px"),
-                                         hr(),
-                                         em("Radar chart shows avg. weekly player percentile performance at position.")
-                                         )
-                               ),
-                        column(width = 8,
-                               wellPanel(class = "well",
-                                         fluidRow(
-                                           column(width = 6,
-                                                  h2("Week-by-Week")),
-                                           column(width = 3,
-                                                  selectInput("ppwbwstat", "Stat", colnames(weekly)[c(9:23, 25)], selected = colnames(weekly)[25])),
-                                           column(width = 3,
-                                                  selectInput("ppwbwseason", "Season", c(unique(weekly$Season)), selected = max(weekly$Season)))
-                                         ),
-                                         plotlyOutput('ppwbw',
-                                                    width = "100%",
-                                                    height = "400px"),
-                                         hr(),
-                                         em("Weeks missed represented by missing data point, not 0")
-                               )
-                        )
-                      ),
-                      wellPanel(class = "well",
-                                fluidRow(
-                                  column(width = 10,
-                                         h2("Game Logs")
-                                  ),
-                                  column(width = 2,
-                                         selectInput("ppgamelogsseason", "Season", as.character(unique(weekly$Season)), "All"), selected = as.character(max(weekly$Season)) )
-                                  ),
-                                
-                                tabsetPanel(
-                                  tabPanel("Weekly", reactableOutput('ppgamelogweekly')),
-                                  tabPanel("Fantasy",
-                                           br(),
-                                           p("*Only includes games when player was actively started in TRUFFLE"),
-                                           reactableOutput('ppgamelogfantasy'))
+                              ),
+                              wellPanel(class = "well",
+                                        fluidRow(
+                                          column(width = 10,
+                                                 h2("Stat Center")
+                                          ),
+                                          column(width = 2,
+                                                 selectInput("ppstatcenterseason", "Season", c(as.character(sort(unique(weekly$Season), decreasing = T)), "All"), selected = as.character(max(weekly$Season)) )
+                                          )
+                                        ),
+                                        tabsetPanel(
+                                          tabPanel("BoxScore", reactableOutput('ppseasons'),
+                                                   hr(),
+                                                   em("Traditional Passing, Rushing, Receiving scoring stats. Hover over column header for definition.")),
+                                          tabPanel("Advanced", reactableOutput('ppadvanced'),
+                                                   hr(),
+                                                   em("Advanced stats on per-touch efficiency, and point source breakdown (Yardage vs. TD vs. First Downs / Rushing vs. Receiving). Hover over column header for definition.")),
+                                          tabPanel("Consistency", reactableOutput('ppconsistency'),
+                                                   hr(),
+                                                   em("Week-to-week consistency stats by scoring output and weekly positional rank. Hover over column header for definition.")),
+                                          tabPanel("Extra Stats", reactableOutput('ppextradash'),
+                                                   hr(),
+                                                   em("Additional weekly context stats, including Yards per Carry/Catch, 20+ and 40+ yard plays, and others. Hover over column header for definition.")),
+                                          tabPanel("ESPN xFP/xTD", reactableOutput('ppxfpxtd'),
+                                                   hr(),
+                                                   em("Expected Fantasy Points and Expected Touchdown stats scraped from ESPN. Hover over column header for definition.")),
+                                          tabPanel("Snap Share", reactableOutput('ppsnapshare'),
+                                                   hr(),
+                                                   em("Week-to-week percentage of offensive team snaps played."))
+                                        )
+                              ),
+                              fluidRow(
+                                column(width = 4,
+                                       wellPanel(class = "well",
+                                                 fluidRow(
+                                                   column(width = 8,
+                                                          h2("Percentile Radar Chart")),
+                                                   column(width = 4,
+                                                          selectInput("ppradarplotseason", "Season", sort(unique(weekly$Season), decreasing = T), selected = max(weekly$Season)))
+                                                 ),
+                                                 plotOutput('ppradarplot',
+                                                            width = "100%",
+                                                            height = "400px"),
+                                                 hr(),
+                                                 em("Radar chart shows avg. weekly player percentile performance at position.")
+                                       )
+                                ),
+                                column(width = 8,
+                                       wellPanel(class = "well",
+                                                 fluidRow(
+                                                   column(width = 6,
+                                                          h2("Week-by-Week")),
+                                                   column(width = 3,
+                                                          selectInput("ppwbwstat", "Stat", colnames(weekly)[c(8:22, 24)], selected = colnames(weekly)[24])),
+                                                   column(width = 3,
+                                                          selectInput("ppwbwseason", "Season", sort(unique(weekly$Season), decreasing = T), selected = max(weekly$Season)))
+                                                 ),
+                                                 plotlyOutput('ppwbw',
+                                                              width = "100%",
+                                                              height = "400px"),
+                                                 hr(),
+                                                 em("Weeks missed represented by missing data point, not 0")
+                                       )
                                 )
-                      )
-                      ),
+                              ),
+                              wellPanel(class = "well",
+                                        fluidRow(
+                                          column(width = 10,
+                                                 h2("Game Logs")
+                                          ),
+                                          column(width = 2,
+                                                 selectInput("ppgamelogsseason", "Season", c(as.character(sort(unique(weekly$Season), decreasing = T)), "All"), selected = as.character(max(weekly$Season)) )
+                                        )
+                                        ),
+                                        tabsetPanel(
+                                          tabPanel("Weekly", reactableOutput('ppgamelogweekly')),
+                                          tabPanel("Fantasy",
+                                                   br(),
+                                                   p("*Only includes games when player was actively started in TRUFFLE"),
+                                                   reactableOutput('ppgamelogfantasy'))
+                                        )
+                              )
+                      ), #end player portal tab item
                       
                       # Fantasy Portal -----
                       tabItem(tabName = "fantasyportal",
@@ -324,7 +330,7 @@ dashboardPageUI <-
                                                  h2("Fantasy Portal")
                                           ),
                                           column(width = 2,
-                                                 selectInput("fantasyportalseason", "Season", unique(weekly$Season), selected = max(weekly$Season) )
+                                                 selectInput("fantasyportalseason", "Season", sort(unique(weekly$Season), decreasing = T), selected = max(weekly$Season))
                                           ),
                                           column(width = 2,
                                                  selectInput("totalorperc", "View", c("Totals","Percentages"), selected = "Totals" )
@@ -334,17 +340,17 @@ dashboardPageUI <-
                                         
                               )
                               
-                      ),
+                      ), #end fantasy portal tab item
                       # Stat Center -----
                       tabItem(tabName = "statcenter",
-                              wellPanel(
+                              wellPanel(class = "well",
                                 fluidRow(
                                   column(width = 12,
                                          h2("Stat Center"))
                                 ),
                                 fluidRow(
                                   column(width = 2,
-                                         selectInput("scseason", "Season", unique(weekly$Season), selected = max(weekly$Season) )
+                                         selectInput("scseason", "Season", sort(unique(weekly$Season), decreasing = T), selected = max(weekly$Season) )
                                   ),
                                   column(width = 3,
                                          sliderInput("scweekrange", "Weeks",
@@ -415,16 +421,62 @@ dashboardPageUI <-
                                          
                               )
                               
-                      ),
+                      ), #end stat center tab item
+                      
+                      #Build Your Own Graph -----
+                      tabItem(tabName = "byog",
+                              wellPanel(class = "well",
+                                        fluidRow(column(h2("Build Your Own Graph"), width = 12),
+                                                 column(p("An interactive graphing tool, designed for you to graphically compare and analyze any two statistics featured on TRUFFLEdash by player season."), width = 12)
+                                        )
+                                        
+                              ),
+                              wellPanel(class = "well",
+                                
+                                sidebarLayout(
+                                  sidebarPanel(
+                                    fluidRow(
+                                      h2("Select Graphing X- & Y-Axis Satistics"),
+                                      column(width = 6, selectInput("byogX", "X-Axis", colnames(byog)[7:74], selected = colnames(byog)[69])),
+                                      column(width = 6, selectInput("byogY", "Y-Axis", colnames(byog)[7:74], selected = colnames(byog)[23]))    
+                                      , style ="padding-top:10px;padding-left:20px;padding-right:20px;z-index:10000;")
+                                  ),
+                                  mainPanel(br(),
+                                            h2("Apply Filters"),
+                                            fluidRow(
+                                              column(width = 2,
+                                                     selectInput("byogseason", "Season", c(sort(unique(weekly$Season), decreasing = T), "All"), selected = max(weekly$Season))),
+                                              column(width = 4,
+                                                     checkboxGroupInput("byogpositions", "Positions", choices = c("QB","RB","WR","TE"), selected = c("QB","RB","WR","TE"),
+                                                                        inline = T)
+                                              ),
+                                              column(width = 2,
+                                                     selectInput("byoggamesmin", "Min. G", choices = c(1:17), selected = 1)),
+                                              column(width = 4,
+                                                     sliderInput("byogavgmin", "Min. Average FPts",
+                                                                 min = 0, max = 30,
+                                                                 value = 5,
+                                                                 step = 1, round = T)
+                                              )
+                                            )
+                                            )
+                                  
+                                ), style = "background-color:#FFFFFF;padding-top:20px", #end sidebarLayout
+                              #wellPanel(
+                                plotlyOutput('byog',
+                                  width = "100%",
+                                  height = "500px"),
+                                hr(),
+                                em("Details revealed by hovering over specific data points, color coded by position")
+                              )
+                      ), #end byog tab item
                       
                       # Trade Machine -----
                       tabItem(tabName = "trademachine",
                               wellPanel(class = "well",
-                                        fluidRow(column(width = 9,
-                                                        h2("Trade Machine"),
-                                                        p("An interactive, and helpful tool, designed to be a peace offering from the Commissioner for making the rules so complicated."),),
-                                                 column(width = 3
-                                                 )
+                                        fluidRow(column(h2("Trade Machine"), width = 12),
+                                                  column(p("An interactive, and helpful tool, designed to be a peace offering from the Commissioner for making the rules so complicated."), width = 12)
+                                                 
                                         )
                                         
                               ),
@@ -503,16 +555,16 @@ dashboardPageUI <-
                                                             fluidRow(
                                                               column(width = 3,
                                                                      reactableOutput('extvalqb')
-                                                                     ),
+                                                              ),
                                                               column(width = 3,
                                                                      reactableOutput('extvalrb')
-                                                                     ),
+                                                              ),
                                                               column(width = 3,
                                                                      reactableOutput('extvalwr')
-                                                                     ),
+                                                              ),
                                                               column(width = 3,
                                                                      reactableOutput('extvalte')
-                                                                     )
+                                                              )
                                                             ),
                                                             hr(),
                                                             em("Expand Rows to see eligible players.")
@@ -535,7 +587,7 @@ dashboardPageUI <-
                                                             fluidRow(
                                                               column(width = 3,
                                                                      reactableOutput('tagvalsqb')
-                                                                     ),
+                                                              ),
                                                               column(width = 3,
                                                                      reactableOutput('tagvalsrb')
                                                               ),
@@ -559,7 +611,7 @@ dashboardPageUI <-
                                                               ),
                                                               mainPanel(br(),
                                                                         reactableOutput('tagvalsplayer')
-                                                                        )
+                                                              )
                                                               
                                                             )#, style = "background-color:#FFFFFF;padding-top:20px" ), #end sidebarLayout
                                                             
@@ -589,6 +641,14 @@ dashboardPageUI <-
                                                             )),
                                                   wellPanel(class = "well",
                                                             h2("Overall"),
+                                                            fluidRow(
+                                                              column(width = 6,
+                                                                     reactableOutput('recordrings')
+                                                              ),
+                                                              column(width = 6,
+                                                                     reactableOutput('recordbenchcups')
+                                                              )
+                                                            ),
                                                             fluidRow(
                                                               column(width = 3,
                                                                      reactableOutput('recordfpts')
@@ -652,35 +712,35 @@ dashboardPageUI <-
                                                   
                                          ),
                                          
-                                         tabPanel("Awards",
-                                                  
-                                                  wellPanel(class = "well",
-                                                            fluidRow(
-                                                              column(width = 9,
-                                                                     h2("Annual End Of Season TRUFFLE Awards"),
-                                                                     p("Awards and All-TRUFFLE Teams annually voted for by TRUFFLE owners.")
-                                                              ),
-                                                              column(width = 3,
-                                                                     selectInput("awardseason", "Season", sort(unique(awards$Season), decreasing = T), selected = max(awards$Season))
-                                                              )
-                                                            )
-                                                  ),
-                                                  wellPanel(class = "well",
-                                                            fluidRow(
-                                                              column(width=6,
-                                                                     h2("Award Winners"),
-                                                                     br(),
-                                                                     reactableOutput('historybooksawards')
-                                                              ),
-                                                              column(width=6,
-                                                                     h2("All-TRUFFLE"),
-                                                                     em("* denotes unanimous 1st Team selection"),
-                                                                     reactableOutput('allt1'),
-                                                                     reactableOutput('allt2')
-                                                              )
-                                                            )
-                                                  )
-                                         ), #end tabpanel
+                                         # tabPanel("Awards",
+                                         #          
+                                         #          wellPanel(class = "well",
+                                         #                    fluidRow(
+                                         #                      column(width = 9,
+                                         #                             h2("Annual End Of Season TRUFFLE Awards"),
+                                         #                             p("Awards and All-TRUFFLE Teams annually voted for by TRUFFLE owners.")
+                                         #                      ),
+                                         #                      column(width = 3,
+                                         #                             selectInput("awardseason", "Season", sort(unique(awards$Season), decreasing = T), selected = max(awards$Season))
+                                         #                      )
+                                         #                    )
+                                         #          ),
+                                         #          wellPanel(class = "well",
+                                         #                    fluidRow(
+                                         #                      column(width=6,
+                                         #                             h2("Award Winners"),
+                                         #                             br(),
+                                         #                             reactableOutput('historybooksawards')
+                                         #                      ),
+                                         #                      column(width=6,
+                                         #                             h2("All-TRUFFLE"),
+                                         #                             em("* denotes unanimous 1st Team selection"),
+                                         #                             reactableOutput('allt1'),
+                                         #                             reactableOutput('allt2')
+                                         #                      )
+                                         #                    )
+                                         #          )
+                                         # ), #end tabpanel
                                          
                                          tabPanel("Rivalries",
                                                   wellPanel(
@@ -694,12 +754,16 @@ dashboardPageUI <-
                                                   fluidRow(
                                                     column(width = 6,
                                                            wellPanel(class = "well",
-                                                                     h2("History")
+                                                                     h2("History"),
+                                                                     reactableOutput('rivscores')
                                                            )
                                                     ),
                                                     column(width = 6,
                                                            wellPanel(class = "well",
-                                                                     h2("Leading Scorers")
+                                                                     h2("Leading Scorers *"),
+                                                                     reactableOutput('rivleaders'),
+                                                                     hr(),
+                                                                     em("*since 2020")
                                                            ))
                                                   )
                                          ), #end tabpanel
@@ -741,7 +805,7 @@ dashboardPageUI <-
                               wellPanel(class = "well",
                                         fluidRow(
                                           column(width=8, h2("Rookie Draft Records")),
-                                          column(width=4, selectInput("draftseason", "Season", unique(draft$Season), selected = max(draft$Season) ))
+                                          column(width=4, selectInput("draftseason", "Season", sort(unique(draft$Season), decreasing = T), selected = max(draft$Season) ))
                                         ),
                                         fluidRow(
                                           column(width=4, reactableOutput('rd1')),

@@ -117,7 +117,7 @@
 2023,1,8,MCM,Jordan Addison,WR,15,50
 2023,1,9,AFL,Zay Flowers,WR,15,50
 2023,1,10,NN,Zach Charbonnet,RB,10,60
-2023,1,11,CRB,DeVon Achane,WR,10,60
+2023,1,11,CRB,DeVon Achane,RB,10,60
 2023,1,12,MWM,Jonathan Mingo,WR,10,50
 2023,2,13,FRR,Dalton Kincaid,TE,5,10
 2023,2,14,WLW,Sam LaPorta,TE,5,10
@@ -133,7 +133,7 @@
 2023,2,24,VD,Josh Downs,WR,5,40
 2023,3,25,VD,Tyjae Spears,RB,3,30
 2023,3,26,MAM,Rashee Rice,WR,3,30
-2023,3,27,FRR,Nathaniel Dell,WR,3,30
+2023,3,27,FRR,Tank Dell,WR,3,30
 2023,3,28,CRB,Jalin Hyatt,WR,3,30
 2023,3,29,WLW,Chase Brown,RB,3,30
 2023,3,30,GF,Zach Evans,RB,3,30
@@ -143,3 +143,39 @@
 2023,3,34,NN,Luke Schoonmaker,TE,3,5
 2023,3,35,WLW,Sean Tucker,RB,3,30
 2023,3,36,MWM,Charlie Jones,WR,3,30
+2024,1,1,MAM,,-,50,
+2024,1,2,AFL,*from CC,-,45,
+2024,1,3,VD,,-,40,
+2024,1,4,GF,,-,35,
+2024,1,5,CC,*from AFL,-,30,
+2024,1,6,NN,,-,25,
+2024,1,7,VD,*from MWM,-,20,
+2024,1,8,NN,*from ELP,-,15,
+2024,1,9,CRB,,-,15,
+2024,1,10,CC,*from MCM,-,10,
+2024,1,11,AFL,*from FRR,-,10,
+2024,1,12,CC,*from AFL & WLW,-,10,
+2024,2,13,VD,*from WLW,-,5,
+2024,2,14,NN,*from FRR,-,5,
+2024,2,15,MCM,,-,5,
+2024,2,16,CC,*from CRB,-,5,
+2024,2,17,ELP,,-,5,
+2024,2,18,MWM,,-,5,
+2024,2,19,NN,,-,5,
+2024,2,20,AFL,,-,5,
+2024,2,21,GF,,-,5,
+2024,2,22,VD,,-,5,
+2024,2,23,CRB,*from CC,-,5,
+2024,2,24,VD,*from MAM,-,5,
+2024,3,25,AFL,*from MAM,-,3,
+2024,3,26,MAM,*from CC,-,3,
+2024,3,27,FRR,*from VD,-,3,
+2024,3,28,GF,,-,3,
+2024,3,29,AFL,,-,3,
+2024,3,30,NN,,-,3,
+2024,3,31,FRR,*from MWM,-,3,
+2024,3,32,CC,*from ELP,-,3,
+2024,3,33,CRB,,-,3,
+2024,3,34,MCM,,-,3,
+2024,3,35,CC,*from AFL & FRR,-,3,
+2024,3,36,ELP,*from WLW,-,3,

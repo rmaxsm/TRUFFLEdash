@@ -23,9 +23,43 @@ def separatePlayers(rows):
       curRow.append('-')
   return curRow
 
+def appendToFile(df, season, filepath):
+  
+  masterFile = filepath
+
+  #read the existing csv as a pd df for error checking
+  masterDf = pd.read_csv(masterFile)
+  
+  #reassign the columns to be equal to that of the existing csv
+  df.columns = masterDf.columns
+
+  #reassign the columns to be equal to that of the existing csv
+  df.columns = masterDf.columns
+  
+  # save backup
+  backupFile = "data/backup/snapPer_backup.csv"
+  masterDf.to_csv(backupFile, index=False)
+  print("Snap Per backup saved at {}".format(backupFile))
+  
+  #create year column to conditionally remove existing data from year being scraped
+  masterDf["Year"] = masterDf["Season"].astype(str)
+  #remove
+  masterDf = masterDf[masterDf["Year"] != season]
+  #drop the year column post check
+  masterDf = masterDf.drop(['Year'], axis=1)
+  
+  #concat scraped df and the masterDf
+  newmaster = pd.concat([masterDf, df], ignore_index=True)
+
+  # stores updated file as csv over previous 'master' 
+  newmaster.to_csv(masterFile, index=False)
+  print("Snap Per saved at {}".format(masterFile))
+
 def runSnapPer():
   
-  response = requests.get('https://www.fantasypros.com/nfl/reports/snap-counts/?year=2022&show=perc')
+  season = "2023"
+  
+  response = requests.get('https://www.fantasypros.com/nfl/reports/snap-counts/?year=2023&show=perc')
   soup = BeautifulSoup(response.content, 'html.parser')
   
   complete =  soup.find("div", {"id": "main-container"})
@@ -45,6 +79,7 @@ def runSnapPer():
   
   #pandas df to represent team
   df = pd.DataFrame(allPlayers, columns=colHeaders)
+  df.insert(0,"Season", season)
   df = df.sort_values(by=['Player'])
   df['Player'] = df['Player'].str.replace(r'.', '', regex=True)
   df['Player'] = df['Player'].str.replace(r' Jr', '', regex=True)
@@ -52,15 +87,17 @@ def runSnapPer():
   df['Player'] = df['Player'].str.replace(r' III', '', regex=True)
   df['Player'] = df['Player'].str.replace(r' II', '', regex=True)
   df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
+  
   # print(df)
+  
   filepath = "data/snapPer.csv"
-  df.to_csv(filepath, index=False)
-  print("\nSNAP PER FILE SAVED TO {}".format(filepath))
-  print("Fantasy Pros DONE :)\n")
+  
+  appendToFile(df, season, filepath)
+  
   
 def main():
   runSnapPer()
   print("\nFP Snap Per DONE")
 
-main()
-
+if __name__ == "__main__":
+  main()
