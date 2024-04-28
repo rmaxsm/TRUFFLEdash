@@ -220,3 +220,4 @@ def main(szn):
   runStandings(szn)
 if __name__ == "__main__":
   main()
+  # main("2024")

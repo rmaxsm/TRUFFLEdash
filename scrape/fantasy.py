@@ -111,12 +111,23 @@ for index, row in teamsPd.iterrows():
   teamsDict[row["LogsScrape"]] = row["Abbrev"]  
 
 #returns team abbreviation from team name
+# def getTeamAbbreviation(team):
+#   try:
+#     return teamsDict[team]
+#   except Exception as exp:
+#     print("An Error Occuring while trying to get the team abbreviation for " + team)
+#     return
+
+#returns team abbreviation from team name
 def getTeamAbbreviation(team):
   try:
+    waived =  re.compile("W ")
+    if(waived.match(team)):
+      return team
     return teamsDict[team]
   except Exception as exp:
     print("An Error Occuring while trying to get the team abbreviation for " + team)
-    return
+    return "err"
 
 #separates the column names
 #returns list representing the columns for tables 
@@ -198,7 +209,9 @@ for index, row in teamsPd.iterrows():
 
 
   #add/remove columns for TRUFFLE formatting
-  df = df.drop(["Bye","Rost", "Start"],axis=1)
+  # df = df.drop(["Bye","Rost", "Start"],axis=1)
+  # FIND ME - this has been changed because 'Bye' is no longer on the website
+  df = df.drop(["Rost", "Start"],axis=1)
   df["Player"] = player
   df.insert(0,"Season", season)
   df.insert(1,"Week", week)

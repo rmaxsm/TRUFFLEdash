@@ -137,6 +137,7 @@ def runXTD():
   
 def main():
   runXTD()
+  print("xTd DONE")
 
 if __name__ == "__main__":
   main()

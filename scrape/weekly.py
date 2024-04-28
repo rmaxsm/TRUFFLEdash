@@ -92,8 +92,8 @@ week = input("What WEEK is it..? ")
 while(len(week) >= 3):
   print("get the week right dumbass")
   week = input("What WEEK is it..? ")
-# season = 2022
-# week = 1
+# season = 2024
+# week = 18
 
 #setting current season
 currentWeekYear = week + season
@@ -107,7 +107,7 @@ teamsPd = pd.read_csv("data/teams.csv")
 
 teamsDict = {}
 for index, row in teamsPd.iterrows():
-  teamsDict[row["LogsScrape"]] = row["Abbrev"]  
+  teamsDict[row["LogsScrape"]] = row["Abbrev"]
 
 
 #returns team abbreviation from team name
@@ -191,7 +191,9 @@ player =  playerTeam[0].apply(getPlayer)
 nfl = pd.Series(playerTeam[1])
 
 #add/remove columns for TRUFFLE formatting
-df = df.drop(["Bye","Rost", "Start"],axis=1)
+# df = df.drop(["Bye","Rost", "Start"],axis=1)
+# FIND ME - this has been changed because 'Bye' is no longer on the website
+df = df.drop(["Rost", "Start"],axis=1)
 df["Player"] = player
 df.insert(0,"Season", season)
 df.insert(1,"Week", week)
