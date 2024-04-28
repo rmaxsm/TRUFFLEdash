@@ -22,14 +22,15 @@ shinyServer(function(input, output, session) {
   # authenticate user by:
   #   1. checking whether their team is in the credentials
   observeEvent(input$login_button, {
-    credentials <- data.frame(user = c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW",
+    credentials <- data.frame(league = c(rep("TRUFFLE", 13), rep("KERFUFFLE", 13)),
+                              user = c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW","GUEST",
                                        "ABT", "CLC", "CPC", "DDD", "LBC", "LC", "MB","NBB","PCP","PP","RR", "SBS",
                                        "GUEST"),
                               stringsAsFactors = FALSE)
     
     # if user name row and password name row are same, credentials are valid
     #   and retrieve locked out status
-    if (toupper(input$user_name) %in% credentials$user) {
+    if (toupper(input$user_name) %in% credentials$user & toupper(input$user_league) == credentials$league[credentials$user == toupper(input$user_name)]) {
       user_input$valid_credentials <- TRUE
     }
     
@@ -46,7 +47,16 @@ shinyServer(function(input, output, session) {
     else if (user_input$valid_credentials == TRUE & input$user_name != "guest") {
       isguest <<- FALSE
       user_input$authenticated <- TRUE
+      
+      #set global variables for league and team
       globalteam <<- toupper(input$user_name)
+      globalleague <<- toupper(input$user_league)
+      
+      #use global league to filter down simple files
+      teams <<- teams[League == globalleague]
+      draft <<- draft[League == globalleague, -"League"]
+      
+      
       updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
       updateSelectInput(session, 'tmportalyr', choices = sort(c(unique(seasons$Season), currentyr), decreasing = T), selected = currentyr)
       updateSelectInput(session, 'rivalry', choices = unique(teams$RivalryName), selected = teams$RivalryName[teams$Abbrev == globalteam])
@@ -70,6 +80,8 @@ shinyServer(function(input, output, session) {
       p("Welcome to"),
       HTML("<span style=color:#84A4D8;font-size:32px>truffle</span><span style =color:#8C2E26;font-weight:bold;font-size:60px;font-family:'Audiowide'>dash</span>  "),
       hr(),
+      #selectInput("user_league", "Select Your League:", c("TRUFFLE", "KERFUFFLE"), selected = "TRUFFLE"),
+      radioButtons("user_league", "Select Your League:", c("TRUFFLE", "KERFUFFLE"), selected = "TRUFFLE", inline = TRUE),
       textInput("user_name", "Enter Your Team:"),
       
       #passwordInput("password", "Password:"),
@@ -81,7 +93,7 @@ shinyServer(function(input, output, session) {
   # red error message if bad credentials
   output$pass <- renderUI({
     if (user_input$status == "bad_user") {
-      h5(strong("Team not found!", style = "color:#8C2E26"), align = "center")
+      h5(strong("Team not found or wrong League selected!", style = "color:#8C2E26"), align = "center")
     } else {
       ""
     }

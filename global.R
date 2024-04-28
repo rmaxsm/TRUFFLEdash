@@ -73,11 +73,16 @@ ggpal <- c(QB = "#8AE2A6", RB = "#FC9592", WR = "#96D3F5", TE = "#FFD087")
 
 #file of TRUFFLE team info
 # teams.csv ----
-teams <- as.data.table(read_csv("data/teams.csv", col_types = cols()))
+#teams <- as.data.table(read_csv("data/teams.csv", col_types = cols()))
+#demodata
+teams <- as.data.table(read_csv("demodata/teams.csv", col_types = cols()))
 
 # ids.csv ----
 #file of CBS player IDs
-ids <- as.data.table(read_csv("data/playerIDs.csv", col_types = cols()))
+#ids <- as.data.table(read_csv("data/playerIDs.csv", col_types = cols()))
+#demodata
+ids <- as.data.table(read_csv("demodata/playerIDs.csv", col_types = cols()))
+
 ids$playerID <- as.character(ids$playerID)
 ids$TRUFFLE[!(ids$TRUFFLE %in% c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW"))] <- "FA"
 ids <- merge(ids, teams[, c("Abbrev", "TeamNum")], by.x = "TRUFFLE", by.y = "Abbrev", all.x = T)
@@ -289,7 +294,7 @@ currentseason <- weekly[Season == max(weekly$Season),
                         ),
                         by = .(Scoring, Season, Pos, Player)]
 
-if (max(seasons$Season) != currentyr) {
+if (max(seasons$Season) != max(currentseason$Season)) {
   seasons <- rbind(seasons, currentseason)
 }
 
@@ -300,7 +305,9 @@ rookierights <- read_csv("data/rookierights.csv", col_types = cols())
 rookierights <- as.vector(rookierights$Player)
 
 #file of draft records
-draft <- as.data.table(read_csv("data/drafts.csv", col_types = cols()))
+#draft <- as.data.table(read_csv("data/drafts.csv", col_types = cols()))
+#demodata
+draft <- as.data.table(read_csv("demodata/drafts.csv", col_types = cols()))
 
 #franchise tag files
 franchised <- as.data.table(read_csv("data/franchisetag.csv", col_types = cols()))
@@ -436,8 +443,6 @@ ptslogs <- weekly[order(-Season, Week)][,
                                         by = .(Scoring, Season, Pos, Player)]
 
 tpoverview <- merge(tpoverview, ptslogs[Season == max(seasons$Season), .(Player,Scoring,ptslog)], by = c('Player','Scoring'), all.x = T)
-#currentyrfix
-#if(max(currentseason$Season) > max(seasons$Season)) { tpoverview <- merge(tpoverview, seasons[Season == max(seasons$Season)][, .(Player,Scoring,PosRk)], by = c('Player','Scoring'), all.x = T) }
 tpoverview <- merge(tpoverview, seasons[Season == max(seasons$Season)][, .(Player,Scoring,PosRk)], by = c('Player','Scoring'), all.x = T)
 tpoverview <- tpoverview[, .(Scoring, TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 
@@ -455,8 +460,6 @@ oldrosterstp$Avg[oldrosterstp$Pos == "DST"] <- NA
 oldrosterstp <- oldrosterstp[, .(Scoring,Season,TRUFFLE, Pos, Player, NFL, Salary, Contract, G, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 #merge in ptslogs and posrks
 oldrosterstp <- merge(oldrosterstp, ptslogs[, .(Scoring,Season,Pos,Player,ptslog)], by = c('Scoring','Season','Pos','Player'), all.x = T)
-#currentyrfix
-#if(max(currentseason$Season) > max(seasons$Season)) { oldrosterstp <- merge(oldrosterstp, seasons[, .(Scoring,Season,Pos,Player,PosRk)], by = c('Scoring','Season','Pos','Player'), all.x = T) }
 oldrosterstp <- merge(oldrosterstp, seasons[, .(Scoring,Season,Pos,Player,PosRk)], by = c('Scoring','Season','Pos','Player'), all.x = T)
 
 #create wayoldrostersview for before 2020
