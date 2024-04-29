@@ -124,6 +124,7 @@ cleanRosters <- function(file) {
   #colnames(file) <- c("Player", "Age",  "Pos", "TRUFFLE", "NFL", "Opp", "GameTime", "Bye", "O/U", "PosRnk", "Ovp", "Rost", "Start", "Salary", "Contract", "Last", "Avg", "Proj")
   #demodata
   colnames(file) <- c("Player", "Age", "League",  "Pos", "TRUFFLE", "NFL", "Opp", "GameTime", "Bye", "O/U", "PosRnk", "Ovp", "Rost", "Start", "Salary", "Contract", "Last", "Avg", "Proj")
+  file <- file[, c("League", "TRUFFLE", "Player",  "Pos", "NFL", "Age", "Opp", "GameTime", "Bye", "O/U", "PosRnk", "Ovp", "Rost", "Start", "Salary", "Contract", "Last", "Avg", "Proj")]
   
   #finalized 
   return(file)
@@ -465,7 +466,7 @@ positionorder <- c("QB","RB","WR","TE", "DST", "IR", "DC")
 #ISSUE
 #possibly need to do this in server
 #team portal tables
-tpoverview <- rosters[, .(TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract)]
+tpoverview <- rosters[, .(League, TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract)]
 tpoverview$Scoring <- "PPFD"
 tpoverviewPPR <- tpoverview; tpoverviewPPR$Scoring <- "PPR"
 tpoverviewhPPR <- tpoverview; tpoverviewhPPR$Scoring <- "hPPR"
@@ -474,18 +475,18 @@ tpoverview <- rbind(tpoverview, tpoverviewPPR, tpoverviewhPPR, tpoverviewSTD); r
 
 tpoverview <- merge(tpoverview, currentseason[Player %in% rosters$Player][, !c("Season", "NFL")], by = c('Scoring','Pos','Player'), all.x = T)
 tpoverview$Avg[tpoverview$Pos == "DST"] <- NA
-tpoverview <- tpoverview[, .(Scoring,TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
+tpoverview <- tpoverview[, .(Scoring,League,TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 
 ptslogs <- weekly[order(-Season, Week)][,
                                         .(ptslog = rev(list(FPts))),
                                         by = .(Scoring, Season, Pos, Player)]
 
-tpoverview <- merge(tpoverview, ptslogs[Season == max(seasons$Season), .(Player,Scoring,ptslog)], by = c('Player','Scoring'), all.x = T)
-tpoverview <- merge(tpoverview, seasons[Season == max(seasons$Season)][, .(Player,Scoring,PosRk)], by = c('Player','Scoring'), all.x = T)
-tpoverview <- tpoverview[, .(Scoring, TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
+tpoverview <- merge(tpoverview, ptslogs[Season == max(seasons$Season), .(Player,Pos,Scoring,ptslog)], by = c('Player','Pos','Scoring'), all.x = T)
+tpoverview <- merge(tpoverview, seasons[Season == max(seasons$Season)][, .(Player,Pos,Scoring,PosRk)], by = c('Player','Pos','Scoring'), all.x = T)
+tpoverview <- tpoverview[, .(Scoring, League, TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 
 #create oldrosters views to be used in teamportal for prior years selected
-oldrosterstp <- oldrosters[Season >= 2020, .(Season, TRUFFLE, Pos, Player, NFL, Salary, Contract)]
+oldrosterstp <- oldrosters[Season >= 2020, .(Season, League, TRUFFLE, Pos, Player, NFL, Salary, Contract)]
 oldrosterstp$Scoring <- "PPFD"
 oldrosterstpPPR <- oldrosterstp; oldrosterstpPPR$Scoring <- "PPR"
 oldrosterstphPPR <- oldrosterstp; oldrosterstphPPR$Scoring <- "hPPR"
@@ -495,7 +496,7 @@ oldrosterstp <- rbind(oldrosterstp, oldrosterstpPPR, oldrosterstphPPR, oldroster
 #merge in other columns for oldrosters team portal
 oldrosterstp <- merge(oldrosterstp, seasons[Player %in% oldrosterstp$Player, -"NFL"], by = c('Scoring','Season','Pos','Player'), all.x = T)
 oldrosterstp$Avg[oldrosterstp$Pos == "DST"] <- NA
-oldrosterstp <- oldrosterstp[, .(Scoring,Season,TRUFFLE, Pos, Player, NFL, Salary, Contract, G, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
+oldrosterstp <- oldrosterstp[, .(Scoring, Season, League, TRUFFLE, Pos, Player, NFL, Salary, Contract, G, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 #merge in ptslogs and posrks
 oldrosterstp <- merge(oldrosterstp, ptslogs[, .(Scoring,Season,Pos,Player,ptslog)], by = c('Scoring','Season','Pos','Player'), all.x = T)
 oldrosterstp <- merge(oldrosterstp, seasons[, .(Scoring,Season,Pos,Player,PosRk)], by = c('Scoring','Season','Pos','Player'), all.x = T)
@@ -513,26 +514,31 @@ wayoldrosterstp <- merge(wayoldrosterstp, seasons[Player %in% wayoldrosterstp$Pl
 wayoldrosterstp <- wayoldrosterstp[, .(Scoring, Season, TRUFFLE, Pos, Player, NFL, G, PosRk, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 
 #franchise tag vals
-tagvals <- as.data.table(
+lgs <- c("TRUFFLE", "KERFUFFLE")
+tagvals <- data.table()
+for (i in 1:length(lgs)) {
+tagvals <- rbind(tagvals, as.data.table(
   rbind(
-    c("QB", "First", round(mean(top5paid$Salary[top5paid$Pos == "QB" & top5paid$Season == currentyr]))),
-    c("QB", "Second", max(top5paid$Salary[top5paid$Pos == "QB" & top5paid$Season == currentyr]) + 1 ),
-    c("RB", "First", round(mean(top5paid$Salary[top5paid$Pos == "RB" & top5paid$Season == currentyr]))),
-    c("RB", "Second", max(top5paid$Salary[top5paid$Pos == "RB" & top5paid$Season == currentyr]) + 1 ),
-    c("WR", "First", round(mean(top5paid$Salary[top5paid$Pos == "WR" & top5paid$Season == currentyr]))),
-    c("WR", "Second", max(top5paid$Salary[top5paid$Pos == "WR" & top5paid$Season == currentyr]) + 1 ),
-    c("TE", "First", round(mean(top5paid$Salary[top5paid$Pos == "TE" & top5paid$Season == currentyr]))),
-    c("TE", "Second", max(top5paid$Salary[top5paid$Pos == "TE" & top5paid$Season == currentyr]) + 1 )
+    c(lgs[i], "QB", "First", round(mean(top5paid$Salary[top5paid$Pos == "QB" & top5paid$Season == currentyr]))),
+    c(lgs[i], "QB", "Second", max(top5paid$Salary[top5paid$Pos == "QB" & top5paid$Season == currentyr]) + 1 ),
+    c(lgs[i], "RB", "First", round(mean(top5paid$Salary[top5paid$Pos == "RB" & top5paid$Season == currentyr]))),
+    c(lgs[i], "RB", "Second", max(top5paid$Salary[top5paid$Pos == "RB" & top5paid$Season == currentyr]) + 1 ),
+    c(lgs[i], "WR", "First", round(mean(top5paid$Salary[top5paid$Pos == "WR" & top5paid$Season == currentyr]))),
+    c(lgs[i], "WR", "Second", max(top5paid$Salary[top5paid$Pos == "WR" & top5paid$Season == currentyr]) + 1 ),
+    c(lgs[i], "TE", "First", round(mean(top5paid$Salary[top5paid$Pos == "TE" & top5paid$Season == currentyr]))),
+    c(lgs[i], "TE", "Second", max(top5paid$Salary[top5paid$Pos == "TE" & top5paid$Season == currentyr]) + 1 )
   )
-)
-colnames(tagvals) <- c("Pos", "Type", "TagVal")
+))
+}
+colnames(tagvals) <- c("League", "Pos", "Type", "TagVal")
 tagvals$TagVal <- as.numeric(tagvals$TagVal)
 
 #table of players with franchise tag values
-ft <- rosters[, .(Pos, Player, Salary, Contract)][order(-Salary)][Pos %in% c("QB", "RB", "WR", "TE")]
+ft <- rosters[, .(League, Pos, Player, Salary, Contract)][order(-Salary)][Pos %in% c("QB", "RB", "WR", "TE")]
 ft$TagVal <- NA
 
 for (i in 1:nrow(ft)) {
+  lg <- ft$League[i]
   pos <- ft$Pos[i]
   pl <- ft$Player[i]
   csal <- ft$Salary[i]
@@ -545,27 +551,27 @@ for (i in 1:nrow(ft)) {
   } else if (ccon == 1 & pl %in% rookierights) {
     ft$TagVal[i] <- "Ineligible (Rookie Ext)"
     #set players franchise tagged 2 previous seasons to ineligible
-  } else if (pl %in% franchised$Player[franchised$Season == currentyr] & pl %in% franchised$Player[franchised$Season == currentyr - 1]) {
+  } else if (pl %in% franchised$Player[franchised$Season == currentyr & franchised$League == lg] & pl %in% franchised$Player[franchised$Season == currentyr - 1 & franchised$League == lg]) {
     ft$TagVal[i] <- "Ineligible (tagged 2x)"
     #set players franchise tagged previously to second tag value based on position
-  } else if (pl %in% franchised$Player[franchised$Season == currentyr]) {
-    ft$TagVal[i] <- tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "Second"]
+  } else if (pl %in% franchised$Player[franchised$Season == currentyr & franchised$League == lg]) {
+    ft$TagVal[i] <- tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "Second" & tagvals$League == lg]
     #set players who's current salary is greater than first tag value, to current salary plus 1
-    #  } else if (csal >= tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "First"]) {
-    #ft$TagVal[i] <- csal + 1
+    } else if (csal >= tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "First" & tagvals$League == lg]) {
+    ft$TagVal[i] <- csal + 1
     #set all other players on 1 year contracts to first tag
   } else {
-    ft$TagVal[i] <- tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "First"]
+    ft$TagVal[i] <- tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "First" & tagvals$League == lg]
   }
 }
 
 #contracts table
-contracts <- rosters[, .(TRUFFLE, Pos, Player, Age, NFL, Salary, Contract)]
-contracts <- merge(x = contracts, y = draft[, .(Pos, Player, Extension)], by = c("Pos", "Player"), all.x = T)[order(Player)]
-contracts <- merge(x = contracts, y = ft[, .(Pos, Player, TagVal)], by = c("Pos", "Player"), all.x = T)[order(Player)]
+contracts <- rosters[, .(League, TRUFFLE, Pos, Player, Age, NFL, Salary, Contract)]
+contracts <- merge(x = contracts, y = draft[, .(League, Pos, Player, Extension)], by = c("League", "Pos", "Player"), all.x = T)[order(Player)]
+contracts <- merge(x = contracts, y = ft[, .(League, Pos, Player, TagVal)], by = c("League", "Pos", "Player"), all.x = T)[order(Player)]
 contracts <- contracts[, `:=`(`'23` = Salary,
                               `'24` = ifelse(Contract > 1, Salary,
-                                             ifelse(Contract == 1 & is.element(Player, rookierights) == T, Extension,
+                                             ifelse(Contract == 1 & is.element(Player, rookierights[rookierights$League == League]) == T, Extension,
                                                     ifelse(Contract == 1 & as.numeric(TagVal) > 0 & is.na(as.numeric(TagVal)) == F, TagVal,
                                                            ifelse(Contract == 1 & is.element(Player, rookierights) == F, "FA", "-")))),
                               `'25` = ifelse(Contract > 2, Salary,
