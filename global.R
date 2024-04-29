@@ -569,33 +569,63 @@ for (i in 1:nrow(ft)) {
 contracts <- rosters[, .(League, TRUFFLE, Pos, Player, Age, NFL, Salary, Contract)]
 contracts <- merge(x = contracts, y = draft[, .(League, Pos, Player, Extension)], by = c("League", "Pos", "Player"), all.x = T)[order(Player)]
 contracts <- merge(x = contracts, y = ft[, .(League, Pos, Player, TagVal)], by = c("League", "Pos", "Player"), all.x = T)[order(Player)]
-contracts <- contracts[, `:=`(`'23` = Salary,
-                              `'24` = ifelse(Contract > 1, Salary,
+contracts$Y1 <- NA; contracts$Y2 <- NA; contracts$Y3 <- NA; contracts$Y4 <- NA; contracts$Y5 <- NA
+contracts <- contracts[, `:=`(`'24` = Salary,
+                              `'25` = ifelse(Contract > 1, Salary,
                                              ifelse(Contract == 1 & is.element(Player, rookierights[rookierights$League == League]) == T, Extension,
                                                     ifelse(Contract == 1 & as.numeric(TagVal) > 0 & is.na(as.numeric(TagVal)) == F, TagVal,
                                                            ifelse(Contract == 1 & is.element(Player, rookierights) == F, "FA", "-")))),
-                              `'25` = ifelse(Contract > 2, Salary,
-                                             ifelse(Contract == 1 & is.element(Player, rookierights) == T, Extension,
-                                                    ifelse(Contract == 2 & is.element(Player, rookierights) == T, Extension,
-                                                           ifelse(Contract == 1 & is.element(Player, franchised$Player[franchised$Season == currentyr]) == F, "FT",
-                                                                  ifelse(Contract == 1 & is.element(Player, franchised$Player[franchised$Season == currentyr - 1]) == F, "FA",
+                              `'26` = ifelse(Contract > 2, Salary,
+                                             ifelse(Contract == 1 & is.element(Player, rookierights[rookierights$League == League]) == T, Extension,
+                                                    ifelse(Contract == 2 & is.element(Player, rookierights[rookierights$League == League]) == T, Extension,
+                                                           ifelse(Contract == 1 & is.element(Player, franchised$Player[franchised$Season == currentyr & franchised$League == League]) == F, "FT",
+                                                                  ifelse(Contract == 1 & is.element(Player, franchised$Player[franchised$Season == currentyr - 1 & franchised$League == League]) == F, "FA",
                                                                          ifelse(Contract == 2, "FT", "-")))))),
-                              `'26` = ifelse(Contract > 3, Salary,
-                                             ifelse(Contract == 1 & is.element(Player, rookierights) == T, "FT",
-                                                    ifelse(Contract == 2 & is.element(Player, rookierights) == T, Extension,
-                                                           ifelse(Contract == 3 & is.element(Player, rookierights) == T, Extension,
-                                                                  ifelse(Contract == 1 & is.element(Player, franchised$Player[franchised$Season == currentyr]) == F, "FA",
+                              `'27` = ifelse(Contract > 3, Salary,
+                                             ifelse(Contract == 1 & is.element(Player, rookierights[rookierights$League == League]) == T, "FT",
+                                                    ifelse(Contract == 2 & is.element(Player, rookierights[rookierights$League == League]) == T, Extension,
+                                                           ifelse(Contract == 3 & is.element(Player, rookierights[rookierights$League == League]) == T, Extension,
+                                                                  ifelse(Contract == 1 & is.element(Player, franchised$Player[franchised$Season == currentyr & franchised$League == League]) == F, "FA",
                                                                          ifelse(Contract == 2, "FT",
-                                                                                ifelse(Contract == 3 & is.element(Player, rookierights) == F, "FT", "-"))))))),
-                              `'27` = ifelse(Contract > 4, Salary,
-                                             ifelse(Contract == 1 & is.element(Player, rookierights) == T, "FT",
-                                                    ifelse(Contract == 2 & is.element(Player, rookierights) == T, "FT",
-                                                           ifelse(Contract == 3 & is.element(Player, rookierights) == T, Extension,
-                                                                  ifelse(Contract == 4 & is.element(Player, rookierights) == T, Extension,
-                                                                         ifelse(Contract == 3 & is.element(Player, rookierights) == F, "FT",
-                                                                         ifelse(Contract == 2 & is.element(Player, rookierights) == F, "FA",
-                                                                         ifelse(Contract == 4 & is.element(Player, rookierights) == F, "FT", "-"))))))))
+                                                                                ifelse(Contract == 3 & is.element(Player, rookierights[rookierights$League == League]) == F, "FT", "-"))))))),
+                              `'28` = ifelse(Contract > 4, Salary,
+                                             ifelse(Contract == 1 & is.element(Player, rookierights[rookierights$League == League]) == T, "FT",
+                                                    ifelse(Contract == 2 & is.element(Player, rookierights[rookierights$League == League]) == T, "FT",
+                                                           ifelse(Contract == 3 & is.element(Player, rookierights[rookierights$League == League]) == T, Extension,
+                                                                  ifelse(Contract == 4 & is.element(Player, rookierights[rookierights$League == League]) == T, Extension,
+                                                                         ifelse(Contract == 3 & is.element(Player, rookierights[rookierights$League == League]) == F, "FT",
+                                                                         ifelse(Contract == 2 & is.element(Player, rookierights[rookierights$League == League]) == F, "FA",
+                                                                         ifelse(Contract == 4 & is.element(Player, rookierights[rookierights$League == League]) == F, "FT", "-"))))))))
 )][order(-Salary)]
+
+for (i in 1:nrow(contracts)) {
+  lg <- contracts$League[i]
+  pos <- contracts$Pos[i]
+  pl <- contracts$Player[i]
+  csal <- contracts$Salary[i]
+  ccon <- contracts$Contract[i]
+  
+  #set players w >1 yr on contract to ineligible
+  if (ccon != 1) {
+    contracts$TagVal[i] <- "Ineligible (>1 yr)"
+    #set players w expiring rookie contracts eligible for extensions to ineligible
+  } else if (ccon == 1 & pl %in% rookierights) {
+    contracts$TagVal[i] <- "Ineligible (Rookie Ext)"
+    #set players franchise tagged 2 previous seasons to ineligible
+  } else if (pl %in% franchised$Player[franchised$Season == currentyr & franchised$League == lg] & pl %in% franchised$Player[franchised$Season == currentyr - 1 & franchised$League == lg]) {
+    contracts$TagVal[i] <- "Ineligible (tagged 2x)"
+    #set players franchise tagged previously to second tag value based on position
+  } else if (pl %in% franchised$Player[franchised$Season == currentyr & franchised$League == lg]) {
+    contracts$TagVal[i] <- tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "Second" & tagvals$League == lg]
+    #set players who's current salary is greater than first tag value, to current salary plus 1
+  } else if (csal >= tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "First" & tagvals$League == lg]) {
+    contracts$TagVal[i] <- csal + 1
+    #set all other players on 1 year contracts to first tag
+  } else {
+    contracts$TagVal[i] <- tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "First" & tagvals$League == lg]
+  }
+}
+
 
 #ppd <- teamportal[, `:=`(`PP$` = round(FPts/Salary,2), `wPP$`= round(Avg/Salary,2))][, c("TRUFFLE", "Pos", "Player", "Avg", "FPts", "PP$", "wPP$")]
 
