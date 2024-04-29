@@ -25,7 +25,7 @@ library(reticulate)
 #colors and global options 
 
 minAvg <- 3
-currentyr <- 2023
+currentyr <- 2024
 
 options(reactable.language = reactableLang(
   pagePrevious = "\u276e",
@@ -107,7 +107,9 @@ fprosage <- as.data.table(cleanFprosage(fprosage))
 
 # rosters.csv ----
 #file of current TRUFFLE rosters
-rosters <- read_csv("data/rosters.csv", col_types = cols())
+#rosters <- read_csv("data/rosters.csv", col_types = cols())
+#demodata
+rosters <- read_csv("demodata/rosters.csv", col_types = cols())
 cleanRosters <- function(file) {
   
   #convert to DT
@@ -119,7 +121,9 @@ cleanRosters <- function(file) {
   file$Age <- as.integer(file$AgePH)
   file$AgePH <- NULL
   
-  colnames(file) <- c("Player", "Age", "Pos", "TRUFFLE", "NFL", "Opp", "GameTime", "Bye", "O/U", "PosRnk", "Ovp", "Rost", "Start", "Salary", "Contract", "Last", "Avg", "Proj")
+  #colnames(file) <- c("Player", "Age",  "Pos", "TRUFFLE", "NFL", "Opp", "GameTime", "Bye", "O/U", "PosRnk", "Ovp", "Rost", "Start", "Salary", "Contract", "Last", "Avg", "Proj")
+  #demodata
+  colnames(file) <- c("Player", "Age", "League",  "Pos", "TRUFFLE", "NFL", "Opp", "GameTime", "Bye", "O/U", "PosRnk", "Ovp", "Rost", "Start", "Salary", "Contract", "Last", "Avg", "Proj")
   
   #finalized 
   return(file)
@@ -128,7 +132,9 @@ rosters <- cleanRosters(rosters)
 
 # oldrosters.csv ----
 #get old rosters and merge in current teams to see what TRUFFLE team players were on which year
-oldrosters <- as.data.table(read_csv("data/oldrosters.csv", col_types = cols()))
+#oldrosters <- as.data.table(read_csv("data/oldrosters.csv", col_types = cols()))
+#demodata
+oldrosters <- as.data.table(read_csv("demodata/oldrosters.csv", col_types = cols()))
 #calculate rings and bench cup wins to display in record books
 rings <- oldrosters[,
                     .(Rings = sum(Ring),
@@ -138,7 +144,7 @@ rings <- oldrosters[,
                       BCYears = lapply(list(paste0(" ",substr(Season[BenchCup == 1],3,4))), sort, decreasing = F),
                       BCTeams = list(unique(paste0(" ",TRUFFLE[BenchCup == 1])))
                     ),
-                    by = .(Pos, Player)]
+                    by = .(League, Pos, Player)]
 rings$RingYears[rings$RingYears == " '"] <- NA; rings$BCYears[rings$BCYears == " '"] <- NA
 ringsbyteam <- oldrosters[,
                           .(Rings = sum(Ring),
@@ -146,21 +152,23 @@ ringsbyteam <- oldrosters[,
                             BenchCups = sum(BenchCup),
                             BCYears = lapply(list(paste0(" ",substr(Season[BenchCup == 1],3,4))), sort, decreasing = F)
                           ),
-                          by = .(TRUFFLE, Pos, Player)]
+                          by = .(League, TRUFFLE, Pos, Player)]
 ringsbyteam$RingYears[ringsbyteam$RingYears == " "] <- NA; ringsbyteam$BCYears[ringsbyteam$BCYears == " "] <- NA
 #delete rings and bench cup columns after use
 oldrosters$Ring <- NULL; oldrosters$BenchCup <- NULL
 
 #add current year rosters
-mergerosters <- rosters[, .(TRUFFLE, Pos, Player, NFL, Salary, Contract)]
+mergerosters <- rosters[, .(League, TRUFFLE, Pos, Player, NFL, Salary, Contract)]
 mergerosters$Season <- currentyr
-mergerosters <- mergerosters[, .(Season, TRUFFLE, Pos, Player, NFL, Salary, Contract)]
+mergerosters <- mergerosters[, .(League, Season, TRUFFLE, Pos, Player, NFL, Salary, Contract)]
 oldrosters <- as.data.table(rbind(oldrosters, mergerosters))[order(Player,Season)]
 rm(mergerosters)
 
 # fantasy.csv ----
 #file of weekly scoring for players started/active in TRUFFLE
-fantasy <- as.data.table(read_csv("data/fantasy.csv", col_types = cols()))
+#fantasy <- as.data.table(read_csv("data/fantasy.csv", col_types = cols()))
+#demodata
+fantasy <- as.data.table(read_csv("demodata/fantasy.csv", col_types = cols()))
 #fantasy <- read_excel("data/fantasy2022test.xlsx")
 cleanFantasy <- function(file) {
   #create scoring setting column and initial PPFD file version
@@ -193,7 +201,9 @@ fantasy <- as.data.table(cleanFantasy(fantasy))
 
 # seasons.csv ----
 #file of full season data for players dating back to 2015
-seasons <- as.data.table(read_csv("data/seasons.csv", col_types = cols()))
+#seasons <- as.data.table(read_csv("data/seasons.csv", col_types = cols()))
+#demodata
+seasons <- as.data.table(read_csv("demodata/seasons.csv", col_types = cols()))
 cleanSeasons <- function(file) {
   #create scoring setting column and initial PPFD file version
   file$Scoring <- "PPFD"
@@ -225,7 +235,9 @@ seasons <- as.data.table(cleanSeasons(seasons))
 
 # weekly.csv ----
 #file of weekly scoring across NFL
-weekly <- as.data.table(read_csv("data/weekly.csv", col_types = cols()))
+#weekly <- as.data.table(read_csv("data/weekly.csv", col_types = cols()))
+#demodata
+weekly <- as.data.table(read_csv("demodata/weekly.csv", col_types = cols()))
 cleanWeekly <- function(file) {
   #remove players that didnt play in a week
   file <- filter(file, is.na(Avg) == F)
@@ -259,19 +271,19 @@ cleanWeekly <- function(file) {
 weekly <- as.data.table(cleanWeekly(weekly))
 
 #create weekly with original teams by old
-weeklyogteams <- weekly
-weeklyogteams$TRUFFLE <- NULL
-weeklyogteams <- merge(x = weeklyogteams, y = oldrosters[ , .(Season, Pos, Player, TRUFFLE)], by = c("Season", "Pos", "Player"), all.x=TRUE)
-weeklyogteams$TRUFFLE[is.na(weeklyogteams$TRUFFLE)] <- "FA"
+weekly_orig_teams <- weekly
+weekly_orig_teams$TRUFFLE <- NULL
+weekly_orig_teams <- merge(x = weekly_orig_teams, y = oldrosters[ , .(League, Season, Pos, Player, TRUFFLE)], by = c("League", "Season", "Pos", "Player"), all.x=TRUE)
+weekly_orig_teams$TRUFFLE[is.na(weekly_orig_teams$TRUFFLE)] <- "FA"
 
 
 #add current truffle teams
 weekly$TRUFFLE <- NULL
-weekly <- merge(x = weekly, y = rosters[ , .(Pos, Player, TRUFFLE)], by = c("Pos", "Player"), all.x=TRUE)
+weekly <- merge(x = weekly, y = rosters[ , .(League, Pos, Player, TRUFFLE)], by = c("League", "Pos", "Player"), all.x=TRUE)
 weekly$TRUFFLE[is.na(weekly$TRUFFLE)] <- "FA"
 
 #add current season
-currentseason <- weekly[Season == max(weekly$Season),
+currentseason <- weekly[Season == max(weekly$Season) & League == "TRUFFLE",
                         .(NFL = NFL[1],
                           G = .N,
                           PaCmp = sum(PaCmp),
@@ -301,8 +313,10 @@ if (max(seasons$Season) != max(currentseason$Season)) {
 seasons <- seasons[order(Scoring, -Season,-FPts, -Avg)][, `:=`(PosRk = 1:.N), by = .(Scoring, Season, Pos)]
 
 #file to indicate what players have rookie rights
-rookierights <- read_csv("data/rookierights.csv", col_types = cols())
-rookierights <- as.vector(rookierights$Player)
+#rookierights <- read_csv("data/rookierights.csv", col_types = cols())
+#rookierights <- as.vector(rookierights$Player)
+#demodata
+rookierights <- as.data.table(read_csv("demodata/rookierights.csv", col_types = cols()))
 
 #file of draft records
 #draft <- as.data.table(read_csv("data/drafts.csv", col_types = cols()))
@@ -310,19 +324,29 @@ rookierights <- as.vector(rookierights$Player)
 draft <- as.data.table(read_csv("demodata/drafts.csv", col_types = cols()))
 
 #franchise tag files
-franchised <- as.data.table(read_csv("data/franchisetag.csv", col_types = cols()))
-top5paid <- as.data.table(read_csv("data/top5paid.csv", col_types = cols()))
+#franchised <- as.data.table(read_csv("data/franchisetag.csv", col_types = cols()))
+#top5paid <- as.data.table(read_csv("data/top5paid.csv", col_types = cols()))
+#demodata
+franchised <- as.data.table(read_csv("demodata/franchisetag.csv", col_types = cols()))
+top5paid <- as.data.table(read_csv("demodata/top5paid.csv", col_types = cols()))
 
 #rivalry scorers
-riv <- as.data.table(read_csv("data/rivalries.csv", col_types = cols()))
+#riv <- as.data.table(read_csv("data/rivalries.csv", col_types = cols()))
+#demodata
+riv <- as.data.table(read_csv("demodata/rivalries.csv", col_types = cols()))
 
-rivscores <- as.data.table(read_csv("data/rivalryscores.csv", col_types = cols()))
+#rivalry scores
+#rivscores <- as.data.table(read_csv("data/rivalryscores.csv", col_types = cols()))
+#demodata
+rivscores <- as.data.table(read_csv("demodata/rivalryscores.csv", col_types = cols()))
+
 rivscores$Winner <- ifelse(rivscores$Team1Score > rivscores$Team2Score, rivscores$Team1, rivscores$Team2)
 rivscores$Icon <- "www/graphics/rivalrylogos/blank.png"
 rivscores$Icon[rivscores$Thanksgiving == 1] <- "www/graphics/rivalrylogos/thanksgiving.png"
 rivscores$Icon[(rivscores$Season < 2021 & rivscores$Week >= 14) | (rivscores$Season >= 2021 & rivscores$Week >= 15)] <- "www/graphics/rivalrylogos/PS.png"
 rivscores$Icon[rivscores$Championship == 1] <- "www/graphics/rivalrylogos/rfs.png"
 
+#fantasy scores by players in rivalry games
 rivfantasy <- fantasy[Scoring == "PPFD" & (paste0(Season, "-", Week, "-", TRUFFLE) %in% paste0(rivscores$Season, "-", rivscores$Week, "-", rivscores$Team1) |
                   paste0(Season, "-", Week, "-", TRUFFLE) %in% paste0(rivscores$Season, "-", rivscores$Week, "-", rivscores$Team2))]
 rivfantasy <- merge(rivfantasy, teams[, .(Abbrev, Rivalry)], by.x = "TRUFFLE", by.y = "Abbrev")
@@ -346,20 +370,24 @@ turkeyscorers <- rivfantasy[Thanksgiving == 1,
 
 
 #read in advanced combined files
-extradash <- as.data.table(read_csv("data/extraDash.csv", col_types = cols()))
-colnames(extradash)[7:20] <- c("Cmp%", "Pa20", "Pa40", "RuYPC", "Ru20", "Tar", "Tar%", "ReYPC", "Re20", "Re40", "ReFD%", "TotYd", "Avg", "FPts")
-extradash$TRUFFLE <- NULL
-extradash <- merge(x = extradash, y = rosters[ , .(Pos, Player, TRUFFLE)], by = c("Pos", "Player"), all.x=TRUE)
-extradash$TRUFFLE[!(extradash$TRUFFLE %in% teams$Abbrev)] <- "FA"
+#extradash <- as.data.table(read_csv("data/extraDash.csv", col_types = cols()))
+#demodata
+extradash <- as.data.table(read_csv("demodata/extraDash.csv", col_types = cols()))
+
+colnames(extradash)[6:19] <- c("Cmp%", "Pa20", "Pa40", "RuYPC", "Ru20", "Tar", "Tar%", "ReYPC", "Re20", "Re40", "ReFD%", "TotYd", "Avg", "FPts")
+
+#don't think extradash needs TRUFFLE team info
+#extradash$TRUFFLE <- NULL
+#extradash <- merge(x = extradash, y = rosters[, .(Pos, Player, TRUFFLE)], by = c("Pos", "Player"), all.x=TRUE)
+#extradash$TRUFFLE[!(extradash$TRUFFLE %in% teams$Abbrev)] <- "FA"
 extradash <- extradash[Avg != "-"]
-extradash <- extradash[, c(3:4, 20, 1:2, 5:19)][order(-Week, -TotYd)]
+extradash <- extradash[, c(3:4, 1:2, 5:19)][order(-Week, -TotYd)]
 
 #merge in other columns for calcs
 extradash <- merge(x = extradash, y = weekly[Scoring == "PPFD" , .(Season, Week, Pos, Player, PaCmp, PaAtt, RuAtt, RuYd, Rec, ReYd, ReFD)], by = c("Season", "Week", "Pos", "Player"))
 
 extradashszn <- extradash[,
-                          .(TRUFFLE = TRUFFLE[1],
-                            G = .N,
+                          .(G = .N,
                             `Cmp%` = ifelse(sum(PaAtt, na.rm = T) > 0, round(sum(PaCmp, na.rm = T) / sum(PaAtt, na.rm = T), 3), 0),
                             Pa20 = sum(Pa20, na.rm = T),
                             Pa40 = sum(Pa40, na.rm = T),
@@ -379,11 +407,12 @@ extradashszn <- extradash[,
 extradashszn <- extradashszn[order(-TotYd)]
 
 #espn data
-espn <- as.data.table(read_csv("data/espnStats.csv", col_types = cols(Season = col_double(), Player = col_character(), NFL = col_character(),
+espn <- suppressWarnings(as.data.table(read_csv("data/espnStats.csv", col_types = cols(Season = col_double(), Player = col_character(), NFL = col_character(),
                                                                       Pos = col_character(), xFP = col_double(), ActualPts = col_double(), xTD = col_double(),
-                                                                      TD = col_double(), Looks = col_double(), Diff = col_double(), In5 = col_double(), EZ = col_double())))
+                                                                      TD = col_double(), Looks = col_double(), Diff = col_double(), In5 = col_double(), EZ = col_double()))))
+
 espn <- espn[Player != "Jeffery Simmons"]
-espn <- espn[,
+espn <- suppressWarnings(espn[,
              .(
                xFP = sum(xFP, na.rm = T),
                ActualPts = sum(ActualPts, na.rm = T),
@@ -394,22 +423,30 @@ espn <- espn[,
                In5 = max(In5, na.rm = T),
                EZ = max(EZ, na.rm = T)
              ),
-             by = .(Season, Pos, Player)]
-espn$xFP <- as.numeric(espn$xFP); espn$ActualPts <- as.numeric(espn$ActualPts); espn$xTD <- as.numeric(espn$xTD); espn$TD <- as.numeric(espn$TD)
-espn$Looks <- as.numeric(espn$Looks); espn$Diff <- as.numeric(espn$Diff); espn$In5 <- as.numeric(espn$In5); espn$EZ <- as.numeric(espn$EZ)
+             by = .(Season, Pos, Player)])
+espn[espn=="-Inf"] <- 0
+#espn$xFP <- as.numeric(espn$xFP); espn$ActualPts <- as.numeric(espn$ActualPts); espn$xTD <- as.numeric(espn$xTD); espn$TD <- as.numeric(espn$TD)
+#espn$Looks <- as.numeric(espn$Looks); espn$Diff <- as.numeric(espn$Diff); espn$In5 <- as.numeric(espn$In5); espn$EZ <- as.numeric(espn$EZ)
 espn$FPDiff <- espn$ActualPts - espn$xFP
-espn <- merge(x = espn, y = oldrosters[ , .(Season, Pos, Player, TRUFFLE)], by = c("Season", "Pos", "Player"), all.x=TRUE)
-espn$TRUFFLE[is.na(espn$TRUFFLE)] <- "FA"
+
+#get rid of TRUFFLE column, do this later
+#espn <- merge(x = espn, y = oldrosters[ , .(Season, Pos, Player, TRUFFLE)], by = c("Season", "Pos", "Player"), all.x=TRUE)
+#espn$TRUFFLE[is.na(espn$TRUFFLE)] <- "FA"
+
 colnames(espn)[9] <- "TDDiff"
-espn <- espn[, .(Season, TRUFFLE, Pos, Player, xFP, ActualPts, FPDiff, xTD, TD, TDDiff, Looks, `In5`, EZ)]
+#espn <- espn[, .(Season, TRUFFLE, Pos, Player, xFP, ActualPts, FPDiff, xTD, TD, TDDiff, Looks, `In5`, EZ)]
+espn <- espn[, .(Season, Pos, Player, xFP, ActualPts, FPDiff, xTD, TD, TDDiff, Looks, `In5`, EZ)]
 
 #snaps data
 snaps <- as.data.table(read_csv("data/snapPer.csv", col_types = cols()))
-snaps <- merge(x = snaps, y = rosters[ , .(Pos, Player, TRUFFLE)], by = c("Pos", "Player"), all.x=TRUE)
-snaps$TRUFFLE[is.na(snaps$TRUFFLE)] <- "FA"
-snaps <- snaps[, c(3, 25, 1:2, 4:22, 24, 23)]
+
+#get rid of TRUFFLE column, do this later
+#snaps <- merge(x = snaps, y = rosters[ , .(Pos, Player, TRUFFLE)], by = c("Pos", "Player"), all.x=TRUE)
+#snaps$TRUFFLE[is.na(snaps$TRUFFLE)] <- "FA"
+
+snaps <- snaps[, c(1, 3, 2, 4:22, 24, 23)]
 snaps[snaps == "bye"] <- NA
-colnames(snaps)[24:25] <- c("Avg", "Tot")
+colnames(snaps)[23:24] <- c("Avg", "Tot")
 #dividing snaps by 100 for percentage formatting
 for (i in 5:24) {
   #if(is.numeric(snaps[[i]])) {
@@ -420,6 +457,7 @@ for (i in 5:24) {
 snaps[snaps == 0] <- NA
 
 # modifying tables for display -----
+#all data loads complete
 
 # helpful vectors
 positionorder <- c("QB","RB","WR","TE", "DST", "IR", "DC")
@@ -638,7 +676,7 @@ consistency <- consistencystart[,
    by = .(Scoring, Season, TRUFFLE, Pos, Player)][order(-Avg)][, .(Scoring, Season,TRUFFLE,Pos,Player,G,Avg,RelSD,`>10 %`,`>20 %`,`>30 %`,`AvgPosRk`,`Top5 %`,`Top12 %`,`Top24 %`,`Top36 %`, `NonStart %`)]
 
 #weeklytop5s
-weeklytop5 <- weeklyogteams[order(Week,-FPts)][, .(TRUFFLE = TRUFFLE[1:30],
+weeklytop5 <- weekly_orig_teams[order(Week,-FPts)][, .(TRUFFLE = TRUFFLE[1:30],
                                                    Player = Player[1:30],
                                                    FPts = FPts[1:30]), 
                                                by = .(Scoring,Season,Week,Pos)][, .(Scoring,Season,Week,TRUFFLE,Pos,Player,FPts)]
