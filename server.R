@@ -55,7 +55,45 @@ shinyServer(function(input, output, session) {
       #use global league to filter down simple files
       teams <<- teams[League == globalleague]
       draft <<- draft[League == globalleague, -"League"]
+      advanced <<- advanced[League == globalleague, -"League"]
+      awards <<- awards[League == globalleague, -"League"]
+      consistency <<- consistency[League == globalleague, -"League"]
+      contracts <<- contracts[League == globalleague, -"League"]
+      franchised <<- franchised[League == globalleague, -"League"]
+      ft <<- ft[League == globalleague, -"League"]
+      oldrosters <<- oldrosters[League == globalleague, -"League"]
+      oldrosterstp <<- oldrosterstp[League == globalleague, -"League"]
+      pointsleaders <<- pointsleaders[League == globalleague, -"League"]
+      ppbios <<- ppbios[League == globalleague, -"League"]
+      pptrufflecareer <<- pptrufflecareer[League == globalleague, -"League"]
+      pptrufflecareerteam <<- pptrufflecareerteam[League == globalleague, -"League"]
+      recordbookspl <<- recordbookspl[League == globalleague, -"League"]
+      recordbookstm <<- recordbookstm[League == globalleague, -"League"]
+      rings <<- rings[League == globalleague, -"League"]
+      ringsbyteam <<- ringsbyteam[League == globalleague, -"League"]
+      riv <<- riv[League == globalleague, -"League"]
+      rivfantasy <<- rivfantasy[League == globalleague, -"League"]
+      #rivscorers <<- rivscorers[League == globalleague, -"League"]
+      rivscores <<- rivscores[League == globalleague, -"League"]
+      rookierights <<- rookierights[League == globalleague, -"League"]
+      rosterbreakdown <<- rosterbreakdown[League == globalleague, -"League"]
+      rosters <<- rosters[League == globalleague, -"League"]
+      tagvals <<- tagvals[League == globalleague, -"League"]
+      teamsfantasyweekly <<- teamsfantasyweekly[League == globalleague, -"League"]
+      top5paid <<- top5paid[League == globalleague, -"League"]
+      tpoverview <<- tpoverview[League == globalleague, -"League"]
+      truffleanalysis <<- truffleanalysis[League == globalleague, -"League"]
+      truffleanalysisperc <<- truffleanalysisperc[League == globalleague, -"League"]
+      #turkeyscorers <<- turkeyscorers[League == globalleague, -"League"]
       
+      #maybe remove?
+      salarybyteam <<- salarybyteam[League == globalleague, -"League"]
+      
+      #maybe not these ones
+      fantasy <<- fantasy[League == globalleague, -"League"]
+      weekly <<- weekly[League == globalleague, -"League"]
+      weekly_orig_teams <<- weekly_orig_teams[League == globalleague, -"League"]
+      weeklytop5 <<- weeklytop5[League == globalleague, -"League"]
       
       updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
       updateSelectInput(session, 'tmportalyr', choices = sort(c(unique(seasons$Season), currentyr), decreasing = T), selected = currentyr)
@@ -3539,7 +3577,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$allt1 <- renderReactable({
-    reactable(allt1[Season == input$awardseason][, -"Season"],
+    reactable(awards[Award == "1stTm"][, .(Season, Pos, Winner, TRUFFLE)][Season == input$awardseason][, -"Season"],
               compact = T,
               columns = list(
                 Pos = posDef(maxW = 80, filt = FALSE),
@@ -3550,7 +3588,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$allt2 <- renderReactable({
-    reactable(allt2[Season == input$awardseason][, -"Season"],
+    reactable(awards[Award == "2ndTm"][, .(Season, Pos, Winner, TRUFFLE)][Season == input$awardseason][, -"Season"],
               compact = T,
               columns = list(
                 Pos = posDef(maxW = 80, filt = FALSE),
