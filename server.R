@@ -52,18 +52,15 @@ shinyServer(function(input, output, session) {
       globalteam <<- toupper(input$user_name)
       globalleague <<- toupper(input$user_league)
       
-      #use global league to filter down simple files
+      #NEED League column, filter down
       teams <<- teams[League == globalleague]
       draft <<- draft[League == globalleague, -"League"]
-      advanced <<- advanced[League == globalleague, -"League"]
       awards <<- awards[League == globalleague, -"League"]
-      consistency <<- consistency[League == globalleague, -"League"]
       contracts <<- contracts[League == globalleague, -"League"]
-      franchised <<- franchised[League == globalleague, -"League"]
-      ft <<- ft[League == globalleague, -"League"]
       oldrosters <<- oldrosters[League == globalleague, -"League"]
       oldrosterstp <<- oldrosterstp[League == globalleague, -"League"]
-      pointsleaders <<- pointsleaders[League == globalleague, -"League"]
+      franchised <<- franchised[League == globalleague, -"League"]
+      ft <<- ft[League == globalleague, -"League"]
       ppbios <<- ppbios[League == globalleague, -"League"]
       pptrufflecareer <<- pptrufflecareer[League == globalleague, -"League"]
       pptrufflecareerteam <<- pptrufflecareerteam[League == globalleague, -"League"]
@@ -85,11 +82,12 @@ shinyServer(function(input, output, session) {
       truffleanalysis <<- truffleanalysis[League == globalleague, -"League"]
       truffleanalysisperc <<- truffleanalysisperc[League == globalleague, -"League"]
       #turkeyscorers <<- turkeyscorers[League == globalleague, -"League"]
-      
-      #maybe remove?
       salarybyteam <<- salarybyteam[League == globalleague, -"League"]
       
-      #maybe not these ones
+      #figure out how to merge team info rather than duplicate rows for two leagues
+      advanced <<- advanced[League == globalleague, -"League"]
+      consistency <<- consistency[League == globalleague, -"League"]
+      pointsleaders <<- pointsleaders[League == globalleague, -"League"]
       fantasy <<- fantasy[League == globalleague, -"League"]
       weekly <<- weekly[League == globalleague, -"League"]
       weekly_orig_teams <<- weekly_orig_teams[League == globalleague, -"League"]
@@ -655,15 +653,15 @@ shinyServer(function(input, output, session) {
                 NFL = nflDef,
                 Salary = salaryDefBar(foot = T),
                 Contract = contractDef(title ="Yr", foot = T),
-                `'23` = futurecolDef(yr = "'23", foot = T),
-                `'24` = futurecolDef(yr = "'24", foot = T),
-                `'25` = futurecolDef(yr = "'25", foot = T),
-                `'26` = futurecolDef(yr = "'26", foot = T),
-                `'27` = futurecolDef(yr = "'27", foot = T)
+                Y1 = futurecolDef(yr = "'24", foot = T),
+                Y2 = futurecolDef(yr = "'25", foot = T),
+                Y3 = futurecolDef(yr = "'26", foot = T),
+                Y4 = futurecolDef(yr = "'27", foot = T),
+                Y5 = futurecolDef(yr = "'28", foot = T)
               ),
               columnGroups = list(
                 colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
-                colGroup(name = "Future Seasons", columns = c("'23","'24","'25","'26","'27"), align = 'left')
+                colGroup(name = "Future Seasons", columns = c("Y1","Y2","Y3","Y4","Y5"), align = 'left')
               ),
               defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
     )
@@ -2163,11 +2161,11 @@ shinyServer(function(input, output, session) {
                   NFL = colDef(minWidth =  40),
                   Salary = salaryDefNobar(minW = 45, foot = T),
                   Contract = contractDef(minW = 30, foot = T, title ="Yr", filt = F),
-                  `'23` = futurecolDef(yr = "'23", maxW = 60, foot = T, filt = F),
                   `'24` = futurecolDef(yr = "'24", maxW = 60, foot = T, filt = F),
                   `'25` = futurecolDef(yr = "'25", maxW = 60, foot = T, filt = F),
                   `'26` = futurecolDef(yr = "'26", maxW = 60, foot = T, filt = F),
-                  `'27` = futurecolDef(yr = "'27", maxW = 60, foot = T, filt = F)
+                  `'27` = futurecolDef(yr = "'27", maxW = 60, foot = T, filt = F),
+                  `'28` = futurecolDef(yr = "'28", maxW = 60, foot = T, filt = F)
                 ),
                 defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
       )
@@ -2195,11 +2193,11 @@ shinyServer(function(input, output, session) {
                   NFL = colDef(minWidth =  40),
                   Salary = salaryDefNobar(minW = 45, foot = T),
                   Contract = contractDef(minW = 30, foot = T, title ="Yr", filt = F),
-                  `'23` = futurecolDef(yr = "'23", maxW = 60, foot = T, filt = F),
-                  `'24` = futurecolDef(yr = "'24", maxW = 60, foot = T, filt = F),
-                  `'25` = futurecolDef(yr = "'25", maxW = 60, foot = T, filt = F),
-                  `'26` = futurecolDef(yr = "'26", maxW = 60, foot = T, filt = F),
-                  `'27` = futurecolDef(yr = "'27", maxW = 60, foot = T, filt = F)
+                  Y1 = futurecolDef(yr = "'24", maxW = 60, foot = T, filt = F),
+                  Y2 = futurecolDef(yr = "'25", maxW = 60, foot = T, filt = F),
+                  Y3 = futurecolDef(yr = "'26", maxW = 60, foot = T, filt = F),
+                  Y4 = futurecolDef(yr = "'27", maxW = 60, foot = T, filt = F),
+                  Y5 = futurecolDef(yr = "'28", maxW = 60, foot = T, filt = F)
                 ),
                 defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
       )
@@ -2329,15 +2327,15 @@ shinyServer(function(input, output, session) {
                 NFL = nflDef,
                 Salary = salaryDefBar(),
                 Contract = contractDef(title ="Yr"),
-                `'23` = futurecolDef(yr = "'23"),
-                `'24` = futurecolDef(yr = "'24"),
-                `'25` = futurecolDef(yr = "'25"),
-                `'26` = futurecolDef(yr = "'26"),
-                `'27` = futurecolDef(yr = "'27")
+                Y1 = futurecolDef(yr = "'24"),
+                Y2 = futurecolDef(yr = "'25"),
+                Y3 = futurecolDef(yr = "'26"),
+                Y4 = futurecolDef(yr = "'27"),
+                Y5 = futurecolDef(yr = "'28")
               ),
               columnGroups = list(
                 colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
-                colGroup(name = "Future Seasons", columns = c("'23","'24","'25","'26","'27"), align = 'left')
+                colGroup(name = "Future Seasons", columns = c("Y1","Y2","Y3","Y4","Y5"), align = 'left')
               )
     )
   })

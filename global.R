@@ -276,6 +276,8 @@ weekly_orig_teams <- weekly
 weekly_orig_teams$TRUFFLE <- NULL
 weekly_orig_teams <- merge(x = weekly_orig_teams, y = oldrosters[ , .(League, Season, Pos, Player, TRUFFLE)], by = c("League", "Season", "Pos", "Player"), all.x=TRUE)
 weekly_orig_teams$TRUFFLE[is.na(weekly_orig_teams$TRUFFLE)] <- "FA"
+#weekly just unique scoring records, no League or TRUFFLE info
+weekly_no_teams <- weekly[League == "TRUFFLE", -c("League", "TRUFFLE")]
 
 
 #add current truffle teams
@@ -610,7 +612,7 @@ suppressWarnings(for (i in 1:nrow(contracts)) {
 })
 contracts <- contracts[order(-Salary)]
 #rename Y1-Y5
-colnames(contracts)[11:15] <- c("'24", "'25", "'26", "'27", "'28")
+#colnames(contracts)[11:15] <- c("'24", "'25", "'26", "'27", "'28")
 
 #ppd <- teamportal[, `:=`(`PP$` = round(FPts/Salary,2), `wPP$`= round(Avg/Salary,2))][, c("TRUFFLE", "Pos", "Player", "Avg", "FPts", "PP$", "wPP$")]
 
@@ -1156,7 +1158,7 @@ salaryDefBar <- function(minW = 175, foot = F) {
            width <- paste0(value / max(rosters$Salary) * 100, "%")
            bar_chart(ifelse(is.na(value), "", value), width = ifelse(is.na(value), 0, width), prefix = "$")
          },
-         footer = function(values) if(foot == T) {paste0("$", sum(values))}
+         footer = function(values) if(foot == T) {suppressWarnings(paste0("$", sum(values)))}
   )
 }
 
@@ -1173,7 +1175,7 @@ tagvalDefBar <- function(minW = 175, foot = F) {
            width <- paste0(value / max(rosters$Salary) * 100, "%")
            bar_chart(ifelse(is.na(value), "", value), width = ifelse(is.na(value), 0, width), prefix = "$")
          },
-         footer = function(values) if(foot == T) {paste0("$", sum(values))}
+         footer = function(values) if(foot == T) {suppressWarnings(paste0("$", sum(values)))}
   )
 }
 
@@ -1186,7 +1188,7 @@ salaryDefNobar <- function(minW = 45, foot = F, title = "$") {
          style = function(value) {
            color <- ifelse(value <= 15, IRcolor, 'black')
            list(color = color)},
-         footer = function(values) if(foot == T) {paste0("$", sum(values))}
+         footer = function(values) if(foot == T) {suppressWarnings(paste0("$", sum(values)))}
   )
 }
 
@@ -1199,7 +1201,7 @@ tagvalDefNobar <- function(minW = 45, foot = T, title = "$") {
          style = function(value) {
            color <- ifelse(value <= 15, IRcolor, 'black')
            list(color = color)},
-         footer = function(values) if(foot == T) {paste0("$", round(mean(values)) )}
+         footer = function(values) if(foot == T) {suppressWarnings(paste0("$", round(mean(values)) ))}
   )
 }
 
@@ -1231,7 +1233,7 @@ futurecolDef <- function(maxW = 75, filt = T, foot = F, yr) {
                                 ifelse(as.character(value) == "FA", textred,
                                        ifelse(as.character(value) == as.character(tag), franchisetag, tabletextcol))))
            list(color = col)},
-         footer = function(values) if(foot == T) {paste0("$", sum(as.numeric(values), na.rm=T))}
+         footer = function(values) if(foot == T) {suppressWarnings(paste0("$", sum(as.numeric(values), na.rm=T)))}
   )
 }
 
