@@ -611,16 +611,17 @@ suppressWarnings(for (i in 1:nrow(contracts)) {
   
 })
 contracts <- contracts[order(-Salary)]
-#rename Y1-Y5
-#colnames(contracts)[11:15] <- c("'24", "'25", "'26", "'27", "'28")
+
+#cap corner graph creation
+capbyteam <- rosters[,
+                        .(TeamSalary = sum(Salary)),
+                        by = .(League, TRUFFLE)]
+capbyteam <- merge(rosters, capbyteam, by = c("League", "TRUFFLE"))
+capbyteam$SalaryPerc <- capbyteam$Salary / capbyteam$TeamSalary
 
 #ppd <- teamportal[, `:=`(`PP$` = round(FPts/Salary,2), `wPP$`= round(Avg/Salary,2))][, c("TRUFFLE", "Pos", "Player", "Avg", "FPts", "PP$", "wPP$")]
 
 #aggregating fantasy data by team
-teamsfantasyweekly <- fantasy[,
-                              .(FPts = sum(FPts, na.rm = T)),
-                              by = .(League, TRUFFLE, Scoring, Season, Week)]
-
 pointsleaders <- weekly[order(-Season, Week)][League == "TRUFFLE",
                                               .(G = .N,
                                                 ptslogs = list(FPts),
@@ -708,10 +709,10 @@ consistency$League <- "TRUFFLE"; consistencycopy <- consistency; consistencycopy
 consistency <- merge(x = consistency, y = oldrosters[ , c("League", "Season", "Pos", "Player", "TRUFFLE")], by = c("League", "Season", "Pos", "Player"), all.x=TRUE)
 
 #weeklytop5s
-weeklytop5 <- weekly_orig_teams[order(Week,-FPts)][, .(TRUFFLE = TRUFFLE[1:30],
+weeklytop5 <- weekly_no_teams[order(Week,-FPts)][, .(#TRUFFLE = NA,
                                                    Player = Player[1:30],
                                                    FPts = FPts[1:30]), 
-                                               by = .(League,Scoring,Season,Week,Pos)][, .(League,Scoring,Season,Week,TRUFFLE,Pos,Player,FPts)]
+                                               by = .(Scoring,Season,Week,Pos)][, .(Scoring,Season,Week,Pos,Player,FPts)]
 
 #rookie extension values
 extval <- as.data.table(rbind(c("QB", "1.1-1.6", 70), c("QB", "1.7-1.12", 60), c("QB", "2", 50), c("QB", "3", 30),
@@ -920,70 +921,9 @@ recordbookspl <- fantasy[Scoring == "PPFD",
                          ),
                          by = .(League, Pos, Player)][Pos != "DST"]
 
-salarybyteam <- rosters[,
-                        .(TeamSalary = sum(Salary)),
-                        by = .(League, TRUFFLE)]
-rosterbreakdown <- merge(rosters, salarybyteam, by = c("League", "TRUFFLE"))
-rosterbreakdown$SalaryPerc <- rosterbreakdown$Salary / rosterbreakdown$TeamSalary
-
-#record books ----
-#fpts
-recordplfpts <- recordbookspl[, .(League,Pos,Player,FPts)][order(-FPts)][1:100, ]
-recordtmfpts <- recordbookstm[, .(League,TRUFFLE,Pos,Player,FPts)][order(-FPts)]
-#games
-recordplgames <- recordbookspl[, .(League,Pos,Player,Games)][order(-Games)][1:100, ]
-recordtmgames <- recordbookstm[, .(League,TRUFFLE,Pos,Player,Games)][order(-Games)]
-#Avg
-recordplavg <- recordbookspl[, .(League,Pos,Player,Games,Avg)][Games > 10][, .(Pos, Player, Avg)][order(-Avg)][1:100, ]
-recordtmavg <- recordbookstm[, .(League,TRUFFLE,Pos,Player,Games,Avg)][Games > 10][, .(TRUFFLE, Pos, Player, Avg)][order(-Avg)]
-#FD
-recordplfd <- recordbookspl[, .(League,Pos,Player,FD)][order(-FD)][1:100, ]
-recordtmfd <- recordbookstm[, .(League,TRUFFLE,Pos,Player,FD)][order(-FD)]
-#PaYd
-recordplpayd <- recordbookspl[, .(League,Pos,Player,PaYd)][order(-PaYd)][1:100, ]
-recordtmpayd <- recordbookstm[, .(League,TRUFFLE,Pos,Player,PaYd)][order(-PaYd)]
-#PaTD
-recordplpatd <- recordbookspl[, .(League,Pos,Player,PaTD)][order(-PaTD)][1:100, ]
-recordtmpatd <- recordbookstm[, .(League,TRUFFLE,Pos,Player,PaTD)][order(-PaTD)]
-#PaInt
-recordplpaint <- recordbookspl[, .(League,Pos,Player,PaInt)][order(-PaInt)][1:100, ]
-recordtmpaint <- recordbookstm[, .(League,TRUFFLE,Pos,Player,PaInt)][order(-PaInt)]
-#PaCmp
-recordplpacmp <- recordbookspl[, .(League,Pos,Player,PaCmp)][order(-PaCmp)][1:100, ]
-recordtmpacmp <- recordbookstm[, .(League,TRUFFLE,Pos,Player,PaCmp)][order(-PaCmp)]
-#RuYd
-recordplruyd <- recordbookspl[, .(League,Pos,Player,RuYd)][order(-RuYd)][1:100, ]
-recordtmruyd <- recordbookstm[, .(League,TRUFFLE,Pos,Player,RuYd)][order(-RuYd)]
-#TuTD
-recordplrutd <- recordbookspl[, .(League,Pos,Player,RuTD)][order(-RuTD)][1:100, ]
-recordtmrutd <- recordbookstm[, .(League,TRUFFLE,Pos,Player,RuTD)][order(-RuTD)]
-#RuFD
-recordplrufd <- recordbookspl[, .(League,Pos,Player,RuFD)][order(-RuFD)][1:100, ]
-recordtmrufd <- recordbookstm[, .(League,TRUFFLE,Pos,Player,RuFD)][order(-RuFD)]
-#FL
-recordplfl <- recordbookspl[, .(League,Pos,Player,FL)][order(-FL)][1:100, ]
-recordtmfl <- recordbookstm[, .(League,TRUFFLE,Pos,Player,FL)][order(-FL)]
-#ReYd
-recordplreyd <- recordbookspl[, .(League,Pos,Player,ReYd)][order(-ReYd)][1:100, ]
-recordtmreyd <- recordbookstm[, .(League,TRUFFLE,Pos,Player,ReYd)][order(-ReYd)]
-#ReTD
-recordplretd <- recordbookspl[, .(League,Pos,Player,ReTD)][order(-ReTD)][1:100, ]
-recordtmretd <- recordbookstm[, .(League,TRUFFLE,Pos,Player,ReTD)][order(-ReTD)]
-#ReFD
-recordplrefd <- recordbookspl[, .(League,Pos,Player,ReFD)][order(-ReFD)][1:100, ]
-recordtmrefd <- recordbookstm[, .(League,TRUFFLE,Pos,Player,ReFD)][order(-ReFD)]
-#Rec
-recordplrec <- recordbookspl[, .(League,Pos,Player,Rec)][order(-Rec)][1:100, ]
-recordtmrec <- recordbookstm[, .(League,TRUFFLE,Pos,Player,Rec)][order(-Rec)]
-
 #awards <- as.data.table(read_excel("data/awards.xlsx"))
 #demodata
-awards <- as.data.table(read_excel("demodata/awards.xlsx"))
-
-#allt1 <- awards[Award == "1stTm"][, .(League,Season, Pos, Winner, TRUFFLE)]
-#allt2 <- awards[Award == "2ndTm"][, .(League,Season, Pos, Winner, TRUFFLE)]
-#award2020 <- awards[Award!="1stTm" & Award!="2ndTm"][Season==2020]
-#award2021 <- awards[Award!="1stTm" & Award!="2ndTm"][Season==2021]
+awards <- as.data.table(read_csv("demodata/awards.csv", col_types = cols()))
 
 #reactable column formats ----
 

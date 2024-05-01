@@ -73,16 +73,15 @@ shinyServer(function(input, output, session) {
       #rivscorers <<- rivscorers[League == globalleague, -"League"]
       rivscores <<- rivscores[League == globalleague, -"League"]
       rookierights <<- rookierights[League == globalleague, -"League"]
-      rosterbreakdown <<- rosterbreakdown[League == globalleague, -"League"]
+      capbyteam <<- capbyteam[League == globalleague, -"League"]
       rosters <<- rosters[League == globalleague, -"League"]
       tagvals <<- tagvals[League == globalleague, -"League"]
-      teamsfantasyweekly <<- teamsfantasyweekly[League == globalleague, -"League"]
+      #teamsfantasyweekly <<- teamsfantasyweekly[League == globalleague, -"League"]
       top5paid <<- top5paid[League == globalleague, -"League"]
       tpoverview <<- tpoverview[League == globalleague, -"League"]
       truffleanalysis <<- truffleanalysis[League == globalleague, -"League"]
       truffleanalysisperc <<- truffleanalysisperc[League == globalleague, -"League"]
       #turkeyscorers <<- turkeyscorers[League == globalleague, -"League"]
-      salarybyteam <<- salarybyteam[League == globalleague, -"League"]
       
       #figure out how to merge team info rather than duplicate rows for two leagues
       advanced <<- advanced[League == globalleague, -"League"]
@@ -91,12 +90,18 @@ shinyServer(function(input, output, session) {
       fantasy <<- fantasy[League == globalleague, -"League"]
       weekly <<- weekly[League == globalleague, -"League"]
       weekly_orig_teams <<- weekly_orig_teams[League == globalleague, -"League"]
-      weeklytop5 <<- weeklytop5[League == globalleague, -"League"]
+      #weeklytop5 <<- weeklytop5[League == globalleague, -"League"]
+      
+      #doing some merging and FA assignment upon logon
+      weeklytop5 <<- merge(x = weeklytop5, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); weeklytop5$TRUFFLE[is.na(weeklytop5$TRUFFLE)] <<- "FA"
+    
       
       updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
-      updateSelectInput(session, 'tmportalyr', choices = sort(c(unique(seasons$Season), currentyr), decreasing = T), selected = currentyr)
+      updateSelectInput(session, 'tmportalyr', choices = if (globalleague == "TRUFFLE") { sort(c(unique(seasons$Season), currentyr), decreasing = T) } else { sort(c(unique(weekly$Season[weekly$League == globalleague]), currentyr)) }, selected = currentyr)
       updateSelectInput(session, 'rivalry', choices = unique(teams$RivalryName), selected = teams$RivalryName[teams$Abbrev == globalteam])
       updateSelectInput(session, 'tmtm1', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
+      updateSelectInput(session, 'recordteams', choices = c(globalleague, unique(teams$FullName)), selected = globalleague)
+      updateSelectInput(session, 'awardseason', choices = unique(awards$Season), selected = globalleague)
     } else {
       user_input$authenticated <- FALSE
     }
@@ -157,15 +162,17 @@ shinyServer(function(input, output, session) {
   #home page ----
   #home page standings
   output$hometeamsfantasy <- renderReactable({
-    teamsfantasy <- teamsfantasyweekly[Scoring == input$homescoring,
-                                       .(Weekly = list(round(FPts,2)),
-                                         Low = min(FPts, na.rm = T),
-                                         High = max(FPts, na.rm = T),
-                                         StdDev = round(sd(FPts, na.rm = T)),
-                                         Avg = round(mean(FPts, na.rm = T)),
-                                         Total = round(sum(FPts, na.rm = T))
-                                       ),
-                                       by = .(Scoring, Season, TRUFFLE)][order(-Total)]
+    teamsfantasy <- fantasy[,
+                                  .(FPts = sum(FPts, na.rm = T)),
+                                  by = .(TRUFFLE, Scoring, Season, Week)][Scoring == input$homescoring,
+                                                                          .(Weekly = list(round(FPts,2)),
+                                                                            Low = min(FPts, na.rm = T),
+                                                                            High = max(FPts, na.rm = T),
+                                                                            StdDev = round(sd(FPts, na.rm = T)),
+                                                                            Avg = round(mean(FPts, na.rm = T)),
+                                                                            Total = round(sum(FPts, na.rm = T))
+                                                                          ),
+                                                                          by = .(Scoring, Season, TRUFFLE)][order(-Total)]
     
     reactable(teamsfantasy[Season == input$homeseason, .(TRUFFLE, Weekly, Low, High, Avg, Total)],
               defaultSorted = c("Total"),
@@ -2343,7 +2350,7 @@ shinyServer(function(input, output, session) {
   #plot1
   output$plot1 <- renderPlotly({
     plot_ly(
-      data = rosterbreakdown,
+      data = capbyteam,
       y = ~TRUFFLE,
       x = ~Salary,
       #text = ~TeamSalary,
@@ -2366,7 +2373,7 @@ shinyServer(function(input, output, session) {
       barmode = "stack",
       font = list(color = 'black')
     ) %>% config(displayModeBar = FALSE) %>% 
-      add_annotations(data = rosterbreakdown %>% select(TRUFFLE, TeamSalary) %>% unique(),
+      add_annotations(data = capbyteam %>% select(TRUFFLE, TeamSalary) %>% unique(),
                       x = 510,
                       y = ~TRUFFLE,
                       text = ~TeamSalary,
@@ -2812,7 +2819,7 @@ shinyServer(function(input, output, session) {
   #history books ----
   #record books rings
   output$recordrings <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
+    if (input$recordteams == globalleague) {
       reactable(rings[Rings > 0, !c("BenchCups","BCYears","BCTeams")][order(-Rings)],
                 defaultSortOrder = "desc",
                 filterable = F,
@@ -2854,7 +2861,7 @@ shinyServer(function(input, output, session) {
   })
   #record books rings
   output$recordbenchcups <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
+    if (input$recordteams == globalleague) {
       reactable(rings[BenchCups > 0, !c("Rings","RingYears","RingTeams")][order(-BenchCups)],
                 defaultSortOrder = "desc",
                 filterable = F,
@@ -2896,8 +2903,8 @@ shinyServer(function(input, output, session) {
   })
   #record books fantasy points
   output$recordfpts <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplfpts,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,FPts)][order(-FPts)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -2915,7 +2922,7 @@ shinyServer(function(input, output, session) {
                 )
       )
     } else {
-      reactable(recordtmfpts[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,FPts)][order(-FPts)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -2935,8 +2942,8 @@ shinyServer(function(input, output, session) {
   })
   #record books games
   output$recordgames <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplgames,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,Games)][order(-Games)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -2954,7 +2961,7 @@ shinyServer(function(input, output, session) {
                 )
       )
     } else {
-      reactable(recordtmgames[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,Games)][order(-Games)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -2974,8 +2981,8 @@ shinyServer(function(input, output, session) {
   })
   #record books avg
   output$recordavg <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplavg,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,Games,Avg)][Games >= if (globalleague == "TRUFFLE") {10} else {1}][, .(Pos, Player, Avg)][order(-Avg)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -2993,7 +3000,7 @@ shinyServer(function(input, output, session) {
                 )
       )
     } else {
-      reactable(recordtmavg[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,Games,Avg)][Games > 10][, .(TRUFFLE, Pos, Player, Avg)][order(-Avg)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3013,8 +3020,8 @@ shinyServer(function(input, output, session) {
   })
   #record books first downs
   output$recordfd <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplfd,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,FD)][order(-FD)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3032,7 +3039,7 @@ shinyServer(function(input, output, session) {
                 )
       )
     } else {
-      reactable(recordtmfd[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,FD)][order(-FD)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3052,8 +3059,8 @@ shinyServer(function(input, output, session) {
   })
   #record books passing yards
   output$recordpayd <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplpayd,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,PaYd)][order(-PaYd)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3071,7 +3078,7 @@ shinyServer(function(input, output, session) {
                 )
       )
     } else {
-      reactable(recordtmpayd[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,PaYd)][order(-PaYd)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3091,8 +3098,8 @@ shinyServer(function(input, output, session) {
   })
   #record books passing td
   output$recordpatd <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplpatd,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,PaTD)][order(-PaTD)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3110,7 +3117,7 @@ shinyServer(function(input, output, session) {
                 )
       )
     } else {
-      reactable(recordtmpatd[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,PaTD)][order(-PaTD)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3130,8 +3137,8 @@ shinyServer(function(input, output, session) {
   })
   #record books interceptions
   output$recordpaint <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplpaint,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,PaInt)][order(-PaInt)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3149,7 +3156,7 @@ shinyServer(function(input, output, session) {
                 )
       )
     } else {
-      reactable(recordtmpaint[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,PaInt)][order(-PaInt)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3169,8 +3176,8 @@ shinyServer(function(input, output, session) {
   })
   #record books completions
   output$recordpacmp <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplpacmp,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,PaCmp)][order(-PaCmp)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3188,7 +3195,7 @@ shinyServer(function(input, output, session) {
                 )
       )
     } else {
-      reactable(recordtmpacmp[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,PaCmp)][order(-PaCmp)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3208,8 +3215,8 @@ shinyServer(function(input, output, session) {
   })
   #record books rushing yards
   output$recordruyd <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplruyd,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,RuYd)][order(-RuYd)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3227,7 +3234,7 @@ shinyServer(function(input, output, session) {
                 )
       )
     } else {
-      reactable(recordtmruyd[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,RuYd)][order(-RuYd)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3247,8 +3254,8 @@ shinyServer(function(input, output, session) {
   })
   #record books rushing touchdowns
   output$recordrutd <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplrutd,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,RuTD)][order(-RuTD)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3266,7 +3273,7 @@ shinyServer(function(input, output, session) {
                 )
       )
     } else {
-      reactable(recordtmrutd[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,RuTD)][order(-RuTD)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3286,8 +3293,8 @@ shinyServer(function(input, output, session) {
   })
   #record books rushing first downs
   output$recordrufd <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplrufd,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,RuFD)][order(-RuFD)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3305,7 +3312,7 @@ shinyServer(function(input, output, session) {
                 )
       )
     } else {
-      reactable(recordtmrufd[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,RuFD)][order(-RuFD)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3325,8 +3332,8 @@ shinyServer(function(input, output, session) {
   })
   #record books fumbles
   output$recordfl <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplfl,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,FL)][order(-FL)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3344,7 +3351,7 @@ shinyServer(function(input, output, session) {
                 )
       )
     } else {
-      reactable(recordtmfl[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,FL)][order(-FL)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3364,8 +3371,8 @@ shinyServer(function(input, output, session) {
   })
   #record books receiving yards
   output$recordreyd <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplreyd,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,ReYd)][order(-ReYd)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3383,7 +3390,7 @@ shinyServer(function(input, output, session) {
                 )
       )
     } else {
-      reactable(recordtmreyd[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,ReYd)][order(-ReYd)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3403,8 +3410,8 @@ shinyServer(function(input, output, session) {
   })
   #record books receiving touchdowns
   output$recordretd <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplretd,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,ReTD)][order(-ReTD)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3422,7 +3429,7 @@ shinyServer(function(input, output, session) {
                 )
       )
     } else {
-      reactable(recordtmretd[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,ReTD)][order(-ReTD)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3442,8 +3449,8 @@ shinyServer(function(input, output, session) {
   })
   #record books receiving first downs
   output$recordrefd <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplrefd,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,ReFD)][order(-ReFD)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3461,7 +3468,7 @@ shinyServer(function(input, output, session) {
                 )
       )
     } else {
-      reactable(recordtmrefd[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,ReFD)][order(-ReFD)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3481,8 +3488,8 @@ shinyServer(function(input, output, session) {
   })
   #record books receptions
   output$recordrec <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplrec,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,Rec)][order(-Rec)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3500,7 +3507,7 @@ shinyServer(function(input, output, session) {
                 )
       )
     } else {
-      reactable(recordtmrec[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,Rec)][order(-Rec)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3521,7 +3528,7 @@ shinyServer(function(input, output, session) {
   
   #awards
   output$historybooksawards <- renderReactable({
-    selectedawards <- awards[Award!="1stTm" & Award!="2ndTm"][Season == input$awardseason]
+    selectedawards <- awards[Award!="1stTm" & Award!="2ndTm"][Season == 2024]
     
     reactable(
       selectedawards,

@@ -636,7 +636,7 @@ dashboardPageUI <-
                                                               ),
                                                               column(width = 3,
                                                                      br(),
-                                                                     selectInput("recordteams", "TRUFFLE / Team", c("TRUFFLE", unique(teams$FullName)), selected = "TRUFFLE" )
+                                                                     selectInput("recordteams", "League / Team", c("TRUFFLE", unique(teams$FullName)), selected = "TRUFFLE" )
                                                               )
                                                             )),
                                                   wellPanel(class = "well",
@@ -712,35 +712,35 @@ dashboardPageUI <-
                                                   
                                          ),
                                          
-                                         # tabPanel("Awards",
-                                         #          
-                                         #          wellPanel(class = "well",
-                                         #                    fluidRow(
-                                         #                      column(width = 9,
-                                         #                             h2("Annual End Of Season TRUFFLE Awards"),
-                                         #                             p("Awards and All-TRUFFLE Teams annually voted for by TRUFFLE owners.")
-                                         #                      ),
-                                         #                      column(width = 3,
-                                         #                             selectInput("awardseason", "Season", sort(unique(awards$Season), decreasing = T), selected = max(awards$Season))
-                                         #                      )
-                                         #                    )
-                                         #          ),
-                                         #          wellPanel(class = "well",
-                                         #                    fluidRow(
-                                         #                      column(width=6,
-                                         #                             h2("Award Winners"),
-                                         #                             br(),
-                                         #                             reactableOutput('historybooksawards')
-                                         #                      ),
-                                         #                      column(width=6,
-                                         #                             h2("All-TRUFFLE"),
-                                         #                             em("* denotes unanimous 1st Team selection"),
-                                         #                             reactableOutput('allt1'),
-                                         #                             reactableOutput('allt2')
-                                         #                      )
-                                         #                    )
-                                         #          )
-                                         # ), #end tabpanel
+                                         tabPanel("Awards",
+
+                                                  wellPanel(class = "well",
+                                                            fluidRow(
+                                                              column(width = 9,
+                                                                     h2("Annual End Of Season TRUFFLE Awards"),
+                                                                     p("Awards and All-TRUFFLE Teams annually voted for by TRUFFLE owners.")
+                                                              ),
+                                                              column(width = 3,
+                                                                     selectInput("awardseason", "Season", sort(unique(awards$Season), decreasing = T), selected = max(awards$Season))
+                                                              )
+                                                            )
+                                                  ),
+                                                  wellPanel(class = "well",
+                                                            fluidRow(
+                                                              column(width=6,
+                                                                     h2("Award Winners"),
+                                                                     br(),
+                                                                     reactableOutput('historybooksawards')
+                                                              ),
+                                                              column(width=6,
+                                                                     h2("All-TRUFFLE"),
+                                                                     em("* denotes unanimous 1st Team selection"),
+                                                                     reactableOutput('allt1'),
+                                                                     reactableOutput('allt2')
+                                                              )
+                                                            )
+                                                  )
+                                         ), #end tabpanel
                                          
                                          tabPanel("Rivalries",
                                                   wellPanel(
