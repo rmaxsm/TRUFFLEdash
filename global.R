@@ -410,7 +410,8 @@ extradashszn <- extradash[,
 extradashszn <- extradashszn[order(-TotYd)]
 
 #espn data
-espn <- suppressWarnings(as.data.table(read_csv("data/espnStats.csv", col_types = cols(Season = col_double(), Player = col_character(), NFL = col_character(),
+#demodata
+espn <- suppressWarnings(as.data.table(read_csv("demodata/espnStats.csv", col_types = cols(Season = col_double(), Player = col_character(), NFL = col_character(),
                                                                       Pos = col_character(), xFP = col_double(), ActualPts = col_double(), xTD = col_double(),
                                                                       TD = col_double(), Looks = col_double(), Diff = col_double(), In5 = col_double(), EZ = col_double()))))
 
@@ -441,7 +442,8 @@ colnames(espn)[9] <- "TDDiff"
 espn <- espn[, .(Season, Pos, Player, xFP, ActualPts, FPDiff, xTD, TD, TDDiff, Looks, `In5`, EZ)]
 
 #snaps data
-snaps <- as.data.table(read_csv("data/snapPer.csv", col_types = cols()))
+#demodata
+snaps <- as.data.table(read_csv("demodata/snapPer.csv", col_types = cols()))
 
 #get rid of TRUFFLE column, do this later
 #snaps <- merge(x = snaps, y = rosters[ , .(Pos, Player, TRUFFLE)], by = c("Pos", "Player"), all.x=TRUE)
@@ -704,7 +706,7 @@ consistency <- consistencystart[,
      `>30 %` = sum(gt30dum)/.N
    ),
    by = .(Scoring, Season, Pos, Player)][order(-Avg)][, .(Scoring, Season,Pos,Player,G,Avg,RelSD,`>10 %`,`>20 %`,`>30 %`,`AvgPosRk`,`Top5 %`,`Top12 %`,`Top24 %`,`Top36 %`, `NonStart %`)]
-rm(consistencystart)
+#rm(consistencystart)
 consistency$League <- "TRUFFLE"; consistencycopy <- consistency; consistencycopy$League <- "KERFUFFLE"; consistency <- rbind(consistency, consistencycopy); rm(consistencycopy)
 consistency <- merge(x = consistency, y = oldrosters[ , c("League", "Season", "Pos", "Player", "TRUFFLE")], by = c("League", "Season", "Pos", "Player"), all.x=TRUE)
 
@@ -930,7 +932,7 @@ awards <- as.data.table(read_csv("demodata/awards.csv", col_types = cols()))
 smallboxwidth <- 45
 
 #functions
-avg_pal <- function(x) { 
+z_avg_pal <- function(x) { 
   if(is.na(x) == T) {
     rgb(1, 1, 1)
   } else if (x < 0) {
@@ -943,7 +945,7 @@ avg_pal <- function(x) {
 }
 
 #function that preps any guven data frame for the inclusion of action buttons
-action_mod <- function(df, team) {
+z_action_mod <- function(df, team) {
   myteam <- team
   df <- merge(df, ids[, .(Player, playerID, TeamNum)], by = 'Player', all.x = T)
   df$Action <- ifelse(df$TRUFFLE == myteam, "www/graphics/actions/drop.png",
@@ -955,20 +957,20 @@ action_mod <- function(df, team) {
   return(df)
 }
 
-bar_chart <- function(label, width = "100%", height = "16px", fill = QBcolor, background = NULL, prefix = "") {
+z_bar_chart <- function(label, width = "100%", height = "16px", fill = QBcolor, background = NULL, prefix = "") {
   bar <- div(style = list(background = fill, width = width, height = height))
   chart <- div(style = list(flexGrow = 1, marginLeft = "8px", background = background), bar)
   div(style = list(display = "flex", alignItems = "center"), paste0(prefix,label), chart)
 }
 
-with_tt <- function(value, tooltip) {
+z_with_tt <- function(value, tooltip) {
   tags$abbr(style = "text-decoration: underline; text-decoration-style: dotted; cursor: help",
             title = tooltip, value)
 }
 
 #column definitions / definition functions
-actionDef <- function() {
-  colDef(header = with_tt("Act", "Drop players on your team\nTrade for players on other teams\nAdd Free Agents"),
+z_actionDef <- function() {
+  colDef(header = z_with_tt("Act", "Drop players on your team\nTrade for players on other teams\nAdd Free Agents"),
          show = !isguest,
          align="center", 
          minWidth = 35, 
@@ -981,7 +983,7 @@ actionDef <- function() {
          })
 }
 
-trfDef <- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE, minW = 75) {
+z_trfDef <- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE, minW = 75) {
   colDef(name = name,
          show = !isguest,
          aggregate = "unique",
@@ -999,7 +1001,7 @@ trfDef <- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE, minW = 75)
   )
 }
 
-trfDefRivScores <- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE, minW = 75) {
+z_trfDefRivScores <- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE, minW = 75) {
   colDef(name = name,
          show = !isguest,
          aggregate = "unique",
@@ -1021,7 +1023,7 @@ trfDefRivScores <- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE, m
   )
 }
 
-posDef <- function(maxW = 48, filt = T, foot = NULL, sort = T) {
+z_posDef <- function(maxW = 48, filt = T, foot = NULL, sort = T) {
   colDef(maxWidth = maxW,
          filterable = filt,
          footer = foot,
@@ -1053,7 +1055,7 @@ posDef <- function(maxW = 48, filt = T, foot = NULL, sort = T) {
          })
 }
 
-playerDef <- function(minW = 200, filt = FALSE, sort = T) {
+z_playerDef <- function(minW = 200, filt = FALSE, sort = T) {
   colDef(minWidth = minW,
          filterable = filt,
          sortable = sort,
@@ -1066,8 +1068,8 @@ playerDef <- function(minW = 200, filt = FALSE, sort = T) {
          })
 }
 
-posRkDef <- function(maxW = 62, filt = F) {
-  colDef(header = with_tt("PosRk", "Seasonal position rank by total FPts"),
+z_posRkDef <- function(maxW = 62, filt = F) {
+  colDef(header = z_with_tt("PosRk", "Seasonal position rank by total FPts"),
          maxWidth = maxW,
          filterable = filt,
          align = 'right',
@@ -1075,8 +1077,8 @@ posRkDef <- function(maxW = 62, filt = F) {
          sortNALast = T)
 }
 
-ptsLogDef <- function(maxW = 75) {
-  colDef(header = with_tt("PtsLog", "Weekly log of FPts"),
+z_ptsLogDef <- function(maxW = 75) {
+  colDef(header = z_with_tt("PtsLog", "Weekly log of FPts"),
          sortable = F,
          align = 'right',
          maxWidth = maxW,
@@ -1086,7 +1088,7 @@ ptsLogDef <- function(maxW = 75) {
          })
 }
 
-salaryDefBar <- function(minW = 175, foot = F) {
+z_salaryDefBar <- function(minW = 175, foot = F) {
   colDef(minWidth = minW,
          align = 'left',
          format = colFormat(digits=0),
@@ -1096,13 +1098,13 @@ salaryDefBar <- function(minW = 175, foot = F) {
            list(color = color)},
          cell = function(value) {
            width <- paste0(value / max(rosters$Salary) * 100, "%")
-           bar_chart(ifelse(is.na(value), "", value), width = ifelse(is.na(value), 0, width), prefix = "$")
+           z_bar_chart(ifelse(is.na(value), "", value), width = ifelse(is.na(value), 0, width), prefix = "$")
          },
          footer = function(values) if(foot == T) {suppressWarnings(paste0("$", sum(values)))}
   )
 }
 
-tagvalDefBar <- function(minW = 175, foot = F) {
+z_tagvalDefBar <- function(minW = 175, foot = F) {
   colDef(header = "Tag Value",
          minWidth = minW,
          align = 'left',
@@ -1113,13 +1115,13 @@ tagvalDefBar <- function(minW = 175, foot = F) {
            list(color = color)},
          cell = function(value) {
            width <- paste0(value / max(rosters$Salary) * 100, "%")
-           bar_chart(ifelse(is.na(value), "", value), width = ifelse(is.na(value), 0, width), prefix = "$")
+           z_bar_chart(ifelse(is.na(value), "", value), width = ifelse(is.na(value), 0, width), prefix = "$")
          },
          footer = function(values) if(foot == T) {suppressWarnings(paste0("$", sum(values)))}
   )
 }
 
-salaryDefNobar <- function(minW = 45, foot = F, title = "$") {
+z_salaryDefNobar <- function(minW = 45, foot = F, title = "$") {
   colDef(minWidth = minW,
          name = title,
          align = 'right',
@@ -1132,7 +1134,7 @@ salaryDefNobar <- function(minW = 45, foot = F, title = "$") {
   )
 }
 
-tagvalDefNobar <- function(minW = 45, foot = T, title = "$") {
+z_tagvalDefNobar <- function(minW = 45, foot = T, title = "$") {
   colDef(minWidth = minW,
          name = title,
          align = 'right',
@@ -1145,7 +1147,7 @@ tagvalDefNobar <- function(minW = 45, foot = T, title = "$") {
   )
 }
 
-contractDef <- function(minW = 45, filt = T, foot = F, title = "Contract") {
+z_contractDef <- function(minW = 45, filt = T, foot = F, title = "Contract") {
   colDef(minWidth = minW,
          filterable = filt,
          name = title,
@@ -1159,8 +1161,8 @@ contractDef <- function(minW = 45, filt = T, foot = F, title = "Contract") {
 }
 
 #formatting for future columns (including FA and RR tags)
-futurecolDef <- function(maxW = 75, filt = T, foot = F, yr) {
-  colDef(header = with_tt(yr, "FA: Free Agent\nPurple: Rookie Extension Value\nBlue: Franchise Tag"),
+z_futureColDef <- function(maxW = 75, filt = T, foot = F, yr) {
+  colDef(header = z_with_tt(yr, "FA: Free Agent\nPurple: Rookie Extension Value\nBlue: Franchise Tag"),
          maxWidth = maxW,
          filterable = filt,
          align = 'right',
@@ -1177,8 +1179,8 @@ futurecolDef <- function(maxW = 75, filt = T, foot = F, yr) {
   )
 }
 
-avgDef <- function(maxW = 65, digs = 1, filt = F, col = T, borderL = F, foot = F) {
-  colDef(header = with_tt("Avg", "Weekly average FPts"),
+z_avgDef <- function(maxW = 65, digs = 1, filt = F, col = T, borderL = F, foot = F) {
+  colDef(header = z_with_tt("Avg", "Weekly average FPts"),
          maxWidth = maxW,
          format = colFormat(digits = digs),
          filterable = filt,
@@ -1186,15 +1188,15 @@ avgDef <- function(maxW = 65, digs = 1, filt = F, col = T, borderL = F, foot = F
          class = function(value) if(borderL == T) {"border-left-grey"},
          style = function(value) { 
            normalized <- (value) / (max(seasons$Avg,na.rm=T))
-           color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
+           color <- ifelse(value > 0, z_avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
            if(col == T) {list(background = color)}
          },
          footer = function(values) if(foot == T) {round(mean(as.numeric(values), na.rm=T),2)}
   )
 }
 
-fptsDef <- function(maxW = 65, borderL = T, digs = 1, filt = F, foot = F) {
-  colDef(header = with_tt("FPts", "Fantasy points"),
+z_fptsDef <- function(maxW = 65, borderL = T, digs = 1, filt = F, foot = F) {
+  colDef(header = z_with_tt("FPts", "Fantasy points"),
          maxWidth = maxW,
          format = colFormat(digits = digs),
          filterable = filt,
@@ -1204,8 +1206,8 @@ fptsDef <- function(maxW = 65, borderL = T, digs = 1, filt = F, foot = F) {
   )
 }
 
-fptsWeekDef <- function(maxW = 65, borderL = T, digs = 1, filt = F, col = T) {
-  colDef(header = with_tt("FPts", "Fantasy points"),
+z_fptsWeekDef <- function(maxW = 65, borderL = T, digs = 1, filt = F, col = T) {
+  colDef(header = z_with_tt("FPts", "Fantasy points"),
          maxWidth = maxW,
          format = colFormat(digits = digs),
          filterable = filt,
@@ -1213,14 +1215,14 @@ fptsWeekDef <- function(maxW = 65, borderL = T, digs = 1, filt = F, col = T) {
          class = function(value) if(borderL == T) {"border-left-grey"},
          style = function(value) { 
            normalized <- (value) / (max(weekly$FPts[weekly$Season == max(weekly$Season)],na.rm=T))
-           color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
+           color <- ifelse(value > 0, z_avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
            if(col == T) {list(background = color)}
          }
   )
 }
 
-fptsSeasDef <- function(maxW = 65, borderL = F, digs = 1, filt = F, col = T) {
-  colDef(header = with_tt("FPts", "Fantasy points"),
+z_fptsSeasDef <- function(maxW = 65, borderL = F, digs = 1, filt = F, col = T) {
+  colDef(header = z_with_tt("FPts", "Fantasy points"),
          maxWidth = maxW,
          format = colFormat(digits = digs),
          filterable = filt,
@@ -1228,13 +1230,13 @@ fptsSeasDef <- function(maxW = 65, borderL = F, digs = 1, filt = F, col = T) {
          class = function(value) if(borderL == T) {"border-left-grey"},
          style = function(value) { 
            normalized <- (value) / (max(seasons$FPts,na.rm=T))
-           color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
+           color <- ifelse(value > 0, z_avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
            if(col == T) {list(background = color)}
          }
   )
 }
 
-seasonDef <- function(name = "Yr", maxW = 45, filt = F) {
+z_seasonDef <- function(name = "Yr", maxW = 45, filt = F) {
   colDef(name=name,
          format = colFormat(percent = F),
          maxWidth = maxW,
@@ -1243,44 +1245,45 @@ seasonDef <- function(name = "Yr", maxW = 45, filt = F) {
          filterable = filt)
 }
 
-nflDef <- colDef(minWidth = 50, align = 'right')
+z_nflDef <- colDef(minWidth = 50, align = 'right')
 
-byeDef <- colDef(minWidth = 50, align = 'right')
+z_byeDef <- colDef(minWidth = 50, align = 'right')
 
-gDef <- function(minW = 40, foot = F) {
-  colDef(header = with_tt("G", "Games Played"),
+z_gDef <- function(minW = 40, foot = F) {
+  colDef(header = z_with_tt("G", "Games Played"),
          minWidth = minW,
          align = 'right',
          defaultSortOrder = "desc",
          footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
   )}
 
-ageDef <- colDef(minWidth = 50, align = 'right', defaultSortOrder = "asc", sortNALast = T)
+z_ageDef <- colDef(minWidth = 50, align = 'right', defaultSortOrder = "asc", sortNALast = T)
 
-smallcolDef <- colDef(maxWidth = 100, align = 'left')
+#not used
+z_smallColDef <- colDef(maxWidth = 100, align = 'left')
 
-weekDef <- colDef("Wk",maxWidth = 44, align = 'center', defaultSortOrder = "desc")
+z_weekDef <- colDef("Wk",maxWidth = 44, align = 'center', defaultSortOrder = "desc")
 
-opDef <- colDef(header = with_tt("Op", "Opponent"), maxWidth = 60, align = 'right')
-oprkDef <- colDef(header = with_tt("OpRk", "Opponent Rankings vs. Fantasy Posision"), maxWidth = 60, align = 'center', style = function(value) {
+z_opDef <- colDef(header = z_with_tt("Op", "Opponent"), maxWidth = 60, align = 'right')
+z_oprkDef <- colDef(header = z_with_tt("OpRk", "Opponent Rankings vs. Fantasy Posision"), maxWidth = 60, align = 'center', style = function(value) {
   color <- ifelse(value <= 10, 'firebrick',
                   ifelse(value <= 20, 'black', 'green'))
   list(color = color)})
 
 #box score stats reactable formats ----
 #passing stats conditional formatting
-pacmpDef <- colDef(header = with_tt("Cmp", "Passing Completions"), minWidth = smallboxwidth + 8, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
-paattDef <- colDef(header = with_tt("Att", "Passing Attempts"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_pacmpDef <- colDef(header = z_with_tt("Cmp", "Passing Completions"), minWidth = smallboxwidth + 8, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
+z_paattDef <- colDef(header = z_with_tt("Att", "Passing Attempts"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
 
-paydDefWk <- colDef(header = with_tt("Yd", "Passing Yards\nBold if >=300"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_paydDefWk <- colDef(header = z_with_tt("Yd", "Passing Yards\nBold if >=300"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 300, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-paydDefSsn <- colDef(header = with_tt("Yd", "Passing Yards\nBold if >=4000"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_paydDefSsn <- colDef(header = z_with_tt("Yd", "Passing Yards\nBold if >=4000"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 4000, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-paydDefNm <- colDef(header = with_tt("Yd", "Passing Yards"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
-paydDef <- function(minW = 45, foot = F, borderL = F) {
-  colDef(header = with_tt("Yd", "Passing Yards"),
+z_paydDefNm <- colDef(header = z_with_tt("Yd", "Passing Yards"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_paydDef <- function(minW = 45, foot = F, borderL = F) {
+  colDef(header = z_with_tt("Yd", "Passing Yards"),
          minWidth = minW,
          class = function(value) if(borderL == T) {"border-left-grey"},
          align = 'right',
@@ -1289,15 +1292,15 @@ paydDef <- function(minW = 45, foot = F, borderL = F) {
   )
 }
 
-patdDefWk <- colDef(header = with_tt("TD", "Passing TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_patdDefWk <- colDef(header = z_with_tt("TD", "Passing TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-patdDefSsn <- colDef(header = with_tt("TD", "Passing TDs\nBold if >=30"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_patdDefSsn <- colDef(header = z_with_tt("TD", "Passing TDs\nBold if >=30"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 30, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-patdDefNm <- colDef(header = with_tt("TD", "Passing TDs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
-patdDef <- function(minW = 45, foot = F) {
-  colDef(header = with_tt("TD", "Passing TDs"),
+z_patdDefNm <- colDef(header = z_with_tt("TD", "Passing TDs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_patdDef <- function(minW = 45, foot = F) {
+  colDef(header = z_with_tt("TD", "Passing TDs"),
          minWidth = minW,
          align = 'right',
          defaultSortOrder = "desc",
@@ -1305,15 +1308,15 @@ patdDef <- function(minW = 45, foot = F) {
   )
 }
 
-paintDefWk <- colDef(header = with_tt("Int", "Interceptions\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_paintDefWk <- colDef(header = z_with_tt("Int", "Interceptions\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'italic', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "asc")
-paintDefSsn <- colDef(header = with_tt("Int", "Interceptions\nBold if >=15"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_paintDefSsn <- colDef(header = z_with_tt("Int", "Interceptions\nBold if >=15"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 15, 'italic', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "asc")
-paintDefNm <- colDef(header = with_tt("Int", "Interceptions"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "asc")
-paintDef <- function(minW = 45, foot = F) {
-  colDef(header = with_tt("Int", "Interceptions"),
+z_paintDefNm <- colDef(header = z_with_tt("Int", "Interceptions"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "asc")
+z_paintDef <- function(minW = 45, foot = F) {
+  colDef(header = z_with_tt("Int", "Interceptions"),
          minWidth = minW,
          align = 'right',
          defaultSortOrder = "desc",
@@ -1322,15 +1325,15 @@ paintDef <- function(minW = 45, foot = F) {
 }
 
 #Rushing stats
-ruattDefWk <- colDef(header = with_tt("Att", "Rushing Attempts\nBold if >=20"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_ruattDefWk <- colDef(header = z_with_tt("Att", "Rushing Attempts\nBold if >=20"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 20, 'bold', 'plain')
   list(fontWeight = fontWeight)}, class = "border-left-grey", defaultSortOrder = "desc")
-ruattDefSsn <- colDef(header = with_tt("Att", "Rushing Attempts\nBold if >=250"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_ruattDefSsn <- colDef(header = z_with_tt("Att", "Rushing Attempts\nBold if >=250"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 250, 'bold', 'plain')
   list(fontWeight = fontWeight)}, class = "border-left-grey", defaultSortOrder = "desc")
-ruattDefNm <- colDef(header = with_tt("Att", "Rushing Attempts"), minWidth = smallboxwidth, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
-ruattDef <- function(minW = 45, foot = F, borderL = T) {
-  colDef(header = with_tt("Att", "Rushing Attempts"),
+z_ruattDefNm <- colDef(header = z_with_tt("Att", "Rushing Attempts"), minWidth = smallboxwidth, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
+z_ruattDef <- function(minW = 45, foot = F, borderL = T) {
+  colDef(header = z_with_tt("Att", "Rushing Attempts"),
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
@@ -1340,15 +1343,15 @@ ruattDef <- function(minW = 45, foot = F, borderL = T) {
 }
 
 #Rushing yards
-ruydDefWk <- colDef(header = with_tt("Yd", "Rushing Yards\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_ruydDefWk <- colDef(header = z_with_tt("Yd", "Rushing Yards\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-ruydDefSsn <- colDef(header = with_tt("Yd", "Rushing Yards\nBold if >=1000"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_ruydDefSsn <- colDef(header = z_with_tt("Yd", "Rushing Yards\nBold if >=1000"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 1000, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-ruydDefNm <- colDef(header = with_tt("Yd", "Rushing Yards"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
-ruydDef <- function(minW = 45, foot = F, borderL = F) {
-  colDef(header = with_tt("Yd", "Rushing Yards"),
+z_ruydDefNm <- colDef(header = z_with_tt("Yd", "Rushing Yards"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_ruydDef <- function(minW = 45, foot = F, borderL = F) {
+  colDef(header = z_with_tt("Yd", "Rushing Yards"),
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
@@ -1358,15 +1361,15 @@ ruydDef <- function(minW = 45, foot = F, borderL = F) {
 }
 
 #Rushing td
-rutdDefWk <- colDef(header = with_tt("TD", "Rushing TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_rutdDefWk <- colDef(header = z_with_tt("TD", "Rushing TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-rutdDefSsn <- colDef(header = with_tt("TD", "Rushing TDs\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_rutdDefSsn <- colDef(header = z_with_tt("TD", "Rushing TDs\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-rutdDefNm <- colDef(header = with_tt("TD", "Rushing TDs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
-rutdDef <- function(minW = 45, foot = F, borderL = F) {
-  colDef(header = with_tt("TD", "Rushing TDs"),
+z_rutdDefNm <- colDef(header = z_with_tt("TD", "Rushing TDs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_rutdDef <- function(minW = 45, foot = F, borderL = F) {
+  colDef(header = z_with_tt("TD", "Rushing TDs"),
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
@@ -1376,15 +1379,15 @@ rutdDef <- function(minW = 45, foot = F, borderL = F) {
 }
 
 #Rushing fd
-rufdDefWk <- colDef(header = with_tt("FD", "Rushing First Downs\nBold if >=5"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_rufdDefWk <- colDef(header = z_with_tt("FD", "Rushing First Downs\nBold if >=5"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 5, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-rufdDefSsn <- colDef(header = with_tt("FD", "Rushing First Downs\nBold if >=50"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_rufdDefSsn <- colDef(header = z_with_tt("FD", "Rushing First Downs\nBold if >=50"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 50, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-rufdDefNm <- colDef(header = with_tt("FD", "Rushing First Downs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
-rufdDef <- function(minW = 45, foot = F, borderL = F) {
-  colDef(header = with_tt("FD", "Rushing TDs"),
+z_rufdDefNm <- colDef(header = z_with_tt("FD", "Rushing First Downs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_rufdDef <- function(minW = 45, foot = F, borderL = F) {
+  colDef(header = z_with_tt("FD", "Rushing TDs"),
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
@@ -1394,15 +1397,15 @@ rufdDef <- function(minW = 45, foot = F, borderL = F) {
 }
 
 #Targets
-tarDefWk <- colDef(header = with_tt("Tar", "Targets\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_tarDefWk <- colDef(header = z_with_tt("Tar", "Targets\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
   list(fontWeight = fontWeight)}, class = "border-left-grey", defaultSortOrder = "desc")
-tarDefSsn <- colDef(header = with_tt("Tar", "Targets\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_tarDefSsn <- colDef(header = z_with_tt("Tar", "Targets\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
   list(fontWeight = fontWeight)}, class = "border-left-grey", defaultSortOrder = "desc")
-tarDefNm <- colDef(header = with_tt("Tar", "Targets"), minWidth = smallboxwidth, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
-tarDef <- function(minW = 45, foot = F, borderL = F) {
-  colDef(header = with_tt("Tar", "Targets"),
+z_tarDefNm <- colDef(header = z_with_tt("Tar", "Targets"), minWidth = smallboxwidth, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
+z_tarDef <- function(minW = 45, foot = F, borderL = F) {
+  colDef(header = z_with_tt("Tar", "Targets"),
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
@@ -1412,15 +1415,15 @@ tarDef <- function(minW = 45, foot = F, borderL = F) {
 }
 
 #Receptions
-recDefWk <- colDef(header = with_tt("Rec", "Receptions\nBold if >=10"), minWidth = smallboxwidth + 2, align = 'right', style = function(value) {
+z_recDefWk <- colDef(header = z_with_tt("Rec", "Receptions\nBold if >=10"), minWidth = smallboxwidth + 2, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-recDefSsn <- colDef(header = with_tt("Rec", "Receptions\nBold if >=100"), minWidth = smallboxwidth + 2, align = 'right', style = function(value) {
+z_recDefSsn <- colDef(header = z_with_tt("Rec", "Receptions\nBold if >=100"), minWidth = smallboxwidth + 2, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-recDefNm <- colDef(header = with_tt("Rec", "Receptions"), minWidth = smallboxwidth + 2, align = 'right', defaultSortOrder = "desc")
-recDef <- function(minW = 47, foot = F, borderL = F) {
-  colDef(header = with_tt("Rec", "Receptions"),
+z_recDefNm <- colDef(header = z_with_tt("Rec", "Receptions"), minWidth = smallboxwidth + 2, align = 'right', defaultSortOrder = "desc")
+z_recDef <- function(minW = 47, foot = F, borderL = F) {
+  colDef(header = z_with_tt("Rec", "Receptions"),
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
@@ -1430,15 +1433,15 @@ recDef <- function(minW = 47, foot = F, borderL = F) {
 }
 
 #receiving yards
-reydDefWk <- colDef(header = with_tt("Yd", "Receiving Yards\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_reydDefWk <- colDef(header = z_with_tt("Yd", "Receiving Yards\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-reydDefSsn <- colDef(header = with_tt("Yd", "Receiving Yards\nBold if >=1000"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_reydDefSsn <- colDef(header = z_with_tt("Yd", "Receiving Yards\nBold if >=1000"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 1000, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-reydDefNm <- colDef(header = with_tt("Yd", "Receiving Yards"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
-reydDef <- function(minW = 47, foot = F, borderL = F) {
-  colDef(header = with_tt("Yd", "Receiving Yards"),
+z_reydDefNm <- colDef(header = z_with_tt("Yd", "Receiving Yards"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_reydDef <- function(minW = 47, foot = F, borderL = F) {
+  colDef(header = z_with_tt("Yd", "Receiving Yards"),
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
@@ -1448,15 +1451,15 @@ reydDef <- function(minW = 47, foot = F, borderL = F) {
 }
 
 #receiving tds
-retdDefWk <- colDef(header = with_tt("TD", "Receiving TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_retdDefWk <- colDef(header = z_with_tt("TD", "Receiving TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-retdDefSsn <- colDef(header = with_tt("TD", "Receiving TDs\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_retdDefSsn <- colDef(header = z_with_tt("TD", "Receiving TDs\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-retdDefNm <- colDef(header = with_tt("TD", "Receiving TDs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
-retdDef <- function(minW = 47, foot = F, borderL = F) {
-  colDef(header = with_tt("TD", "Receiving TDs"),
+z_retdDefNm <- colDef(header = z_with_tt("TD", "Receiving TDs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_retdDef <- function(minW = 47, foot = F, borderL = F) {
+  colDef(header = z_with_tt("TD", "Receiving TDs"),
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
@@ -1466,15 +1469,15 @@ retdDef <- function(minW = 47, foot = F, borderL = F) {
 }
 
 #Receiving fd
-refdDefWk <- colDef(header = with_tt("FD", "Receiving First Downs\nBold if >=5"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_refdDefWk <- colDef(header = z_with_tt("FD", "Receiving First Downs\nBold if >=5"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 5, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-refdDefSsn <- colDef(header = with_tt("FD", "Receiving First Downs\nBold if >=50"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_refdDefSsn <- colDef(header = z_with_tt("FD", "Receiving First Downs\nBold if >=50"), minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 50, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-refdDefNm <- colDef(header = with_tt("FD", "Receiving First Downs"), minWidth = smallboxwidth, align = 'right')
-refdDef <- function(minW = 47, foot = F, borderL = F) {
-  colDef(header = with_tt("FD", "Receiving First Downs"),
+z_refdDefNm <- colDef(header = z_with_tt("FD", "Receiving First Downs"), minWidth = smallboxwidth, align = 'right')
+z_refdDef <- function(minW = 47, foot = F, borderL = F) {
+  colDef(header = z_with_tt("FD", "Receiving First Downs"),
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
@@ -1483,157 +1486,157 @@ refdDef <- function(minW = 47, foot = F, borderL = F) {
   )
 }
 
-flDef <- colDef(header = with_tt("Fl", "Fumbles Lost"), minWidth = smallboxwidth - 5, align = 'right', defaultSortOrder = "desc")
+z_flDef <- colDef(header = z_with_tt("Fl", "Fumbles Lost"), minWidth = smallboxwidth - 5, align = 'right', defaultSortOrder = "desc")
 
 #advanced stats reactable formats----
-perccolwidth <- 60
-othcolwidth <- 45
-blankptwidth <- 52
-tchDef <- colDef(header = with_tt("Tch", "Touches\n(Completions + Carries + Receptions)"),
-                 minWidth = othcolwidth,
+z_perccolwidth <- 60
+z_othcolwidth <- 45
+z_blankptwidth <- 52
+z_tchDef <- colDef(header = z_with_tt("Tch", "Touches\n(Completions + Carries + Receptions)"),
+                 minWidth = z_othcolwidth,
                  align = "right",
                  class = "border-left-grey",
                  defaultSortOrder = "desc",
                  sortNALast = T)
-oppDef <- colDef(header = with_tt("Opp", "Opportunities\n(Passing Attempts + Carries + Targets)"),
-                 minWidth = othcolwidth + 2,
+z_oppDef <- colDef(header = z_with_tt("Opp", "Opportunities\n(Passing Attempts + Carries + Targets)"),
+                 minWidth = z_othcolwidth + 2,
                  align = "right",
                  defaultSortOrder = "desc",
                  sortNALast = T)
-fptsPtchDef <- colDef(header = with_tt("FPt/Tch", "FPts per Touch\n(Completions + Carries + Receptions)"),
+z_fptsPtchDef <- colDef(header = z_with_tt("FPt/Tch", "FPts per Touch\n(Completions + Carries + Receptions)"),
                       minWidth = 68,
                       align = "right",
                       format = colFormat(digits = 2),
                       defaultSortOrder = "desc",
                       sortNALast = T)
-fptsPoppDef <- colDef(header = with_tt("FPt/Opp", "FPts per Opportunity\n(Passing Attempts + Carries + Targets)"),
+z_fptsPoppDef <- colDef(header = z_with_tt("FPt/Opp", "FPts per Opportunity\n(Passing Attempts + Carries + Targets)"),
                       minWidth = 72,
                       align = "right",
                       format = colFormat(digits = 2),
                       defaultSortOrder = "desc",
                       sortNALast = T)
-ydptsDef <- colDef(header = with_tt("YdPt", "FPts from Yards\n(Passing + Rushing + Receiving)"),
-                   minWidth = blankptwidth,
+z_ydptsDef <- colDef(header = z_with_tt("YdPt", "FPts from Yards\n(Passing + Rushing + Receiving)"),
+                   minWidth = z_blankptwidth,
                    align = "right",
                    class = "border-left-grey",
                    format = colFormat(digits = 1),
                    defaultSortOrder = "desc",
                    sortNALast = T)
-tdptsDef <- colDef(header = with_tt("TDPt", "FPts from Touchdowns\n(Passing + Rushing + Receiving)"),
-                   minWidth = blankptwidth,
+z_tdptsDef <- colDef(header = z_with_tt("TDPt", "FPts from Touchdowns\n(Passing + Rushing + Receiving)"),
+                   minWidth = z_blankptwidth,
                    align = "right",
                    defaultSortOrder = "desc",
                    sortNALast = T)
-fdptsDef <- colDef(header = with_tt("FDPt", "FPts from First Downs\n(Rushing + Receiving)"),
-                   minWidth = blankptwidth,
+z_fdptsDef <- colDef(header = z_with_tt("FDPt", "FPts from First Downs\n(Rushing + Receiving)"),
+                   minWidth = z_blankptwidth,
                    align = "right",
                    defaultSortOrder = "desc",
                    sortNALast = T)
-ruptsDef <- colDef(header = with_tt("RuPt", "FPts from Rushing\n(Yards + TDs + First Downs)"),
-                   minWidth = blankptwidth,
+z_ruptsDef <- colDef(header = z_with_tt("RuPt", "FPts from Rushing\n(Yards + TDs + First Downs)"),
+                   minWidth = z_blankptwidth,
                    align = "right",
                    class = "border-left-grey",
                    format = colFormat(digits = 1),
                    defaultSortOrder = "desc",
                    sortNALast = T)
-reptsDef <- colDef(header = with_tt("RePt", "FPts from Receiving\n(Yards + TDs + First Downs)"),
-                   minWidth = blankptwidth,
+z_reptsDef <- colDef(header = z_with_tt("RePt", "FPts from Receiving\n(Yards + TDs + First Downs)"),
+                   minWidth = z_blankptwidth,
                    align = "right",
                    format = colFormat(digits = 1),
                    defaultSortOrder = "desc",
                    sortNALast = T)
-ydptpercDef <- colDef(header = with_tt("YdPt%", "Percentage of Total FPts from Yards\n(Passing + Rushing + Receiving)"),
-                      minWidth = perccolwidth,
+z_ydptpercDef <- colDef(header = z_with_tt("YdPt%", "Percentage of Total FPts from Yards\n(Passing + Rushing + Receiving)"),
+                      minWidth = z_perccolwidth,
                       align = "right",
                       format = colFormat(percent = T, digits = 0),
                       class = "border-left-grey",
                       defaultSortOrder = "desc",
                       sortNALast = T)
-tdptpercDef <- colDef(header = with_tt("TDPt%", "Percentage of Total FPts from Touchdowns\n(Passing + Rushing + Receiving)"),
-                      minWidth = perccolwidth + 2,
+z_tdptpercDef <- colDef(header = z_with_tt("TDPt%", "Percentage of Total FPts from Touchdowns\n(Passing + Rushing + Receiving)"),
+                      minWidth = z_perccolwidth + 2,
                       align = "right",
                       format = colFormat(percent = T, digits = 0),
                       defaultSortOrder = "desc",
                       sortNALast = T)
-fdptpercDef = colDef(header = with_tt("FDPt%", "Percentage of Total FPts from First Downs\n(Rushing + Receiving)"),
-                     minWidth = perccolwidth + 3,
+z_fdptpercDef = colDef(header = z_with_tt("FDPt%", "Percentage of Total FPts from First Downs\n(Rushing + Receiving)"),
+                     minWidth = z_perccolwidth + 3,
                      align = "right",
                      format = colFormat(percent = T, digits = 0),
                      defaultSortOrder = "desc",
                      sortNALast = T)
-ruptpercDef = colDef(header = with_tt("RuPt%", "Percentage of Total FPts from Rushing\n(Yards + TDs + First Downs)"),
-                     minWidth = perccolwidth + 2,
+z_ruptpercDef = colDef(header = z_with_tt("RuPt%", "Percentage of Total FPts from Rushing\n(Yards + TDs + First Downs)"),
+                     minWidth = z_perccolwidth + 2,
                      align = "right",
                      class = "border-left-grey",
                      format = colFormat(percent = T, digits = 0),
                      defaultSortOrder = "desc",
                      sortNALast = T)
-reptpercDef = colDef(header = with_tt("RePt%", "Percentage of Total FPts from Receiving\n(Yards + TDs + First Downs)"),
-                     minWidth = perccolwidth + 2,
+z_reptpercDef = colDef(header = z_with_tt("RePt%", "Percentage of Total FPts from Receiving\n(Yards + TDs + First Downs)"),
+                     minWidth = z_perccolwidth + 2,
                      align = "right",
                      format = colFormat(percent = T, digits = 0),
                      defaultSortOrder = "desc",
                      sortNALast = T)
 
 #consistency stats reactable formats----
-conscolwidth <- 60
-relsdDef <- colDef(header = with_tt("RelSD", "Relative Standard Deviation of Weekly FPts\n(SD / Avg)"),
-                   minWidth = conscolwidth,
+z_conscolwidth <- 60
+z_relsdDef <- colDef(header = z_with_tt("RelSD", "Relative Standard Deviation of Weekly FPts\n(SD / Avg)"),
+                   minWidth = z_conscolwidth,
                    align = "right",
                    format = colFormat(digits = 2),
                    defaultSortOrder = "asc",
                    sortNALast = T)
-avgposrkDef <- colDef(header = with_tt("AvgPosRk", "Average Weekly Position Rank by FPts"),
-                      minWidth = conscolwidth + 10,
+z_avgposrkDef <- colDef(header = z_with_tt("AvgPosRk", "Average Weekly Position Rank by FPts"),
+                      minWidth = z_conscolwidth + 10,
                       align = "right",
                       class = "border-left-grey",
                       defaultSortOrder = "asc",
                       sortNALast = T)
-top5pDef <- colDef(header = with_tt("Top5%", "Percentage of Weeks with top 5 Positional Scoring Rank"),
-                   minWidth = conscolwidth,
+z_top5pDef <- colDef(header = z_with_tt("Top5%", "Percentage of Weeks with top 5 Positional Scoring Rank"),
+                   minWidth = z_conscolwidth,
                    align = "right",
                    format = colFormat(percent = T, digits = 0),
                    defaultSortOrder = "desc",
                    sortNALast = T)
-top12pDef <- colDef(header = with_tt("Top12%", "Percentage of Weeks with top 12 Positional Scoring Rank"),
-                    minWidth = conscolwidth,
+z_top12pDef <- colDef(header = z_with_tt("Top12%", "Percentage of Weeks with top 12 Positional Scoring Rank"),
+                    minWidth = z_conscolwidth,
                     align = "right",
                     format = colFormat(percent = T, digits = 0),
                     defaultSortOrder = "desc",
                     sortNALast = T)
-top24pDef <- colDef(header = with_tt("Top24%", "Percentage of Weeks with top 24 Positional Scoring Rank"),
-                    minWidth = conscolwidth,
+z_top24pDef <- colDef(header = z_with_tt("Top24%", "Percentage of Weeks with top 24 Positional Scoring Rank"),
+                    minWidth = z_conscolwidth,
                     align = "right",
                     format = colFormat(percent = T, digits = 0),
                     defaultSortOrder = "desc",
                     sortNALast = T)
-top36pDef <- colDef(header = with_tt("Top36%", "Percentage of Weeks with top 36 Positional Scoring Rank"),
-                    minWidth = conscolwidth,
+z_top36pDef <- colDef(header = z_with_tt("Top36%", "Percentage of Weeks with top 36 Positional Scoring Rank"),
+                    minWidth = z_conscolwidth,
                     align = "right",
                     format = colFormat(percent = T, digits = 0),
                     defaultSortOrder = "desc",
                     sortNALast = T)
-nonstartpDef <- colDef(header = with_tt("NonStart%", "Percentage of Weeks outside of top 36 Positional Scoring Rank"),
+z_nonstartpDef <- colDef(header = z_with_tt("NonStart%", "Percentage of Weeks outside of top 36 Positional Scoring Rank"),
                        minWidth = 75,
                        align = "right",
                        format = colFormat(percent = T, digits = 0),
                        defaultSortOrder = "desc",
                        sortNALast = T)
-g10pDef <- colDef(header = with_tt(">10 %", "Percentage of Weeks scoring >10 FPts"),
-                  minWidth = conscolwidth,
+z_g10pDef <- colDef(header = z_with_tt(">10 %", "Percentage of Weeks scoring >10 FPts"),
+                  minWidth = z_conscolwidth,
                   class = "border-left-grey",
                   align = "right",
                   format = colFormat(percent = T,digits = 0),
                   defaultSortOrder = "desc",
                   sortNALast = T)
-g20pDef <- colDef(header = with_tt(">20 %", "Percentage of Weeks scoring >20 FPts"),
-                  minWidth = conscolwidth,
+z_g20pDef <- colDef(header = z_with_tt(">20 %", "Percentage of Weeks scoring >20 FPts"),
+                  minWidth = z_conscolwidth,
                   align = "right",
                   format = colFormat(percent = T, digits = 0),
                   defaultSortOrder = "desc",
                   sortNALast = T)
-g30pDef <- colDef(header = with_tt(">30 %", "Percentage of Weeks scoring >30 FPts"),
-                  minWidth = conscolwidth,
+z_g30pDef <- colDef(header = z_with_tt(">30 %", "Percentage of Weeks scoring >30 FPts"),
+                  minWidth = z_conscolwidth,
                   align = "right",
                   format = colFormat(percent = T, digits = 0),
                   defaultSortOrder = "desc",
@@ -1643,9 +1646,3 @@ g30pDef <- colDef(header = with_tt(">30 %", "Percentage of Weeks scoring >30 FPt
 source("dashboardPage.R")
 source("loginPage.R")
 source("guestUI.R")
-
-#password stuff
-# num_fails_to_lockout <- 1000
-# credentials <- data.frame(user = c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW","GUEST"),
-#                              stringsAsFactors = FALSE)
-# saveRDS(credentials, "credentials/credentials.rds")
