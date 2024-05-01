@@ -192,7 +192,7 @@ shinyServer(function(input, output, session) {
                                   sparkline(values,
                                             type = "bar",
                                             chartRangeMin = 0,
-                                            chartRangeMax = max(teamsfantasyweekly$FPts[teamsfantasy$Season == input$homeseason]))
+                                            chartRangeMax = max(teamsfantasy$High[teamsfantasy$Season == input$homeseason]))
                                 }),
                 Low = colDef(header = with_tt("Low", "Lowest weekly score"),
                              minWidth = 50,
