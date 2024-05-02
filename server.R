@@ -96,12 +96,15 @@ shinyServer(function(input, output, session) {
       weeklytop5 <<- merge(x = weeklytop5, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); weeklytop5$TRUFFLE[is.na(weeklytop5$TRUFFLE)] <<- "FA"
       espn <<- merge(x = espn, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); espn$TRUFFLE[is.na(espn$TRUFFLE)] <<- "FA"
       snaps <<- merge(x = snaps, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); snaps$TRUFFLE[is.na(snaps$TRUFFLE)] <<- "FA"
-    
+      extradash <<- merge(x = extradash, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); extradash$TRUFFLE[is.na(extradash$TRUFFLE)] <<- "FA"
+      consistencystart <<- merge(x = consistencystart, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); consistencystart$TRUFFLE[is.na(consistencystart$TRUFFLE)] <<- "FA"
+      
       
       updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
       updateSelectInput(session, 'tmportalyr', choices = if (globalleague == "TRUFFLE") { sort(c(unique(seasons$Season), currentyr), decreasing = T) } else { sort(c(unique(weekly$Season[weekly$League == globalleague]), currentyr)) }, selected = currentyr)
       updateSelectInput(session, 'rivalry', choices = unique(teams$RivalryName), selected = teams$RivalryName[teams$Abbrev == globalteam])
       updateSelectInput(session, 'tmtm1', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
+      updateSelectInput(session, 'tmtm2', choices = unique(teams$FullName), selected = teams$FullName[2])
       updateSelectInput(session, 'recordteams', choices = c(globalleague, unique(teams$FullName)), selected = globalleague)
       updateSelectInput(session, 'awardseason', choices = unique(awards$Season), selected = globalleague)
     } else {
@@ -1469,12 +1472,12 @@ shinyServer(function(input, output, session) {
   #player portal weekly logs
   output$ppgamelogweekly <- renderReactable({
     if(input$ppstatcenterseason == "All") {
-      df <- weekly
+      df <- weekly_no_teams
     } else {
-      df <- weekly[Season == as.numeric(input$ppgamelogsseason)]
+      df <- weekly_no_teams[Season == as.numeric(input$ppgamelogsseason)]
     }
     
-    reactable(df[Scoring == input$homescoring & Player %in% input$player][order(Season, Week, -FPts)][, !c("Scoring","TRUFFLE", "PaCmp", "PaAtt", "NFL", "Avg", "FL", "PosRk")],
+    reactable(df[Scoring == input$homescoring & Player %in% input$player][order(Season, Week, -FPts)][, !c("Scoring", "PaCmp", "PaAtt", "NFL", "Avg", "FL", "PosRk")],
               pagination = F,
               height = 'auto',
               filterable = F,
@@ -1998,7 +2001,7 @@ shinyServer(function(input, output, session) {
     snapssc <- snaps[Season == input$scseason][order(-Tot)][, !c("Season")]
     snapssc$TRUFFLEdum <- ifelse(snapssc$TRUFFLE == "FA", "FA", "Owned")
     snapssc <- z_action_mod(snapssc, team = globalteam)
-    snapssc <- snapssc[, c(28, 2, 3, 1, 4:27, 29)]
+    snapssc <- snapssc[, c(28, 24, 2, 3, 1, 4:23, 25:27, 29)]
     
     reactable(snapssc[TRUFFLEdum %in% input$scavailable & Pos %in% input$scpositions][, !c("TRUFFLEdum", "playerID", "TeamNum", "ActionLink", "Team")],
               paginationType = "jump",

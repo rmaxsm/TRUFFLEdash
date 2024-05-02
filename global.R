@@ -387,7 +387,7 @@ extradash <- extradash[Avg != "-"]
 extradash <- extradash[, c(3:4, 1:2, 5:19)][order(-Week, -TotYd)]
 
 #merge in other columns for calcs
-extradash <- merge(x = extradash, y = weekly[Scoring == "PPFD" , .(Season, Week, Pos, Player, PaCmp, PaAtt, RuAtt, RuYd, Rec, ReYd, ReFD)], by = c("Season", "Week", "Pos", "Player"))
+extradash <- merge(x = extradash, y = weekly_no_teams[Scoring == "PPFD" , .(Season, Week, Pos, Player, PaCmp, PaAtt, RuAtt, RuYd, Rec, ReYd, ReFD)], by = c("Season", "Week", "Pos", "Player"))
 
 extradashszn <- extradash[,
                           .(G = .N,
@@ -677,7 +677,7 @@ advanced <- merge(x = advanced, y = oldrosters[ , c("League", "Season", "Pos", "
 
 
 #consistencystats
-consistencystart <- weekly[League == "TRUFFLE"]
+consistencystart <- weekly_no_teams
 #posrank dummies
 consistencystart$top5dum <- ifelse(consistencystart$PosRk <= 5, 1, 0)
 consistencystart$top12dum <- ifelse(consistencystart$PosRk <= 12, 1, 0)
