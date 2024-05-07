@@ -78,17 +78,17 @@ dashboardPageUI <-
                               # ),
                               
                               #draft homepage around draft time
-                              wellPanel(class = "well",
-                                        fluidRow(
-                                          column(width=8, h2("Rookie Draft")),
-                                          column(width=4, selectInput("homedraftseason", "Season", sort(unique(draft$Season), decreasing = T), selected = max(draft$Season) ))
-                                        ),
-                                        fluidRow(
-                                          column(width=4, reactableOutput('homerd1')),
-                                          column(width=4, reactableOutput('homerd2')),
-                                          column(width=4, reactableOutput('homerd3'))
-                                        )
-                              ),
+                              # wellPanel(class = "well",
+                              #           fluidRow(
+                              #             column(width=8, h2("Rookie Draft")),
+                              #             column(width=4, selectInput("homedraftseason", "Season", sort(unique(draft$Season), decreasing = T), selected = max(draft$Season) ))
+                              #           ),
+                              #           fluidRow(
+                              #             column(width=4, reactableOutput('homerd1')),
+                              #             column(width=4, reactableOutput('homerd2')),
+                              #             column(width=4, reactableOutput('homerd3'))
+                              #           )
+                              # ),
                               
                               fluidRow(
                                 column(width = 6,
