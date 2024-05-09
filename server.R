@@ -84,8 +84,8 @@ shinyServer(function(input, output, session) {
       #turkeyscorers <<- turkeyscorers[League == globalleague, -"League"]
       
       #figure out how to merge team info rather than duplicate rows for two leagues
-      advanced <<- advanced[League == globalleague, -"League"]
-      consistency <<- consistency[League == globalleague, -"League"]
+      advanced <<- advanced[League == globalleague, -"League"]; advanced$TRUFFLE[is.na(advanced$TRUFFLE)] <<- "FA"
+      consistency <<- consistency[League == globalleague, -"League"]; consistency$TRUFFLE[is.na(consistency$TRUFFLE)] <<- "FA"
       pointsleaders <<- pointsleaders[League == globalleague, -"League"]
       fantasy <<- fantasy[League == globalleague, -"League"]
       weekly <<- weekly[League == globalleague, -"League"]
@@ -373,6 +373,62 @@ shinyServer(function(input, output, session) {
                 ReYd = z_reydDefSsn,
                 ReTD = z_retdDefSsn,
                 ReFD = z_refdDefSsn
+              )
+    )
+  })
+  
+  #home page advanced leaders
+  output$homeadvanced <- renderReactable({
+    reactable(advanced[Scoring == input$homescoring & Season == input$homeseason & Opp / length(unique(weekly$Week[weekly$Season == input$homeseason])) > 5, .(TRUFFLE, Pos, Player, `FPts/Touch`, `FPts/Opp`, `YdPt%`, `TDPt%`, `FDPt%`)],
+              height = 420,
+              defaultSorted = "FPts/Touch",
+              defaultSortOrder = "desc",
+              filterable = F,
+              showPageInfo = FALSE,
+              defaultPageSize = 10,
+              paginationType = 'simple',
+              highlight = T,
+              #borderless = T,
+              compact = T,
+              resizable = F,
+              columns = list(
+                TRUFFLE = z_trfDef(maxW = 70),
+                Pos = z_posDef(maxW = 44),
+                Player = z_playerDef(minW = 120,
+                                     filt = T),
+                
+                `FPts/Touch` = z_fptsPtchDef,
+                `FPts/Opp` = z_fptsPoppDef,
+                `YdPt%` = z_ydptpercDef,
+                `TDPt%` = z_tdptpercDef,
+                `FDPt%` = z_fdptpercDef
+              )
+    )
+  })
+  
+  output$homeconsistency <- renderReactable({
+    reactable(consistency[Scoring == input$homescoring & Season == input$homeseason & Avg > 5, .(TRUFFLE, Pos, Player, Avg, RelSD, `>10 %`, `>20 %`, `>30 %`)],
+              height = 420,
+              defaultSorted = "Avg",
+              defaultSortOrder = "desc",
+              filterable = F,
+              showPageInfo = FALSE,
+              defaultPageSize = 10,
+              paginationType = 'simple',
+              highlight = T,
+              #borderless = T,
+              compact = T,
+              resizable = F,
+              columns = list(
+                TRUFFLE = z_trfDef(maxW = 70),
+                Pos = z_posDef(maxW = 44),
+                Player = z_playerDef(minW = 130,
+                                     filt = T),
+                Avg = z_avgDef(maxW = 55),
+                RelSD = z_relsdDef,
+                `>10 %` = z_g10pDef,
+                `>20 %` = z_g20pDef,
+                `>30 %` = z_g30pDef
               )
     )
   })

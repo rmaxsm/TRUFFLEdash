@@ -123,8 +123,13 @@ dashboardPageUI <-
                                                    ),
                                                    tabPanel("Receiving",
                                                             reactableOutput('homereceiving')
+                                                   ),
+                                                   tabPanel("Advanced",
+                                                            reactableOutput('homeadvanced')
+                                                   ),
+                                                   tabPanel("Consistency",
+                                                            reactableOutput('homeconsistency')
                                                    )
-                                                   
                                                  )
                                        ))
                                 

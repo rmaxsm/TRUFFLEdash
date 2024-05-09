@@ -20,6 +20,7 @@ library(shinyBS)
 library(markdown)
 library(fmsb)
 library(reticulate)
+library(lubridate)
 
 # setting colors -----
 #colors and global options 
@@ -89,10 +90,12 @@ ids <- merge(ids, teams[, c("Abbrev", "TeamNum")], by.x = "TRUFFLE", by.y = "Abb
 
 #import fantasy pros file to use for age
 #fprosage <- read_excel("data/fprosage.xlsx")
-fprosage <- read_csv("data/fprosage.csv", col_types = cols())
+#demodata
+fprosage <- read_csv("demodata/fprosage.csv", col_types = cols())
 cleanFprosage <- function(file) {
   file$TIERS <- NULL
-  colnames(file) <- c("DynRk", "Player", "NFL", "DynPosRk", "Bye", "AgePH", "SOS", "EcfADP")
+  file$`ECR VS. ADP` <- NULL
+  colnames(file) <- c("DynRk", "Player", "NFL", "DynPosRk", "BestRk", "WorstRk", "AvgDynRk", "SD")
   file$Player <- str_replace_all(file$Player,"\\.","")
   file$Player <- str_replace_all(file$Player," Jr","")
   file$Player <- str_replace_all(file$Player," Sr","")
@@ -100,6 +103,25 @@ cleanFprosage <- function(file) {
   file$Player <- str_replace_all(file$Player," II","")
   file$Player <- str_replace_all(file$Player,"Will Fuller V","Will Fuller")
   file$Player <- str_replace_all(file$Player,"La'Mical","Lamical")
+  
+  #extract position
+  file$Pos <- substr(file$DynPosRk, 1, 2)
+  
+  #read in birthdays
+  bdays <- read_csv("demodata/birthdays.csv", col_types = cols())
+  bdays$player <- str_replace_all(bdays$player,"\\.","")
+  bdays$player <- str_replace_all(bdays$player," Jr","")
+  bdays$player <- str_replace_all(bdays$player," Sr","")
+  bdays$player <- str_replace_all(bdays$player," III","")
+  bdays$player <- str_replace_all(bdays$player," II","")
+  bdays$player <- str_replace_all(bdays$player,"Will Fuller V","Will Fuller")
+  bdays$player <- str_replace_all(bdays$player,"La'Mical","Lamical")
+  
+  bdays$birthday <- as.Date(bdays$birthday, "%m/%d/%y")
+  bdays$Age <- as.integer(floor(difftime(as.Date(Sys.Date(), format='%d/%m/%y'), bdays$birthday, unit="days") / 365.25))
+  colnames(bdays) <- c("Player", "Pos", "Team", "Birthday", "Age")
+  
+  file <- merge(x = file, y = bdays[ , c("Player", "Pos", "Age")], by = c("Player", "Pos"), all.x=TRUE)
   
   return(file)
 }
@@ -116,14 +138,10 @@ cleanRosters <- function(file) {
   file <- as.data.table(file)
   
   #merge in correct team abbreviations
-  file <- merge(x = file, y = fprosage[ , c("Player", "AgePH")], by = "Player", all.x=TRUE)
-  file <- add_column(file, Age = NA, .after = "Player")
-  file$Age <- as.integer(file$AgePH)
-  file$AgePH <- NULL
-  
+  file <- merge(x = file, y = fprosage[ , c("Player", "Pos", "Age")], by = c("Player", "Pos"), all.x=TRUE)
   #colnames(file) <- c("Player", "Age",  "Pos", "TRUFFLE", "NFL", "Opp", "GameTime", "Bye", "O/U", "PosRnk", "Ovp", "Rost", "Start", "Salary", "Contract", "Last", "Avg", "Proj")
   #demodata
-  colnames(file) <- c("Player", "Age", "League",  "Pos", "TRUFFLE", "NFL", "Opp", "GameTime", "Bye", "O/U", "PosRnk", "Ovp", "Rost", "Start", "Salary", "Contract", "Last", "Avg", "Proj")
+  colnames(file) <- c("Player", "Pos", "League", "TRUFFLE", "NFL", "Opp", "GameTime", "Bye", "O/U", "PosRnk", "Ovp", "Rost", "Start", "Salary", "Contract", "Last", "Avg", "Proj", "Age")
   file <- file[, c("League", "TRUFFLE", "Player",  "Pos", "NFL", "Age", "Opp", "GameTime", "Bye", "O/U", "PosRnk", "Ovp", "Rost", "Start", "Salary", "Contract", "Last", "Avg", "Proj")]
   
   #finalized 
@@ -649,8 +667,8 @@ ppbios <- ppbios[,
                    Total = round(sum(FPts))),
                  by = .(League, Scoring, Pos, Player)]
 ppbios <- merge(ppbios, rosters[, .(League, Player, Pos, Salary, Contract)], by = c('League', 'Player', 'Pos'), all.x = T)
-ppbios <- merge(ppbios, fprosage[, .(Player, AgePH, DynRk, DynPosRk)], by = 'Player')
-ppbios <- ppbios[, .(League, Scoring, TRUFFLE,Pos,Player,NFL,AgePH,DynRk,DynPosRk,Salary,Contract,ptslogs)]
+ppbios <- merge(ppbios, fprosage[, .(Player, Age, DynRk, DynPosRk)], by = 'Player')
+ppbios <- ppbios[, .(League, Scoring, TRUFFLE,Pos,Player,NFL,Age,DynRk,DynPosRk,Salary,Contract,ptslogs)]
 
 #creating advanced tables across scoring systems ----
 advanced <- weekly[League == "TRUFFLE", .(FPts = sum(FPts),
@@ -1516,14 +1534,14 @@ z_oppDef <- colDef(header = z_with_tt("Opp", "Opportunities\n(Passing Attempts +
                  align = "right",
                  defaultSortOrder = "desc",
                  sortNALast = T)
-z_fptsPtchDef <- colDef(header = z_with_tt("FPt/Tch", "FPts per Touch\n(Completions + Carries + Receptions)"),
-                      minWidth = 68,
+z_fptsPtchDef <- colDef(header = z_with_tt("Fp/T", "FPts per Touch\n(Completions + Carries + Receptions)"),
+                      minWidth = 64,
                       align = "right",
                       format = colFormat(digits = 2),
                       defaultSortOrder = "desc",
                       sortNALast = T)
-z_fptsPoppDef <- colDef(header = z_with_tt("FPt/Opp", "FPts per Opportunity\n(Passing Attempts + Carries + Targets)"),
-                      minWidth = 72,
+z_fptsPoppDef <- colDef(header = z_with_tt("Fp/O", "FPts per Opportunity\n(Passing Attempts + Carries + Targets)"),
+                      minWidth = 64,
                       align = "right",
                       format = colFormat(digits = 2),
                       defaultSortOrder = "desc",
@@ -1558,20 +1576,20 @@ z_reptsDef <- colDef(header = z_with_tt("RePt", "FPts from Receiving\n(Yards + T
                    format = colFormat(digits = 1),
                    defaultSortOrder = "desc",
                    sortNALast = T)
-z_ydptpercDef <- colDef(header = z_with_tt("YdPt%", "Percentage of Total FPts from Yards\n(Passing + Rushing + Receiving)"),
+z_ydptpercDef <- colDef(header = z_with_tt("YDp%", "Percentage of Total FPts from Yards\n(Passing + Rushing + Receiving)"),
                       minWidth = z_perccolwidth,
                       align = "right",
                       format = colFormat(percent = T, digits = 0),
                       class = "border-left-grey",
                       defaultSortOrder = "desc",
                       sortNALast = T)
-z_tdptpercDef <- colDef(header = z_with_tt("TDPt%", "Percentage of Total FPts from Touchdowns\n(Passing + Rushing + Receiving)"),
+z_tdptpercDef <- colDef(header = z_with_tt("TDp%", "Percentage of Total FPts from Touchdowns\n(Passing + Rushing + Receiving)"),
                       minWidth = z_perccolwidth + 2,
                       align = "right",
                       format = colFormat(percent = T, digits = 0),
                       defaultSortOrder = "desc",
                       sortNALast = T)
-z_fdptpercDef = colDef(header = z_with_tt("FDPt%", "Percentage of Total FPts from First Downs\n(Rushing + Receiving)"),
+z_fdptpercDef = colDef(header = z_with_tt("FDp%", "Percentage of Total FPts from First Downs\n(Rushing + Receiving)"),
                      minWidth = z_perccolwidth + 3,
                      align = "right",
                      format = colFormat(percent = T, digits = 0),
@@ -1635,20 +1653,20 @@ z_nonstartpDef <- colDef(header = z_with_tt("NonStart%", "Percentage of Weeks ou
                        format = colFormat(percent = T, digits = 0),
                        defaultSortOrder = "desc",
                        sortNALast = T)
-z_g10pDef <- colDef(header = z_with_tt(">10 %", "Percentage of Weeks scoring >10 FPts"),
+z_g10pDef <- colDef(header = z_with_tt(">10%", "Percentage of Weeks scoring >10 FPts"),
                   minWidth = z_conscolwidth,
                   class = "border-left-grey",
                   align = "right",
                   format = colFormat(percent = T,digits = 0),
                   defaultSortOrder = "desc",
                   sortNALast = T)
-z_g20pDef <- colDef(header = z_with_tt(">20 %", "Percentage of Weeks scoring >20 FPts"),
+z_g20pDef <- colDef(header = z_with_tt(">20%", "Percentage of Weeks scoring >20 FPts"),
                   minWidth = z_conscolwidth,
                   align = "right",
                   format = colFormat(percent = T, digits = 0),
                   defaultSortOrder = "desc",
                   sortNALast = T)
-z_g30pDef <- colDef(header = z_with_tt(">30 %", "Percentage of Weeks scoring >30 FPts"),
+z_g30pDef <- colDef(header = z_with_tt(">30%", "Percentage of Weeks scoring >30 FPts"),
                   minWidth = z_conscolwidth,
                   align = "right",
                   format = colFormat(percent = T, digits = 0),
