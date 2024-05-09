@@ -17,8 +17,8 @@ dashboardPageUI <-
                     menuItem("Home", tabName = "home", icon = icon("football-ball")),
                     menuItem("Team Portal", tabName = "teamportal", icon = icon("users")),
                     menuItem("Player Portal", tabName = "playerportal", icon = icon("user")),
-                    menuItem("Stat Center", tabName = "statcenter", icon = icon("chart-bar")),
-                    menuItem("BYOG", tabName = "byog", icon = icon("chart-bar")),
+                    menuItem("Stat Center", tabName = "statcenter", icon = icon("sliders")),
+                    menuItem("BYOG", tabName = "byog", icon = icon("chart-line")),
                     menuItem("Trade Machine", tabName = "trademachine" , icon = icon("gears")),
                     menuItem("Fantasy Portal", tabName = "fantasyportal", icon = icon("facebook-f")),
                     menuItem("Cap Corner", tabName = "capcorner", icon = icon("dollar-sign")),
@@ -94,13 +94,38 @@ dashboardPageUI <-
                                 column(width = 6,
                                        wellPanel(class = "well",
                                                  h2("Standings"),
-                                                 reactableOutput('hometeamsfantasy', width = "100%")
+                                                 tabsetPanel(
+                                                   tabPanel("Scoring",
+                                                            reactableOutput('hometeamsfantasy', width = "100%")),
+                                                   tabPanel("Divisions"
+                                                            ),
+                                                   tabPanel("Playoffs"
+                                                   ),
+                                                   tabPanel("Optimal"
+                                                   )
+                                                   
+                                                 )
+                                                 
                                        )
                                 ),
                                 column(width = 6,
                                        wellPanel(class = "well",
                                                  h2("Season Leaders"),
-                                                 reactableOutput('homepointsleaders') #height = "100%"),
+                                                 tabsetPanel(
+                                                   tabPanel("Fantasy",
+                                                            reactableOutput('homepointsleaders')
+                                                            ), #height = "100%"),
+                                                   tabPanel("Passing",
+                                                            reactableOutput('homepassing')
+                                                   ),
+                                                   tabPanel("Rushing",
+                                                            reactableOutput('homerushing')
+                                                   ),
+                                                   tabPanel("Receiving",
+                                                            reactableOutput('homereceiving')
+                                                   )
+                                                   
+                                                 )
                                        ))
                                 
                               ),

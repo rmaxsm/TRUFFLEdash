@@ -98,7 +98,7 @@ shinyServer(function(input, output, session) {
       snaps <<- merge(x = snaps, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); snaps$TRUFFLE[is.na(snaps$TRUFFLE)] <<- "FA"
       extradash <<- merge(x = extradash, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); extradash$TRUFFLE[is.na(extradash$TRUFFLE)] <<- "FA"
       consistencystart <<- merge(x = consistencystart, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); consistencystart$TRUFFLE[is.na(consistencystart$TRUFFLE)] <<- "FA"
-      
+      seasons <<- merge(x = seasons, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); seasons$TRUFFLE[is.na(seasons$TRUFFLE)] <<- "FA"
       
       updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
       updateSelectInput(session, 'tmportalyr', choices = if (globalleague == "TRUFFLE") { sort(c(unique(seasons$Season), currentyr), decreasing = T) } else { sort(c(unique(weekly$Season[weekly$League == globalleague]), currentyr)) }, selected = currentyr)
@@ -292,6 +292,89 @@ shinyServer(function(input, output, session) {
       )
       
     }
+  })
+  
+  #home page passing leaders
+  output$homepassing <- renderReactable({
+    reactable(seasons[Scoring == input$homescoring & Season == input$homeseason & PaAtt > 0, .(TRUFFLE, Pos, Player, PaCmp, PaAtt, PaYd, PaTD, PaInt)],
+              height = 420,
+              defaultSorted = "PaYd",
+              defaultSortOrder = "desc",
+              filterable = T,
+              showPageInfo = FALSE,
+              defaultPageSize = 10,
+              paginationType = 'simple',
+              highlight = T,
+              #borderless = T,
+              compact = T,
+              resizable = F,
+              columns = list(
+                TRUFFLE = z_trfDef(),
+                Pos = z_posDef(),
+                Player = z_playerDef(minW = 130,
+                                     filt = T),
+                PaCmp = colDef(header = z_with_tt("Cmp", "Passing Completions"), filterable = F, minWidth = smallboxwidth + 8, align = 'right', defaultSortOrder = "desc"),
+                PaAtt = z_paattDef,
+                PaYd = z_paydDefSsn,
+                PaTD = z_patdDefSsn,
+                PaInt = z_paintDefSsn
+                )
+              )
+  })
+  
+  #home page rushing leaders
+  output$homerushing <- renderReactable({
+    reactable(seasons[Scoring == input$homescoring & Season == input$homeseason & RuAtt > 0, .(TRUFFLE, Pos, Player, RuAtt, RuYd, RuTD, RuFD)],
+              height = 420,
+              defaultSorted = "RuYd",
+              defaultSortOrder = "desc",
+              filterable = T,
+              showPageInfo = FALSE,
+              defaultPageSize = 10,
+              paginationType = 'simple',
+              highlight = T,
+              #borderless = T,
+              compact = T,
+              resizable = F,
+              columns = list(
+                TRUFFLE = z_trfDef(),
+                Pos = z_posDef(),
+                Player = z_playerDef(minW = 130,
+                                     filt = T),
+                RuAtt = z_ruattDef(borderL = F),
+                RuYd = z_ruydDefSsn,
+                RuTD = z_rutdDefSsn,
+                RuFD = z_rufdDefSsn
+              )
+    )
+  })
+  
+  #home page receiving leaders
+  output$homereceiving <- renderReactable({
+    reactable(seasons[Scoring == input$homescoring & Season == input$homeseason & Rec > 0, .(TRUFFLE, Pos, Player, Tar, Rec, ReYd, ReTD, ReFD)],
+              height = 420,
+              defaultSorted = "ReYd",
+              defaultSortOrder = "desc",
+              filterable = T,
+              showPageInfo = FALSE,
+              defaultPageSize = 10,
+              paginationType = 'simple',
+              highlight = T,
+              #borderless = T,
+              compact = T,
+              resizable = F,
+              columns = list(
+                TRUFFLE = z_trfDef(),
+                Pos = z_posDef(),
+                Player = z_playerDef(minW = 130,
+                                     filt = T),
+                Tar = z_tarDef(),
+                Rec = z_recDef(),
+                ReYd = z_reydDefSsn,
+                ReTD = z_retdDefSsn,
+                ReFD = z_refdDefSsn
+              )
+    )
   })
   
   #home weekly top 5 qb
@@ -708,7 +791,7 @@ shinyServer(function(input, output, session) {
   #change to include not exclude columns
   output$tpboxscore <- renderReactable({
     reactable(seasons[Scoring == input$homescoring & Player %in% oldrosters$Player[oldrosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm] & oldrosters$Season == input$tmportalyr] 
-                      & Season == input$tmportalyr][order(match(Pos, positionorder), -FPts)][, !c("Scoring", "Season","NFL", "PosRk", "FL")],
+                      & Season == input$tmportalyr][order(match(Pos, positionorder), -FPts)][, !c("TRUFFLE","Scoring", "Season","NFL", "PosRk", "FL")],
               pagination = F,
               height = 'auto',
               filterable = T,
@@ -1151,7 +1234,7 @@ shinyServer(function(input, output, session) {
       df <- seasons[Season == as.numeric(input$ppstatcenterseason)]
     }
     
-    reactable(df[Scoring == input$homescoring & Player %in% input$player][order(-Season, -FPts)][, !c("Scoring","NFL", "Pos","FL", "PosRk")],
+    reactable(df[Scoring == input$homescoring & Player %in% input$player][order(-Season, -FPts)][, !c("TRUFFLE","Scoring","NFL", "Pos","FL", "PosRk")],
               defaultSorted = c("Season", "FPts"),
               pagination = F,
               height = 'auto',
@@ -2415,7 +2498,7 @@ shinyServer(function(input, output, session) {
               ),
               details = function(index) {
                 if (index == 1) {
-                  reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "QB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "QB" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
                               Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
@@ -2423,7 +2506,7 @@ shinyServer(function(input, output, session) {
                             )
                   )
                 } else if (index == 2) {
-                  reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "QB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "QB" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
                               Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
@@ -2431,7 +2514,7 @@ shinyServer(function(input, output, session) {
                             )
                   )
                 } else if (index == 3) {
-                  reactable(extvaldraft[Round == 2 & Pos == "QB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 2 & Pos == "QB" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
                               Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
@@ -2439,7 +2522,7 @@ shinyServer(function(input, output, session) {
                             )
                   )
                 } else if (index == 4) {
-                  reactable(extvaldraft[Round == 3 & Pos == "QB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 3 & Pos == "QB" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
                               Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
@@ -2484,7 +2567,7 @@ shinyServer(function(input, output, session) {
               ),
               details = function(index) {
                 if (index == 1) {
-                  reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "RB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "RB" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
                               Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
@@ -2492,7 +2575,7 @@ shinyServer(function(input, output, session) {
                             )
                   )
                 } else if (index == 2) {
-                  reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "RB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "RB" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
                               Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
@@ -2500,7 +2583,7 @@ shinyServer(function(input, output, session) {
                             )
                   )
                 } else if (index == 3) {
-                  reactable(extvaldraft[Round == 2 & Pos == "RB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 2 & Pos == "RB" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
                               Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
@@ -2508,7 +2591,7 @@ shinyServer(function(input, output, session) {
                             )
                   )
                 } else if (index == 4) {
-                  reactable(extvaldraft[Round == 3 & Pos == "RB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 3 & Pos == "RB" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
                               Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
@@ -2553,7 +2636,7 @@ shinyServer(function(input, output, session) {
               ),
               details = function(index) {
                 if (index == 1) {
-                  reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "WR" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "WR" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
                               Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
@@ -2561,7 +2644,7 @@ shinyServer(function(input, output, session) {
                             )
                   )
                 } else if (index == 2) {
-                  reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "WR" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "WR" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
                               Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
@@ -2569,7 +2652,7 @@ shinyServer(function(input, output, session) {
                             )
                   )
                 } else if (index == 3) {
-                  reactable(extvaldraft[Round == 2 & Pos == "WR" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 2 & Pos == "WR" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
                               Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
@@ -2577,7 +2660,7 @@ shinyServer(function(input, output, session) {
                             )
                   )
                 } else if (index == 4) {
-                  reactable(extvaldraft[Round == 3 & Pos == "WR" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 3 & Pos == "WR" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
                               Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
@@ -2622,7 +2705,7 @@ shinyServer(function(input, output, session) {
               ),
               details = function(index) {
                 if (index == 1) {
-                  reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "TE" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "TE" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
                               Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
@@ -2630,7 +2713,7 @@ shinyServer(function(input, output, session) {
                             )
                   )
                 } else if (index == 2) {
-                  reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "TE" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "TE" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
                               Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
@@ -2638,7 +2721,7 @@ shinyServer(function(input, output, session) {
                             )
                   )
                 } else if (index == 3) {
-                  reactable(extvaldraft[Round == 2 & Pos == "TE" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 2 & Pos == "TE" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
                               Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
@@ -2646,7 +2729,7 @@ shinyServer(function(input, output, session) {
                             )
                   )
                 } else if (index == 4) {
-                  reactable(extvaldraft[Round == 3 & Pos == "TE" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 3 & Pos == "TE" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
                               Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
@@ -3860,7 +3943,9 @@ shinyServer(function(input, output, session) {
   #Bench Cup Output
   output$bcgsheet <- renderUI({
     tags$iframe(id = "bcgsheet", 
-                src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTjTy8adhC-I9-Pemw_oez5B5lO6BqogZ66H8sA10gW7kSoFg91pDudNP-Il7H5vzJr2WCyZT1RTp7G/pubhtml",
+                src=if (globalleague == "TRUFFLE") { "https://docs.google.com/spreadsheets/d/e/2PACX-1vTjTy8adhC-I9-Pemw_oez5B5lO6BqogZ66H8sA10gW7kSoFg91pDudNP-Il7H5vzJr2WCyZT1RTp7G/pubhtml" } else {
+                  "https://docs.google.com/spreadsheets/d/e/2PACX-1vR6KKRn3h51W8V9-t0kXcSjpblZVCw5B8O593W5pOtvp4HbWVnYE8-60ZcPeVjscQKaV0qeyZ3eDAVt/pubhtml"
+                },
                 height=1020,
                 width='100%',
                 frameborder = 0,
@@ -3912,7 +3997,7 @@ shinyServer(function(input, output, session) {
   
   #datahub seasons
   output$dhseasons <- renderReactable({
-    reactable(seasons[Scoring == input$homescoring][order(-FPts)][, !c("PosRk","Scoring")],
+    reactable(seasons[Scoring == input$homescoring][order(-FPts)][, !c("TRUFFLE","PosRk","Scoring")],
               paginationType = "jump",
               showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
               pageSizeOptions = c(10, 20, 50, 100),

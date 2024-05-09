@@ -312,6 +312,7 @@ currentseason <- weekly[Season == max(weekly$Season) & League == "TRUFFLE",
 if (max(seasons$Season) != max(currentseason$Season)) {
   seasons <- rbind(seasons, currentseason)
 }
+rm(currentseason)
 
 seasons <- seasons[order(Scoring, -Season,-FPts, -Avg)][, `:=`(PosRk = 1:.N), by = .(Scoring, Season, Pos)]
 
@@ -477,7 +478,7 @@ tpoverviewhPPR <- tpoverview; tpoverviewhPPR$Scoring <- "hPPR"
 tpoverviewSTD <- tpoverview; tpoverviewSTD$Scoring <- "STD"
 tpoverview <- rbind(tpoverview, tpoverviewPPR, tpoverviewhPPR, tpoverviewSTD); rm(tpoverviewPPR,tpoverviewhPPR,tpoverviewSTD)
 
-tpoverview <- merge(tpoverview, currentseason[Player %in% rosters$Player][, !c("Season", "NFL")], by = c('Scoring','Pos','Player'), all.x = T)
+tpoverview <- merge(tpoverview, seasons[Player %in% rosters$Player & Season == currentyr][, !c("Season", "NFL")], by = c('Scoring','Pos','Player'), all.x = T)
 tpoverview$Avg[tpoverview$Pos == "DST"] <- NA
 tpoverview <- tpoverview[, .(Scoring,League,TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 
@@ -1272,18 +1273,19 @@ z_oprkDef <- colDef(header = z_with_tt("OpRk", "Opponent Rankings vs. Fantasy Po
 
 #box score stats reactable formats ----
 #passing stats conditional formatting
-z_pacmpDef <- colDef(header = z_with_tt("Cmp", "Passing Completions"), minWidth = smallboxwidth + 8, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
-z_paattDef <- colDef(header = z_with_tt("Att", "Passing Attempts"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_pacmpDef <- colDef(header = z_with_tt("Cmp", "Passing Completions"), filterable = F, minWidth = smallboxwidth + 8, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
+z_paattDef <- colDef(header = z_with_tt("Att", "Passing Attempts"), filterable = F, minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
 
-z_paydDefWk <- colDef(header = z_with_tt("Yd", "Passing Yards\nBold if >=300"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_paydDefWk <- colDef(header = z_with_tt("Yd", "Passing Yards\nBold if >=300"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 300, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-z_paydDefSsn <- colDef(header = z_with_tt("Yd", "Passing Yards\nBold if >=4000"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_paydDefSsn <- colDef(header = z_with_tt("Yd", "Passing Yards\nBold if >=4000"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 4000, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-z_paydDefNm <- colDef(header = z_with_tt("Yd", "Passing Yards"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_paydDefNm <- colDef(header = z_with_tt("Yd", "Passing Yards"), filterable = F, minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
 z_paydDef <- function(minW = 45, foot = F, borderL = F) {
   colDef(header = z_with_tt("Yd", "Passing Yards"),
+         filterable = F,
          minWidth = minW,
          class = function(value) if(borderL == T) {"border-left-grey"},
          align = 'right',
@@ -1292,15 +1294,16 @@ z_paydDef <- function(minW = 45, foot = F, borderL = F) {
   )
 }
 
-z_patdDefWk <- colDef(header = z_with_tt("TD", "Passing TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_patdDefWk <- colDef(header = z_with_tt("TD", "Passing TDs\nBold if >=3"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-z_patdDefSsn <- colDef(header = z_with_tt("TD", "Passing TDs\nBold if >=30"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_patdDefSsn <- colDef(header = z_with_tt("TD", "Passing TDs\nBold if >=30"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 30, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-z_patdDefNm <- colDef(header = z_with_tt("TD", "Passing TDs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_patdDefNm <- colDef(header = z_with_tt("TD", "Passing TDs"), filterable = F, minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
 z_patdDef <- function(minW = 45, foot = F) {
   colDef(header = z_with_tt("TD", "Passing TDs"),
+         filterable = F,
          minWidth = minW,
          align = 'right',
          defaultSortOrder = "desc",
@@ -1308,15 +1311,16 @@ z_patdDef <- function(minW = 45, foot = F) {
   )
 }
 
-z_paintDefWk <- colDef(header = z_with_tt("Int", "Interceptions\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_paintDefWk <- colDef(header = z_with_tt("Int", "Interceptions\nBold if >=3"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'italic', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "asc")
-z_paintDefSsn <- colDef(header = z_with_tt("Int", "Interceptions\nBold if >=15"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_paintDefSsn <- colDef(header = z_with_tt("Int", "Interceptions\nBold if >=15"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 15, 'italic', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "asc")
-z_paintDefNm <- colDef(header = z_with_tt("Int", "Interceptions"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "asc")
+z_paintDefNm <- colDef(header = z_with_tt("Int", "Interceptions"), filterable = F, minWidth = smallboxwidth, align = 'right', defaultSortOrder = "asc")
 z_paintDef <- function(minW = 45, foot = F) {
   colDef(header = z_with_tt("Int", "Interceptions"),
+         filterable = F,
          minWidth = minW,
          align = 'right',
          defaultSortOrder = "desc",
@@ -1325,15 +1329,16 @@ z_paintDef <- function(minW = 45, foot = F) {
 }
 
 #Rushing stats
-z_ruattDefWk <- colDef(header = z_with_tt("Att", "Rushing Attempts\nBold if >=20"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_ruattDefWk <- colDef(header = z_with_tt("Att", "Rushing Attempts\nBold if >=20"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 20, 'bold', 'plain')
   list(fontWeight = fontWeight)}, class = "border-left-grey", defaultSortOrder = "desc")
-z_ruattDefSsn <- colDef(header = z_with_tt("Att", "Rushing Attempts\nBold if >=250"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_ruattDefSsn <- colDef(header = z_with_tt("Att", "Rushing Attempts\nBold if >=250"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 250, 'bold', 'plain')
   list(fontWeight = fontWeight)}, class = "border-left-grey", defaultSortOrder = "desc")
-z_ruattDefNm <- colDef(header = z_with_tt("Att", "Rushing Attempts"), minWidth = smallboxwidth, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
+z_ruattDefNm <- colDef(header = z_with_tt("Att", "Rushing Attempts"), filterable = F, minWidth = smallboxwidth, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
 z_ruattDef <- function(minW = 45, foot = F, borderL = T) {
   colDef(header = z_with_tt("Att", "Rushing Attempts"),
+         filterable = F,
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
@@ -1343,15 +1348,16 @@ z_ruattDef <- function(minW = 45, foot = F, borderL = T) {
 }
 
 #Rushing yards
-z_ruydDefWk <- colDef(header = z_with_tt("Yd", "Rushing Yards\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_ruydDefWk <- colDef(header = z_with_tt("Yd", "Rushing Yards\nBold if >=100"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-z_ruydDefSsn <- colDef(header = z_with_tt("Yd", "Rushing Yards\nBold if >=1000"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_ruydDefSsn <- colDef(header = z_with_tt("Yd", "Rushing Yards\nBold if >=1000"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 1000, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-z_ruydDefNm <- colDef(header = z_with_tt("Yd", "Rushing Yards"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_ruydDefNm <- colDef(header = z_with_tt("Yd", "Rushing Yards"), filterable = F, minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
 z_ruydDef <- function(minW = 45, foot = F, borderL = F) {
   colDef(header = z_with_tt("Yd", "Rushing Yards"),
+         filterable = F,
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
@@ -1361,15 +1367,16 @@ z_ruydDef <- function(minW = 45, foot = F, borderL = F) {
 }
 
 #Rushing td
-z_rutdDefWk <- colDef(header = z_with_tt("TD", "Rushing TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_rutdDefWk <- colDef(header = z_with_tt("TD", "Rushing TDs\nBold if >=3"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-z_rutdDefSsn <- colDef(header = z_with_tt("TD", "Rushing TDs\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_rutdDefSsn <- colDef(header = z_with_tt("TD", "Rushing TDs\nBold if >=10"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-z_rutdDefNm <- colDef(header = z_with_tt("TD", "Rushing TDs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_rutdDefNm <- colDef(header = z_with_tt("TD", "Rushing TDs"), filterable = F, minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
 z_rutdDef <- function(minW = 45, foot = F, borderL = F) {
   colDef(header = z_with_tt("TD", "Rushing TDs"),
+         filterable = F,
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
@@ -1379,16 +1386,17 @@ z_rutdDef <- function(minW = 45, foot = F, borderL = F) {
 }
 
 #Rushing fd
-z_rufdDefWk <- colDef(header = z_with_tt("FD", "Rushing First Downs\nBold if >=5"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_rufdDefWk <- colDef(header = z_with_tt("FD", "Rushing First Downs\nBold if >=5"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 5, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-z_rufdDefSsn <- colDef(header = z_with_tt("FD", "Rushing First Downs\nBold if >=50"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_rufdDefSsn <- colDef(header = z_with_tt("FD", "Rushing First Downs\nBold if >=50"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 50, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-z_rufdDefNm <- colDef(header = z_with_tt("FD", "Rushing First Downs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_rufdDefNm <- colDef(header = z_with_tt("FD", "Rushing First Downs"), filterable = F, minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
 z_rufdDef <- function(minW = 45, foot = F, borderL = F) {
   colDef(header = z_with_tt("FD", "Rushing TDs"),
          class = function(value) if(borderL == T) {"border-left-grey"},
+         filterable = F,
          minWidth = minW,
          align = 'right',
          defaultSortOrder = "desc",
@@ -1397,15 +1405,16 @@ z_rufdDef <- function(minW = 45, foot = F, borderL = F) {
 }
 
 #Targets
-z_tarDefWk <- colDef(header = z_with_tt("Tar", "Targets\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_tarDefWk <- colDef(header = z_with_tt("Tar", "Targets\nBold if >=10"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
   list(fontWeight = fontWeight)}, class = "border-left-grey", defaultSortOrder = "desc")
-z_tarDefSsn <- colDef(header = z_with_tt("Tar", "Targets\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_tarDefSsn <- colDef(header = z_with_tt("Tar", "Targets\nBold if >=100"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
   list(fontWeight = fontWeight)}, class = "border-left-grey", defaultSortOrder = "desc")
-z_tarDefNm <- colDef(header = z_with_tt("Tar", "Targets"), minWidth = smallboxwidth, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
+z_tarDefNm <- colDef(header = z_with_tt("Tar", "Targets"), filterable = F, minWidth = smallboxwidth, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
 z_tarDef <- function(minW = 45, foot = F, borderL = F) {
   colDef(header = z_with_tt("Tar", "Targets"),
+         filterable = F,
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
@@ -1415,15 +1424,16 @@ z_tarDef <- function(minW = 45, foot = F, borderL = F) {
 }
 
 #Receptions
-z_recDefWk <- colDef(header = z_with_tt("Rec", "Receptions\nBold if >=10"), minWidth = smallboxwidth + 2, align = 'right', style = function(value) {
+z_recDefWk <- colDef(header = z_with_tt("Rec", "Receptions\nBold if >=10"), filterable = F, minWidth = smallboxwidth + 2, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-z_recDefSsn <- colDef(header = z_with_tt("Rec", "Receptions\nBold if >=100"), minWidth = smallboxwidth + 2, align = 'right', style = function(value) {
+z_recDefSsn <- colDef(header = z_with_tt("Rec", "Receptions\nBold if >=100"), filterable = F, minWidth = smallboxwidth + 2, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-z_recDefNm <- colDef(header = z_with_tt("Rec", "Receptions"), minWidth = smallboxwidth + 2, align = 'right', defaultSortOrder = "desc")
+z_recDefNm <- colDef(header = z_with_tt("Rec", "Receptions"), filterable = F, minWidth = smallboxwidth + 2, align = 'right', defaultSortOrder = "desc")
 z_recDef <- function(minW = 47, foot = F, borderL = F) {
   colDef(header = z_with_tt("Rec", "Receptions"),
+         filterable = F,
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
@@ -1433,15 +1443,16 @@ z_recDef <- function(minW = 47, foot = F, borderL = F) {
 }
 
 #receiving yards
-z_reydDefWk <- colDef(header = z_with_tt("Yd", "Receiving Yards\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_reydDefWk <- colDef(header = z_with_tt("Yd", "Receiving Yards\nBold if >=100"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-z_reydDefSsn <- colDef(header = z_with_tt("Yd", "Receiving Yards\nBold if >=1000"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_reydDefSsn <- colDef(header = z_with_tt("Yd", "Receiving Yards\nBold if >=1000"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 1000, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-z_reydDefNm <- colDef(header = z_with_tt("Yd", "Receiving Yards"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_reydDefNm <- colDef(header = z_with_tt("Yd", "Receiving Yards"), filterable = F, minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
 z_reydDef <- function(minW = 47, foot = F, borderL = F) {
   colDef(header = z_with_tt("Yd", "Receiving Yards"),
+         filterable = F,
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
@@ -1451,15 +1462,16 @@ z_reydDef <- function(minW = 47, foot = F, borderL = F) {
 }
 
 #receiving tds
-z_retdDefWk <- colDef(header = z_with_tt("TD", "Receiving TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_retdDefWk <- colDef(header = z_with_tt("TD", "Receiving TDs\nBold if >=3"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-z_retdDefSsn <- colDef(header = z_with_tt("TD", "Receiving TDs\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_retdDefSsn <- colDef(header = z_with_tt("TD", "Receiving TDs\nBold if >=10"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-z_retdDefNm <- colDef(header = z_with_tt("TD", "Receiving TDs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_retdDefNm <- colDef(header = z_with_tt("TD", "Receiving TDs"), filterable = F, minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
 z_retdDef <- function(minW = 47, foot = F, borderL = F) {
   colDef(header = z_with_tt("TD", "Receiving TDs"),
+         filterable = F,
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
@@ -1469,15 +1481,16 @@ z_retdDef <- function(minW = 47, foot = F, borderL = F) {
 }
 
 #Receiving fd
-z_refdDefWk <- colDef(header = z_with_tt("FD", "Receiving First Downs\nBold if >=5"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_refdDefWk <- colDef(header = z_with_tt("FD", "Receiving First Downs\nBold if >=5"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 5, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-z_refdDefSsn <- colDef(header = z_with_tt("FD", "Receiving First Downs\nBold if >=50"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_refdDefSsn <- colDef(header = z_with_tt("FD", "Receiving First Downs\nBold if >=50"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 50, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-z_refdDefNm <- colDef(header = z_with_tt("FD", "Receiving First Downs"), minWidth = smallboxwidth, align = 'right')
+z_refdDefNm <- colDef(header = z_with_tt("FD", "Receiving First Downs"), filterable = F, minWidth = smallboxwidth, align = 'right')
 z_refdDef <- function(minW = 47, foot = F, borderL = F) {
   colDef(header = z_with_tt("FD", "Receiving First Downs"),
+         filterable = F,
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
