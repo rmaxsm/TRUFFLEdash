@@ -99,6 +99,7 @@ shinyServer(function(input, output, session) {
       extradash <<- merge(x = extradash, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); extradash$TRUFFLE[is.na(extradash$TRUFFLE)] <<- "FA"
       consistencystart <<- merge(x = consistencystart, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); consistencystart$TRUFFLE[is.na(consistencystart$TRUFFLE)] <<- "FA"
       seasons <<- merge(x = seasons, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); seasons$TRUFFLE[is.na(seasons$TRUFFLE)] <<- "FA"
+      proj <<- merge(x = proj, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); proj$TRUFFLE[is.na(proj$TRUFFLE)] <<- "FA"
       
       updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
       updateSelectInput(session, 'tmportalyr', choices = if (globalleague == "TRUFFLE") { sort(c(unique(seasons$Season), currentyr), decreasing = T) } else { sort(c(unique(weekly$Season[weekly$League == globalleague]), currentyr)) }, selected = currentyr)
@@ -233,6 +234,45 @@ shinyServer(function(input, output, session) {
   #home page season leaders
   output$homepointsleaders <- renderReactable({
     if(isguest == F) {
+      
+    if (isOffseason == T & input$homeseason == currentyr) {
+      
+      reactable(proj[Season == input$homeseason, .(TRUFFLE, Pos, Player, PosRk, Avg, FPts)],
+                #height = 440,
+                defaultSorted = c("FPts", "Avg"),
+                defaultSortOrder = "desc",
+                filterable = T,
+                showPageInfo = FALSE,
+                defaultPageSize = 10,
+                paginationType = 'simple',
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                resizable = F,
+                columns = list(
+                  TRUFFLE = z_trfDef(),
+                  Pos = z_posDef(),
+                  Player = z_playerDef(minW = 130,
+                                       filt = T),
+                  PosRk = z_posRkDef(filt = F, proj = T),
+                  Avg = z_avgDef(maxW = 55),
+                  FPts = colDef(header = z_with_tt("Proj", "Seasonal projected FPts"),
+                                 maxWidth = 70,
+                                 format = colFormat(digits = 0),
+                                 filterable = F,
+                                style = list(fontStyle = 'italic'),
+                  )
+                ),
+                columnGroups = list(colGroup(name = "CBS Projections shown during offseason, highlighted in italics",
+                                             columns = c("TRUFFLE", "Pos", "Player", "PosRk", "Avg", "FPts"),
+                                             align = 'left',
+                                             headerStyle = list(fontStyle = 'italic', fontWeight = 'normal')
+                )
+                )
+                
+      )
+      
+    } else {
     
     reactable(pointsleaders[Scoring == input$homescoring & Season == input$homeseason, .(TRUFFLE, Pos, Player, PosRk, ptslogs, Avg, Total)],
               height = 420,
@@ -261,8 +301,8 @@ shinyServer(function(input, output, session) {
                 )
               )
     )
-    }
-    else {
+    } }
+    else { #guest else
       reactable(pointsleaders[Scoring == input$homescoring & Season == input$homeseason, .(TRUFFLE, Pos, Player, PosRk, ptslogs, Avg, Total)],
                 height = 420,
                 defaultSorted = c("Total", "Avg"),
@@ -296,8 +336,13 @@ shinyServer(function(input, output, session) {
   
   #home page passing leaders
   output$homepassing <- renderReactable({
-    reactable(seasons[Scoring == input$homescoring & Season == input$homeseason & PaAtt > 0, .(TRUFFLE, Pos, Player, PaCmp, PaAtt, PaYd, PaTD, PaInt)],
-              height = 420,
+    
+    if (isOffseason == T & input$homeseason == currentyr) { df <- proj[Season == input$homeseason & PaAtt > 0, .(TRUFFLE, Pos, Player, PaCmp, PaAtt, PaYd, PaTD, PaInt)]  } else {
+      df <- seasons[Scoring == input$homescoring & Season == input$homeseason & PaAtt > 0, .(TRUFFLE, Pos, Player, PaCmp, PaAtt, PaYd, PaTD, PaInt)]
+    }
+    
+    reactable(df,
+              #height = 420,
               defaultSorted = "PaYd",
               defaultSortOrder = "desc",
               filterable = T,
@@ -313,19 +358,31 @@ shinyServer(function(input, output, session) {
                 Pos = z_posDef(),
                 Player = z_playerDef(minW = 130,
                                      filt = T),
-                PaCmp = colDef(header = z_with_tt("Cmp", "Passing Completions"), filterable = F, minWidth = smallboxwidth + 8, align = 'right', defaultSortOrder = "desc"),
-                PaAtt = z_paattDef,
-                PaYd = z_paydDefSsn,
-                PaTD = z_patdDefSsn,
-                PaInt = z_paintDefSsn
-                )
+                PaCmp = z_pacmpDef(borderL = F, proj = (isOffseason & input$homeseason == currentyr)),
+                PaAtt = z_paattDef(proj = (isOffseason & input$homeseason == currentyr)),
+                PaYd = z_paydDef(proj = (isOffseason & input$homeseason == currentyr)),
+                PaTD = z_patdDef(proj = (isOffseason & input$homeseason == currentyr)),
+                PaInt = z_paintDef(proj = (isOffseason & input$homeseason == currentyr))
+                ),
+              if (isOffseason & input$homeseason == currentyr) {
+              columnGroups = list(colGroup(name = "CBS Projections shown during offseason, highlighted in italics",
+                                           columns = c("TRUFFLE", "Pos", "Player", "PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"),
+                                           align = 'left',
+                                           headerStyle = list(fontStyle = 'italic', fontWeight = 'normal')
+              )
+              ) }
               )
   })
   
   #home page rushing leaders
   output$homerushing <- renderReactable({
-    reactable(seasons[Scoring == input$homescoring & Season == input$homeseason & RuAtt > 0, .(TRUFFLE, Pos, Player, RuAtt, RuYd, RuTD, RuFD)],
-              height = 420,
+    
+    if (isOffseason == T & input$homeseason == currentyr) { df <- proj[Season == input$homeseason & RuAtt > 0, .(TRUFFLE, Pos, Player, RuAtt, RuYd, RuTD, RuFD)]  } else {
+      df <- seasons[Scoring == input$homescoring & Season == input$homeseason & RuAtt > 0, .(TRUFFLE, Pos, Player, RuAtt, RuYd, RuTD, RuFD)]
+    }
+    
+    reactable(df,
+              #height = 420,
               defaultSorted = "RuYd",
               defaultSortOrder = "desc",
               filterable = T,
@@ -341,18 +398,30 @@ shinyServer(function(input, output, session) {
                 Pos = z_posDef(),
                 Player = z_playerDef(minW = 130,
                                      filt = T),
-                RuAtt = z_ruattDef(borderL = F),
-                RuYd = z_ruydDefSsn,
-                RuTD = z_rutdDefSsn,
-                RuFD = z_rufdDefSsn
-              )
+                RuAtt = z_ruattDef(borderL = F, proj = (isOffseason & input$homeseason == currentyr)),
+                RuYd = z_ruydDef(proj = (isOffseason & input$homeseason == currentyr)),
+                RuTD = z_rutdDef(proj = (isOffseason & input$homeseason == currentyr)),
+                RuFD = z_rufdDef(disp = !(isOffseason & input$homeseason == currentyr))
+              ),
+              if (isOffseason & input$homeseason == currentyr) {
+                columnGroups = list(colGroup(name = "CBS Projections shown during offseason, highlighted in italics",
+                                             columns = c("TRUFFLE", "Pos", "Player", "RuAtt", "RuYd", "RuTD", "RuFD"),
+                                             align = 'left',
+                                             headerStyle = list(fontStyle = 'italic', fontWeight = 'normal')
+                )
+                ) }
     )
   })
   
   #home page receiving leaders
   output$homereceiving <- renderReactable({
-    reactable(seasons[Scoring == input$homescoring & Season == input$homeseason & Rec > 0, .(TRUFFLE, Pos, Player, Tar, Rec, ReYd, ReTD, ReFD)],
-              height = 420,
+    
+    if (isOffseason == T & input$homeseason == currentyr) { df <- proj[Season == input$homeseason & Rec > 0, .(TRUFFLE, Pos, Player, Tar, Rec, ReYd, ReTD, ReFD)]  } else {
+      df <- seasons[Scoring == input$homescoring & Season == input$homeseason & Rec > 0, .(TRUFFLE, Pos, Player, Tar, Rec, ReYd, ReTD, ReFD)]
+    }
+    
+    reactable(df,
+              #height = 420,
               defaultSorted = "ReYd",
               defaultSortOrder = "desc",
               filterable = T,
@@ -368,19 +437,31 @@ shinyServer(function(input, output, session) {
                 Pos = z_posDef(),
                 Player = z_playerDef(minW = 130,
                                      filt = T),
-                Tar = z_tarDef(),
-                Rec = z_recDef(),
-                ReYd = z_reydDefSsn,
-                ReTD = z_retdDefSsn,
-                ReFD = z_refdDefSsn
-              )
+                Tar = z_tarDef(proj = (isOffseason & input$homeseason == currentyr)),
+                Rec = z_recDef(proj = (isOffseason & input$homeseason == currentyr)),
+                ReYd = z_reydDef(proj = (isOffseason & input$homeseason == currentyr)),
+                ReTD = z_retdDef(proj = (isOffseason & input$homeseason == currentyr)),
+                ReFD = z_refdDef(disp = !(isOffseason & input$homeseason == currentyr))
+              ),
+              if (isOffseason & input$homeseason == currentyr) {
+                columnGroups = list(colGroup(name = "CBS Projections shown during offseason, highlighted in italics",
+                                             columns = c("TRUFFLE", "Pos", "Player", "Tar", "Rec", "ReYd", "ReTD", "ReFD"),
+                                             align = 'left',
+                                             headerStyle = list(fontStyle = 'italic', fontWeight = 'normal')
+                )
+                ) }
     )
   })
   
   #home page advanced leaders
   output$homeadvanced <- renderReactable({
-    reactable(advanced[Scoring == input$homescoring & Season == input$homeseason & Opp / length(unique(weekly$Week[weekly$Season == input$homeseason])) > 5, .(TRUFFLE, Pos, Player, `FPts/Touch`, `FPts/Opp`, `YdPt%`, `TDPt%`, `FDPt%`)],
-              height = 420,
+    
+    if (isOffseason == T & input$homeseason == currentyr) { df <- proj[Season == input$homeseason & Avg > 5, .(TRUFFLE, Pos, Player, `FPts/Touch`, `FPts/Opp`, `YdPt%`, `TDPt%`, `FDPt%`)]  } else {
+      df <- advanced[Scoring == input$homescoring & Season == input$homeseason & Opp / length(unique(weekly$Week[weekly$Season == input$homeseason])) > 5, .(TRUFFLE, Pos, Player, `FPts/Touch`, `FPts/Opp`, `YdPt%`, `TDPt%`, `FDPt%`)]
+    }
+    
+    reactable(df,
+              #height = 420,
               defaultSorted = "FPts/Touch",
               defaultSortOrder = "desc",
               filterable = F,
@@ -397,18 +478,25 @@ shinyServer(function(input, output, session) {
                 Player = z_playerDef(minW = 120,
                                      filt = T),
                 
-                `FPts/Touch` = z_fptsPtchDef,
-                `FPts/Opp` = z_fptsPoppDef,
-                `YdPt%` = z_ydptpercDef,
-                `TDPt%` = z_tdptpercDef,
-                `FDPt%` = z_fdptpercDef
-              )
+                `FPts/Touch` = z_fptsPtchDef(proj = (isOffseason & input$homeseason == currentyr)),
+                `FPts/Opp` = z_fptsPoppDef(proj = (isOffseason & input$homeseason == currentyr)),
+                `YdPt%` = z_ydptpercDef(proj = (isOffseason & input$homeseason == currentyr)),
+                `TDPt%` = z_tdptpercDef(proj = (isOffseason & input$homeseason == currentyr)),
+                `FDPt%` = z_fdptpercDef(proj = (isOffseason & input$homeseason == currentyr))
+              ),
+              if (isOffseason & input$homeseason == currentyr) {
+                columnGroups = list(colGroup(name = "CBS Projections shown during offseason, highlighted in italics",
+                                             columns = c("TRUFFLE", "Pos", "Player", "FPts/Touch", "FPts/Opp", "YdPt%", "TDPt%", "FDPt%"),
+                                             align = 'left',
+                                             headerStyle = list(fontStyle = 'italic', fontWeight = 'normal')
+                )
+                ) }
     )
   })
   
   output$homeconsistency <- renderReactable({
     reactable(consistency[Scoring == input$homescoring & Season == input$homeseason & Avg > 5, .(TRUFFLE, Pos, Player, Avg, RelSD, `>10 %`, `>20 %`, `>30 %`)],
-              height = 420,
+              #height = 420,
               defaultSorted = "Avg",
               defaultSortOrder = "desc",
               filterable = F,
@@ -429,7 +517,14 @@ shinyServer(function(input, output, session) {
                 `>10 %` = z_g10pDef,
                 `>20 %` = z_g20pDef,
                 `>30 %` = z_g30pDef
-              )
+              ),
+              if (isOffseason & input$homeseason == currentyr) {
+                columnGroups = list(colGroup(name = "Previous year statistics, projections not available for consistency metrics",
+                                             columns = c("TRUFFLE", "Pos", "Player", "Avg", "RelSD", ">10 %", ">20 %", ">30 %"),
+                                             align = 'left',
+                                             headerStyle = list(fontStyle = 'italic', fontWeight = 'normal')
+                )
+                ) }
     )
   })
   
@@ -704,6 +799,10 @@ shinyServer(function(input, output, session) {
                 FPts = z_fptsSeasDef()
               ),
               columnGroups = list(
+                if (isOffseason == T) {colGroup(name = "CBS Projections for Avg & FPts shown during offseason",
+                                                columns = c("Action", "Pos", "Player", "Age", "NFL", "Bye"),
+                                                align = 'left',
+                                                headerStyle = list(fontStyle = 'italic', fontWeight = 'normal'))},
                 colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
                 colGroup(name = "Fantasy", columns = c("G", "PosRk", "ptslog", "Avg", "FPts"), align = 'left')
               ),
@@ -857,8 +956,8 @@ shinyServer(function(input, output, session) {
                 Pos = z_posDef(),
                 Player = z_playerDef(minW = 135, filt=T),
                 G = z_gDef(),
-                PaCmp = z_pacmpDef,
-                PaAtt = z_paattDef,
+                PaCmp = z_pacmpDef(),
+                PaAtt = z_paattDef(),
                 PaYd = z_paydDefSsn,
                 PaTD = z_patdDefSsn,
                 PaInt = z_paintDefSsn,
@@ -900,16 +999,16 @@ shinyServer(function(input, output, session) {
                 FPts = z_fptsSeasDef(),
                 Touch = z_tchDef,
                 Opp = z_oppDef,
-                `FPts/Touch` = z_fptsPtchDef,
-                `FPts/Opp` = z_fptsPoppDef,
+                `FPts/Touch` = z_fptsPtchDef(),
+                `FPts/Opp` = z_fptsPoppDef(),
                 YdPts = z_ydptsDef,
                 TDPts = z_tdptsDef,
                 FDPts = z_fdptsDef,
                 RuPts = z_ruptsDef,
                 RePts = z_reptsDef,
-                `YdPt%` = z_ydptpercDef,
-                `TDPt%` = z_tdptpercDef,
-                `FDPt%` = z_fdptpercDef,
+                `YdPt%` = z_ydptpercDef(),
+                `TDPt%` = z_tdptpercDef(),
+                `FDPt%` = z_fdptpercDef(),
                 `RuPt%` = z_ruptpercDef,
                 `RePt%` = z_reptpercDef
               ),
@@ -1087,8 +1186,8 @@ shinyServer(function(input, output, session) {
                 Player = z_playerDef(minW = 150, filt = T),
                 Opp = z_opDef,
                 OpRk = z_oprkDef,
-                PaCmp = z_pacmpDef,
-                PaAtt = z_paattDef,
+                PaCmp = z_pacmpDef(),
+                PaAtt = z_paattDef(),
                 PaYd = z_paydDefWk,
                 PaTD = z_patdDefWk,
                 PaInt = z_paintDefWk,
@@ -1124,7 +1223,7 @@ shinyServer(function(input, output, session) {
       ppbios <- z_action_mod(df = ppbios, team = globalteam)
       selectedplayers <- ppbios[Scoring == input$homescoring & Player %in% input$player][order(-Salary)]
       
-      reactable(selectedplayers[, .(Action, TRUFFLE, Pos, Player, NFL, AgePH, DynRk, DynPosRk, Salary, Contract, ptslogs)],
+      reactable(selectedplayers[, .(Action, TRUFFLE, Pos, Player, NFL, Age, DynRk, DynPosRk, Salary, Contract, ptslogs)],
                 defaultSorted = c("Salary"),
                 pagination = F,
                 height = 'auto',
@@ -1151,7 +1250,7 @@ shinyServer(function(input, output, session) {
                   Pos = z_posDef(filt = FALSE),
                   Player = z_playerDef(minW = 140),
                   NFL = colDef(align = 'left'),
-                  AgePH = colDef(name = "Age"),
+                  Age = colDef(name = "Age"),
                   DynRk = colDef(header = z_with_tt("DynRk", "Fantasy Pros Overall Dynasty Rank"), align = 'left'),
                   DynPosRk = colDef(header = z_with_tt("DynRk", "Fantasy Pros Positional Dynasty Rank"), align = 'left'),
                   Salary = z_salaryDefBar(),
@@ -1162,7 +1261,7 @@ shinyServer(function(input, output, session) {
     } else { 
       selectedplayers <- ppbios[Scoring == input$homescoring & Player %in% input$player][order(Player)]
       
-      reactable(selectedplayers[, .(Pos, Player, NFL, AgePH, DynRk, DynPosRk, ptslogs)],
+      reactable(selectedplayers[, .(Pos, Player, NFL, Age, DynRk, DynPosRk, ptslogs)],
                 pagination = F,
                 height = 'auto',
                 filterable = F,
@@ -1172,7 +1271,7 @@ shinyServer(function(input, output, session) {
                   Pos = z_posDef(filt = FALSE),
                   Player = z_playerDef(minW = 140),
                   NFL = colDef(align = 'left'),
-                  AgePH = colDef(name = "Age"),
+                  Age = colDef(name = "Age"),
                   DynRk = colDef(header = z_with_tt("DynRk", "Fantasy Pros Overall Dynasty Rank"), align = 'left'),
                   DynPosRk = colDef(header = z_with_tt("DynRk", "Fantasy Pros Positional Dynasty Rank"), align = 'left'),
                   ptslogs = z_ptsLogDef(maxW = 100)
@@ -1302,8 +1401,8 @@ shinyServer(function(input, output, session) {
                 Season = z_seasonDef(filt = F),
                 Player = z_playerDef(minW = 135),
                 G = z_gDef(),
-                PaCmp = z_pacmpDef,
-                PaAtt = z_paattDef,
+                PaCmp = z_pacmpDef(),
+                PaAtt = z_paattDef(),
                 PaYd = z_paydDefSsn,
                 PaTD = z_patdDefSsn,
                 PaInt = z_paintDefSsn,
@@ -1349,16 +1448,16 @@ shinyServer(function(input, output, session) {
                 FPts = z_fptsSeasDef(),
                 Touch = z_tchDef,
                 Opp = z_oppDef,
-                `FPts/Touch` = z_fptsPtchDef,
-                `FPts/Opp` = z_fptsPoppDef,
+                `FPts/Touch` = z_fptsPtchDef(),
+                `FPts/Opp` = z_fptsPoppDef(),
                 YdPts = z_ydptsDef,
                 TDPts = z_tdptsDef,
                 FDPts = z_fdptsDef,
                 RuPts = z_ruptsDef,
                 RePts = z_reptsDef,
-                `YdPt%` = z_ydptpercDef,
-                `TDPt%` = z_tdptpercDef,
-                `FDPt%` = z_fdptpercDef,
+                `YdPt%` = z_ydptpercDef(),
+                `TDPt%` = z_tdptpercDef(),
+                `FDPt%` = z_fdptpercDef(),
                 `RuPt%` = z_ruptpercDef,
                 `RePt%` = z_reptpercDef
               ),
@@ -1807,8 +1906,8 @@ shinyServer(function(input, output, session) {
                 Pos = z_posDef(sort = F, maxW = 38),
                 Player = z_playerDef(minW = 125, filt = T),
                 G = z_gDef(),
-                PaCmp = z_pacmpDef,
-                PaAtt = z_paattDef,
+                PaCmp = z_pacmpDef(),
+                PaAtt = z_paattDef(),
                 PaYd = z_paydDefNm,
                 PaTD = z_patdDefNm,
                 PaInt = z_paintDefNm,
@@ -1894,16 +1993,16 @@ shinyServer(function(input, output, session) {
                 Player = z_playerDef(minW = 120, filt = T),
                 Touch = z_tchDef,
                 Opp = z_oppDef,
-                `FPts/Touch` = z_fptsPtchDef,
-                `FPts/Opp` = z_fptsPoppDef,
+                `FPts/Touch` = z_fptsPtchDef(),
+                `FPts/Opp` = z_fptsPoppDef(),
                 YdPts = z_ydptsDef,
                 TDPts = z_tdptsDef,
                 FDPts = z_fdptsDef,
                 RuPts = z_ruptsDef,
                 RePts = z_reptsDef,
-                `YdPt%` = z_ydptpercDef,
-                `TDPt%` = z_tdptpercDef,
-                `FDPt%` = z_fdptpercDef,
+                `YdPt%` = z_ydptpercDef(),
+                `TDPt%` = z_tdptpercDef(),
+                `FDPt%` = z_fdptpercDef(),
                 `RuPt%` = z_ruptpercDef,
                 `RePt%` = z_reptpercDef
               ),
@@ -4026,8 +4125,8 @@ shinyServer(function(input, output, session) {
                 Player = z_playerDef(minW = 150, filt = T),
                 Opp = z_opDef,
                 OpRk = z_oprkDef,
-                PaCmp = z_pacmpDef,
-                PaAtt = z_paattDef,
+                PaCmp = z_pacmpDef(),
+                PaAtt = z_paattDef(),
                 PaYd = z_paydDefWk,
                 PaTD = z_patdDefWk,
                 PaInt = z_paintDefWk,
@@ -4067,8 +4166,8 @@ shinyServer(function(input, output, session) {
                 Player = z_playerDef(minW = 150, filt = T),
                 NFL = z_nflDef,
                 G = z_gDef(),
-                PaCmp = z_pacmpDef,
-                PaAtt = z_paattDef,
+                PaCmp = z_pacmpDef(),
+                PaAtt = z_paattDef(),
                 PaYd = z_paydDefSsn,
                 PaTD = z_patdDefSsn,
                 PaInt = z_paintDefSsn,
@@ -4109,8 +4208,8 @@ shinyServer(function(input, output, session) {
                 TRUFFLE = z_trfDef(),
                 Pos = z_posDef(),
                 Player = z_playerDef(minW = 150, filt = T),
-                PaCmp = z_pacmpDef,
-                PaAtt = z_paattDef,
+                PaCmp = z_pacmpDef(),
+                PaAtt = z_paattDef(),
                 PaYd = z_paydDefWk,
                 PaTD = z_patdDefWk,
                 PaInt = z_paintDefWk,
