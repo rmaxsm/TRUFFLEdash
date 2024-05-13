@@ -47,7 +47,7 @@ dashboardPageUI <-
                                                  HTML(" Welcome to <span style=color:#84A4D8;font-size:14px>truffle</span><span style =color:#8C2E26;font-weight:bold;font-size:30px;font-family:'Audiowide'>dash</span>")
                                           ),
                                           column(width = 4,
-                                                 selectInput("homeseason", HTML("<span style=color:#84A4D8;font-size:14px>Season</span>"), sort(unique(weekly$Season), decreasing = T), selected = max(weekly$Season) )
+                                                 selectInput("homeseason", HTML("<span style=color:#84A4D8;font-size:14px>Season</span>"), sort(unique(c(weekly$Season, currentyr)), decreasing = T), selected = max(unique(c(weekly$Season, currentyr))) )
                                           )
                                           ,
                                           column(width=4, align = "right",
