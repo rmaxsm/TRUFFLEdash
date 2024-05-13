@@ -29,6 +29,9 @@ minAvg <- 3
 currentyr <- 2024
 isOffseason <- TRUE
 
+#test it works without 2024 data
+no2024testdata <- 2024
+
 options(reactable.language = reactableLang(
   pagePrevious = "\u276e",
   pageNext = "\u276f"
@@ -219,7 +222,7 @@ cleanFantasy <- function(file) {
 }
 fantasy <- as.data.table(cleanFantasy(fantasy))
 #no 2024 data test
-fantasy <- fantasy[Season != 2024]
+fantasy <- fantasy[Season != no2024testdata]
 
 # seasons.csv ----
 #file of full season data for players dating back to 2015
@@ -292,7 +295,7 @@ cleanWeekly <- function(file) {
 }
 weekly <- as.data.table(cleanWeekly(weekly))
 #no 2024 data test
-weekly <- weekly[Season != 2024]
+weekly <- weekly[Season != no2024testdata]
 
 #create weekly with original teams by old
 weekly_orig_teams <- weekly
@@ -393,7 +396,7 @@ riv <- as.data.table(read_csv("demodata/rivalries.csv", col_types = cols()))
 #demodata
 rivscores <- as.data.table(read_csv("demodata/rivalryscores.csv", col_types = cols()))
 #no 2024 data test
-rivscores <- rivscores[Season != 2024]
+rivscores <- rivscores[Season != no2024testdata]
 
 rivscores$Winner <- ifelse(rivscores$Team1Score > rivscores$Team2Score, rivscores$Team1, rivscores$Team2)
 rivscores$Icon <- "www/graphics/rivalrylogos/blank.png"
@@ -429,7 +432,7 @@ turkeyscorers <- rivfantasy[Thanksgiving == 1,
 #demodata
 extradash <- as.data.table(read_csv("demodata/extraDash.csv", col_types = cols()))
 #no 2024 data test
-extradash <- extradash[Season != 2024]
+extradash <- extradash[Season != no2024testdata]
 
 colnames(extradash)[6:19] <- c("Cmp%", "Pa20", "Pa40", "RuYPC", "Ru20", "Tar", "Tar%", "ReYPC", "Re20", "Re40", "ReFD%", "TotYd", "Avg", "FPts")
 
@@ -469,7 +472,7 @@ espn <- suppressWarnings(as.data.table(read_csv("demodata/espnStats.csv", col_ty
                                                                       Pos = col_character(), xFP = col_double(), ActualPts = col_double(), xTD = col_double(),
                                                                       TD = col_double(), Looks = col_double(), Diff = col_double(), In5 = col_double(), EZ = col_double()))))
 #no 2024 data test
-espn <- espn[Season != 2024]
+espn <- espn[Season != no2024testdata]
 
 
 espn <- espn[Player != "Jeffery Simmons"]
@@ -502,7 +505,7 @@ espn <- espn[, .(Season, Pos, Player, xFP, ActualPts, FPDiff, xTD, TD, TDDiff, L
 #demodata
 snaps <- as.data.table(read_csv("demodata/snapPer.csv", col_types = cols()))
 #no 2024 data test
-snaps <- snaps[Season != 2024]
+snaps <- snaps[Season != no2024testdata]
 
 #get rid of TRUFFLE column, do this later
 #snaps <- merge(x = snaps, y = rosters[ , .(Pos, Player, TRUFFLE)], by = c("Pos", "Player"), all.x=TRUE)
