@@ -193,14 +193,14 @@ dashboardPageUI <-
                                                   wellPanel(class = "well",
                                                             reactableOutput('tpboxscore'),
                                                             hr(),
-                                                            em("Traditional Passing, Rushing, Receiving scoring stats. Hover over column header for definition.")
+                                                            em("Traditional Passing, Rushing, Receiving scoring stats. Hover over column header for definition. Italic values indicate CBS Projections during offseason.")
                                                   )
                                          ),
                                          tabPanel("Advanced",
                                                   wellPanel(class = "well",
                                                             reactableOutput('tpadvanced'),
                                                             hr(),
-                                                            em("Advanced stats on per-touch efficiency, and point source breakdown (Yardage vs. TD vs. First Downs / Rushing vs. Receiving). Hover over column header for definition.")
+                                                            em("Advanced stats on per-touch efficiency, and point source breakdown (Yardage vs. TD vs. First Downs / Rushing vs. Receiving). Hover over column header for definition. Italic values indicate CBS Projections during offseason.")
                                                   )
                                          ),
                                          tabPanel("Consistency",
@@ -410,14 +410,14 @@ dashboardPageUI <-
                                                   wellPanel(class = "well",
                                                             reactableOutput('scboxscore'),
                                                             hr(),
-                                                            em("Traditional Passing, Rushing, Receiving scoring stats. Hover over column header for definition.")
+                                                            em("Traditional Passing, Rushing, Receiving scoring stats. Hover over column header for definition. Italic values indicate CBS Projections during offseason.")
                                                   )
                                          ),
                                          tabPanel("Advanced",
                                                   wellPanel(class = "well",
                                                             reactableOutput('scadvanced'),
                                                             hr(),
-                                                            em("Advanced stats on per-touch efficiency, and point source breakdown (Yardage vs. TD vs. First Downs / Rushing vs. Receiving). Hover over column header for definition.")
+                                                            em("Advanced stats on per-touch efficiency, and point source breakdown (Yardage vs. TD vs. First Downs / Rushing vs. Receiving). Hover over column header for definition. Italic values indicate CBS Projections during offseason.")
                                                   )
                                          ),
                                          tabPanel("Consistency",
