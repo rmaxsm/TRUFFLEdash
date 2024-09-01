@@ -22,14 +22,15 @@ shinyServer(function(input, output, session) {
   # authenticate user by:
   #   1. checking whether their team is in the credentials
   observeEvent(input$login_button, {
-    credentials <- data.frame(user = c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW",
+    credentials <- data.frame(league = c(rep("TRUFFLE", 13), rep("KERFUFFLE", 13)),
+                              user = c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW","GUEST",
                                        "ABT", "CLC", "CPC", "DDD", "LBC", "LC", "MB","NBB","PCP","PP","RR", "SBS",
                                        "GUEST"),
                               stringsAsFactors = FALSE)
     
     # if user name row and password name row are same, credentials are valid
     #   and retrieve locked out status
-    if (toupper(input$user_name) %in% credentials$user) {
+    if (toupper(input$user_name) %in% credentials$user & toupper(input$user_league) == credentials$league[credentials$user == toupper(input$user_name)]) {
       user_input$valid_credentials <- TRUE
     }
     
@@ -46,11 +47,70 @@ shinyServer(function(input, output, session) {
     else if (user_input$valid_credentials == TRUE & input$user_name != "guest") {
       isguest <<- FALSE
       user_input$authenticated <- TRUE
+      
+      #set global variables for league and team
       globalteam <<- toupper(input$user_name)
+      globalleague <<- toupper(input$user_league)
+      
+      #NEED League column, filter down
+      teams <<- teams[League == globalleague]
+      draft <<- draft[League == globalleague, -"League"]
+      awards <<- awards[League == globalleague, -"League"]
+      contracts <<- contracts[League == globalleague, -"League"]
+      oldrosters <<- oldrosters[League == globalleague, -"League"]
+      oldrosterstp <<- oldrosterstp[League == globalleague, -"League"]
+      franchised <<- franchised[League == globalleague, -"League"]
+      ft <<- ft[League == globalleague, -"League"]
+      ppbios <<- ppbios[League == globalleague, -"League"]
+      pptrufflecareer <<- pptrufflecareer[League == globalleague, -"League"]
+      pptrufflecareerteam <<- pptrufflecareerteam[League == globalleague, -"League"]
+      recordbookspl <<- recordbookspl[League == globalleague, -"League"]
+      recordbookstm <<- recordbookstm[League == globalleague, -"League"]
+      rings <<- rings[League == globalleague, -"League"]
+      ringsbyteam <<- ringsbyteam[League == globalleague, -"League"]
+      riv <<- riv[League == globalleague, -"League"]
+      rivfantasy <<- rivfantasy[League == globalleague, -"League"]
+      #rivscorers <<- rivscorers[League == globalleague, -"League"]
+      rivscores <<- rivscores[League == globalleague, -"League"]
+      rookierights <<- rookierights[League == globalleague, -"League"]
+      capbyteam <<- capbyteam[League == globalleague, -"League"]
+      rosters <<- rosters[League == globalleague, -"League"]
+      tagvals <<- tagvals[League == globalleague, -"League"]
+      #teamsfantasyweekly <<- teamsfantasyweekly[League == globalleague, -"League"]
+      top5paid <<- top5paid[League == globalleague, -"League"]
+      tpoverview <<- tpoverview[League == globalleague, -"League"]
+      truffleanalysis <<- truffleanalysis[League == globalleague, -"League"]
+      truffleanalysisperc <<- truffleanalysisperc[League == globalleague, -"League"]
+      #turkeyscorers <<- turkeyscorers[League == globalleague, -"League"]
+      
+      #figure out how to merge team info rather than duplicate rows for two leagues
+      advanced <<- advanced[League == globalleague, -"League"]; advanced$TRUFFLE[is.na(advanced$TRUFFLE)] <<- "FA"
+      consistency <<- consistency[League == globalleague, -"League"]; consistency$TRUFFLE[is.na(consistency$TRUFFLE)] <<- "FA"
+      pointsleaders <<- pointsleaders[League == globalleague, -"League"]
+      fantasy <<- fantasy[League == globalleague, -"League"]
+      weekly <<- weekly[League == globalleague, -"League"]
+      weekly_orig_teams <<- weekly_orig_teams[League == globalleague, -"League"]
+      #weeklytop5 <<- weeklytop5[League == globalleague, -"League"]
+      
+      #doing some merging and FA assignment upon logon
+      weeklytop5 <<- merge(x = weeklytop5, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); weeklytop5$TRUFFLE[is.na(weeklytop5$TRUFFLE)] <<- "FA"
+      espn <<- merge(x = espn, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); espn$TRUFFLE[is.na(espn$TRUFFLE)] <<- "FA"
+      snaps <<- merge(x = snaps, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); snaps$TRUFFLE[is.na(snaps$TRUFFLE)] <<- "FA"
+      extradash <<- merge(x = extradash, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); extradash$TRUFFLE[is.na(extradash$TRUFFLE)] <<- "FA"
+      consistencystart <<- merge(x = consistencystart, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); consistencystart$TRUFFLE[is.na(consistencystart$TRUFFLE)] <<- "FA"
+      seasons <<- merge(x = seasons, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); seasons$TRUFFLE[is.na(seasons$TRUFFLE)] <<- "FA"
+      proj <<- merge(x = proj, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); proj$TRUFFLE[is.na(proj$TRUFFLE)] <<- "FA"
+      
+      #updating select inputs across the site at login
       updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
-      updateSelectInput(session, 'tmportalyr', choices = sort(c(unique(seasons$Season), currentyr), decreasing = T), selected = currentyr)
+      updateSelectInput(session, 'tmportalyr', choices = if (globalleague == "TRUFFLE") { sort(c(unique(seasons$Season), currentyr), decreasing = T) } else { sort(c(unique(weekly$Season[weekly$League == globalleague]), currentyr)) }, selected = currentyr)
       updateSelectInput(session, 'rivalry', choices = unique(teams$RivalryName), selected = teams$RivalryName[teams$Abbrev == globalteam])
       updateSelectInput(session, 'tmtm1', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
+      updateSelectInput(session, 'tmtm2', choices = unique(teams$FullName), selected = teams$FullName[2])
+      updateSelectInput(session, 'recordteams', choices = c(globalleague, unique(teams$FullName)), selected = globalleague)
+      updateSelectInput(session, 'awardseason', choices = unique(awards$Season), selected = globalleague)
+      if (isOffseason) {updateSelectInput(session, 'ppstatcenterseason', choices = c("Proj", as.character(sort(unique(weekly$Season), decreasing = T)), "All"), selected = "Proj")}
+      if (isOffseason) {updateSelectInput(session, 'scseason', choices = c("Proj", as.character(sort(unique(weekly$Season), decreasing = T))), selected = "Proj")}
     } else {
       user_input$authenticated <- FALSE
     }
@@ -70,6 +130,8 @@ shinyServer(function(input, output, session) {
       p("Welcome to"),
       HTML("<span style=color:#84A4D8;font-size:32px>truffle</span><span style =color:#8C2E26;font-weight:bold;font-size:60px;font-family:'Audiowide'>dash</span>  "),
       hr(),
+      #selectInput("user_league", "Select Your League:", c("TRUFFLE", "KERFUFFLE"), selected = "TRUFFLE"),
+      radioButtons("user_league", "Select Your League:", c("TRUFFLE", "KERFUFFLE"), selected = "TRUFFLE", inline = TRUE),
       textInput("user_name", "Enter Your Team:"),
       
       #passwordInput("password", "Password:"),
@@ -81,16 +143,11 @@ shinyServer(function(input, output, session) {
   # red error message if bad credentials
   output$pass <- renderUI({
     if (user_input$status == "bad_user") {
-      h5(strong("Team not found!", style = "color:#8C2E26"), align = "center")
+      h5(strong("Team not found or wrong League selected!", style = "color:#8C2E26"), align = "center")
     } else {
       ""
     }
   })  
-  
-  #testing my team function for stuff
-  # observe({
-  #   updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
-  #   })
   
   #sponsor logo
   output$sponsor <- renderImage({
@@ -109,100 +166,163 @@ shinyServer(function(input, output, session) {
   #home page ----
   #home page standings
   output$hometeamsfantasy <- renderReactable({
-    teamsfantasy <- teamsfantasyweekly[Scoring == input$homescoring,
-                                       .(Weekly = list(round(FPts,2)),
-                                         Low = min(FPts, na.rm = T),
-                                         High = max(FPts, na.rm = T),
-                                         StdDev = round(sd(FPts, na.rm = T)),
-                                         Avg = round(mean(FPts, na.rm = T)),
-                                         Total = round(sum(FPts, na.rm = T))
-                                       ),
-                                       by = .(Scoring, Season, TRUFFLE)][order(-Total)]
+    teamsfantasy <- fantasy[,
+                            .(FPts = sum(FPts, na.rm = T)),
+                            by = .(TRUFFLE, Scoring, Season, Week)][Scoring == input$homescoring,
+                                                                    .(Weekly = list(round(FPts,2)),
+                                                                      Low = min(FPts, na.rm = T),
+                                                                      High = max(FPts, na.rm = T),
+                                                                      StdDev = round(sd(FPts, na.rm = T)),
+                                                                      Avg = round(mean(FPts, na.rm = T)),
+                                                                      Total = round(sum(FPts, na.rm = T))
+                                                                    ),
+                                                                    by = .(Scoring, Season, TRUFFLE)][order(-Total)]
+    
+    if (isOffseason == TRUE) {
+      append <- proj[TRUFFLE != "FA",
+                     .(Scoring = "PPFD",
+                       Season = currentyr,
+                       Weekly = 0,
+                       Low = 0,
+                       High = 0,
+                       StdDev = 0,
+                       Avg = round(sum(FPts, na.rm = T) / 17,1),
+                       Total = round(sum(FPts, na.rm = T))
+                     ), by = .(TRUFFLE)][order(-Total)]
+      teamsfantasy <- rbind(teamsfantasy,append)
+    }
     
     reactable(teamsfantasy[Season == input$homeseason, .(TRUFFLE, Weekly, Low, High, Avg, Total)],
               defaultSorted = c("Total"),
               defaultSortOrder = "desc",
               pagination = FALSE,
-              height = 420,
+              height = ifelse(isOffseason, 'auto', 420),
               highlight = T,
               #borderless = T,
               compact = T,
               resizable = F,
               columns = list(
-                TRUFFLE = trfDef(filt = FALSE),
-                Weekly = colDef(header = with_tt("Weekly", "Weekly log of team FPts"),
+                TRUFFLE = z_trfDef(filt = FALSE),
+                Weekly = colDef(header = z_with_tt("Weekly", "Weekly log of team FPts"),
                                 maxWidth = 100,
                                 sortable = F,
                                 cell = function(values) {
                                   sparkline(values,
                                             type = "bar",
                                             chartRangeMin = 0,
-                                            chartRangeMax = max(teamsfantasyweekly$FPts[teamsfantasy$Season == input$homeseason]))
+                                            chartRangeMax = max(teamsfantasy$High[teamsfantasy$Season == input$homeseason]))
                                 }),
-                Low = colDef(header = with_tt("Low", "Lowest weekly score"),
+                Low = colDef(header = z_with_tt("Low", "Lowest weekly score"),
                              minWidth = 50,
                              align = 'right',
                              format = colFormat(digits=1),
                              style = function(value) {
-                               fontWeight <- ifelse(value == min(teamsfantasy$Low[teamsfantasy$Season == input$homeseason], na.rm = T), 'bold', 'plain')
+                               fontWeight <- ifelse(value == min(teamsfantasy$Low[teamsfantasy$Season == input$homeseason] & value > 0, na.rm = T), 'bold', 'plain')
                                list(fontWeight = fontWeight)
                              }),
-                High = colDef(header = with_tt("High", "Highest weekly score"),
+                High = colDef(header = z_with_tt("High", "Highest weekly score"),
                               minWidth = 50,
                               align = 'right',
                               format = colFormat(digits=1),
                               style = function(value) {
-                                fontWeight <- ifelse(value == max(teamsfantasy$High[teamsfantasy$Season == input$homeseason], na.rm = T), 'bold', 'plain')
+                                fontWeight <- ifelse(value == max(teamsfantasy$High[teamsfantasy$Season == input$homeseason] & value > 0, na.rm = T), 'bold', 'plain')
                                 list(fontWeight = fontWeight)
                               }),
-                Avg = colDef(header = with_tt("Avg", "Weekly average team FPts"),
+                Avg = colDef(header = z_with_tt("Avg", "Weekly average team FPts"),
                              minWidth = 50,
                              align = 'right'),
-                Total = colDef(header = with_tt("Tot", "Season total team FPts"),
+                Total = colDef(header = z_with_tt("Tot", "Season total team FPts"),
                                minWidth = 150,
                                align = 'left',
                                format = colFormat(digits=0),
                                cell = function(value) {
                                  width <- paste0(value / max(teamsfantasy$Total[teamsfantasy$Season == input$homeseason]) * 100, "%")
-                                 bar_chart(value, width = width)
+                                 z_bar_chart(value, width = width)
                                }
                 )
-              ))
+              ),
+              if (isOffseason & input$homeseason == currentyr) {
+                columnGroups = list(colGroup(name = "CBS Projections shown during offseason, Total = sum of projected FPts across roster",
+                                             columns = c("TRUFFLE", "Weekly", "Low", "High", "Avg", "Total"),
+                                             align = 'left',
+                                             headerStyle = list(fontStyle = 'italic', fontWeight = 'normal')
+                )
+                )}
+    )
   })
   
   #home page season leaders
   output$homepointsleaders <- renderReactable({
     if(isguest == F) {
-    
-    reactable(pointsleaders[Scoring == input$homescoring & Season == input$homeseason, .(TRUFFLE, Pos, Player, PosRk, ptslogs, Avg, Total)],
-              height = 420,
-              defaultSorted = c("Total", "Avg"),
-              defaultSortOrder = "desc",
-              filterable = T,
-              showPageInfo = FALSE,
-              defaultPageSize = 10,
-              paginationType = 'simple',
-              highlight = T,
-              #borderless = T,
-              compact = T,
-              resizable = F,
-              columns = list(
-                TRUFFLE = trfDef(),
-                Pos = posDef(),
-                Player = playerDef(minW = 130,
-                                   filt = T),
-                PosRk = posRkDef(filt = F),
-                ptslogs = ptsLogDef(),
-                Avg = avgDef(maxW = 48),
-                Total = colDef(header = with_tt("Tot", "Seasonal total FPts"),
-                               maxWidth = 45,
-                               format = colFormat(digits = 0),
-                               filterable = F
-                )
-              )
-    )
-    }
-    else {
+      
+      if (isOffseason == T & input$homeseason == currentyr) {
+        
+        reactable(proj[Season == input$homeseason, .(TRUFFLE, Pos, Player, PosRk, Avg, FPts)],
+                  #height = 440,
+                  defaultSorted = c("FPts", "Avg"),
+                  defaultSortOrder = "desc",
+                  filterable = T,
+                  showPageInfo = FALSE,
+                  defaultPageSize = 10,
+                  paginationType = 'simple',
+                  highlight = T,
+                  #borderless = T,
+                  compact = T,
+                  resizable = F,
+                  columns = list(
+                    TRUFFLE = z_trfDef(),
+                    Pos = z_posDef(),
+                    Player = z_playerDef(minW = 130,
+                                         filt = T),
+                    PosRk = z_posRkDef(filt = F, proj = T),
+                    Avg = z_avgDef(maxW = 55, proj = T),
+                    FPts = colDef(header = z_with_tt("Proj", "Seasonal projected FPts"),
+                                  maxWidth = 70,
+                                  format = colFormat(digits = 0),
+                                  filterable = F,
+                                  style = list(fontStyle = 'italic'),
+                    )
+                  ),
+                  columnGroups = list(colGroup(name = "CBS Projections shown during offseason, highlighted in italics",
+                                               columns = c("TRUFFLE", "Pos", "Player", "PosRk", "Avg", "FPts"),
+                                               align = 'left',
+                                               headerStyle = list(fontStyle = 'italic', fontWeight = 'normal')
+                  )
+                  )
+                  
+        )
+        
+      } else {
+        
+        reactable(pointsleaders[Scoring == input$homescoring & Season == input$homeseason, .(TRUFFLE, Pos, Player, PosRk, ptslogs, Avg, Total)],
+                  height = 420,
+                  defaultSorted = c("Total", "Avg"),
+                  defaultSortOrder = "desc",
+                  filterable = T,
+                  showPageInfo = FALSE,
+                  defaultPageSize = 10,
+                  paginationType = 'simple',
+                  highlight = T,
+                  #borderless = T,
+                  compact = T,
+                  resizable = F,
+                  columns = list(
+                    TRUFFLE = z_trfDef(),
+                    Pos = z_posDef(),
+                    Player = z_playerDef(minW = 130,
+                                         filt = T),
+                    PosRk = z_posRkDef(filt = F),
+                    ptslogs = z_ptsLogDef(),
+                    Avg = z_avgDef(maxW = 48),
+                    Total = colDef(header = z_with_tt("Tot", "Seasonal total FPts"),
+                                   maxWidth = 45,
+                                   format = colFormat(digits = 0),
+                                   filterable = F
+                    )
+                  )
+        )
+      } }
+    else { #guest else
       reactable(pointsleaders[Scoring == input$homescoring & Season == input$homeseason, .(TRUFFLE, Pos, Player, PosRk, ptslogs, Avg, Total)],
                 height = 420,
                 defaultSorted = c("Total", "Avg"),
@@ -216,14 +336,14 @@ shinyServer(function(input, output, session) {
                 compact = T,
                 resizable = F,
                 columns = list(
-                  TRUFFLE = trfDef(),
-                  Pos = posDef(),
-                  Player = playerDef(minW = 130,
-                                     filt = T),
-                  PosRk = posRkDef(filt = F),
-                  ptslogs = ptsLogDef(),
-                  Avg = avgDef(maxW = 48),
-                  Total = colDef(header = with_tt("Tot", "Seasonal total FPts"),
+                  TRUFFLE = z_trfDef(),
+                  Pos = z_posDef(),
+                  Player = z_playerDef(minW = 130,
+                                       filt = T),
+                  PosRk = z_posRkDef(filt = F),
+                  ptslogs = z_ptsLogDef(),
+                  Avg = z_avgDef(maxW = 48),
+                  Total = colDef(header = z_with_tt("Tot", "Seasonal total FPts"),
                                  maxWidth = 45,
                                  format = colFormat(digits = 0),
                                  filterable = F
@@ -234,10 +354,135 @@ shinyServer(function(input, output, session) {
     }
   })
   
-  #home weekly top 5 qb
-  output$homeweeklytop5qb <- renderReactable({
-    if (isguest == F) {
-    reactable(na.omit(weeklytop5[Scoring == input$homescoring & Season == input$homeseason & Week == input$weeklytop5week & Pos == "QB"][1:30, .(TRUFFLE, Player, FPts)][order(-FPts)]),
+  #home page passing leaders
+  output$homepassing <- renderReactable({
+    
+    if (isOffseason == T & input$homeseason == currentyr) { df <- proj[Season == input$homeseason & PaAtt > 0, .(TRUFFLE, Pos, Player, PaCmp, PaAtt, PaYd, PaTD, PaInt)]  } else {
+      df <- seasons[Scoring == input$homescoring & Season == input$homeseason & PaAtt > 0, .(TRUFFLE, Pos, Player, PaCmp, PaAtt, PaYd, PaTD, PaInt)]
+    }
+    
+    reactable(df,
+              height = ifelse(isOffseason, 'auto', 420),
+              defaultSorted = "PaYd",
+              defaultSortOrder = "desc",
+              filterable = T,
+              showPageInfo = FALSE,
+              defaultPageSize = 10,
+              paginationType = 'simple',
+              highlight = T,
+              #borderless = T,
+              compact = T,
+              resizable = F,
+              columns = list(
+                TRUFFLE = z_trfDef(),
+                Pos = z_posDef(),
+                Player = z_playerDef(minW = 130,
+                                     filt = T),
+                PaCmp = z_pacmpDef(borderL = F, proj = (isOffseason & input$homeseason == currentyr)),
+                PaAtt = z_paattDef(proj = (isOffseason & input$homeseason == currentyr)),
+                PaYd = z_paydDef(proj = (isOffseason & input$homeseason == currentyr), szn = T),
+                PaTD = z_patdDef(proj = (isOffseason & input$homeseason == currentyr), szn = T),
+                PaInt = z_paintDef(proj = (isOffseason & input$homeseason == currentyr), szn = T)
+              ),
+              if (isOffseason & input$homeseason == currentyr) {
+                columnGroups = list(colGroup(name = "CBS Projections shown during offseason, highlighted in italics",
+                                             columns = c("TRUFFLE", "Pos", "Player", "PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"),
+                                             align = 'left',
+                                             headerStyle = list(fontStyle = 'italic', fontWeight = 'normal')
+                )
+                ) }
+    )
+  })
+  
+  #home page rushing leaders
+  output$homerushing <- renderReactable({
+    
+    if (isOffseason == T & input$homeseason == currentyr) { df <- proj[Season == input$homeseason & RuAtt > 0, .(TRUFFLE, Pos, Player, RuAtt, RuYd, RuTD, RuFD)]  } else {
+      df <- seasons[Scoring == input$homescoring & Season == input$homeseason & RuAtt > 0, .(TRUFFLE, Pos, Player, RuAtt, RuYd, RuTD, RuFD)]
+    }
+    
+    reactable(df,
+              height = ifelse(isOffseason, 'auto', 420),
+              defaultSorted = "RuYd",
+              defaultSortOrder = "desc",
+              filterable = T,
+              showPageInfo = FALSE,
+              defaultPageSize = 10,
+              paginationType = 'simple',
+              highlight = T,
+              #borderless = T,
+              compact = T,
+              resizable = F,
+              columns = list(
+                TRUFFLE = z_trfDef(),
+                Pos = z_posDef(),
+                Player = z_playerDef(minW = 130,
+                                     filt = T),
+                RuAtt = z_ruattDef(borderL = F, proj = (isOffseason & input$homeseason == currentyr), szn = T),
+                RuYd = z_ruydDef(proj = (isOffseason & input$homeseason == currentyr), szn = T),
+                RuTD = z_rutdDef(proj = (isOffseason & input$homeseason == currentyr)),
+                RuFD = z_rufdDef(disp = !(isOffseason & input$homeseason == currentyr))
+              ),
+              if (isOffseason & input$homeseason == currentyr) {
+                columnGroups = list(colGroup(name = "CBS Projections shown during offseason, highlighted in italics",
+                                             columns = c("TRUFFLE", "Pos", "Player", "RuAtt", "RuYd", "RuTD", "RuFD"),
+                                             align = 'left',
+                                             headerStyle = list(fontStyle = 'italic', fontWeight = 'normal')
+                )
+                ) }
+    )
+  })
+  
+  #home page receiving leaders
+  output$homereceiving <- renderReactable({
+    
+    if (isOffseason == T & input$homeseason == currentyr) { df <- proj[Season == input$homeseason & Rec > 0, .(TRUFFLE, Pos, Player, Tar, Rec, ReYd, ReTD, ReFD)]  } else {
+      df <- seasons[Scoring == input$homescoring & Season == input$homeseason & Rec > 0, .(TRUFFLE, Pos, Player, Tar, Rec, ReYd, ReTD, ReFD)]
+    }
+    
+    reactable(df,
+              height = ifelse(isOffseason, 'auto', 420),
+              defaultSorted = "ReYd",
+              defaultSortOrder = "desc",
+              filterable = T,
+              showPageInfo = FALSE,
+              defaultPageSize = 10,
+              paginationType = 'simple',
+              highlight = T,
+              #borderless = T,
+              compact = T,
+              resizable = F,
+              columns = list(
+                TRUFFLE = z_trfDef(),
+                Pos = z_posDef(),
+                Player = z_playerDef(minW = 130,
+                                     filt = T),
+                Tar = z_tarDef(proj = (isOffseason & input$homeseason == currentyr)),
+                Rec = z_recDef(proj = (isOffseason & input$homeseason == currentyr)),
+                ReYd = z_reydDef(proj = (isOffseason & input$homeseason == currentyr)),
+                ReTD = z_retdDef(proj = (isOffseason & input$homeseason == currentyr)),
+                ReFD = z_refdDef(disp = !(isOffseason & input$homeseason == currentyr))
+              ),
+              if (isOffseason & input$homeseason == currentyr) {
+                columnGroups = list(colGroup(name = "CBS Projections shown during offseason, highlighted in italics",
+                                             columns = c("TRUFFLE", "Pos", "Player", "Tar", "Rec", "ReYd", "ReTD", "ReFD"),
+                                             align = 'left',
+                                             headerStyle = list(fontStyle = 'italic', fontWeight = 'normal')
+                )
+                ) }
+    )
+  })
+  
+  #home page advanced leaders
+  output$homeadvanced <- renderReactable({
+    
+    if (isOffseason == T & input$homeseason == currentyr) { df <- proj[Season == input$homeseason & Avg > 5, .(TRUFFLE, Pos, Player, `FPts/Touch`, `FPts/Opp`, `YdPt%`, `TDPt%`, `FDPt%`)]  } else {
+      df <- advanced[Scoring == input$homescoring & Season == input$homeseason & Opp / length(unique(weekly$Week[weekly$Season == input$homeseason])) > 5, .(TRUFFLE, Pos, Player, `FPts/Touch`, `FPts/Opp`, `YdPt%`, `TDPt%`, `FDPt%`)]
+    }
+    
+    reactable(df,
+              #height = ifelse(isOffseason, 'auto', 420),
+              defaultSorted = "FPts/Touch",
               defaultSortOrder = "desc",
               filterable = F,
               showPageInfo = FALSE,
@@ -248,12 +493,81 @@ shinyServer(function(input, output, session) {
               compact = T,
               resizable = F,
               columns = list(
-                TRUFFLE = trfDef(filt = FALSE),
-                Player = playerDef(minW = 125, filt = F, sort = F),
-                FPts = fptsWeekDef(maxW = 40, borderL = F)
+                TRUFFLE = z_trfDef(maxW = 70),
+                Pos = z_posDef(maxW = 44),
+                Player = z_playerDef(minW = 120,
+                                     filt = T),
+                
+                `FPts/Touch` = z_fptsPtchDef(proj = (isOffseason & input$homeseason == currentyr)),
+                `FPts/Opp` = z_fptsPoppDef(proj = (isOffseason & input$homeseason == currentyr)),
+                `YdPt%` = z_ydptpercDef(proj = (isOffseason & input$homeseason == currentyr)),
+                `TDPt%` = z_tdptpercDef(proj = (isOffseason & input$homeseason == currentyr)),
+                `FDPt%` = z_fdptpercDef(proj = (isOffseason & input$homeseason == currentyr))
               ),
-              columnGroups = list(colGroup(name = "QB", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
+              if (isOffseason & input$homeseason == currentyr) {
+                columnGroups = list(colGroup(name = "CBS Projections shown during offseason, highlighted in italics",
+                                             columns = c("TRUFFLE", "Pos", "Player", "FPts/Touch", "FPts/Opp", "YdPt%", "TDPt%", "FDPt%"),
+                                             align = 'left',
+                                             headerStyle = list(fontStyle = 'italic', fontWeight = 'normal')
+                )
+                ) }
     )
+  })
+  
+  output$homeconsistency <- renderReactable({
+    reactable(consistency[Scoring == input$homescoring & Season == input$homeseason & Avg > 5, .(TRUFFLE, Pos, Player, Avg, RelSD, `>10 %`, `>20 %`, `>30 %`)],
+              height = ifelse(isOffseason, 'auto', 420),
+              defaultSorted = "Avg",
+              defaultSortOrder = "desc",
+              filterable = F,
+              showPageInfo = FALSE,
+              defaultPageSize = 10,
+              paginationType = 'simple',
+              highlight = T,
+              #borderless = T,
+              compact = T,
+              resizable = F,
+              columns = list(
+                TRUFFLE = z_trfDef(maxW = 70),
+                Pos = z_posDef(maxW = 44),
+                Player = z_playerDef(minW = 130,
+                                     filt = T),
+                Avg = z_avgDef(maxW = 55),
+                RelSD = z_relsdDef,
+                `>10 %` = z_g10pDef,
+                `>20 %` = z_g20pDef,
+                `>30 %` = z_g30pDef
+              ),
+              if (isOffseason & input$homeseason == currentyr) {
+                columnGroups = list(colGroup(name = "Previous year statistics, projections not available for consistency metrics",
+                                             columns = c("TRUFFLE", "Pos", "Player", "Avg", "RelSD", ">10 %", ">20 %", ">30 %"),
+                                             align = 'left',
+                                             headerStyle = list(fontStyle = 'italic', fontWeight = 'normal')
+                )
+                ) }
+    )
+  })
+  
+  #home weekly top 5 qb
+  output$homeweeklytop5qb <- renderReactable({
+    if (isguest == F) {
+      reactable(na.omit(weeklytop5[Scoring == input$homescoring & Season == input$homeseason & Week == input$weeklytop5week & Pos == "QB"][1:30, .(TRUFFLE, Player, FPts)][order(-FPts)]),
+                defaultSortOrder = "desc",
+                filterable = F,
+                showPageInfo = FALSE,
+                defaultPageSize = 10,
+                paginationType = 'simple',
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                resizable = F,
+                columns = list(
+                  TRUFFLE = z_trfDef(filt = FALSE),
+                  Player = z_playerDef(minW = 125, filt = F, sort = F),
+                  FPts = z_fptsWeekDef(maxW = 40, borderL = F)
+                ),
+                columnGroups = list(colGroup(name = "QB", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
+      )
     } else if (isguest == T) {
       reactable(na.omit(weeklytop5[Scoring == input$homescoring & Season == input$homeseason & Week == input$weeklytop5week & Pos == "QB"][1:30, .(TRUFFLE, Pos, Player, FPts)][order(-FPts)]),
                 defaultSortOrder = "desc",
@@ -266,10 +580,10 @@ shinyServer(function(input, output, session) {
                 compact = T,
                 resizable = F,
                 columns = list(
-                  TRUFFLE = trfDef(filt = FALSE),
-                  Pos = posDef(filt = F),
-                  Player = playerDef(minW = 125, filt = F, sort = F),
-                  FPts = fptsWeekDef(maxW = 40, borderL = F)
+                  TRUFFLE = z_trfDef(filt = FALSE),
+                  Pos = z_posDef(filt = F),
+                  Player = z_playerDef(minW = 125, filt = F, sort = F),
+                  FPts = z_fptsWeekDef(maxW = 40, borderL = F)
                 ),
                 columnGroups = list(colGroup(name = "QB", columns = c("TRUFFLE", "Pos", "Player", "FPts"), align = 'left'))
       )
@@ -290,9 +604,9 @@ shinyServer(function(input, output, session) {
                 compact = T,
                 resizable = F,
                 columns = list(
-                  TRUFFLE = trfDef(filt = FALSE),
-                  Player = playerDef(minW = 125, filt = F, sort = F),
-                  FPts = fptsWeekDef(maxW = 40, borderL = F)
+                  TRUFFLE = z_trfDef(filt = FALSE),
+                  Player = z_playerDef(minW = 125, filt = F, sort = F),
+                  FPts = z_fptsWeekDef(maxW = 40, borderL = F)
                 ),
                 columnGroups = list(colGroup(name = "RB", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
       )
@@ -308,10 +622,10 @@ shinyServer(function(input, output, session) {
                 compact = T,
                 resizable = F,
                 columns = list(
-                  TRUFFLE = trfDef(filt = FALSE),
-                  Pos = posDef(filt = F),
-                  Player = playerDef(minW = 125, filt = F, sort = F),
-                  FPts = fptsWeekDef(maxW = 40, borderL = F)
+                  TRUFFLE = z_trfDef(filt = FALSE),
+                  Pos = z_posDef(filt = F),
+                  Player = z_playerDef(minW = 125, filt = F, sort = F),
+                  FPts = z_fptsWeekDef(maxW = 40, borderL = F)
                 ),
                 columnGroups = list(colGroup(name = "RB", columns = c("TRUFFLE", "Pos", "Player", "FPts"), align = 'left'))
       )
@@ -332,9 +646,9 @@ shinyServer(function(input, output, session) {
                 compact = T,
                 resizable = F,
                 columns = list(
-                  TRUFFLE = trfDef(filt = FALSE),
-                  Player = playerDef(minW = 125, filt = F, sort = F),
-                  FPts = fptsWeekDef(maxW = 40, borderL = F)
+                  TRUFFLE = z_trfDef(filt = FALSE),
+                  Player = z_playerDef(minW = 125, filt = F, sort = F),
+                  FPts = z_fptsWeekDef(maxW = 40, borderL = F)
                 ),
                 columnGroups = list(colGroup(name = "WR", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
       )
@@ -350,10 +664,10 @@ shinyServer(function(input, output, session) {
                 compact = T,
                 resizable = F,
                 columns = list(
-                  TRUFFLE = trfDef(filt = FALSE),
-                  Pos = posDef(filt = F),
-                  Player = playerDef(minW = 125, filt = F, sort = F),
-                  FPts = fptsWeekDef(maxW = 40, borderL = F)
+                  TRUFFLE = z_trfDef(filt = FALSE),
+                  Pos = z_posDef(filt = F),
+                  Player = z_playerDef(minW = 125, filt = F, sort = F),
+                  FPts = z_fptsWeekDef(maxW = 40, borderL = F)
                 ),
                 columnGroups = list(colGroup(name = "WR", columns = c("TRUFFLE", "Pos", "Player", "FPts"), align = 'left'))
       )
@@ -374,9 +688,9 @@ shinyServer(function(input, output, session) {
                 compact = T,
                 resizable = F,
                 columns = list(
-                  TRUFFLE = trfDef(filt = FALSE),
-                  Player = playerDef(minW = 125, filt = F, sort = F),
-                  FPts = fptsWeekDef(maxW = 40, borderL = F)
+                  TRUFFLE = z_trfDef(filt = FALSE),
+                  Player = z_playerDef(minW = 125, filt = F, sort = F),
+                  FPts = z_fptsWeekDef(maxW = 40, borderL = F)
                 ),
                 columnGroups = list(colGroup(name = "TE", columns = c("TRUFFLE", "Player", "FPts"), align = 'left'))
       )
@@ -392,10 +706,10 @@ shinyServer(function(input, output, session) {
                 compact = T,
                 resizable = F,
                 columns = list(
-                  TRUFFLE = trfDef(filt = FALSE),
-                  Pos = posDef(filt = F),
-                  Player = playerDef(minW = 125, filt = F, sort = F),
-                  FPts = fptsWeekDef(maxW = 40, borderL = F)
+                  TRUFFLE = z_trfDef(filt = FALSE),
+                  Pos = z_posDef(filt = F),
+                  Player = z_playerDef(minW = 125, filt = F, sort = F),
+                  FPts = z_fptsWeekDef(maxW = 40, borderL = F)
                 ),
                 columnGroups = list(colGroup(name = "TE", columns = c("TRUFFLE", "Pos", "Player", "FPts"), align = 'left'))
       )
@@ -423,7 +737,7 @@ shinyServer(function(input, output, session) {
                             )
                           }
         ),
-        Abbrev = trfDef(filt = FALSE, name = ""),
+        Abbrev = z_trfDef(filt = FALSE, name = ""),
         Logo = colDef(name = "",
                       #class = "border-right-grey",
                       align="center", 
@@ -468,48 +782,52 @@ shinyServer(function(input, output, session) {
   #team portal overview
   output$tpoverview <- renderReactable({
     if(input$tmportalyr == currentyr) {
-    tpoverview <- action_mod(df = tpoverview[Scoring == input$homescoring], team = globalteam)
-    reactable(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm], .(Action, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][order(match(Pos, positionorder), -Avg)],
-              defaultSortOrder = "desc",
-              pagination = FALSE,
-              highlight = T,
-              filterable = T,
-              compact = T,
-              columns = list(
-                Action = colDef(show = !isguest,
-                                header = with_tt("A", "Action link to add, drop, or trade player"),
-                                sortable = F,
-                                filterable = F,
-                                align="center",
-                                minWidth = 30,
-                                cell = function(value, index) {
-                                  action_url <- tpoverview$ActionLink[index]
-                                  img_src <- knitr::image_uri(value)
-                                  image <- img(src = img_src, height = "15px", alt = value)
-                                  tagList(
-                                    div(style = list(display = "inline-block"), image)
-                                  )
-                                  tags$a(href = action_url, target = "_blank", image)
-                                }),
-                Pos = posDef(foot = "Total"),
-                Player = playerDef(filt=T),
-                Age = ageDef,
-                Bye = byeDef,
-                NFL = nflDef,
-                Salary = salaryDefBar(foot = T),
-                Contract = contractDef(foot = T, title ="Yr"),
-                G = gDef(),
-                PosRk = posRkDef(filt = T),
-                ptslog = ptsLogDef(),
-                Avg = avgDef(),
-                FPts = fptsSeasDef()
-              ),
-              columnGroups = list(
-                colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
-                colGroup(name = "Fantasy", columns = c("G", "PosRk", "ptslog", "Avg", "FPts"), align = 'left')
-              ),
-              defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
-    )
+      tpoverview <- z_action_mod(df = tpoverview[Scoring == input$homescoring], team = globalteam)
+      reactable(tpoverview[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm], .(Action, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][order(match(Pos, positionorder), -Avg)],
+                defaultSortOrder = "desc",
+                pagination = FALSE,
+                highlight = T,
+                filterable = T,
+                compact = T,
+                columns = list(
+                  Action = colDef(show = !isguest,
+                                  header = z_with_tt("A", "Action link to add, drop, or trade player"),
+                                  sortable = F,
+                                  filterable = F,
+                                  align="center",
+                                  minWidth = 30,
+                                  cell = function(value, index) {
+                                    action_url <- tpoverview$ActionLink[index]
+                                    img_src <- knitr::image_uri(value)
+                                    image <- img(src = img_src, height = "15px", alt = value)
+                                    tagList(
+                                      div(style = list(display = "inline-block"), image)
+                                    )
+                                    tags$a(href = action_url, target = "_blank", image)
+                                  }),
+                  Pos = z_posDef(foot = "Total"),
+                  Player = z_playerDef(filt=T),
+                  Age = z_ageDef,
+                  Bye = z_byeDef,
+                  NFL = z_nflDef,
+                  Salary = z_salaryDefBar(foot = T),
+                  Contract = z_contractDef(foot = T, title ="Yr"),
+                  G = z_gDef(),
+                  PosRk = z_posRkDef(filt = T),
+                  ptslog = z_ptsLogDef(),
+                  Avg = z_avgDef(proj = isOffseason),
+                  FPts = z_fptsSeasDef(proj = isOffseason)
+                ),
+                columnGroups = list(
+                  if (isOffseason == T & input$tmportalyr == currentyr) {colGroup(name = "CBS Projections for Avg & FPts shown during offseason",
+                                                  columns = c("Action", "Pos", "Player", "Age", "NFL", "Bye"),
+                                                  align = 'left',
+                                                  headerStyle = list(fontStyle = 'italic', fontWeight = 'normal'))},
+                  colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
+                  colGroup(name = "Fantasy", columns = c("G", "PosRk", "ptslog", "Avg", "FPts"), align = 'left')
+                ),
+                defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
+      )
     }
     else if (input$tmportalyr < 2020) {
       reactable(wayoldrosterstp[Scoring == input$homescoring & Season == input$tmportalyr & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm], .(Pos, Player, NFL, G, PosRk, Avg, FPts)][order(match(Pos, positionorder), -Avg)],
@@ -519,13 +837,13 @@ shinyServer(function(input, output, session) {
                 filterable = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(),
-                  Player = playerDef(filt=T),
-                  NFL = nflDef,
-                  G = gDef(),
-                  PosRk = posRkDef(filt = T),
-                  Avg = avgDef(),
-                  FPts = fptsSeasDef()
+                  Pos = z_posDef(),
+                  Player = z_playerDef(filt=T),
+                  NFL = z_nflDef,
+                  G = z_gDef(),
+                  PosRk = z_posRkDef(filt = T),
+                  Avg = z_avgDef(),
+                  FPts = z_fptsSeasDef()
                 ),
                 columnGroups = list(
                   colGroup(name = "Fantasy", columns = c("G", "PosRk", "Avg", "FPts"), align = 'left')
@@ -540,16 +858,16 @@ shinyServer(function(input, output, session) {
                 filterable = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(foot = "Total"),
-                  Player = playerDef(filt=T),
-                  NFL = nflDef,
-                  Salary = salaryDefBar(foot = T),
-                  Contract = contractDef(foot = T, title ="Yr"),
-                  G = gDef(),
-                  PosRk = posRkDef(filt = T),
-                  ptslog = ptsLogDef(),
-                  Avg = avgDef(),
-                  FPts = fptsSeasDef()
+                  Pos = z_posDef(foot = "Total"),
+                  Player = z_playerDef(filt=T),
+                  NFL = z_nflDef,
+                  Salary = z_salaryDefBar(foot = T),
+                  Contract = z_contractDef(foot = T, title ="Yr"),
+                  G = z_gDef(),
+                  PosRk = z_posRkDef(filt = T),
+                  ptslog = z_ptsLogDef(),
+                  Avg = z_avgDef(),
+                  FPts = z_fptsSeasDef()
                 ),
                 columnGroups = list(
                   colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
@@ -567,56 +885,56 @@ shinyServer(function(input, output, session) {
   #team portal contracts
   output$tpcontracts <- renderReactable({
     if (input$tmportalyr == currentyr) {
-    futurecolDef <- function(maxW = 75, filt = T, foot = F, yr) {
-      colDef(header = with_tt(yr, "FA: Free Agent\nPurple: Rookie Extension Value\nBlue: Franchise Tag"),
-             maxWidth = maxW,
-             filterable = filt,
-             align = 'right',
-             defaultSortOrder = "desc",
-             style = function(value, index) {
-               df <- contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][, !c("TRUFFLE")][order(match(Pos, positionorder), -Salary, Player)]
-               pl <- as.numeric()
-               tag <- df$TagVal[index]
-               ext <- df$Extension[index]
-               col <- ifelse(as.character(value) == as.character("FT"), franchisetag,
-                             ifelse(as.character(value) == as.character(ext), rookieextension,
-                                    ifelse(as.character(value) == as.character("FA"), textred,
-                                           ifelse(as.character(value) == as.character(tag), franchisetag, tabletextcol))))
-               list(color = col)},
-             #cell = function(value) {
-             #class <- paste0("tag status-", value)
-             #htmltools::div(class = class, value)},
-             footer = function(values) if(foot == T) {paste0("$", sum(as.numeric(values), na.rm=T))}
+      z_futureColDef <- function(maxW = 75, filt = T, foot = F, yr) {
+        colDef(header = z_with_tt(yr, "FA: Free Agent\nPurple: Rookie Extension Value\nBlue: Franchise Tag"),
+               maxWidth = maxW,
+               filterable = filt,
+               align = 'right',
+               defaultSortOrder = "desc",
+               style = function(value, index) {
+                 df <- contracts[TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][, !c("TRUFFLE")][order(match(Pos, positionorder), -Salary, Player)]
+                 pl <- as.numeric()
+                 tag <- df$TagVal[index]
+                 ext <- df$Extension[index]
+                 col <- ifelse(as.character(value) == as.character("FT"), franchisetag,
+                               ifelse(as.character(value) == as.character(ext), rookieextension,
+                                      ifelse(as.character(value) == as.character("FA"), textred,
+                                             ifelse(as.character(value) == as.character(tag), franchisetag, tabletextcol))))
+                 list(color = col)},
+               #cell = function(value) {
+               #class <- paste0("tag status-", value)
+               #htmltools::div(class = class, value)},
+               footer = function(values) if(foot == T) {paste0("$", sum(as.numeric(values), na.rm=T))}
+        )
+      }
+      
+      reactable(contractsreact(),
+                selection = "multiple", onClick = "select",
+                defaultSortOrder = "desc",
+                pagination = FALSE,
+                filterable = T,
+                highlight = T,
+                compact = T,
+                columns = list(
+                  Extension = colDef(show = F),
+                  Pos = z_posDef(foot = "Total"),
+                  Player = z_playerDef(filt = T),
+                  Age = z_ageDef,
+                  NFL = z_nflDef,
+                  Salary = z_salaryDefBar(foot = T),
+                  Contract = z_contractDef(title ="Yr", foot = T),
+                  Y1 = z_futureColDef(yr = "'24", foot = T),
+                  Y2 = z_futureColDef(yr = "'25", foot = T),
+                  Y3 = z_futureColDef(yr = "'26", foot = T),
+                  Y4 = z_futureColDef(yr = "'27", foot = T),
+                  Y5 = z_futureColDef(yr = "'28", foot = T)
+                ),
+                columnGroups = list(
+                  colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
+                  colGroup(name = "Future Seasons", columns = c("Y1","Y2","Y3","Y4","Y5"), align = 'left')
+                ),
+                defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
       )
-    }
-    
-    reactable(contractsreact(),
-              selection = "multiple", onClick = "select",
-              defaultSortOrder = "desc",
-              pagination = FALSE,
-              filterable = T,
-              highlight = T,
-              compact = T,
-              columns = list(
-                Extension = colDef(show = F),
-                Pos = posDef(foot = "Total"),
-                Player = playerDef(filt = T),
-                Age = ageDef,
-                NFL = nflDef,
-                Salary = salaryDefBar(foot = T),
-                Contract = contractDef(title ="Yr", foot = T),
-                `'23` = futurecolDef(yr = "'23", foot = T),
-                `'24` = futurecolDef(yr = "'24", foot = T),
-                `'25` = futurecolDef(yr = "'25", foot = T),
-                `'26` = futurecolDef(yr = "'26", foot = T),
-                `'27` = futurecolDef(yr = "'27", foot = T)
-              ),
-              columnGroups = list(
-                colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
-                colGroup(name = "Future Seasons", columns = c("'23","'24","'25","'26","'27"), align = 'left')
-              ),
-              defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
-    )
     }
     else if (input$tmportalyr < 2020) {
       emptydf <- as.data.table("Sorry, no data available. Salaries & contracts only introduced in 2020.")
@@ -630,11 +948,11 @@ shinyServer(function(input, output, session) {
                 filterable = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(foot = "Total"),
-                  Player = playerDef(filt=T),
-                  NFL = nflDef,
-                  Salary = salaryDefBar(foot = T),
-                  Contract = contractDef(foot = T, title ="Yr")
+                  Pos = z_posDef(foot = "Total"),
+                  Player = z_playerDef(filt=T),
+                  NFL = z_nflDef,
+                  Salary = z_salaryDefBar(foot = T),
+                  Contract = z_contractDef(foot = T, title ="Yr")
                 ),
                 columnGroups = list(
                   colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left')
@@ -647,33 +965,39 @@ shinyServer(function(input, output, session) {
   #team portal boxscore
   #change to include not exclude columns
   output$tpboxscore <- renderReactable({
-    reactable(seasons[Scoring == input$homescoring & Player %in% oldrosters$Player[oldrosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm] & oldrosters$Season == input$tmportalyr] 
-                      & Season == input$tmportalyr][order(match(Pos, positionorder), -FPts)][, !c("Scoring", "Season","NFL", "PosRk", "FL")],
+    
+    if (isOffseason == T & input$tmportalyr == currentyr) { df <- proj[Player %in% oldrosters$Player[oldrosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm] & oldrosters$Season == input$tmportalyr] 
+                                                                       & Season == input$tmportalyr][order(match(Pos, positionorder), -FPts)][, .(Pos, Player, G, PaCmp, PaAtt, PaYd, PaTD, PaInt, RuAtt, RuYd, RuTD, RuFD, Tar, Rec, ReYd, ReTD, ReFD, Avg, FPts)]  } else {
+      df <- seasons[Scoring == input$homescoring & Player %in% oldrosters$Player[oldrosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm] & oldrosters$Season == input$tmportalyr] 
+              & Season == input$tmportalyr][order(match(Pos, positionorder), -FPts)][, .(Pos, Player, G, PaCmp, PaAtt, PaYd, PaTD, PaInt, RuAtt, RuYd, RuTD, RuFD, Tar, Rec, ReYd, ReTD, ReFD, Avg, FPts)]
+    }
+    
+    reactable(df,
               pagination = F,
               height = 'auto',
               filterable = T,
               highlight = T,
               compact = T,
               columns = list(
-                Pos = posDef(),
-                Player = playerDef(minW = 135, filt=T),
-                G = gDef(),
-                PaCmp = pacmpDef,
-                PaAtt = paattDef,
-                PaYd = paydDefSsn,
-                PaTD = patdDefSsn,
-                PaInt = paintDefSsn,
-                RuAtt = ruattDefSsn,
-                RuYd = ruydDefSsn,
-                RuTD = rutdDefSsn,
-                RuFD = rufdDefSsn,
-                Tar = tarDefSsn,
-                Rec = recDefSsn,
-                ReYd = reydDefSsn,
-                ReTD = retdDefSsn,
-                ReFD = refdDefSsn,
-                Avg = avgDef(),
-                FPts = fptsSeasDef()
+                Pos = z_posDef(),
+                Player = z_playerDef(minW = 135, filt=T),
+                G = z_gDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                PaCmp = z_pacmpDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                PaAtt = z_paattDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                PaYd = z_paydDef(proj = (isOffseason & input$tmportalyr == currentyr), szn = T),
+                PaTD = z_patdDef(proj = (isOffseason & input$tmportalyr == currentyr), szn = T),
+                PaInt = z_paintDef(proj = (isOffseason & input$tmportalyr == currentyr), szn = T),
+                RuAtt = z_ruattDef(borderL = T, proj = (isOffseason & input$tmportalyr == currentyr), szn = T),
+                RuYd = z_ruydDef(proj = (isOffseason & input$tmportalyr == currentyr), szn = T),
+                RuTD = z_rutdDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                RuFD = z_rufdDef(disp = (isOffseason & input$tmportalyr == currentyr)),
+                Tar = z_tarDef(borderL = T, proj = (isOffseason & input$tmportalyr == currentyr)),
+                Rec = z_recDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                ReYd = z_reydDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                ReTD = z_retdDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                ReFD = z_refdDef(disp = (isOffseason & input$tmportalyr == currentyr)),
+                Avg = z_avgDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                FPts = z_fptsSeasDef(proj = (isOffseason & input$tmportalyr == currentyr))
               ),
               columnGroups = list(
                 colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
@@ -686,40 +1010,49 @@ shinyServer(function(input, output, session) {
   
   #team portal advanced
   output$tpadvanced <- renderReactable({
+    
+    if (isOffseason == T & input$tmportalyr == currentyr) { df <- proj[Player %in% oldrosters$Player[oldrosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm] & oldrosters$Season == input$tmportalyr] 
+                                                                       & Season == input$tmportalyr][order(match(Pos, positionorder), -FPts)][, .(Pos, Player, FPts, Touch, Opp, `FPts/Touch`, `FPts/Opp`,YdPts,TDPts,FDPts,RuPts,RePts,`YdPt%`,`TDPt%`,`FDPt%`,`RuPt%`,`RePt%`)]  } else {
+    df <- advanced[Scoring == input$homescoring & Season == input$tmportalyr &
+                     Player %in% oldrosters$Player[oldrosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm] &
+                                                     oldrosters$Season == input$tmportalyr]][order(match(Pos, positionorder),-FPts)][, 
+                                                                                                                                     .(Pos, Player, FPts, Touch, Opp, `FPts/Touch`, `FPts/Opp`,YdPts,TDPts,FDPts,RuPts,RePts,`YdPt%`,`TDPt%`,`FDPt%`,`RuPt%`,`RePt%`)]
+    }
+    
     if (input$tmportalyr >= 2020) {
-    perccolwidth <- 60
-    othcolwidth <- 43
-    reactable(advanced[Scoring == input$homescoring & Season == input$tmportalyr & Player %in% oldrosters$Player[oldrosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm] & oldrosters$Season == input$tmportalyr]][order(match(Pos, positionorder),-FPts)][, -c("Scoring","TRUFFLE","Season")],
-              pagination = F,
-              height = 'auto',
-              filterable = F,
-              highlight = T,
-              compact = T,
-              columns = list(
-                Pos = posDef(),
-                Player = playerDef(minW = 120, filt = T),
-                FPts = fptsSeasDef(),
-                Touch = tchDef,
-                Opp = oppDef,
-                `FPts/Touch` = fptsPtchDef,
-                `FPts/Opp` = fptsPoppDef,
-                YdPts = ydptsDef,
-                TDPts = tdptsDef,
-                FDPts = fdptsDef,
-                RuPts = ruptsDef,
-                RePts = reptsDef,
-                `YdPt%` = ydptpercDef,
-                `TDPt%` = tdptpercDef,
-                `FDPt%` = fdptpercDef,
-                `RuPt%` = ruptpercDef,
-                `RePt%` = reptpercDef
-              ),
-              columnGroups = list(
-                colGroup(name = "Volume / Efficiency", columns = c("Touch","Opp","FPts/Touch","FPts/Opp"), align = 'left'),
-                colGroup(name = "Point Source Breakdown", columns = c("YdPts","TDPts","FDPts","YdPt%","TDPt%","FDPt%","RuPts",
-                                                                      "RePts","RuPt%","RePt%"), align = 'left')
-              )
-    )
+      z_perccolwidth <- 60
+      z_othcolwidth <- 43
+      reactable(df,
+                pagination = F,
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                compact = T,
+                columns = list(
+                  Pos = z_posDef(),
+                  Player = z_playerDef(minW = 120, filt = T),
+                  FPts = z_fptsSeasDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                  Touch = z_tchDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                  Opp = z_oppDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                  `FPts/Touch` = z_fptsPtchDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                  `FPts/Opp` = z_fptsPoppDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                  YdPts = z_ydptsDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                  TDPts = z_tdptsDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                  FDPts = z_fdptsDef(proj = (isOffseason & input$tmportalyr == currentyr), disp = !(isOffseason & input$tmportalyr == currentyr)),
+                  RuPts = z_ruptsDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                  RePts = z_reptsDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                  `YdPt%` = z_ydptpercDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                  `TDPt%` = z_tdptpercDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                  `FDPt%` = z_fdptpercDef(proj = (isOffseason & input$tmportalyr == currentyr), disp = !(isOffseason & input$tmportalyr == currentyr)),
+                  `RuPt%` = z_ruptpercDef(proj = (isOffseason & input$tmportalyr == currentyr)),
+                  `RePt%` = z_reptpercDef(proj = (isOffseason & input$tmportalyr == currentyr))
+                ),
+                columnGroups = list(
+                  colGroup(name = "Volume / Efficiency", columns = c("Touch","Opp","FPts/Touch","FPts/Opp"), align = 'left'),
+                  colGroup(name = "Point Source Breakdown", columns = c("YdPts","TDPts","FDPts","YdPt%","TDPt%","FDPt%","RuPts",
+                                                                        "RePts","RuPt%","RePt%"), align = 'left')
+                )
+      )
     }
     else {
       emptydf <- as.data.table("Sorry, no data available. Advanced statistics only introduced in 2020.")
@@ -731,34 +1064,34 @@ shinyServer(function(input, output, session) {
   #team portal consistency
   output$tpconsistency <- renderReactable({
     if (input$tmportalyr >= 2020) {
-    perccolwidth <- 60
-    reactable(consistency[Scoring == input$homescoring & Season == input$tmportalyr & Player %in% oldrosters$Player[oldrosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm] & oldrosters$Season == input$tmportalyr]][order(match(Pos, positionorder),-Avg)][, -c("Scoring","TRUFFLE","Season")],
-              pagination = F,
-              height = 'auto',
-              filterable = F,
-              highlight = T,
-              compact = T,
-              columns = list(
-                G = gDef(),
-                Pos = posDef(),
-                Player = playerDef(minW = 125, filt = T),
-                Avg = avgDef(),
-                RelSD = relsdDef,
-                AvgPosRk = avgposrkDef,
-                `Top5 %` = top5pDef,
-                `Top12 %` = top12pDef,
-                `Top24 %` = top24pDef,
-                `Top36 %` = top36pDef,
-                `NonStart %` = nonstartpDef,
-                `>10 %` = g10pDef,
-                `>20 %` = g20pDef,
-                `>30 %` = g30pDef
-              ),
-              columnGroups = list(
-                colGroup(name = "Fantasy Points", columns = c("Avg","RelSD",">10 %",">20 %",">30 %"), align = 'left'),
-                colGroup(name = "Weekly Position Rank", columns = c("AvgPosRk","Top5 %","Top12 %","Top24 %","Top36 %", "NonStart %"), align = 'left')
-              )
-    )
+      z_perccolwidth <- 60
+      reactable(consistency[Scoring == input$homescoring & Season == input$tmportalyr & Player %in% oldrosters$Player[oldrosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm] & oldrosters$Season == input$tmportalyr]][order(match(Pos, positionorder),-Avg)][, -c("Scoring","TRUFFLE","Season")],
+                pagination = F,
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                compact = T,
+                columns = list(
+                  G = z_gDef(),
+                  Pos = z_posDef(),
+                  Player = z_playerDef(minW = 125, filt = T),
+                  Avg = z_avgDef(),
+                  RelSD = z_relsdDef,
+                  AvgPosRk = z_avgposrkDef,
+                  `Top5 %` = z_top5pDef,
+                  `Top12 %` = z_top12pDef,
+                  `Top24 %` = z_top24pDef,
+                  `Top36 %` = z_top36pDef,
+                  `NonStart %` = z_nonstartpDef,
+                  `>10 %` = z_g10pDef,
+                  `>20 %` = z_g20pDef,
+                  `>30 %` = z_g30pDef
+                ),
+                columnGroups = list(
+                  colGroup(name = "Fantasy Points", columns = c("Avg","RelSD",">10 %",">20 %",">30 %"), align = 'left'),
+                  colGroup(name = "Weekly Position Rank", columns = c("AvgPosRk","Top5 %","Top12 %","Top24 %","Top36 %", "NonStart %"), align = 'left')
+                )
+      )
     } else {
       emptydf <- as.data.table("Sorry, no data available. Consistency statistics only introduced in 2020.")
       colnames(emptydf) <- c("Error")
@@ -769,39 +1102,39 @@ shinyServer(function(input, output, session) {
   #team portal extradash
   output$tpextradash <- renderReactable({
     if (input$tmportalyr >= 2022) {
-    reactable(extradashszn[Season == input$tmportalyr & Player %in% oldrosters$Player[oldrosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm] & oldrosters$Season == input$tmportalyr]][order(match(Pos, positionorder),-TotYd)][, !c("TRUFFLE", "Season")],
-              pagination = F,
-              height = 'auto',
-              filterable = F,
-              highlight = T,
-              compact = T,
-              defaultColDef = colDef(
-                minWidth = 55,
-                align = "right"
-              ),
-              columns = list(
-                Pos = posDef(),
-                Player = playerDef(filt = T),
-                G = gDef(),
-                `Cmp%` = colDef(header = with_tt("Cmp%", "Completion Percentage"), format = colFormat(percent = T), minWidth = 75),
-                Pa20 = colDef(header = with_tt("20+", "Passing Completions of 20+ Yd"), class = "border-left-grey"),
-                Pa40 = colDef(header = with_tt("40+", "Passing Completions of 40+ Yd")),
-                RuYPC = colDef(header = with_tt("YPC", "Rushing Yards per Carry"), class = "border-left-grey", minWidth = 60),
-                Ru20 = colDef(header = with_tt("20+", "Rushes of 20+ Yd")),
-                Tar = colDef(header = with_tt("Tar", "Targets"), class = "border-left-grey"),
-                `Tar%` = colDef(header = with_tt("Tar%", "Percentage of Team Targets"), minWidth = 70, format = colFormat(suffix = "%")),
-                ReYPC = colDef(header = with_tt("YPC", "Yards per Catch"), minWidth = 60),
-                Re20 = colDef(header = with_tt("20+", "Receptions of 20+ Yd")),
-                Re40 = colDef(header = with_tt("40+", "Receptions of 40+ Yd")),
-                `ReFD%` = colDef(header = with_tt("FD%", "Percentage of Receptions resulting in First Down"), minWidth = 65, format = colFormat(percent = T)),
-                TotYd = colDef(header = with_tt("TotYd", "Total Passing/Rushing/Receiving Yards"), minWidth = 70)
-              ),
-              columnGroups = list(
-                colGroup(name = "Passing", columns = c("Cmp%","Pa20","Pa40"), align = 'left'),
-                colGroup(name = "Rushing", columns = c("RuYPC", "Ru20"), align = 'left'),
-                colGroup(name = "Receiving", columns = c("Tar", "Tar%", "ReYPC", "Re20", "Re40", "ReFD%"), align = 'left')
-              )
-    )
+      reactable(extradashszn[Season == input$tmportalyr & Player %in% oldrosters$Player[oldrosters$TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm] & oldrosters$Season == input$tmportalyr]][order(match(Pos, positionorder),-TotYd)][, !c("TRUFFLE", "Season")],
+                pagination = F,
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                compact = T,
+                defaultColDef = colDef(
+                  minWidth = 55,
+                  align = "right"
+                ),
+                columns = list(
+                  Pos = z_posDef(),
+                  Player = z_playerDef(filt = T),
+                  G = z_gDef(),
+                  `Cmp%` = colDef(header = z_with_tt("Cmp%", "Completion Percentage"), format = colFormat(percent = T), minWidth = 75),
+                  Pa20 = colDef(header = z_with_tt("20+", "Passing Completions of 20+ Yd"), class = "border-left-grey"),
+                  Pa40 = colDef(header = z_with_tt("40+", "Passing Completions of 40+ Yd")),
+                  RuYPC = colDef(header = z_with_tt("YPC", "Rushing Yards per Carry"), class = "border-left-grey", minWidth = 60),
+                  Ru20 = colDef(header = z_with_tt("20+", "Rushes of 20+ Yd")),
+                  Tar = colDef(header = z_with_tt("Tar", "Targets"), class = "border-left-grey"),
+                  `Tar%` = colDef(header = z_with_tt("Tar%", "Percentage of Team Targets"), minWidth = 70, format = colFormat(suffix = "%")),
+                  ReYPC = colDef(header = z_with_tt("YPC", "Yards per Catch"), minWidth = 60),
+                  Re20 = colDef(header = z_with_tt("20+", "Receptions of 20+ Yd")),
+                  Re40 = colDef(header = z_with_tt("40+", "Receptions of 40+ Yd")),
+                  `ReFD%` = colDef(header = z_with_tt("FD%", "Percentage of Receptions resulting in First Down"), minWidth = 65, format = colFormat(percent = T)),
+                  TotYd = colDef(header = z_with_tt("TotYd", "Total Passing/Rushing/Receiving Yards"), minWidth = 70)
+                ),
+                columnGroups = list(
+                  colGroup(name = "Passing", columns = c("Cmp%","Pa20","Pa40"), align = 'left'),
+                  colGroup(name = "Rushing", columns = c("RuYPC", "Ru20"), align = 'left'),
+                  colGroup(name = "Receiving", columns = c("Tar", "Tar%", "ReYPC", "Re20", "Re40", "ReFD%"), align = 'left')
+                )
+      )
     } else {
       emptydf <- as.data.table("Sorry, no data available. Extradash statistics only introduced in 2022.")
       colnames(emptydf) <- c("Error")
@@ -812,30 +1145,30 @@ shinyServer(function(input, output, session) {
   #team portal xfpxtd
   output$tpxfpxtd <- renderReactable({
     if (input$tmportalyr >= 2022) {
-    reactable(espn[Season == input$tmportalyr & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-xFP)][, !c("TRUFFLE", "Season")],
-              pagination = F,
-              height = 'auto',
-              filterable = F,
-              highlight = T,
-              compact = T,
-              defaultColDef = colDef(
-                minWidth = 50,
-                align = "right"
-              ),
-              columns = list(
-                Pos = posDef(filt = T),
-                Player = playerDef(minW = 125, filt = T),
-                xFP = colDef(header = with_tt("xFP", "Expected ESPN Fantasy Points")),
-                ActualPts = colDef(header = with_tt("aFP", "Actual ESPN Fantasy Points")),
-                FPDiff = colDef(header = with_tt("Diff", "Difference between the player's total xFP and actual FP")),
-                xTD = colDef(header = with_tt("xTD", "Expected Touchdowns"), class = "border-left-grey"),
-                TD = colDef(header = with_tt("aTD", "Actual Touchdowns")),
-                TDDiff = colDef(header = with_tt("Diff", "Difference between the player's total xTD and actual TD")),
-                Looks = colDef(header = with_tt("Looks", "Carries + Targets")),
-                In5 = colDef(header = with_tt("In5", "Carries inside 5-yard line")),
-                EZ = colDef(header = with_tt("EZ", "End Zone Targets"))
-              )
-    )
+      reactable(espn[Season == input$tmportalyr & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-xFP)][, !c("TRUFFLE", "Season")],
+                pagination = F,
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                compact = T,
+                defaultColDef = colDef(
+                  minWidth = 50,
+                  align = "right"
+                ),
+                columns = list(
+                  Pos = z_posDef(filt = T),
+                  Player = z_playerDef(minW = 125, filt = T),
+                  xFP = colDef(header = z_with_tt("xFP", "Expected ESPN Fantasy Points")),
+                  ActualPts = colDef(header = z_with_tt("aFP", "Actual ESPN Fantasy Points")),
+                  FPDiff = colDef(header = z_with_tt("Diff", "Difference between the player's total xFP and actual FP")),
+                  xTD = colDef(header = z_with_tt("xTD", "Expected Touchdowns"), class = "border-left-grey"),
+                  TD = colDef(header = z_with_tt("aTD", "Actual Touchdowns")),
+                  TDDiff = colDef(header = z_with_tt("Diff", "Difference between the player's total xTD and actual TD")),
+                  Looks = colDef(header = z_with_tt("Looks", "Carries + Targets")),
+                  In5 = colDef(header = z_with_tt("In5", "Carries inside 5-yard line")),
+                  EZ = colDef(header = z_with_tt("EZ", "End Zone Targets"))
+                )
+      )
     } else {
       emptydf <- as.data.table("Sorry, no data available. ESPN expected statistics only introduced in 2022.")
       colnames(emptydf) <- c("Error")
@@ -847,24 +1180,24 @@ shinyServer(function(input, output, session) {
   #team portal snap share
   output$tpsnapshare <- renderReactable({
     if (input$tmportalyr >= 2022) {
-    reactable(snaps[Season == input$tmportalyr & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-Tot)][, !c("TRUFFLE", "Team", "Season")],
-              pagination = F,
-              height = 'auto',
-              filterable = F,
-              highlight = T,
-              compact = T,
-              defaultColDef = colDef(
-                minWidth = 48,
-                align = "center",
-                format = colFormat(percent = T)
-              ),
-              columns = list(
-                Pos = posDef(),
-                Player = playerDef(minW = 125, filt = T),
-                `18` = colDef(class = "border-right-grey"),
-                Tot = colDef(minWidth = 50, format = colFormat(percent = F))
-              )
-    )
+      reactable(snaps[Season == input$tmportalyr & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(match(Pos, positionorder),-Tot)][, !c("TRUFFLE", "Team", "Season")],
+                pagination = F,
+                height = 'auto',
+                filterable = F,
+                highlight = T,
+                compact = T,
+                defaultColDef = colDef(
+                  minWidth = 48,
+                  align = "center",
+                  format = colFormat(percent = T)
+                ),
+                columns = list(
+                  Pos = z_posDef(),
+                  Player = z_playerDef(minW = 125, filt = T),
+                  `18` = colDef(class = "border-right-grey"),
+                  Tot = colDef(minWidth = 50, format = colFormat(percent = F))
+                )
+      )
     } else {
       emptydf <- as.data.table("Sorry, no data available. Snap share statistics only introduced in 2022.")
       colnames(emptydf) <- c("Error")
@@ -875,41 +1208,41 @@ shinyServer(function(input, output, session) {
   #team portal fantasy logs
   output$tpfantasylogs <- renderReactable({
     if (input$tmportalyr >= 2020) {
-    reactable(fantasy[Scoring == input$homescoring & Season == input$tmportalyr & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(Week, -FPts)][, !c("Scoring","TRUFFLE", "Season", "NFL", "Avg","FL")],
-              paginationType = "jump", defaultPageSize = 10, showPageInfo = FALSE,
-              height = 'auto',
-              filterable = T,
-              highlight = T,
-              #borderless = T,
-              compact = T,
-              columns = list(
-                Week = weekDef,
-                Pos = posDef(),
-                Player = playerDef(minW = 150, filt = T),
-                Opp = opDef,
-                OpRk = oprkDef,
-                PaCmp = pacmpDef,
-                PaAtt = paattDef,
-                PaYd = paydDefWk,
-                PaTD = patdDefWk,
-                PaInt = paintDefWk,
-                RuAtt = ruattDefWk,
-                RuYd = ruydDefWk,
-                RuTD = rutdDefWk,
-                RuFD = rufdDefWk,
-                Tar = tarDefWk,
-                Rec = recDefWk,
-                ReYd = reydDefWk,
-                ReTD = retdDefWk,
-                ReFD = refdDefWk,
-                FPts = fptsWeekDef()
-              ),
-              columnGroups = list(
-                colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
-                colGroup(name = "Rushing", columns = c("RuAtt", "RuYd", "RuTD", "RuFD"), align = 'left'),
-                colGroup(name = "Receiving", columns = c("Tar", "Rec", "ReYd", "ReTD", "ReFD"), align = 'left')
-              )
-    )
+      reactable(fantasy[Scoring == input$homescoring & Season == input$tmportalyr & TRUFFLE == teams$Abbrev[teams$FullName == input$tmportaltm]][order(Week, -FPts)][, !c("Scoring","TRUFFLE", "Season", "NFL", "Avg","FL")],
+                paginationType = "jump", defaultPageSize = 10, showPageInfo = FALSE,
+                height = 'auto',
+                filterable = T,
+                highlight = T,
+                #borderless = T,
+                compact = T,
+                columns = list(
+                  Week = z_weekDef,
+                  Pos = z_posDef(),
+                  Player = z_playerDef(minW = 150, filt = T),
+                  Opp = z_opDef,
+                  OpRk = z_oprkDef,
+                  PaCmp = z_pacmpDef(),
+                  PaAtt = z_paattDef(),
+                  PaYd = z_paydDef(wk = T),
+                  PaTD = z_patdDef(wk = T),
+                  PaInt = z_paintDef(wk = T),
+                  RuAtt = z_ruattDef(wk = T),
+                  RuYd = z_ruydDef(wk = T),
+                  RuTD = z_rutdDefWk,
+                  RuFD = z_rufdDefWk,
+                  Tar = z_tarDefWk,
+                  Rec = z_recDefWk,
+                  ReYd = z_reydDefWk,
+                  ReTD = z_retdDefWk,
+                  ReFD = z_refdDefWk,
+                  FPts = z_fptsWeekDef()
+                ),
+                columnGroups = list(
+                  colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
+                  colGroup(name = "Rushing", columns = c("RuAtt", "RuYd", "RuTD", "RuFD"), align = 'left'),
+                  colGroup(name = "Receiving", columns = c("Tar", "Rec", "ReYd", "ReTD", "ReFD"), align = 'left')
+                )
+      )
     } else {
       emptydf <- as.data.table("Sorry, no data available. Weekly fantasy logs only introduced in 2020.")
       colnames(emptydf) <- c("Error")
@@ -922,10 +1255,10 @@ shinyServer(function(input, output, session) {
   output$ppbios <- renderReactable({
     if (isguest == F) {
       
-      ppbios <- action_mod(df = ppbios, team = globalteam)
+      ppbios <- z_action_mod(df = ppbios, team = globalteam)
       selectedplayers <- ppbios[Scoring == input$homescoring & Player %in% input$player][order(-Salary)]
       
-      reactable(selectedplayers[, .(Action, TRUFFLE, Pos, Player, NFL, AgePH, DynRk, DynPosRk, Salary, Contract, ptslogs)],
+      reactable(selectedplayers[, .(Action, TRUFFLE, Pos, Player, NFL, Age, DynRk, DynPosRk, Salary, Contract, ptslogs)],
                 defaultSorted = c("Salary"),
                 pagination = F,
                 height = 'auto',
@@ -934,7 +1267,7 @@ shinyServer(function(input, output, session) {
                 compact = T,
                 columns = list(
                   Action = colDef(show = !isguest,
-                                  header = with_tt("A", "Action link to add, drop, or trade player"),
+                                  header = z_with_tt("A", "Action link to add, drop, or trade player"),
                                   sortable = F,
                                   filterable = F,
                                   align="center",
@@ -948,35 +1281,35 @@ shinyServer(function(input, output, session) {
                                     )
                                     tags$a(href = action_url, target = "_blank", image)
                                   }),
-                  TRUFFLE = trfDef(filt = FALSE),
-                  Pos = posDef(filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  TRUFFLE = z_trfDef(filt = FALSE),
+                  Pos = z_posDef(filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   NFL = colDef(align = 'left'),
-                  AgePH = colDef(name = "Age"),
-                  DynRk = colDef(header = with_tt("DynRk", "Fantasy Pros Overall Dynasty Rank"), align = 'left'),
-                  DynPosRk = colDef(header = with_tt("DynRk", "Fantasy Pros Positional Dynasty Rank"), align = 'left'),
-                  Salary = salaryDefBar(),
-                  Contract = contractDef(filt = FALSE, minW = 70),
-                  ptslogs = ptsLogDef(maxW = 100)
+                  Age = colDef(name = "Age"),
+                  DynRk = colDef(header = z_with_tt("DynRk", "Fantasy Pros Overall Dynasty Rank"), align = 'left'),
+                  DynPosRk = colDef(header = z_with_tt("DynRk", "Fantasy Pros Positional Dynasty Rank"), align = 'left'),
+                  Salary = z_salaryDefBar(),
+                  Contract = z_contractDef(filt = FALSE, minW = 70),
+                  ptslogs = z_ptsLogDef(maxW = 100)
                 )
       )
     } else { 
       selectedplayers <- ppbios[Scoring == input$homescoring & Player %in% input$player][order(Player)]
       
-      reactable(selectedplayers[, .(Pos, Player, NFL, AgePH, DynRk, DynPosRk, ptslogs)],
+      reactable(selectedplayers[, .(Pos, Player, NFL, Age, DynRk, DynPosRk, ptslogs)],
                 pagination = F,
                 height = 'auto',
                 filterable = F,
                 highlight = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   NFL = colDef(align = 'left'),
-                  AgePH = colDef(name = "Age"),
-                  DynRk = colDef(header = with_tt("DynRk", "Fantasy Pros Overall Dynasty Rank"), align = 'left'),
-                  DynPosRk = colDef(header = with_tt("DynRk", "Fantasy Pros Positional Dynasty Rank"), align = 'left'),
-                  ptslogs = ptsLogDef(maxW = 100)
+                  Age = colDef(name = "Age"),
+                  DynRk = colDef(header = z_with_tt("DynRk", "Fantasy Pros Overall Dynasty Rank"), align = 'left'),
+                  DynPosRk = colDef(header = z_with_tt("DynRk", "Fantasy Pros Positional Dynasty Rank"), align = 'left'),
+                  ptslogs = z_ptsLogDef(maxW = 100)
                 )
       )
       
@@ -996,38 +1329,38 @@ shinyServer(function(input, output, session) {
               compact = T,
               columns = list(
                 #Season = colDef(aggregate = "unique"),
-                Player = playerDef(minW=120),
-                G = gDef(),
-                PaYd = paydDef(borderL = T),
-                PaTD = patdDef(),
-                PaInt = paintDef(),
-                RuYd = ruydDef(borderL = T),
-                RuTD = rutdDef(),
-                RuFD = rufdDef(),
-                ReYd = reydDef(borderL = T),
-                ReTD = retdDef(),
-                ReFD = refdDef(),
-                Avg = avgDef(),
-                FPts = fptsDef()
+                Player = z_playerDef(minW=120),
+                G = z_gDef(),
+                PaYd = z_paydDef(borderL = T),
+                PaTD = z_patdDef(),
+                PaInt = z_paintDef(),
+                RuYd = z_ruydDef(borderL = T),
+                RuTD = z_rutdDef(),
+                RuFD = z_rufdDef(),
+                ReYd = z_reydDef(borderL = T),
+                ReTD = z_retdDef(),
+                ReFD = z_refdDef(),
+                Avg = z_avgDef(),
+                FPts = z_fptsDef()
               ),
               details = function(index) {
                 poi <- df$Player[index]
                 reactable(pptrufflecareerteam[Player == poi][, -c("Pos", "Player")],
                           columns = list(
-                            TRUFFLE = trfDef(filt=F),
+                            TRUFFLE = z_trfDef(filt=F),
                             Seasons = colDef(minWidth = 90),
-                            G = gDef(),
-                            PaYd = paydDef(borderL = T),
-                            PaTD = patdDef(),
-                            PaInt = paintDef(),
-                            RuYd = ruydDef(borderL = T),
-                            RuTD = rutdDef(),
-                            RuFD = rufdDef(),
-                            ReYd = reydDef(borderL = T),
-                            ReTD = retdDef(),
-                            ReFD = refdDef(),
-                            Avg = avgDef(),
-                            FPts = fptsDef()
+                            G = z_gDef(),
+                            PaYd = z_paydDef(borderL = T),
+                            PaTD = z_patdDef(),
+                            PaInt = z_paintDef(),
+                            RuYd = z_ruydDef(borderL = T),
+                            RuTD = z_rutdDef(),
+                            RuFD = z_rufdDef(),
+                            ReYd = z_reydDef(borderL = T),
+                            ReTD = z_retdDef(),
+                            ReFD = z_refdDef(),
+                            Avg = z_avgDef(),
+                            FPts = z_fptsDef()
                           ))
               }
     )
@@ -1043,6 +1376,12 @@ shinyServer(function(input, output, session) {
                      ),
                      by = .(Player)][order(-Salary)]
     
+    df <- rbind(df, ids[Player %in% input$player,
+                        .(TRUFFLE = "FA",
+                          Salary = 0,
+                          Contract = 0),
+                        by = .(Player)])
+    
     reactable(df,
               pagination = F,
               height = 'auto',
@@ -1051,10 +1390,10 @@ shinyServer(function(input, output, session) {
               #borderless = T,
               compact = T,
               columns = list(
-                Player = playerDef(minW = 125),
-                TRUFFLE = trfDef(filt = FALSE),
-                Salary = salaryDefNobar(title = "$"),
-                Contract = contractDef(filt = F, title ="Yr")
+                Player = z_playerDef(minW = 125),
+                TRUFFLE = z_trfDef(filt = FALSE),
+                Salary = z_salaryDefNobar(title = "$"),
+                Contract = z_contractDef(filt = F, title ="Yr")
               ),
               details = function(index) {
                 poi <- df$Player[index]
@@ -1065,8 +1404,8 @@ shinyServer(function(input, output, session) {
                                             maxWidth = 80,
                                             align = 'center',
                                             footer = "Career:"),
-                            TRUFFLE = trfDef(filt = F),
-                            Salary = salaryDefNobar(foot = T, minW = 80),
+                            TRUFFLE = z_trfDef(filt = F),
+                            Salary = z_salaryDefNobar(foot = T, minW = 80),
                             Contract = colDef(name="Yr",
                                               maxWidth = 45,
                                               align = 'center',
@@ -1086,12 +1425,14 @@ shinyServer(function(input, output, session) {
   #player portal seasons
   output$ppseasons <- renderReactable({
     if(input$ppstatcenterseason == "All") {
-      df <- seasons[Season >= 2020]
-    } else {
-      df <- seasons[Season == as.numeric(input$ppstatcenterseason)]
+      df <- seasons[Season >= 2020 & Scoring == input$homescoring & Player %in% input$player][order(-Season, -FPts)][, .(Season,Player,G,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,RuYd,RuTD,RuFD,Tar,Rec,ReYd,ReTD,ReFD,Avg,FPts)]
+    } else if (input$ppstatcenterseason == "Proj") 
+      df <- proj[Player %in% input$player][order(-Season, -FPts)][, .(Season,Player,G,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,RuYd,RuTD,RuFD,Tar,Rec,ReYd,ReTD,ReFD,Avg,FPts)]
+    else {
+      df <- seasons[Season == as.numeric(input$ppstatcenterseason) & Scoring == input$homescoring & Player %in% input$player][order(-Season, -FPts)][, .(Season,Player,G,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,RuYd,RuTD,RuFD,Tar,Rec,ReYd,ReTD,ReFD,Avg,FPts)]
     }
     
-    reactable(df[Scoring == input$homescoring & Player %in% input$player][order(-Season, -FPts)][, !c("Scoring","NFL", "Pos","FL", "PosRk")],
+    reactable(df,
               defaultSorted = c("Season", "FPts"),
               pagination = F,
               height = 'auto',
@@ -1100,25 +1441,25 @@ shinyServer(function(input, output, session) {
               #borderless = T,
               #compact = T,
               columns = list(
-                Season = seasonDef(filt = F),
-                Player = playerDef(minW = 135),
-                G = gDef(),
-                PaCmp = pacmpDef,
-                PaAtt = paattDef,
-                PaYd = paydDefSsn,
-                PaTD = patdDefSsn,
-                PaInt = paintDefSsn,
-                RuAtt = ruattDefSsn,
-                RuYd = ruydDefSsn,
-                RuTD = rutdDefSsn,
-                RuFD = rufdDefSsn,
-                Tar = tarDefSsn,
-                Rec = recDefSsn,
-                ReYd = reydDefSsn,
-                ReTD = retdDefSsn,
-                ReFD = refdDefSsn,
-                Avg = avgDef(),
-                FPts = fptsSeasDef()
+                Season = z_seasonDef(filt = F),
+                Player = z_playerDef(minW = 135),
+                G = z_gDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                PaCmp = z_pacmpDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                PaAtt = z_paattDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                PaYd = z_paydDef(proj = (isOffseason & input$ppstatcenterseason == "Proj"), szn = T),
+                PaTD = z_patdDef(proj = (isOffseason & input$ppstatcenterseason == "Proj"), szn = T),
+                PaInt = z_paintDef(proj = (isOffseason & input$ppstatcenterseason == "Proj"), szn = T),
+                RuAtt = z_ruattDef(borderL = T, proj = (isOffseason & input$ppstatcenterseason == "Proj"), szn = T),
+                RuYd = z_ruydDef(proj = (isOffseason & input$ppstatcenterseason == "Proj"), szn = T),
+                RuTD = z_rutdDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                RuFD = z_rufdDef(disp = !(isOffseason & input$ppstatcenterseason == "Proj")),
+                Tar = z_tarDef(borderL = T, proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                Rec = z_recDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                ReYd = z_reydDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                ReTD = z_retdDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                ReFD = z_refdDef(disp = !(isOffseason & input$ppstatcenterseason == "Proj")),
+                Avg = z_avgDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                FPts = z_fptsSeasDef(proj = (isOffseason & input$ppstatcenterseason == "Proj"))
               ),
               columnGroups = list(
                 colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
@@ -1131,37 +1472,37 @@ shinyServer(function(input, output, session) {
   #player portal advanced
   output$ppadvanced <- renderReactable({
     if(input$ppstatcenterseason == "All") {
-      df <- advanced[Season >= 2020]
+      df <- advanced[Season >= 2020 & Scoring == input$homescoring & Player %in% input$player][, .(Season,Player,FPts,Touch,Opp,`FPts/Touch`,`FPts/Opp`,YdPts,TDPts,FDPts,RuPts,RePts,`YdPt%`,`TDPt%`,`FDPt%`,`RuPt%`,`RePt%`)][order(-FPts)]
+    } else if (input$ppstatcenterseason == "Proj") {
+      df <- proj[Player %in% input$player][, .(Season,Player,FPts,Touch,Opp,`FPts/Touch`,`FPts/Opp`,YdPts,TDPts,FDPts,RuPts,RePts,`YdPt%`,`TDPt%`,`FDPt%`,`RuPt%`,`RePt%`)][order(-FPts)]
     } else {
-      df <- advanced[Season == as.numeric(input$ppstatcenterseason)]
+      df <- advanced[Season == as.numeric(input$ppstatcenterseason) & Scoring == input$homescoring & Player %in% input$player][, .(Season,Player,FPts,Touch,Opp,`FPts/Touch`,`FPts/Opp`,YdPts,TDPts,FDPts,RuPts,RePts,`YdPt%`,`TDPt%`,`FDPt%`,`RuPt%`,`RePt%`)][order(-FPts)]
     }
     
-    reactable(df[Scoring == input$homescoring & Player %in% input$player][, -c("Scoring","TRUFFLE","Pos")][order(-FPts)],
+    reactable(df,
               defaultSorted = c("FPts"),
               pagination = F,
               height = 'auto',
               filterable = F,
               highlight = T,
-              #borderless = T,
-              #compact = T,
               columns = list(
-                Season = seasonDef(filt = F),
-                Player = playerDef(minW = 120),
-                FPts = fptsSeasDef(),
-                Touch = tchDef,
-                Opp = oppDef,
-                `FPts/Touch` = fptsPtchDef,
-                `FPts/Opp` = fptsPoppDef,
-                YdPts = ydptsDef,
-                TDPts = tdptsDef,
-                FDPts = fdptsDef,
-                RuPts = ruptsDef,
-                RePts = reptsDef,
-                `YdPt%` = ydptpercDef,
-                `TDPt%` = tdptpercDef,
-                `FDPt%` = fdptpercDef,
-                `RuPt%` = ruptpercDef,
-                `RePt%` = reptpercDef
+                Season = z_seasonDef(filt = F),
+                Player = z_playerDef(minW = 120),
+                FPts = z_fptsSeasDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                Touch = z_tchDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                Opp = z_oppDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                `FPts/Touch` = z_fptsPtchDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                `FPts/Opp` = z_fptsPoppDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                YdPts = z_ydptsDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                TDPts = z_tdptsDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                FDPts = z_fdptsDef(proj = (isOffseason & input$ppstatcenterseason == "Proj"), disp = !(isOffseason & input$ppstatcenterseason == "Proj")),
+                RuPts = z_ruptsDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                RePts = z_reptsDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                `YdPt%` = z_ydptpercDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                `TDPt%` = z_tdptpercDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                `FDPt%` = z_fdptpercDef(proj = (isOffseason & input$ppstatcenterseason == "Proj"), disp = !(isOffseason & input$ppstatcenterseason == "Proj")),
+                `RuPt%` = z_ruptpercDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                `RePt%` = z_reptpercDef(proj = (isOffseason & input$ppstatcenterseason == "Proj"))
               ),
               columnGroups = list(
                 colGroup(name = "Volume / Efficiency", columns = c("Touch","Opp","FPts/Touch","FPts/Opp"), align = 'left'),
@@ -1187,20 +1528,20 @@ shinyServer(function(input, output, session) {
               #borderless = T,
               #compact = T,
               columns = list(
-                Season = seasonDef(filt = F),
-                Player = playerDef(minW = 125),
-                G = gDef(),
-                Avg = avgDef(),
-                RelSD = relsdDef,
-                AvgPosRk = avgposrkDef,
-                `Top5 %` = top5pDef,
-                `Top12 %` = top12pDef,
-                `Top24 %` = top24pDef,
-                `Top36 %` = top36pDef,
-                `NonStart %` = nonstartpDef,
-                `>10 %` = g10pDef,
-                `>20 %` = g20pDef,
-                `>30 %` = g30pDef
+                Season = z_seasonDef(filt = F),
+                Player = z_playerDef(minW = 125),
+                G = z_gDef(),
+                Avg = z_avgDef(),
+                RelSD = z_relsdDef,
+                AvgPosRk = z_avgposrkDef,
+                `Top5 %` = z_top5pDef,
+                `Top12 %` = z_top12pDef,
+                `Top24 %` = z_top24pDef,
+                `Top36 %` = z_top36pDef,
+                `NonStart %` = z_nonstartpDef,
+                `>10 %` = z_g10pDef,
+                `>20 %` = z_g20pDef,
+                `>30 %` = z_g30pDef
               ),
               columnGroups = list(
                 colGroup(name = "Fantasy Points", columns = c("Avg","RelSD",">10 %",">20 %",">30 %"), align = 'left'),
@@ -1223,23 +1564,23 @@ shinyServer(function(input, output, session) {
                 align = "right"
               ),
               columns = list(
-                Season = seasonDef(),
-                TRUFFLE = trfDef(),
-                Pos = posDef(),
-                Player = playerDef(filt = F),
-                G = gDef(),
-                `Cmp%` = colDef(header = with_tt("Cmp%", "Completion Percentage"), format = colFormat(percent = T), minWidth = 75),
-                Pa20 = colDef(header = with_tt("20+", "Passing Completions of 20+ Yd"), class = "border-left-grey"),
-                Pa40 = colDef(header = with_tt("40+", "Passing Completions of 40+ Yd")),
-                RuYPC = colDef(header = with_tt("YPC", "Rushing Yards per Carry"), class = "border-left-grey", minWidth = 60),
-                Ru20 = colDef(header = with_tt("20+", "Rushes of 20+ Yd")),
-                Tar = colDef(header = with_tt("Tar", "Targets"), class = "border-left-grey"),
-                `Tar%` = colDef(header = with_tt("Tar%", "Percentage of Team Targets"), minWidth = 70, format = colFormat(suffix = "%")),
-                ReYPC = colDef(header = with_tt("YPC", "Yards per Catch"), minWidth = 60),
-                Re20 = colDef(header = with_tt("20+", "Receptions of 20+ Yd")),
-                Re40 = colDef(header = with_tt("40+", "Receptions of 40+ Yd")),
-                `ReFD%` = colDef(header = with_tt("FD%", "Percentage of Receptions resulting in First Down"), minWidth = 65, format = colFormat(percent = T)),
-                TotYd = colDef(header = with_tt("TotYd", "Total Passing/Rushing/Receiving Yards"), minWidth = 70)
+                Season = z_seasonDef(),
+                TRUFFLE = z_trfDef(),
+                Pos = z_posDef(),
+                Player = z_playerDef(filt = F),
+                G = z_gDef(),
+                `Cmp%` = colDef(header = z_with_tt("Cmp%", "Completion Percentage"), format = colFormat(percent = T), minWidth = 75),
+                Pa20 = colDef(header = z_with_tt("20+", "Passing Completions of 20+ Yd"), class = "border-left-grey"),
+                Pa40 = colDef(header = z_with_tt("40+", "Passing Completions of 40+ Yd")),
+                RuYPC = colDef(header = z_with_tt("YPC", "Rushing Yards per Carry"), class = "border-left-grey", minWidth = 60),
+                Ru20 = colDef(header = z_with_tt("20+", "Rushes of 20+ Yd")),
+                Tar = colDef(header = z_with_tt("Tar", "Targets"), class = "border-left-grey"),
+                `Tar%` = colDef(header = z_with_tt("Tar%", "Percentage of Team Targets"), minWidth = 70, format = colFormat(suffix = "%")),
+                ReYPC = colDef(header = z_with_tt("YPC", "Yards per Catch"), minWidth = 60),
+                Re20 = colDef(header = z_with_tt("20+", "Receptions of 20+ Yd")),
+                Re40 = colDef(header = z_with_tt("40+", "Receptions of 40+ Yd")),
+                `ReFD%` = colDef(header = z_with_tt("FD%", "Percentage of Receptions resulting in First Down"), minWidth = 65, format = colFormat(percent = T)),
+                TotYd = colDef(header = z_with_tt("TotYd", "Total Passing/Rushing/Receiving Yards"), minWidth = 70)
               ),
               columnGroups = list(
                 colGroup(name = "Passing", columns = c("Cmp%","Pa20","Pa40"), align = 'left'),
@@ -1269,17 +1610,17 @@ shinyServer(function(input, output, session) {
                 align = "right"
               ),
               columns = list(
-                Season = seasonDef(),
-                Player = playerDef(minW = 125),
-                xFP = colDef(header = with_tt("xFP", "Expected ESPN Fantasy Points")),
-                ActualPts = colDef(header = with_tt("aFP", "Actual ESPN Fantasy Points")),
-                FPDiff = colDef(header = with_tt("Diff", "Difference between the player's total xFP and actual FP")),
-                xTD = colDef(header = with_tt("xTD", "Expected Touchdowns"), class = "border-left-grey"),
-                TD = colDef(header = with_tt("aTD", "Actual Touchdowns")),
-                TDDiff = colDef(header = with_tt("Diff", "Difference between the player's total xTD and actual TD")),
-                Looks = colDef(header = with_tt("Looks", "Carries + Targets")),
-                In5 = colDef(header = with_tt("In5", "Carries inside 5-yard line")),
-                EZ = colDef(header = with_tt("EZ", "End Zone Targets"))
+                Season = z_seasonDef(),
+                Player = z_playerDef(minW = 125),
+                xFP = colDef(header = z_with_tt("xFP", "Expected ESPN Fantasy Points")),
+                ActualPts = colDef(header = z_with_tt("aFP", "Actual ESPN Fantasy Points")),
+                FPDiff = colDef(header = z_with_tt("Diff", "Difference between the player's total xFP and actual FP")),
+                xTD = colDef(header = z_with_tt("xTD", "Expected Touchdowns"), class = "border-left-grey"),
+                TD = colDef(header = z_with_tt("aTD", "Actual Touchdowns")),
+                TDDiff = colDef(header = z_with_tt("Diff", "Difference between the player's total xTD and actual TD")),
+                Looks = colDef(header = z_with_tt("Looks", "Carries + Targets")),
+                In5 = colDef(header = z_with_tt("In5", "Carries inside 5-yard line")),
+                EZ = colDef(header = z_with_tt("EZ", "End Zone Targets"))
               )
     )
   })
@@ -1306,8 +1647,8 @@ shinyServer(function(input, output, session) {
                 format = colFormat(percent = T)
               ),
               columns = list(
-                Season = seasonDef(),
-                Player = playerDef(minW = 120),
+                Season = z_seasonDef(),
+                Player = z_playerDef(minW = 120),
                 `18` = colDef(class = "border-right-grey"),
                 Tot = colDef(minWidth = 50, format = colFormat(percent = F))
               )
@@ -1412,12 +1753,12 @@ shinyServer(function(input, output, session) {
   #player portal weekly logs
   output$ppgamelogweekly <- renderReactable({
     if(input$ppstatcenterseason == "All") {
-      df <- weekly
+      df <- weekly_no_teams
     } else {
-      df <- weekly[Season == as.numeric(input$ppgamelogsseason)]
+      df <- weekly_no_teams[Season == as.numeric(input$ppgamelogsseason)]
     }
     
-    reactable(df[Scoring == input$homescoring & Player %in% input$player][order(Season, Week, -FPts)][, !c("Scoring","TRUFFLE", "PaCmp", "PaAtt", "NFL", "Avg", "FL", "PosRk")],
+    reactable(df[Scoring == input$homescoring & Player %in% input$player][order(Season, Week, -FPts)][, !c("Scoring", "PaCmp", "PaAtt", "NFL", "Avg", "FL", "PosRk")],
               pagination = F,
               height = 'auto',
               filterable = F,
@@ -1425,25 +1766,25 @@ shinyServer(function(input, output, session) {
               #borderless = T,
               compact = T,
               columns = list(
-                Season = seasonDef(filt = F),
-                Week = weekDef,
-                Pos = posDef(filt = F),
-                Player = playerDef(minW = 135, filt = F),
-                Opp = opDef,
-                OpRk = oprkDef,
-                PaYd = paydDefWk,
-                PaTD = patdDefWk,
-                PaInt = paintDefWk,
-                RuAtt = ruattDefWk,
-                RuYd = ruydDefWk,
-                RuTD = rutdDefWk,
-                RuFD = rufdDefWk,
-                Tar = tarDefWk,
-                Rec = recDefWk,
-                ReYd = reydDefWk,
-                ReTD = retdDefWk,
-                ReFD = refdDefWk,
-                FPts = fptsWeekDef()
+                Season = z_seasonDef(filt = F),
+                Week = z_weekDef,
+                Pos = z_posDef(filt = F),
+                Player = z_playerDef(minW = 135, filt = F),
+                Opp = z_opDef,
+                OpRk = z_oprkDef,
+                PaYd = z_paydDef(wk = T),
+                PaTD = z_patdDef(wk = T),
+                PaInt = z_paintDef(wk = T),
+                RuAtt = z_ruattDef(wk = T),
+                RuYd = z_ruydDef(wk = T),
+                RuTD = z_rutdDefWk,
+                RuFD = z_rufdDefWk,
+                Tar = z_tarDefWk,
+                Rec = z_recDefWk,
+                ReYd = z_reydDefWk,
+                ReTD = z_retdDefWk,
+                ReFD = z_refdDefWk,
+                FPts = z_fptsWeekDef()
               ),
               columnGroups = list(
                 colGroup(name = "Passing", columns = c("PaYd", "PaTD", "PaInt"), align = 'left'),
@@ -1468,24 +1809,24 @@ shinyServer(function(input, output, session) {
               #borderless = T,
               compact = T,
               columns = list(
-                Season = seasonDef(),
-                Week = weekDef,
-                TRUFFLE = trfDef(filt = F),
-                Pos = posDef(filt = F),
-                Player = playerDef(minW = 150, filt = F),
-                PaYd = paydDefWk,
-                PaTD = patdDefWk,
-                PaInt = paintDefWk,
-                RuAtt = ruattDefWk,
-                RuYd = ruydDefWk,
-                RuTD = rutdDefWk,
-                RuFD = rufdDefWk,
-                Rec = recDefWk,
-                ReYd = reydDefWk,
-                ReTD = retdDefWk,
-                ReFD = refdDefWk,
-                FL = flDef,
-                FPts = fptsWeekDef()
+                Season = z_seasonDef(),
+                Week = z_weekDef,
+                TRUFFLE = z_trfDef(filt = F),
+                Pos = z_posDef(filt = F),
+                Player = z_playerDef(minW = 150, filt = F),
+                PaYd = z_paydDef(wk = T),
+                PaTD = z_patdDef(wk = T),
+                PaInt = z_paintDef(wk = T),
+                RuAtt = z_ruattDef(wk = T),
+                RuYd = z_ruydDef(wk = T),
+                RuTD = z_rutdDefWk,
+                RuFD = z_rufdDefWk,
+                Rec = z_recDefWk,
+                ReYd = z_reydDefWk,
+                ReTD = z_retdDefWk,
+                ReFD = z_refdDefWk,
+                FL = z_flDef,
+                FPts = z_fptsWeekDef()
               ),
               columnGroups = list(
                 colGroup(name = "Passing", columns = c("PaYd", "PaTD", "PaInt"), align = 'left'),
@@ -1506,12 +1847,12 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  TRUFFLE = trfDef(filt = FALSE),
+                  TRUFFLE = z_trfDef(filt = FALSE),
                   FPts = colDef(minWidth = 150, align = 'left',
                                 format = colFormat(digits=1),
                                 cell = function(value) {
                                   width <- paste0(value / max(truffleanalysis$FPts) * 100, "%")
-                                  bar_chart(round(value,0), width = width)
+                                  z_bar_chart(round(value,0), width = width)
                                 }),
                   Ydpts = colDef(class = 'border-left-grey')
                 ),
@@ -1529,12 +1870,12 @@ shinyServer(function(input, output, session) {
                 compact = T,
                 defaultColDef = colDef(format = colFormat(percent = T, digits = 1)),
                 columns = list(
-                  TRUFFLE = trfDef(filt = FALSE),
+                  TRUFFLE = z_trfDef(filt = FALSE),
                   FPts = colDef(minWidth = 150, align = 'left',
                                 format = colFormat(digits=1),
                                 cell = function(value) {
                                   width <- paste0(value / max(truffleanalysis$FPts) * 100, "%")
-                                  bar_chart(round(value,0), width = width)
+                                  z_bar_chart(round(value,0), width = width)
                                 }),
                   Ydpts = colDef(class = 'border-left')
                 ),
@@ -1553,6 +1894,12 @@ shinyServer(function(input, output, session) {
   #building the tables that take the week sliders into account
   #stat center boxscore
   output$scboxscore <- renderReactable({
+    
+    if (isOffseason & input$scseason == "Proj") {
+      boxscorerange <- proj
+      boxscorerange$TRUFFLEdum <- ifelse(boxscorerange$TRUFFLE == "FA", "FA", "Owned")
+    } else {
+    
     boxscorerange <- weekly[Scoring == input$homescoring & Season == input$scseason &
                               Week %in% seq(input$scweekrange[1],input$scweekrange[2])
     ][,
@@ -1577,7 +1924,9 @@ shinyServer(function(input, output, session) {
       ),
       by = .(TRUFFLE, Pos, Player)][TRUFFLEdum %in% input$scavailable & Avg >= input$scavgmin & Pos %in% input$scpositions][, !"TRUFFLEdum"]
     
-    boxscorerange <- action_mod(df = boxscorerange, team = globalteam)
+    }
+    
+    boxscorerange <- z_action_mod(df = boxscorerange, team = globalteam)
     
     reactable(boxscorerange[, .(Action,TRUFFLE,Pos,Player,G,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,RuYd,RuTD,RuFD,Tar,Rec,ReYd,ReTD,ReFD,Avg,FPts)],
               paginationType = "jump",
@@ -1590,7 +1939,7 @@ shinyServer(function(input, output, session) {
               compact = T,
               columns = list(
                 Action = colDef(show = !isguest,
-                                header = with_tt("A", "Action link to add, drop, or trade player"),
+                                header = z_with_tt("A", "Action link to add, drop, or trade player"),
                                 sortable = F,
                                 filterable = F,
                                 align="center",
@@ -1604,26 +1953,26 @@ shinyServer(function(input, output, session) {
                                   )
                                   tags$a(href = action_url, target = "_blank", image)
                                 }),
-                TRUFFLE = trfDef(sort = F, maxW = 60),
-                Pos = posDef(sort = F, maxW = 38),
-                Player = playerDef(minW = 125, filt = T),
-                G = gDef(),
-                PaCmp = pacmpDef,
-                PaAtt = paattDef,
-                PaYd = paydDefNm,
-                PaTD = patdDefNm,
-                PaInt = paintDefNm,
-                RuAtt = ruattDefNm,
-                RuYd = ruydDefNm,
-                RuTD = rutdDefNm,
-                RuFD = rufdDefNm,
-                Tar = tarDefNm,
-                Rec = recDefNm,
-                ReYd = reydDefNm,
-                ReTD = retdDefNm,
-                ReFD = refdDefNm,
-                Avg = avgDef(maxW = 65, borderL = T),
-                FPts = fptsSeasDef(maxW = 65, col = F)
+                TRUFFLE = z_trfDef(sort = F, maxW = 60),
+                Pos = z_posDef(sort = F, maxW = 38),
+                Player = z_playerDef(minW = 125, filt = T),
+                G = z_gDef(proj = (isOffseason & input$scseason == "Proj")),
+                PaCmp = z_pacmpDef(proj = (isOffseason & input$scseason == "Proj")),
+                PaAtt = z_paattDef(proj = (isOffseason & input$scseason == "Proj")),
+                PaYd = z_paydDef(proj = (isOffseason & input$scseason == "Proj"), szn = T),
+                PaTD = z_patdDef(proj = (isOffseason & input$scseason == "Proj"), szn = T),
+                PaInt = z_paintDef(proj = (isOffseason & input$scseason == "Proj"), szn = T),
+                RuAtt = z_ruattDef(borderL = T, proj = (isOffseason & input$scseason == "Proj"), szn = T),
+                RuYd = z_ruydDef(proj = (isOffseason & input$scseason == "Proj"), szn = T),
+                RuTD = z_rutdDef(proj = (isOffseason & input$scseason == "Proj")),
+                RuFD = z_rufdDef(disp = !(isOffseason & input$scseason == "Proj")),
+                Tar = z_tarDef(borderL = T, proj = (isOffseason & input$scseason == "Proj")),
+                Rec = z_recDef(proj = (isOffseason & input$scseason == "Proj")),
+                ReYd = z_reydDef(proj = (isOffseason & input$scseason == "Proj")),
+                ReTD = z_retdDef(proj = (isOffseason & input$scseason == "Proj")),
+                ReFD = z_refdDef(disp = !(isOffseason & input$scseason == "Proj")),
+                Avg = z_avgDef(proj = (isOffseason & input$scseason == "Proj"), borderL = T, maxW = 65),
+                FPts = z_fptsSeasDef(proj = (isOffseason & input$scseason == "Proj"), col = F, maxW = 65)
               ),
               columnGroups = list(
                 colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
@@ -1636,6 +1985,12 @@ shinyServer(function(input, output, session) {
   #stat center advanced
   #calculating the reactive advanced stats over ranges
   output$scadvanced <- renderReactable({
+    
+    if (isOffseason & input$scseason == "Proj") {
+      advancedrange <- proj
+      advancedrange$TRUFFLEdum <- ifelse(advancedrange$TRUFFLE == "FA", "FA", "Owned")
+    } else {
+    
     advancedrange <- weekly[Season == input$scseason & Week %in% seq(input$scweekrange[1],input$scweekrange[2])
     ][,
       .(Avg = round(mean(FPts, na.rm = T),2),
@@ -1661,7 +2016,9 @@ shinyServer(function(input, output, session) {
                                                  TRUFFLEdum = ifelse(TRUFFLE == "FA", "FA", "Owned")
       )][Scoring == input$homescoring & TRUFFLEdum %in% input$scavailable & Avg >= input$scavgmin & Pos %in% input$scpositions][order(-Avg)][, !c("Scoring","TRUFFLEdum")]
     
-    advancedrange <- action_mod(df = advancedrange, team = globalteam)
+    }
+    
+    advancedrange <- z_action_mod(df = advancedrange, team = globalteam)
     
     reactable(advancedrange[, .(Action,TRUFFLE,Pos,Player,Touch,Opp,`FPts/Touch`,`FPts/Opp`,YdPts,TDPts,FDPts,`YdPt%`,`TDPt%`,`FDPt%`,RuPts,
                                 RePts,`RuPt%`,`RePt%`,Avg)],
@@ -1675,7 +2032,7 @@ shinyServer(function(input, output, session) {
               compact = T,
               columns = list(
                 Action = colDef(show = !isguest,
-                                header = with_tt("A", "Action link to add, drop, or trade player"),
+                                header = z_with_tt("A", "Action link to add, drop, or trade player"),
                                 sortable = F,
                                 filterable = F,
                                 align="center",
@@ -1690,23 +2047,23 @@ shinyServer(function(input, output, session) {
                                   tags$a(href = action_url, target = "_blank", image)
                                 }),
                 Avg = colDef(show = F, defaultSortOrder = "desc"),
-                TRUFFLE = trfDef(),
-                Pos = posDef(),
-                Player = playerDef(minW = 120, filt = T),
-                Touch = tchDef,
-                Opp = oppDef,
-                `FPts/Touch` = fptsPtchDef,
-                `FPts/Opp` = fptsPoppDef,
-                YdPts = ydptsDef,
-                TDPts = tdptsDef,
-                FDPts = fdptsDef,
-                RuPts = ruptsDef,
-                RePts = reptsDef,
-                `YdPt%` = ydptpercDef,
-                `TDPt%` = tdptpercDef,
-                `FDPt%` = fdptpercDef,
-                `RuPt%` = ruptpercDef,
-                `RePt%` = reptpercDef
+                TRUFFLE = z_trfDef(),
+                Pos = z_posDef(),
+                Player = z_playerDef(minW = 120, filt = T),
+                Touch = z_tchDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                Opp = z_oppDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                `FPts/Touch` = z_fptsPtchDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                `FPts/Opp` = z_fptsPoppDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                YdPts = z_ydptsDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                TDPts = z_tdptsDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                FDPts = z_fdptsDef(proj = (isOffseason & input$ppstatcenterseason == "Proj"), disp = !(isOffseason & input$ppstatcenterseason == "Proj")),
+                RuPts = z_ruptsDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                RePts = z_reptsDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                `YdPt%` = z_ydptpercDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                `TDPt%` = z_tdptpercDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                `FDPt%` = z_fdptpercDef(proj = (isOffseason & input$ppstatcenterseason == "Proj"), disp = !(isOffseason & input$ppstatcenterseason == "Proj")),
+                `RuPt%` = z_ruptpercDef(proj = (isOffseason & input$ppstatcenterseason == "Proj")),
+                `RePt%` = z_reptpercDef(proj = (isOffseason & input$ppstatcenterseason == "Proj"))
               ),
               columnGroups = list(
                 colGroup(name = "Volume / Efficiency", columns = c("Touch","Opp","FPts/Touch","FPts/Opp"), align = 'left'),
@@ -1719,28 +2076,28 @@ shinyServer(function(input, output, session) {
   #stat center consistency
   #consistency range filtered table
   output$scconsistency <- renderReactable({
-    perccolwidth <- 60
+    z_perccolwidth <- 60
     consistencyrange <- consistencystart[Scoring == input$homescoring & Season == input$scseason &
-                                 Week %in% seq(input$scweekrange[1],input$scweekrange[2])
+                                           Week %in% seq(input$scweekrange[1],input$scweekrange[2])
     ][,
-       .(G = .N,
-         FPts = sum(FPts, na.rm = T),
-         Avg = round(mean(FPts),1),
-         RelSD = round(sd(FPts)/mean(FPts),2),
-         AvgPosRk = round(mean(PosRk),1),
-         `Top5 %` = sum(top5dum)/.N,
-         `Top12 %` = sum(top12dum)/.N,
-         `Top24 %` = sum(top24dum)/.N,
-         `Top36 %` = sum(top36dum)/.N,
-         `NonStart %` = sum(nonStartdum)/.N,
-         `>10 %` = sum(gt10dum)/.N,
-         `>20 %` = sum(gt20dum)/.N,
-         `>30 %` = sum(gt30dum)/.N,
-         TRUFFLEdum = ifelse(TRUFFLE == "FA", "FA", "Owned")
-       ),
-       by = .(TRUFFLE, Pos, Player)][TRUFFLEdum %in% input$scavailable & Avg >= input$scavgmin & Pos %in% input$scpositions][, !"TRUFFLEdum"]
+      .(G = .N,
+        FPts = sum(FPts, na.rm = T),
+        Avg = round(mean(FPts),1),
+        RelSD = round(sd(FPts)/mean(FPts),2),
+        AvgPosRk = round(mean(PosRk),1),
+        `Top5 %` = sum(top5dum)/.N,
+        `Top12 %` = sum(top12dum)/.N,
+        `Top24 %` = sum(top24dum)/.N,
+        `Top36 %` = sum(top36dum)/.N,
+        `NonStart %` = sum(nonStartdum)/.N,
+        `>10 %` = sum(gt10dum)/.N,
+        `>20 %` = sum(gt20dum)/.N,
+        `>30 %` = sum(gt30dum)/.N,
+        TRUFFLEdum = ifelse(TRUFFLE == "FA", "FA", "Owned")
+      ),
+      by = .(TRUFFLE, Pos, Player)][TRUFFLEdum %in% input$scavailable & Avg >= input$scavgmin & Pos %in% input$scpositions][, !"TRUFFLEdum"]
     
-    consistencyrange <- action_mod(df = consistencyrange, team = globalteam)
+    consistencyrange <- z_action_mod(df = consistencyrange, team = globalteam)
     
     reactable(consistencyrange[, .(Action,TRUFFLE,Pos,Player,G,Avg,RelSD,
                                    `>10 %`,`>20 %`,`>30 %`,AvgPosRk,
@@ -1756,7 +2113,7 @@ shinyServer(function(input, output, session) {
               compact = T,
               columns = list(
                 Action = colDef(show = !isguest,
-                                header = with_tt("A", "Action link to add, drop, or trade player"),
+                                header = z_with_tt("A", "Action link to add, drop, or trade player"),
                                 sortable = F,
                                 filterable = F,
                                 align="center",
@@ -1770,21 +2127,21 @@ shinyServer(function(input, output, session) {
                                   )
                                   tags$a(href = action_url, target = "_blank", image)
                                 }),
-                TRUFFLE = trfDef(),
-                Pos = posDef(),
-                G = gDef(),
-                Player = playerDef(minW = 125, filt = T),
-                Avg = avgDef(maxW = perccolwidth, borderL = T),
-                RelSD = relsdDef,
-                AvgPosRk = avgposrkDef,
-                `Top5 %` = top5pDef,
-                `Top12 %` = top12pDef,
-                `Top24 %` = top24pDef,
-                `Top36 %` = top36pDef,
-                `NonStart %` = nonstartpDef,
-                `>10 %` = g10pDef,
-                `>20 %` = g20pDef,
-                `>30 %` = g30pDef
+                TRUFFLE = z_trfDef(),
+                Pos = z_posDef(),
+                G = z_gDef(),
+                Player = z_playerDef(minW = 125, filt = T),
+                Avg = z_avgDef(maxW = z_perccolwidth, borderL = T),
+                RelSD = z_relsdDef,
+                AvgPosRk = z_avgposrkDef,
+                `Top5 %` = z_top5pDef,
+                `Top12 %` = z_top12pDef,
+                `Top24 %` = z_top24pDef,
+                `Top36 %` = z_top36pDef,
+                `NonStart %` = z_nonstartpDef,
+                `>10 %` = z_g10pDef,
+                `>20 %` = z_g20pDef,
+                `>30 %` = z_g30pDef
                 
               ),
               columnGroups = list(
@@ -1818,7 +2175,7 @@ shinyServer(function(input, output, session) {
     extradashrange$TRUFFLEdum <- ifelse(extradashrange$TRUFFLE == "FA", "FA", "Owned")
     extradashrange <- extradashrange[TRUFFLEdum %in% input$scavailable & Pos %in% input$scpositions & Avg >= input$scavgmin][, !"TRUFFLEdum"]
     
-    extradashrange <- action_mod(extradashrange, team = globalteam)
+    extradashrange <- z_action_mod(extradashrange, team = globalteam)
     
     extradashrange$Avg <- NULL
     extradashrange <- extradashrange[, c(20, 2, 4, 3, 1, 5:19, 21)]
@@ -1840,7 +2197,7 @@ shinyServer(function(input, output, session) {
               ),
               columns = list(
                 Action = colDef(show = !isguest,
-                                header = with_tt("A", "Action link to add, drop, or trade player"),
+                                header = z_with_tt("A", "Action link to add, drop, or trade player"),
                                 sortable = F,
                                 filterable = F,
                                 align="center",
@@ -1854,22 +2211,22 @@ shinyServer(function(input, output, session) {
                                   )
                                   tags$a(href = action_url, target = "_blank", image)
                                 }),
-                TRUFFLE = trfDef(),
-                Pos = posDef(),
-                Player = playerDef(filt = T),
-                G = gDef(),
-                `Cmp%` = colDef(header = with_tt("Cmp%", "Completion Percentage"), format = colFormat(percent = T), minWidth = 75, class = "border-left-grey"),
-                Pa20 = colDef(header = with_tt("20+", "Passing Completions of 20+ Yd")),
-                Pa40 = colDef(header = with_tt("40+", "Passing Completions of 40+ Yd")),
-                RuYPC = colDef(header = with_tt("YPC", "Rushing Yards per Carry"), class = "border-left-grey", minWidth = 60),
-                Ru20 = colDef(header = with_tt("20+", "Rushes of 20+ Yd")),
-                Tar = colDef(header = with_tt("Tar", "Targets"), class = "border-left-grey"),
-                `Tar%` = colDef(header = with_tt("Tar%", "Percentage of Team Targets"), minWidth = 70, format = colFormat(suffix = "%")),
-                ReYPC = colDef(header = with_tt("YPC", "Yards per Catch"), minWidth = 60),
-                Re20 = colDef(header = with_tt("20+", "Receptions of 20+ Yd")),
-                Re40 = colDef(header = with_tt("40+", "Receptions of 40+ Yd")),
-                `ReFD%` = colDef(header = with_tt("FD%", "Percentage of Receptions resulting in First Down"), minWidth = 65, format = colFormat(percent = T)),
-                TotYd = colDef(header = with_tt("TotYd", "Total Passing/Rushing/Receiving Yards"), minWidth = 70)
+                TRUFFLE = z_trfDef(),
+                Pos = z_posDef(),
+                Player = z_playerDef(filt = T),
+                G = z_gDef(),
+                `Cmp%` = colDef(header = z_with_tt("Cmp%", "Completion Percentage"), format = colFormat(percent = T), minWidth = 75, class = "border-left-grey"),
+                Pa20 = colDef(header = z_with_tt("20+", "Passing Completions of 20+ Yd")),
+                Pa40 = colDef(header = z_with_tt("40+", "Passing Completions of 40+ Yd")),
+                RuYPC = colDef(header = z_with_tt("YPC", "Rushing Yards per Carry"), class = "border-left-grey", minWidth = 60),
+                Ru20 = colDef(header = z_with_tt("20+", "Rushes of 20+ Yd")),
+                Tar = colDef(header = z_with_tt("Tar", "Targets"), class = "border-left-grey"),
+                `Tar%` = colDef(header = z_with_tt("Tar%", "Percentage of Team Targets"), minWidth = 70, format = colFormat(suffix = "%")),
+                ReYPC = colDef(header = z_with_tt("YPC", "Yards per Catch"), minWidth = 60),
+                Re20 = colDef(header = z_with_tt("20+", "Receptions of 20+ Yd")),
+                Re40 = colDef(header = z_with_tt("40+", "Receptions of 40+ Yd")),
+                `ReFD%` = colDef(header = z_with_tt("FD%", "Percentage of Receptions resulting in First Down"), minWidth = 65, format = colFormat(percent = T)),
+                TotYd = colDef(header = z_with_tt("TotYd", "Total Passing/Rushing/Receiving Yards"), minWidth = 70)
               ),
               columnGroups = list(
                 colGroup(name = "Passing", columns = c("Cmp%","Pa20","Pa40"), align = 'left'),
@@ -1885,7 +2242,7 @@ shinyServer(function(input, output, session) {
   output$scxfpxtd <- renderReactable({
     espnsc <-espn[Season == input$scseason][order(-xFP)][, !c("Season")]
     espnsc$TRUFFLEdum <- ifelse(espnsc$TRUFFLE == "FA", "FA", "Owned")
-    espnsc <- action_mod(espnsc, team = globalteam)
+    espnsc <- z_action_mod(espnsc, team = globalteam)
     espnsc <- espnsc[, .(Action,TRUFFLE,Pos,Player,xFP,ActualPts,FPDiff,xTD,TD,TDDiff,Looks,In5,EZ,TRUFFLEdum,playerID,TeamNum,ActionLink)]
     
     reactable(espnsc[TRUFFLEdum %in% input$scavailable & Pos %in% input$scpositions][, !c("TRUFFLEdum", "playerID", "TeamNum", "ActionLink")],
@@ -1905,7 +2262,7 @@ shinyServer(function(input, output, session) {
               ),
               columns = list(
                 Action = colDef(show = !isguest,
-                                header = with_tt("A", "Action link to add, drop, or trade player"),
+                                header = z_with_tt("A", "Action link to add, drop, or trade player"),
                                 sortable = F,
                                 filterable = F,
                                 align="center",
@@ -1919,19 +2276,19 @@ shinyServer(function(input, output, session) {
                                   )
                                   tags$a(href = action_url, target = "_blank", image)
                                 }),
-                TRUFFLE = trfDef(),
-                Pos = posDef(),
-                Player = playerDef(minW = 125, filt = T),
-                NFL = nflDef,
-                xFP = colDef(header = with_tt("xFP", "Expected ESPN Fantasy Points")),
-                ActualPts = colDef(header = with_tt("aFP", "Actual ESPN Fantasy Points")),
-                FPDiff = colDef(header = with_tt("Diff", "Difference between the player's total xFP and actual FP")),
-                xTD = colDef(header = with_tt("xTD", "Expected Touchdowns"), class = "border-left-grey"),
-                TD = colDef(header = with_tt("aTD", "Actual Touchdowns")),
-                TDDiff = colDef(header = with_tt("Diff", "Difference between the player's total xTD and actual TD")),
-                Looks = colDef(header = with_tt("Looks", "Carries + Targets")),
-                In5 = colDef(header = with_tt("In5", "Carries inside 5-yard line")),
-                EZ = colDef(header = with_tt("EZ", "End Zone Targets"))
+                TRUFFLE = z_trfDef(),
+                Pos = z_posDef(),
+                Player = z_playerDef(minW = 125, filt = T),
+                NFL = z_nflDef,
+                xFP = colDef(header = z_with_tt("xFP", "Expected ESPN Fantasy Points")),
+                ActualPts = colDef(header = z_with_tt("aFP", "Actual ESPN Fantasy Points")),
+                FPDiff = colDef(header = z_with_tt("Diff", "Difference between the player's total xFP and actual FP")),
+                xTD = colDef(header = z_with_tt("xTD", "Expected Touchdowns"), class = "border-left-grey"),
+                TD = colDef(header = z_with_tt("aTD", "Actual Touchdowns")),
+                TDDiff = colDef(header = z_with_tt("Diff", "Difference between the player's total xTD and actual TD")),
+                Looks = colDef(header = z_with_tt("Looks", "Carries + Targets")),
+                In5 = colDef(header = z_with_tt("In5", "Carries inside 5-yard line")),
+                EZ = colDef(header = z_with_tt("EZ", "End Zone Targets"))
               )
     )
   })
@@ -1940,8 +2297,8 @@ shinyServer(function(input, output, session) {
   output$scsnapshare <- renderReactable({
     snapssc <- snaps[Season == input$scseason][order(-Tot)][, !c("Season")]
     snapssc$TRUFFLEdum <- ifelse(snapssc$TRUFFLE == "FA", "FA", "Owned")
-    snapssc <- action_mod(snapssc, team = globalteam)
-    snapssc <- snapssc[, c(28, 2, 3, 1, 4:27, 29)]
+    snapssc <- z_action_mod(snapssc, team = globalteam)
+    snapssc <- snapssc[, c(28, 24, 2, 3, 1, 4:23, 25:27, 29)]
     
     reactable(snapssc[TRUFFLEdum %in% input$scavailable & Pos %in% input$scpositions][, !c("TRUFFLEdum", "playerID", "TeamNum", "ActionLink", "Team")],
               paginationType = "jump",
@@ -1960,7 +2317,7 @@ shinyServer(function(input, output, session) {
               ),
               columns = list(
                 Action = colDef(show = !isguest,
-                                header = with_tt("A", "Action link to add, drop, or trade player"),
+                                header = z_with_tt("A", "Action link to add, drop, or trade player"),
                                 sortable = F,
                                 filterable = F,
                                 align="center",
@@ -1974,10 +2331,10 @@ shinyServer(function(input, output, session) {
                                   )
                                   tags$a(href = action_url, target = "_blank", image)
                                 }),
-                TRUFFLE = trfDef(),
-                Pos = posDef(),
-                Player = playerDef(minW = 125, filt = T),
-                Team = nflDef,
+                TRUFFLE = z_trfDef(),
+                Pos = z_posDef(),
+                Player = z_playerDef(minW = 125, filt = T),
+                Team = z_nflDef,
                 `18` = colDef(class = "border-right-grey"),
                 Tot = colDef(minWidth = 50, format = colFormat(percent = F))
               )
@@ -1993,20 +2350,20 @@ shinyServer(function(input, output, session) {
       df <- byog[Season == as.numeric(input$byogseason)]
     }
     
-      df <- df[Scoring == input$homescoring & Pos %in% input$byogpositions & G > input$byoggamesmin & Avg > input$byogavgmin]
-      df$X <- df[[input$byogX]]
-      df$Y <- df[[input$byogY]]
-      ggplotly(ggplot(df, aes(x = X, y = Y, group = Player,  color = Pos,
-                              text = paste0("</br><i>Season:</i> <b>", Season,
-                                            "</b></br><i>Player:</i> <b>", Player,
-                                            "</b></br><i>", input$byogX, "</i>: <b>", X,
-                                            "</b></br><i>", input$byogY, "</i>: <b>", Y, "</b>")
-                              )) +
-                 geom_point(size = 2) +
-                 xlim(min(df[[input$byogX]], na.rm=T), max(df[[input$byogX]], na.rm=T)) + ylim(min(df[[input$byogY]], na.rm=T), max(df[[input$byogY]], na.rm=T)) +
-                 ylab(input$byogY) + xlab(input$byogX) +
-                 theme_minimal() + scale_color_manual(values=ggpal), tooltip = "text"
-               )
+    df <- df[Scoring == input$homescoring & Pos %in% input$byogpositions & G > input$byoggamesmin & Avg > input$byogavgmin]
+    df$X <- df[[input$byogX]]
+    df$Y <- df[[input$byogY]]
+    ggplotly(ggplot(df, aes(x = X, y = Y, group = Player,  color = Pos,
+                            text = paste0("</br><i>Season:</i> <b>", Season,
+                                          "</b></br><i>Player:</i> <b>", Player,
+                                          "</b></br><i>", input$byogX, "</i>: <b>", X,
+                                          "</b></br><i>", input$byogY, "</i>: <b>", Y, "</b>")
+    )) +
+      geom_point(size = 2) +
+      xlim(min(df[[input$byogX]], na.rm=T), max(df[[input$byogX]], na.rm=T)) + ylim(min(df[[input$byogY]], na.rm=T), max(df[[input$byogY]], na.rm=T)) +
+      ylab(input$byogY) + xlab(input$byogX) +
+      theme_minimal() + scale_color_manual(values=ggpal), tooltip = "text"
+    )
   })
   
   # df <- byog[Scoring == "PPFD" & Season == 2022 & Pos %in% c("QB", "RB", "WR", "TE") & G > 1 & Avg > 5]
@@ -2048,15 +2405,15 @@ shinyServer(function(input, output, session) {
               #borderless = T,
               compact = T,
               columns = list(
-                Pos = posDef(maxW = 38, filt = FALSE),
-                Player = playerDef(minW = 125),
+                Pos = z_posDef(maxW = 38, filt = FALSE),
+                Player = z_playerDef(minW = 125),
                 Age = colDef(minWidth =  40),
                 NFL = colDef(minWidth =  40),
-                Salary = salaryDefNobar(minW = 45, foot = T),
-                Contract = contractDef(minW = 30, foot = T, title ="Yr", filt = F),
-                ptslog = ptsLogDef(maxW = 70),
-                Avg = avgDef(maxW = 45),
-                FPts = fptsSeasDef(maxW = 50)
+                Salary = z_salaryDefNobar(minW = 45, foot = T),
+                Contract = z_contractDef(minW = 30, foot = T, title ="Yr", filt = F),
+                ptslog = z_ptsLogDef(maxW = 70),
+                Avg = z_avgDef(maxW = 45),
+                FPts = z_fptsSeasDef(maxW = 50)
               ),
               defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
     )
@@ -2074,15 +2431,15 @@ shinyServer(function(input, output, session) {
               compact = T,
               resizable = F,
               columns = list(
-                Pos = posDef(maxW = 38, filt = FALSE),
-                Player = playerDef(minW = 125),
+                Pos = z_posDef(maxW = 38, filt = FALSE),
+                Player = z_playerDef(minW = 125),
                 Age = colDef(minWidth =  40),
                 NFL = colDef(minWidth =  40),
-                Salary = salaryDefNobar(minW = 45, foot = T),
-                Contract = contractDef(minW = 30, foot = T, title ="Yr", filt = F),
-                ptslog = ptsLogDef(maxW = 70),
-                Avg = avgDef(maxW = 45),
-                FPts = fptsSeasDef(maxW = 50)
+                Salary = z_salaryDefNobar(minW = 45, foot = T),
+                Contract = z_contractDef(minW = 30, foot = T, title ="Yr", filt = F),
+                ptslog = z_ptsLogDef(maxW = 70),
+                Avg = z_avgDef(maxW = 45),
+                FPts = z_fptsSeasDef(maxW = 50)
               ),
               defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
     )
@@ -2108,16 +2465,16 @@ shinyServer(function(input, output, session) {
                 resizable = F,
                 columns = list(
                   Extension = colDef(show = F),
-                  Pos = posDef(maxW = 38, filt = FALSE),
-                  Player = playerDef(minW = 125),
+                  Pos = z_posDef(maxW = 38, filt = FALSE),
+                  Player = z_playerDef(minW = 125),
                   NFL = colDef(minWidth =  40),
-                  Salary = salaryDefNobar(minW = 45, foot = T),
-                  Contract = contractDef(minW = 30, foot = T, title ="Yr", filt = F),
-                  `'23` = futurecolDef(yr = "'23", maxW = 60, foot = T, filt = F),
-                  `'24` = futurecolDef(yr = "'24", maxW = 60, foot = T, filt = F),
-                  `'25` = futurecolDef(yr = "'25", maxW = 60, foot = T, filt = F),
-                  `'26` = futurecolDef(yr = "'26", maxW = 60, foot = T, filt = F),
-                  `'27` = futurecolDef(yr = "'27", maxW = 60, foot = T, filt = F)
+                  Salary = z_salaryDefNobar(minW = 45, foot = T),
+                  Contract = z_contractDef(minW = 30, foot = T, title ="Yr", filt = F),
+                  `'24` = z_futureColDef(yr = "'24", maxW = 60, foot = T, filt = F),
+                  `'25` = z_futureColDef(yr = "'25", maxW = 60, foot = T, filt = F),
+                  `'26` = z_futureColDef(yr = "'26", maxW = 60, foot = T, filt = F),
+                  `'27` = z_futureColDef(yr = "'27", maxW = 60, foot = T, filt = F),
+                  `'28` = z_futureColDef(yr = "'28", maxW = 60, foot = T, filt = F)
                 ),
                 defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
       )
@@ -2140,16 +2497,16 @@ shinyServer(function(input, output, session) {
                 resizable = F,
                 columns = list(
                   Extension = colDef(show = F),
-                  Pos = posDef(maxW = 38, filt = FALSE),
-                  Player = playerDef(minW = 125),
+                  Pos = z_posDef(maxW = 38, filt = FALSE),
+                  Player = z_playerDef(minW = 125),
                   NFL = colDef(minWidth =  40),
-                  Salary = salaryDefNobar(minW = 45, foot = T),
-                  Contract = contractDef(minW = 30, foot = T, title ="Yr", filt = F),
-                  `'23` = futurecolDef(yr = "'23", maxW = 60, foot = T, filt = F),
-                  `'24` = futurecolDef(yr = "'24", maxW = 60, foot = T, filt = F),
-                  `'25` = futurecolDef(yr = "'25", maxW = 60, foot = T, filt = F),
-                  `'26` = futurecolDef(yr = "'26", maxW = 60, foot = T, filt = F),
-                  `'27` = futurecolDef(yr = "'27", maxW = 60, foot = T, filt = F)
+                  Salary = z_salaryDefNobar(minW = 45, foot = T),
+                  Contract = z_contractDef(minW = 30, foot = T, title ="Yr", filt = F),
+                  Y1 = z_futureColDef(yr = "'24", maxW = 60, foot = T, filt = F),
+                  Y2 = z_futureColDef(yr = "'25", maxW = 60, foot = T, filt = F),
+                  Y3 = z_futureColDef(yr = "'26", maxW = 60, foot = T, filt = F),
+                  Y4 = z_futureColDef(yr = "'27", maxW = 60, foot = T, filt = F),
+                  Y5 = z_futureColDef(yr = "'28", maxW = 60, foot = T, filt = F)
                 ),
                 defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
       )
@@ -2237,7 +2594,7 @@ shinyServer(function(input, output, session) {
               compact = T,
               resizable = F,
               columns = list(
-                TRF = trfDef(filt = FALSE),
+                TRF = z_trfDef(filt = FALSE),
                 Team = colDef(minWidth = 125),
                 PlayersReceived = colDef(name = "Players Received"),
                 Net = colDef(name = "Net Salary", 
@@ -2272,22 +2629,22 @@ shinyServer(function(input, output, session) {
               compact = T,
               resizable = T,
               columns = list(
-                TRUFFLE = trfDef(),
-                Pos = posDef(),
-                Player = playerDef(filt = T),
-                Age = ageDef,
-                NFL = nflDef,
-                Salary = salaryDefBar(),
-                Contract = contractDef(title ="Yr"),
-                `'23` = futurecolDef(yr = "'23"),
-                `'24` = futurecolDef(yr = "'24"),
-                `'25` = futurecolDef(yr = "'25"),
-                `'26` = futurecolDef(yr = "'26"),
-                `'27` = futurecolDef(yr = "'27")
+                TRUFFLE = z_trfDef(),
+                Pos = z_posDef(),
+                Player = z_playerDef(filt = T),
+                Age = z_ageDef,
+                NFL = z_nflDef,
+                Salary = z_salaryDefBar(),
+                Contract = z_contractDef(title ="Yr"),
+                Y1 = z_futureColDef(yr = "'24"),
+                Y2 = z_futureColDef(yr = "'25"),
+                Y3 = z_futureColDef(yr = "'26"),
+                Y4 = z_futureColDef(yr = "'27"),
+                Y5 = z_futureColDef(yr = "'28")
               ),
               columnGroups = list(
                 colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
-                colGroup(name = "Future Seasons", columns = c("'23","'24","'25","'26","'27"), align = 'left')
+                colGroup(name = "Future Seasons", columns = c("Y1","Y2","Y3","Y4","Y5"), align = 'left')
               )
     )
   })
@@ -2295,7 +2652,7 @@ shinyServer(function(input, output, session) {
   #plot1
   output$plot1 <- renderPlotly({
     plot_ly(
-      data = rosterbreakdown,
+      data = capbyteam,
       y = ~TRUFFLE,
       x = ~Salary,
       #text = ~TeamSalary,
@@ -2318,7 +2675,7 @@ shinyServer(function(input, output, session) {
       barmode = "stack",
       font = list(color = 'black')
     ) %>% config(displayModeBar = FALSE) %>% 
-      add_annotations(data = rosterbreakdown %>% select(TRUFFLE, TeamSalary) %>% unique(),
+      add_annotations(data = capbyteam %>% select(TRUFFLE, TeamSalary) %>% unique(),
                       x = 510,
                       y = ~TRUFFLE,
                       text = ~TeamSalary,
@@ -2355,35 +2712,35 @@ shinyServer(function(input, output, session) {
               ),
               details = function(index) {
                 if (index == 1) {
-                  reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "QB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "QB" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
-                              Player = playerDef(minW = 150),
+                              Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
-                              ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              ExtensionYr = colDef(header = z_with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
                             )
                   )
                 } else if (index == 2) {
-                  reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "QB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "QB" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
-                              Player = playerDef(minW = 150),
+                              Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
-                              ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              ExtensionYr = colDef(header = z_with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
                             )
                   )
                 } else if (index == 3) {
-                  reactable(extvaldraft[Round == 2 & Pos == "QB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 2 & Pos == "QB" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
-                              Player = playerDef(minW = 150),
+                              Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
-                              ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              ExtensionYr = colDef(header = z_with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
                             )
                   )
                 } else if (index == 4) {
-                  reactable(extvaldraft[Round == 3 & Pos == "QB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 3 & Pos == "QB" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
-                              Player = playerDef(minW = 150),
+                              Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
-                              ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              ExtensionYr = colDef(header = z_with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
                             )
                   )
                 }
@@ -2424,35 +2781,35 @@ shinyServer(function(input, output, session) {
               ),
               details = function(index) {
                 if (index == 1) {
-                  reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "RB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "RB" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
-                              Player = playerDef(minW = 150),
+                              Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
-                              ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              ExtensionYr = colDef(header = z_with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
                             )
                   )
                 } else if (index == 2) {
-                  reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "RB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "RB" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
-                              Player = playerDef(minW = 150),
+                              Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
-                              ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              ExtensionYr = colDef(header = z_with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
                             )
                   )
                 } else if (index == 3) {
-                  reactable(extvaldraft[Round == 2 & Pos == "RB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 2 & Pos == "RB" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
-                              Player = playerDef(minW = 150),
+                              Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
-                              ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              ExtensionYr = colDef(header = z_with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
                             )
                   )
                 } else if (index == 4) {
-                  reactable(extvaldraft[Round == 3 & Pos == "RB" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 3 & Pos == "RB" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
-                              Player = playerDef(minW = 150),
+                              Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
-                              ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              ExtensionYr = colDef(header = z_with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
                             )
                   )
                 }
@@ -2493,35 +2850,35 @@ shinyServer(function(input, output, session) {
               ),
               details = function(index) {
                 if (index == 1) {
-                  reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "WR" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "WR" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
-                              Player = playerDef(minW = 150),
+                              Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
-                              ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              ExtensionYr = colDef(header = z_with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
                             )
                   )
                 } else if (index == 2) {
-                  reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "WR" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "WR" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
-                              Player = playerDef(minW = 150),
+                              Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
-                              ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              ExtensionYr = colDef(header = z_with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
                             )
                   )
                 } else if (index == 3) {
-                  reactable(extvaldraft[Round == 2 & Pos == "WR" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 2 & Pos == "WR" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
-                              Player = playerDef(minW = 150),
+                              Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
-                              ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              ExtensionYr = colDef(header = z_with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
                             )
                   )
                 } else if (index == 4) {
-                  reactable(extvaldraft[Round == 3 & Pos == "WR" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 3 & Pos == "WR" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
-                              Player = playerDef(minW = 150),
+                              Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
-                              ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              ExtensionYr = colDef(header = z_with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
                             )
                   )
                 }
@@ -2562,35 +2919,35 @@ shinyServer(function(input, output, session) {
               ),
               details = function(index) {
                 if (index == 1) {
-                  reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "TE" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 1 & `#` <= 6 & Pos == "TE" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
-                              Player = playerDef(minW = 150),
+                              Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
-                              ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              ExtensionYr = colDef(header = z_with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
                             )
                   )
                 } else if (index == 2) {
-                  reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "TE" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 1 & `#` >= 7 & Pos == "TE" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
-                              Player = playerDef(minW = 150),
+                              Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
-                              ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              ExtensionYr = colDef(header = z_with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
                             )
                   )
                 } else if (index == 3) {
-                  reactable(extvaldraft[Round == 2 & Pos == "TE" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 2 & Pos == "TE" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
-                              Player = playerDef(minW = 150),
+                              Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
-                              ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              ExtensionYr = colDef(header = z_with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
                             )
                   )
                 } else if (index == 4) {
-                  reactable(extvaldraft[Round == 3 & Pos == "TE" & Player %in% rookierights][, c("Player", "Pick", "ExtensionYr")], 
+                  reactable(extvaldraft[Round == 3 & Pos == "TE" & Player %in% rookierights$Player][, c("Player", "Pick", "ExtensionYr")], 
                             columns = list(
-                              Player = playerDef(minW = 150),
+                              Player = z_playerDef(minW = 150),
                               Pick = colDef(minWidth = 50, align = 'right'),
-                              ExtensionYr = colDef(header = with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
+                              ExtensionYr = colDef(header = z_with_tt("Ext Yr", "Year Player is Rookie Extension Eligible"), minWidth = 50)
                             )
                   )
                 }
@@ -2608,9 +2965,9 @@ shinyServer(function(input, output, session) {
     reactable(tagvalsqb,
               sortable = F,
               columns = list(
-                Type = colDef(header = with_tt("Tag", "First vs. Second time franchising player"),
+                Type = colDef(header = z_with_tt("Tag", "First vs. Second time franchising player"),
                               minWidth = 50),
-                TagVal = tagvalDefBar(minW = 100)
+                TagVal = z_tagvalDefBar(minW = 100)
               ),
               columnGroups = list(
                 colGroup(name = "QB", columns = c("Type", "TagVal"), align = 'left')
@@ -2620,7 +2977,7 @@ shinyServer(function(input, output, session) {
                   reactable(top5paid[Pos == "QB" & Season == currentyr][, c("Player", "Salary")], 
                             columns = list(
                               Player = colDef(minWidth = 150, footer = "Mean"),
-                              Salary = tagvalDefNobar()
+                              Salary = z_tagvalDefNobar()
                             ),
                             defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
                   )
@@ -2628,7 +2985,7 @@ shinyServer(function(input, output, session) {
                   reactable(top5paid[Pos == "QB" & Season == currentyr][, c("Player", "Salary")][1], 
                             columns = list(
                               Player = colDef(minWidth = 150),
-                              Salary = tagvalDefNobar(foot = F)
+                              Salary = z_tagvalDefNobar(foot = F)
                             ),
                             defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
                   )
@@ -2644,9 +3001,9 @@ shinyServer(function(input, output, session) {
     reactable(tagvalsrb,
               sortable = F,
               columns = list(
-                Type = colDef(header = with_tt("Tag", "First vs. Second time franchising player"),
+                Type = colDef(header = z_with_tt("Tag", "First vs. Second time franchising player"),
                               minWidth = 50),
-                TagVal = tagvalDefBar(minW = 100)
+                TagVal = z_tagvalDefBar(minW = 100)
               ),
               columnGroups = list(
                 colGroup(name = "RB", columns = c("Type", "TagVal"), align = 'left')
@@ -2656,7 +3013,7 @@ shinyServer(function(input, output, session) {
                   reactable(top5paid[Pos == "RB" & Season == currentyr][, c("Player", "Salary")], 
                             columns = list(
                               Player = colDef(minWidth = 150, footer = "Mean"),
-                              Salary = tagvalDefNobar()
+                              Salary = z_tagvalDefNobar()
                             ),
                             defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
                   )
@@ -2664,7 +3021,7 @@ shinyServer(function(input, output, session) {
                   reactable(top5paid[Pos == "RB" & Season == currentyr][, c("Player", "Salary")][1], 
                             columns = list(
                               Player = colDef(minWidth = 150),
-                              Salary = tagvalDefNobar(foot = F)
+                              Salary = z_tagvalDefNobar(foot = F)
                             ),
                             defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
                   )
@@ -2680,9 +3037,9 @@ shinyServer(function(input, output, session) {
     reactable(tagvalswr,
               sortable = F,
               columns = list(
-                Type = colDef(header = with_tt("Tag", "First vs. Second time franchising player"),
+                Type = colDef(header = z_with_tt("Tag", "First vs. Second time franchising player"),
                               minWidth = 50),
-                TagVal = tagvalDefBar(minW = 100)
+                TagVal = z_tagvalDefBar(minW = 100)
               ),
               columnGroups = list(
                 colGroup(name = "WR", columns = c("Type", "TagVal"), align = 'left')
@@ -2692,7 +3049,7 @@ shinyServer(function(input, output, session) {
                   reactable(top5paid[Pos == "WR" & Season == currentyr][, c("Player", "Salary")], 
                             columns = list(
                               Player = colDef(minWidth = 150, footer = "Mean"),
-                              Salary = tagvalDefNobar()
+                              Salary = z_tagvalDefNobar()
                             ),
                             defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
                   )
@@ -2700,7 +3057,7 @@ shinyServer(function(input, output, session) {
                   reactable(top5paid[Pos == "WR" & Season == currentyr][, c("Player", "Salary")][1], 
                             columns = list(
                               Player = colDef(minWidth = 150),
-                              Salary = tagvalDefNobar(foot = F)
+                              Salary = z_tagvalDefNobar(foot = F)
                             ),
                             defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
                   )
@@ -2716,9 +3073,9 @@ shinyServer(function(input, output, session) {
     reactable(tagvalste,
               sortable = F,
               columns = list(
-                Type = colDef(header = with_tt("Tag", "First vs. Second time franchising player"),
+                Type = colDef(header = z_with_tt("Tag", "First vs. Second time franchising player"),
                               minWidth = 50),
-                TagVal = tagvalDefBar(minW = 100)
+                TagVal = z_tagvalDefBar(minW = 100)
               ),
               columnGroups = list(
                 colGroup(name = "TE", columns = c("Type", "TagVal"), align = 'left')
@@ -2728,7 +3085,7 @@ shinyServer(function(input, output, session) {
                   reactable(top5paid[Pos == "TE" & Season == currentyr][, c("Player", "Salary")], 
                             columns = list(
                               Player = colDef(minWidth = 150, footer = "Mean"),
-                              Salary = salaryDefNobar()
+                              Salary = z_salaryDefNobar()
                             ),
                             defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
                   )
@@ -2736,7 +3093,7 @@ shinyServer(function(input, output, session) {
                   reactable(top5paid[Pos == "TE" & Season == currentyr][, c("Player", "Salary")][1], 
                             columns = list(
                               Player = colDef(minWidth = 150),
-                              Salary = salaryDefNobar(foot = F)
+                              Salary = z_salaryDefNobar(foot = F)
                             ),
                             defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
                   )
@@ -2750,11 +3107,11 @@ shinyServer(function(input, output, session) {
     reactable(ft[Player %in% input$tagvalplayer],
               compact = T,
               columns = list(
-                Pos = posDef(filt = F),
-                Player = playerDef(minW = 125),
-                Salary = salaryDefBar(minW = 125),
-                Contract = contractDef(filt = F, title ="Yr"),
-                TagVal = colDef(header = with_tt("Tag Value", "Player Tag Value for Next Year"),
+                Pos = z_posDef(filt = F),
+                Player = z_playerDef(minW = 125),
+                Salary = z_salaryDefBar(minW = 125),
+                Contract = z_contractDef(filt = F, title ="Yr"),
+                TagVal = colDef(header = z_with_tt("Tag Value", "Player Tag Value for Next Year"),
                                 minWidth = 100,
                                 align = "right")
               )
@@ -2764,7 +3121,7 @@ shinyServer(function(input, output, session) {
   #history books ----
   #record books rings
   output$recordrings <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
+    if (input$recordteams == globalleague) {
       reactable(rings[Rings > 0, !c("BenchCups","BCYears","BCTeams")][order(-Rings)],
                 defaultSortOrder = "desc",
                 filterable = F,
@@ -2775,8 +3132,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 40, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 40, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   Rings = colDef(minWidth = 60, align = "left"),
                   RingYears = colDef(name = "Years"),
                   RingTeams = colDef(name = "Teams")
@@ -2795,8 +3152,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 40, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 40, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   Rings = colDef(minWidth = 60, align = "left"),
                   RingYears = colDef(name = "Years")
                 ),
@@ -2806,7 +3163,7 @@ shinyServer(function(input, output, session) {
   })
   #record books rings
   output$recordbenchcups <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
+    if (input$recordteams == globalleague) {
       reactable(rings[BenchCups > 0, !c("Rings","RingYears","RingTeams")][order(-BenchCups)],
                 defaultSortOrder = "desc",
                 filterable = F,
@@ -2817,8 +3174,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 40, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 40, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   BenchCups = colDef(name = "Cups", minWidth = 60, align = "left"),
                   BCYears = colDef(name = "Years"),
                   BCTeams = colDef(name = "Teams")
@@ -2837,8 +3194,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 40, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 40, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   BenchCups = colDef(name = "Cups", minWidth = 60, align = "left"),
                   BCYears = colDef(name = "Years")
                 ),
@@ -2848,8 +3205,8 @@ shinyServer(function(input, output, session) {
   })
   #record books fantasy points
   output$recordfpts <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplfpts,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,FPts)][order(-FPts)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -2859,15 +3216,15 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   FPts = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Fantasy Points", columns = c("Pos", "Player", "FPts"), align = 'left')
                 )
       )
     } else {
-      reactable(recordtmfpts[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,FPts)][order(-FPts)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -2877,8 +3234,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   FPts = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Fantasy Points", columns = c("Pos", "Player", "FPts"), align = 'left')
@@ -2887,8 +3244,8 @@ shinyServer(function(input, output, session) {
   })
   #record books games
   output$recordgames <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplgames,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,Games)][order(-Games)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -2898,15 +3255,15 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   Games = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Games Played", columns = c("Pos", "Player", "Games"), align = 'left')
                 )
       )
     } else {
-      reactable(recordtmgames[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,Games)][order(-Games)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -2916,8 +3273,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   Games = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Games Played", columns = c("Pos", "Player", "Games"), align = 'left')
@@ -2926,8 +3283,8 @@ shinyServer(function(input, output, session) {
   })
   #record books avg
   output$recordavg <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplavg,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,Games,Avg)][Games >= if (globalleague == "TRUFFLE") {10} else {1}][, .(Pos, Player, Avg)][order(-Avg)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -2937,15 +3294,15 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   Avg = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Average Fantasy Points", columns = c("Pos", "Player", "Avg"), align = 'left')
                 )
       )
     } else {
-      reactable(recordtmavg[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,Games,Avg)][Games > 10][, .(TRUFFLE, Pos, Player, Avg)][order(-Avg)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -2955,8 +3312,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   Avg = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Average Fantasy Points", columns = c("Pos", "Player", "Avg"), align = 'left')
@@ -2965,8 +3322,8 @@ shinyServer(function(input, output, session) {
   })
   #record books first downs
   output$recordfd <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplfd,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,FD)][order(-FD)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -2976,15 +3333,15 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   FD = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "First Downs", columns = c("Pos", "Player", "FD"), align = 'left')
                 )
       )
     } else {
-      reactable(recordtmfd[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,FD)][order(-FD)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -2994,8 +3351,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   FD = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "First Downs", columns = c("Pos", "Player", "FD"), align = 'left')
@@ -3004,8 +3361,8 @@ shinyServer(function(input, output, session) {
   })
   #record books passing yards
   output$recordpayd <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplpayd,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,PaYd)][order(-PaYd)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3015,15 +3372,15 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   PaYd = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Passing Yards", columns = c("Pos", "Player", "PaYd"), align = 'left')
                 )
       )
     } else {
-      reactable(recordtmpayd[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,PaYd)][order(-PaYd)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3033,8 +3390,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   PaYd = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Passing Yards", columns = c("Pos", "Player", "PaYd"), align = 'left')
@@ -3043,8 +3400,8 @@ shinyServer(function(input, output, session) {
   })
   #record books passing td
   output$recordpatd <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplpatd,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,PaTD)][order(-PaTD)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3054,15 +3411,15 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   PaTD = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Passing Touchdowns", columns = c("Pos", "Player", "PaTD"), align = 'left')
                 )
       )
     } else {
-      reactable(recordtmpatd[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,PaTD)][order(-PaTD)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3072,8 +3429,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   PaTD = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Passing Touchdowns", columns = c("Pos", "Player", "PaTD"), align = 'left')
@@ -3082,8 +3439,8 @@ shinyServer(function(input, output, session) {
   })
   #record books interceptions
   output$recordpaint <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplpaint,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,PaInt)][order(-PaInt)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3093,15 +3450,15 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   PaInt = colDef(name = "Int", minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Interceptions", columns = c("Pos", "Player", "PaInt"), align = 'left')
                 )
       )
     } else {
-      reactable(recordtmpaint[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,PaInt)][order(-PaInt)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3111,8 +3468,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   PaInt = colDef(name = "Int",minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Interceptions", columns = c("Pos", "Player", "PaInt"), align = 'left')
@@ -3121,8 +3478,8 @@ shinyServer(function(input, output, session) {
   })
   #record books completions
   output$recordpacmp <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplpacmp,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,PaCmp)][order(-PaCmp)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3132,15 +3489,15 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   PaCmp = colDef(name = "Cmp", minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Completions", columns = c("Pos", "Player", "PaCmp"), align = 'left')
                 )
       )
     } else {
-      reactable(recordtmpacmp[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,PaCmp)][order(-PaCmp)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3150,8 +3507,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   PaCmp = colDef(name = "Cmp",minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Completions", columns = c("Pos", "Player", "PaCmp"), align = 'left')
@@ -3160,8 +3517,8 @@ shinyServer(function(input, output, session) {
   })
   #record books rushing yards
   output$recordruyd <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplruyd,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,RuYd)][order(-RuYd)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3171,15 +3528,15 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   RuYd = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Rushing Yards", columns = c("Pos", "Player", "RuYd"), align = 'left')
                 )
       )
     } else {
-      reactable(recordtmruyd[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,RuYd)][order(-RuYd)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3189,8 +3546,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   RuYd = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Rushing Yards", columns = c("Pos", "Player", "RuYd"), align = 'left')
@@ -3199,8 +3556,8 @@ shinyServer(function(input, output, session) {
   })
   #record books rushing touchdowns
   output$recordrutd <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplrutd,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,RuTD)][order(-RuTD)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3210,15 +3567,15 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   RuTD = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Rushing Touchdowns", columns = c("Pos", "Player", "RuTD"), align = 'left')
                 )
       )
     } else {
-      reactable(recordtmrutd[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,RuTD)][order(-RuTD)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3228,8 +3585,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   RuTD = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Rushing Touchdowns", columns = c("Pos", "Player", "RuTD"), align = 'left')
@@ -3238,8 +3595,8 @@ shinyServer(function(input, output, session) {
   })
   #record books rushing first downs
   output$recordrufd <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplrufd,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,RuFD)][order(-RuFD)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3249,15 +3606,15 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   RuFD = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Rushing First Downs", columns = c("Pos", "Player", "RuFD"), align = 'left')
                 )
       )
     } else {
-      reactable(recordtmrufd[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,RuFD)][order(-RuFD)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3267,8 +3624,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   RuFD = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Rushing First Downs", columns = c("Pos", "Player", "RuFD"), align = 'left')
@@ -3277,8 +3634,8 @@ shinyServer(function(input, output, session) {
   })
   #record books fumbles
   output$recordfl <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplfl,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,FL)][order(-FL)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3288,15 +3645,15 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   FL = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Fumbles", columns = c("Pos", "Player", "FL"), align = 'left')
                 )
       )
     } else {
-      reactable(recordtmfl[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,FL)][order(-FL)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3306,8 +3663,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   FL = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Fumbles", columns = c("Pos", "Player", "FL"), align = 'left')
@@ -3316,8 +3673,8 @@ shinyServer(function(input, output, session) {
   })
   #record books receiving yards
   output$recordreyd <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplreyd,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,ReYd)][order(-ReYd)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3327,15 +3684,15 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   ReYd = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Receiving Yards", columns = c("Pos", "Player", "ReYd"), align = 'left')
                 )
       )
     } else {
-      reactable(recordtmreyd[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,ReYd)][order(-ReYd)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3345,8 +3702,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   ReYd = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Receiving Yards", columns = c("Pos", "Player", "ReYd"), align = 'left')
@@ -3355,8 +3712,8 @@ shinyServer(function(input, output, session) {
   })
   #record books receiving touchdowns
   output$recordretd <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplretd,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,ReTD)][order(-ReTD)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3366,15 +3723,15 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   ReTD = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Receiving Touchdowns", columns = c("Pos", "Player", "ReTD"), align = 'left')
                 )
       )
     } else {
-      reactable(recordtmretd[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,ReTD)][order(-ReTD)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3384,8 +3741,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   ReTD = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Receiving Touchdowns", columns = c("Pos", "Player", "ReTD"), align = 'left')
@@ -3394,8 +3751,8 @@ shinyServer(function(input, output, session) {
   })
   #record books receiving first downs
   output$recordrefd <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplrefd,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,ReFD)][order(-ReFD)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3405,15 +3762,15 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   ReFD = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Receiving First Downs", columns = c("Pos", "Player", "ReFD"), align = 'left')
                 )
       )
     } else {
-      reactable(recordtmrefd[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,ReFD)][order(-ReFD)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3423,8 +3780,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   ReFD = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Receiving First Downs", columns = c("Pos", "Player", "ReFD"), align = 'left')
@@ -3433,8 +3790,8 @@ shinyServer(function(input, output, session) {
   })
   #record books receptions
   output$recordrec <- renderReactable({
-    if (input$recordteams == "TRUFFLE") {
-      reactable(recordplrec,
+    if (input$recordteams == globalleague) {
+      reactable(recordbookspl[, .(Pos,Player,Rec)][order(-Rec)][1:100, ],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3444,15 +3801,15 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   Rec = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Receptions", columns = c("Pos", "Player", "Rec"), align = 'left')
                 )
       )
     } else {
-      reactable(recordtmrec[TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
+      reactable(recordbookstm[, .(TRUFFLE,Pos,Player,Rec)][order(-Rec)][TRUFFLE == teams$Abbrev[teams$FullName == input$recordteams] ][, -"TRUFFLE"],
                 defaultSortOrder = "desc",
                 filterable = F,
                 sortable = F,
@@ -3462,8 +3819,8 @@ shinyServer(function(input, output, session) {
                 #borderless = T,
                 compact = T,
                 columns = list(
-                  Pos = posDef(maxW = 35, filt = FALSE),
-                  Player = playerDef(minW = 140),
+                  Pos = z_posDef(maxW = 35, filt = FALSE),
+                  Player = z_playerDef(minW = 140),
                   Rec = colDef(minWidth = 60, align = "left")
                 ),
                 columnGroups = list(colGroup(name = "Receptions", columns = c("Pos", "Player", "Rec"), align = 'left')
@@ -3527,22 +3884,22 @@ shinyServer(function(input, output, session) {
   })
   
   output$allt1 <- renderReactable({
-    reactable(allt1[Season == input$awardseason][, -"Season"],
+    reactable(awards[Award == "1stTm"][, .(Season, Pos, Winner, TRUFFLE)][Season == input$awardseason][, -"Season"],
               compact = T,
               columns = list(
-                Pos = posDef(maxW = 80, filt = FALSE),
-                TRUFFLE = trfDef(filt = FALSE)
+                Pos = z_posDef(maxW = 80, filt = FALSE),
+                TRUFFLE = z_trfDef(filt = FALSE)
               ),
               columnGroups = list(colGroup(name = "1st Team", columns = c("Pos", "Winner", "TRUFFLE"), align = 'left')
               ))
   })
   
   output$allt2 <- renderReactable({
-    reactable(allt2[Season == input$awardseason][, -"Season"],
+    reactable(awards[Award == "2ndTm"][, .(Season, Pos, Winner, TRUFFLE)][Season == input$awardseason][, -"Season"],
               compact = T,
               columns = list(
-                Pos = posDef(maxW = 80, filt = FALSE),
-                TRUFFLE = trfDef(filt = FALSE)
+                Pos = z_posDef(maxW = 80, filt = FALSE),
+                TRUFFLE = z_trfDef(filt = FALSE)
               ),
               columnGroups = list(colGroup(name = "2nd Team", columns = c("Pos", "Winner", "TRUFFLE"), align = 'left')
               ))
@@ -3607,8 +3964,8 @@ shinyServer(function(input, output, session) {
     reactable(allt1[Season == input$homeseason][, -"Season"],
               compact = T,
               columns = list(
-                Pos = posDef(maxW = 80, filt = FALSE),
-                TRUFFLE = trfDef(filt = FALSE)
+                Pos = z_posDef(maxW = 80, filt = FALSE),
+                TRUFFLE = z_trfDef(filt = FALSE)
               ),
               columnGroups = list(colGroup(name = "1st Team", columns = c("Pos", "Winner", "TRUFFLE"), align = 'left')
               ))
@@ -3618,8 +3975,8 @@ shinyServer(function(input, output, session) {
     reactable(allt2[Season == input$homeseason][, -"Season"],
               compact = T,
               columns = list(
-                Pos = posDef(maxW = 80, filt = FALSE),
-                TRUFFLE = trfDef(filt = FALSE)
+                Pos = z_posDef(maxW = 80, filt = FALSE),
+                TRUFFLE = z_trfDef(filt = FALSE)
               ),
               columnGroups = list(colGroup(name = "2nd Team", columns = c("Pos", "Winner", "TRUFFLE"), align = 'left')
               ))
@@ -3694,7 +4051,7 @@ shinyServer(function(input, output, session) {
                                   div(style = list(display = "inline-block"), image)
                                 )
                               }),
-                Team1 = trfDefRivScores(filt = FALSE, maxW = 100),
+                Team1 = z_trfDefRivScores(filt = FALSE, maxW = 100),
                 Team1Score = colDef(name = "Score",
                                     #minWidth = 100,
                                     format = colFormat(digits = 2),
@@ -3718,7 +4075,7 @@ shinyServer(function(input, output, session) {
                                       col <- ifelse(value > oppscore, QBcolor, NA)
                                       list(background = col)}
                 ),
-                Team2 = trfDefRivScores(filt = FALSE, maxW = 100)
+                Team2 = z_trfDefRivScores(filt = FALSE, maxW = 100)
               ),
               details = function(index) {
                 season <- df$Season[index]
@@ -3731,14 +4088,14 @@ shinyServer(function(input, output, session) {
                           pagination = F,
                           highlight = T,
                           columns = list(
-                            TRUFFLE = trfDef(filt=F),
-                            Pos = posDef(filt = FALSE, foot = " "),
-                            Player = playerDef(minW = 160),
-                            FPts = fptsWeekDef()
+                            TRUFFLE = z_trfDef(filt=F),
+                            Pos = z_posDef(filt = FALSE, foot = " "),
+                            Player = z_playerDef(minW = 160),
+                            FPts = z_fptsWeekDef()
                           ))
               },
               defaultColDef = colDef(footerStyle = list(fontWeight = "bold")),
-              )
+    )
   })
   
   output$rivleaders <- renderReactable({
@@ -3752,12 +4109,12 @@ shinyServer(function(input, output, session) {
               paginationType = 'simple',
               highlight = T,
               columns = list(
-                TRUFFLE = trfDef(filt = FALSE),
-                Pos = posDef(filt = FALSE),
-                Player = playerDef(minW = 160),
-                G = gDef(),
-                FPts = fptsDef(),
-                Avg = avgDef()
+                TRUFFLE = z_trfDef(filt = FALSE),
+                Pos = z_posDef(filt = FALSE),
+                Player = z_playerDef(minW = 160),
+                G = z_gDef(),
+                FPts = z_fptsDef(),
+                Avg = z_avgDef()
               ),
               details = function(index) {
                 team <- df$TRUFFLE[index]
@@ -3788,19 +4145,21 @@ shinyServer(function(input, output, session) {
                                               div(style = list(display = "inline-block"), image)
                                             )
                                           }),
-                            Yd = colDef(header = with_tt("Yd", "Tot Yards = Pa + Ru + Re"), maxWidth = 80),
-                            TD = colDef(header = with_tt("TD", "Tot TD = Pa + Ru + Re"), maxWidth = 80),
-                            FD = colDef(header = with_tt("FD", "Tot FD = Ru + Re"), maxWidth = 80),
-                            FPts = fptsWeekDef()
+                            Yd = colDef(header = z_with_tt("Yd", "Tot Yards = Pa + Ru + Re"), maxWidth = 80),
+                            TD = colDef(header = z_with_tt("TD", "Tot TD = Pa + Ru + Re"), maxWidth = 80),
+                            FD = colDef(header = z_with_tt("FD", "Tot FD = Ru + Re"), maxWidth = 80),
+                            FPts = z_fptsWeekDef()
                           ))
               }
-              )
+    )
   })
   
   #Bench Cup Output
   output$bcgsheet <- renderUI({
     tags$iframe(id = "bcgsheet", 
-                src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTjTy8adhC-I9-Pemw_oez5B5lO6BqogZ66H8sA10gW7kSoFg91pDudNP-Il7H5vzJr2WCyZT1RTp7G/pubhtml",
+                src=if (globalleague == "TRUFFLE") { "https://docs.google.com/spreadsheets/d/e/2PACX-1vTjTy8adhC-I9-Pemw_oez5B5lO6BqogZ66H8sA10gW7kSoFg91pDudNP-Il7H5vzJr2WCyZT1RTp7G/pubhtml" } else {
+                  "https://docs.google.com/spreadsheets/d/e/2PACX-1vR6KKRn3h51W8V9-t0kXcSjpblZVCw5B8O593W5pOtvp4HbWVnYE8-60ZcPeVjscQKaV0qeyZ3eDAVt/pubhtml"
+                },
                 height=1020,
                 width='100%',
                 frameborder = 0,
@@ -3819,28 +4178,28 @@ shinyServer(function(input, output, session) {
               highlight = T,
               compact = T,
               columns = list(
-                Season = seasonDef(filt = T),
-                Week = weekDef,
-                Pos = posDef(),
-                Player = playerDef(minW = 150, filt = T),
-                Opp = opDef,
-                OpRk = oprkDef,
-                PaCmp = pacmpDef,
-                PaAtt = paattDef,
-                PaYd = paydDefWk,
-                PaTD = patdDefWk,
-                PaInt = paintDefWk,
-                RuAtt = ruattDefWk,
-                RuYd = ruydDefWk,
-                RuTD = rutdDefWk,
-                RuFD = rufdDefWk,
-                Tar = tarDefWk,
-                Rec = recDefWk,
-                ReYd = reydDefWk,
-                ReTD = retdDefWk,
-                ReFD = refdDefWk,
-                FL = flDef,
-                FPts = fptsWeekDef()
+                Season = z_seasonDef(filt = T),
+                Week = z_weekDef,
+                Pos = z_posDef(),
+                Player = z_playerDef(minW = 150, filt = T),
+                Opp = z_opDef,
+                OpRk = z_oprkDef,
+                PaCmp = z_pacmpDef(),
+                PaAtt = z_paattDef(),
+                PaYd = z_paydDef(wk = T),
+                PaTD = z_patdDef(wk = T),
+                PaInt = z_paintDef(wk = T),
+                RuAtt = z_ruattDef(wk = T),
+                RuYd = z_ruydDef(wk = T),
+                RuTD = z_rutdDefWk,
+                RuFD = z_rufdDefWk,
+                Tar = z_tarDefWk,
+                Rec = z_recDefWk,
+                ReYd = z_reydDefWk,
+                ReTD = z_retdDefWk,
+                ReFD = z_refdDefWk,
+                FL = z_flDef,
+                FPts = z_fptsWeekDef()
               ),
               columnGroups = list(
                 colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
@@ -3852,7 +4211,7 @@ shinyServer(function(input, output, session) {
   
   #datahub seasons
   output$dhseasons <- renderReactable({
-    reactable(seasons[Scoring == input$homescoring][order(-FPts)][, !c("PosRk","Scoring")],
+    reactable(seasons[Scoring == input$homescoring][order(-FPts)][, !c("TRUFFLE","PosRk","Scoring")],
               paginationType = "jump",
               showPageInfo = FALSE, showPageSizeOptions = TRUE, defaultPageSize = 20,
               pageSizeOptions = c(10, 20, 50, 100),
@@ -3861,28 +4220,28 @@ shinyServer(function(input, output, session) {
               highlight = T,
               compact = T,
               columns = list(
-                Season = seasonDef(filt = T),
-                Pos = posDef(),
-                Player = playerDef(minW = 150, filt = T),
-                NFL = nflDef,
-                G = gDef(),
-                PaCmp = pacmpDef,
-                PaAtt = paattDef,
-                PaYd = paydDefSsn,
-                PaTD = patdDefSsn,
-                PaInt = paintDefSsn,
-                RuAtt = ruattDefSsn,
-                RuYd = ruydDefSsn,
-                RuTD = rutdDefSsn,
-                RuFD = rufdDefSsn,
-                Tar = tarDefSsn,
-                Rec = recDefSsn,
-                ReYd = reydDefSsn,
-                ReTD = retdDefSsn,
-                ReFD = refdDefSsn,
-                FL = flDef,
-                Avg = avgDef(),
-                FPts = fptsSeasDef()
+                Season = z_seasonDef(filt = T),
+                Pos = z_posDef(),
+                Player = z_playerDef(minW = 150, filt = T),
+                NFL = z_nflDef,
+                G = z_gDef(),
+                PaCmp = z_pacmpDef(),
+                PaAtt = z_paattDef(),
+                PaYd = z_paydDef(szn = T),
+                PaTD = z_patdDef(szn = T),
+                PaInt = z_paintDef(szn = T),
+                RuAtt = z_ruattDef(szn = T),
+                RuYd = z_ruydDef(szn = T),
+                RuTD = z_rutdDefSsn,
+                RuFD = z_rufdDefSsn,
+                Tar = z_tarDefSsn,
+                Rec = z_recDefSsn,
+                ReYd = z_reydDefSsn,
+                ReTD = z_retdDefSsn,
+                ReFD = z_refdDefSsn,
+                FL = z_flDef,
+                Avg = z_avgDef(),
+                FPts = z_fptsSeasDef()
               ),
               columnGroups = list(
                 colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
@@ -3903,27 +4262,27 @@ shinyServer(function(input, output, session) {
               highlight = T,
               compact = T,
               columns = list(
-                Season = seasonDef(filt = T),
-                Week = weekDef,
-                TRUFFLE = trfDef(),
-                Pos = posDef(),
-                Player = playerDef(minW = 150, filt = T),
-                PaCmp = pacmpDef,
-                PaAtt = paattDef,
-                PaYd = paydDefWk,
-                PaTD = patdDefWk,
-                PaInt = paintDefWk,
-                RuAtt = ruattDefWk,
-                RuYd = ruydDefWk,
-                RuTD = rutdDefWk,
-                RuFD = rufdDefWk,
-                Tar = tarDefWk,
-                Rec = recDefWk,
-                ReYd = reydDefWk,
-                ReTD = retdDefWk,
-                ReFD = refdDefWk,
-                FL = flDef,
-                FPts = fptsWeekDef()
+                Season = z_seasonDef(filt = T),
+                Week = z_weekDef,
+                TRUFFLE = z_trfDef(),
+                Pos = z_posDef(),
+                Player = z_playerDef(minW = 150, filt = T),
+                PaCmp = z_pacmpDef(),
+                PaAtt = z_paattDef(),
+                PaYd = z_paydDef(wk = T),
+                PaTD = z_patdDef(wk = T),
+                PaInt = z_paintDef(wk = T),
+                RuAtt = z_ruattDef(wk = T),
+                RuYd = z_ruydDef(wk = T),
+                RuTD = z_rutdDefWk,
+                RuFD = z_rufdDefWk,
+                Tar = z_tarDefWk,
+                Rec = z_recDefWk,
+                ReYd = z_reydDefWk,
+                ReTD = z_retdDefWk,
+                ReFD = z_refdDefWk,
+                FL = z_flDef,
+                FPts = z_fptsWeekDef()
               ),
               columnGroups = list(
                 colGroup(name = "Passing", columns = c("PaCmp", "PaAtt", "PaYd", "PaTD", "PaInt"), align = 'left'),
@@ -3945,10 +4304,10 @@ shinyServer(function(input, output, session) {
               compact = T,
               columns = list(
                 `#` = colDef(minWidth = 30, align = "right"),
-                TRF = trfDef(filt = FALSE),
+                TRF = z_trfDef(filt = FALSE),
                 Player = colDef(minWidth = 150, align = "left"),
-                Pos = posDef(maxW = 40, filt = FALSE),
-                Salary = salaryDefNobar(minW = 60)
+                Pos = z_posDef(maxW = 40, filt = FALSE),
+                Salary = z_salaryDefNobar(minW = 60)
               ),
               columnGroups = list(colGroup(name = "Round 1", columns = c("#","TRF","Player","Pos","Salary"), align = 'left')
               )
@@ -3965,10 +4324,10 @@ shinyServer(function(input, output, session) {
               compact = T,
               columns = list(
                 `#` = colDef(minWidth = 30, align = "right"),
-                TRF = trfDef(filt = FALSE),
+                TRF = z_trfDef(filt = FALSE),
                 Player = colDef(minWidth = 150, align = "left"),
-                Pos = posDef(maxW = 40, filt = FALSE),
-                Salary = salaryDefNobar(minW = 60)
+                Pos = z_posDef(maxW = 40, filt = FALSE),
+                Salary = z_salaryDefNobar(minW = 60)
               ),
               columnGroups = list(colGroup(name = "Round 2", columns = c("#","TRF","Player","Pos","Salary"), align = 'left')
               )
@@ -3985,10 +4344,10 @@ shinyServer(function(input, output, session) {
               compact = T,
               columns = list(
                 `#` = colDef(minWidth = 30, align = "right"),
-                TRF = trfDef(filt = FALSE),
+                TRF = z_trfDef(filt = FALSE),
                 Player = colDef(minWidth = 150, align = "left"),
-                Pos = posDef(maxW = 40, filt = FALSE),
-                Salary = salaryDefNobar(minW = 60)
+                Pos = z_posDef(maxW = 40, filt = FALSE),
+                Salary = z_salaryDefNobar(minW = 60)
               ),
               columnGroups = list(colGroup(name = "Round 3", columns = c("#","TRF","Player","Pos","Salary"), align = 'left')
               )
@@ -4007,10 +4366,10 @@ shinyServer(function(input, output, session) {
               compact = T,
               columns = list(
                 `#` = colDef(minWidth = 30, align = "right"),
-                TRF = trfDef(filt = FALSE),
+                TRF = z_trfDef(filt = FALSE),
                 Player = colDef(minWidth = 150, align = "left"),
-                Pos = posDef(maxW = 40, filt = FALSE),
-                Salary = salaryDefNobar(minW = 60)
+                Pos = z_posDef(maxW = 40, filt = FALSE),
+                Salary = z_salaryDefNobar(minW = 60)
               ),
               columnGroups = list(colGroup(name = "Round 1", columns = c("#","TRF","Player","Pos","Salary"), align = 'left')
               )
@@ -4027,10 +4386,10 @@ shinyServer(function(input, output, session) {
               compact = T,
               columns = list(
                 `#` = colDef(minWidth = 30, align = "right"),
-                TRF = trfDef(filt = FALSE),
+                TRF = z_trfDef(filt = FALSE),
                 Player = colDef(minWidth = 150, align = "left"),
-                Pos = posDef(maxW = 40, filt = FALSE),
-                Salary = salaryDefNobar(minW = 60)
+                Pos = z_posDef(maxW = 40, filt = FALSE),
+                Salary = z_salaryDefNobar(minW = 60)
               ),
               columnGroups = list(colGroup(name = "Round 2", columns = c("#","TRF","Player","Pos","Salary"), align = 'left')
               )
@@ -4047,14 +4406,21 @@ shinyServer(function(input, output, session) {
               compact = T,
               columns = list(
                 `#` = colDef(minWidth = 30, align = "right"),
-                TRF = trfDef(filt = FALSE),
+                TRF = z_trfDef(filt = FALSE),
                 Player = colDef(minWidth = 150, align = "left"),
-                Pos = posDef(maxW = 40, filt = FALSE),
-                Salary = salaryDefNobar(minW = 60)
+                Pos = z_posDef(maxW = 40, filt = FALSE),
+                Salary = z_salaryDefNobar(minW = 60)
               ),
               columnGroups = list(colGroup(name = "Round 3", columns = c("#","TRF","Player","Pos","Salary"), align = 'left')
               )
     )
+  })
+  
+  #Stop the app timing out
+  autoInvalidate <- reactiveTimer(10000)
+  observe({
+    autoInvalidate()
+    cat(".")
   })
   
 })

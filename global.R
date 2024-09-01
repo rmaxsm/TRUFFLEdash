@@ -20,12 +20,17 @@ library(shinyBS)
 library(markdown)
 library(fmsb)
 library(reticulate)
+library(lubridate)
 
 # setting colors -----
 #colors and global options 
 
 minAvg <- 3
-currentyr <- 2023
+currentyr <- 2024
+isOffseason <- T
+
+#test it works without 2024 data
+no2024testdata <- ifelse(isOffseason == T, 2024, 2025)
 
 options(reactable.language = reactableLang(
   pagePrevious = "\u276e",
@@ -69,25 +74,34 @@ pal <- setNames(pal, c("QB", "RB", "WR", "TE", "DST", "DC", "IR"))
 
 ggpal <- c(QB = "#8AE2A6", RB = "#FC9592", WR = "#96D3F5", TE = "#FFD087")
 
+bigN <- 9999999999
+
 # Reading in and cleaning data from Excels/csvs -----
 
 #file of TRUFFLE team info
 # teams.csv ----
-teams <- as.data.table(read_csv("data/teams.csv", col_types = cols()))
+#teams <- as.data.table(read_csv("data/teams.csv", col_types = cols()))
+#demodata
+teams <- as.data.table(read_csv("demodata/teams.csv", col_types = cols()))
 
 # ids.csv ----
 #file of CBS player IDs
-ids <- as.data.table(read_csv("data/playerIDs.csv", col_types = cols()))
+#ids <- as.data.table(read_csv("data/playerIDs.csv", col_types = cols()))
+#demodata
+ids <- as.data.table(read_csv("demodata/playerIDs.csv", col_types = cols()))
+
 ids$playerID <- as.character(ids$playerID)
 ids$TRUFFLE[!(ids$TRUFFLE %in% c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW"))] <- "FA"
 ids <- merge(ids, teams[, c("Abbrev", "TeamNum")], by.x = "TRUFFLE", by.y = "Abbrev", all.x = T)
 
 #import fantasy pros file to use for age
 #fprosage <- read_excel("data/fprosage.xlsx")
-fprosage <- read_csv("data/fprosage.csv", col_types = cols())
+#demodata
+fprosage <- read_csv("demodata/fprosage.csv", col_types = cols())
 cleanFprosage <- function(file) {
   file$TIERS <- NULL
-  colnames(file) <- c("DynRk", "Player", "NFL", "DynPosRk", "Bye", "AgePH", "SOS", "EcfADP")
+  file$`ECR VS. ADP` <- NULL
+  colnames(file) <- c("DynRk", "Player", "NFL", "DynPosRk", "BestRk", "WorstRk", "AvgDynRk", "SD")
   file$Player <- str_replace_all(file$Player,"\\.","")
   file$Player <- str_replace_all(file$Player," Jr","")
   file$Player <- str_replace_all(file$Player," Sr","")
@@ -96,25 +110,45 @@ cleanFprosage <- function(file) {
   file$Player <- str_replace_all(file$Player,"Will Fuller V","Will Fuller")
   file$Player <- str_replace_all(file$Player,"La'Mical","Lamical")
   
+  #extract position
+  file$Pos <- substr(file$DynPosRk, 1, 2)
+  
+  #read in birthdays
+  bdays <- read_csv("demodata/birthdays.csv", col_types = cols())
+  bdays$player <- str_replace_all(bdays$player,"\\.","")
+  bdays$player <- str_replace_all(bdays$player," Jr","")
+  bdays$player <- str_replace_all(bdays$player," Sr","")
+  bdays$player <- str_replace_all(bdays$player," III","")
+  bdays$player <- str_replace_all(bdays$player," II","")
+  bdays$player <- str_replace_all(bdays$player,"Will Fuller V","Will Fuller")
+  bdays$player <- str_replace_all(bdays$player,"La'Mical","Lamical")
+  
+  bdays$birthday <- as.Date(bdays$birthday, "%m/%d/%y")
+  bdays$Age <- as.integer(floor(difftime(as.Date(Sys.Date(), format='%d/%m/%y'), bdays$birthday, unit="days") / 365.25))
+  colnames(bdays) <- c("Player", "Pos", "Team", "Birthday", "Age")
+  
+  file <- merge(x = file, y = bdays[ , c("Player", "Pos", "Age")], by = c("Player", "Pos"), all.x=TRUE)
+  
   return(file)
 }
 fprosage <- as.data.table(cleanFprosage(fprosage))
 
 # rosters.csv ----
 #file of current TRUFFLE rosters
-rosters <- read_csv("data/rosters.csv", col_types = cols())
+#rosters <- read_csv("data/rosters.csv", col_types = cols())
+#demodata
+rosters <- read_csv("demodata/rosters.csv", col_types = cols())
 cleanRosters <- function(file) {
   
   #convert to DT
   file <- as.data.table(file)
   
   #merge in correct team abbreviations
-  file <- merge(x = file, y = fprosage[ , c("Player", "AgePH")], by = "Player", all.x=TRUE)
-  file <- add_column(file, Age = NA, .after = "Player")
-  file$Age <- as.integer(file$AgePH)
-  file$AgePH <- NULL
-  
-  colnames(file) <- c("Player", "Age", "Pos", "TRUFFLE", "NFL", "Opp", "GameTime", "Bye", "O/U", "PosRnk", "Ovp", "Rost", "Start", "Salary", "Contract", "Last", "Avg", "Proj")
+  file <- merge(x = file, y = fprosage[ , c("Player", "Pos", "Age")], by = c("Player", "Pos"), all.x=TRUE)
+  #colnames(file) <- c("Player", "Age",  "Pos", "TRUFFLE", "NFL", "Opp", "GameTime", "Bye", "O/U", "PosRnk", "Ovp", "Rost", "Start", "Salary", "Contract", "Last", "Avg", "Proj")
+  #demodata
+  colnames(file) <- c("Player", "Pos", "League", "TRUFFLE", "NFL", "Opp", "GameTime", "Bye", "O/U", "PosRnk", "Ovp", "Rost", "Start", "Salary", "Contract", "Last", "Avg", "Proj", "Age")
+  file <- file[, c("League", "TRUFFLE", "Player",  "Pos", "NFL", "Age", "Opp", "GameTime", "Bye", "O/U", "PosRnk", "Ovp", "Rost", "Start", "Salary", "Contract", "Last", "Avg", "Proj")]
   
   #finalized 
   return(file)
@@ -123,7 +157,9 @@ rosters <- cleanRosters(rosters)
 
 # oldrosters.csv ----
 #get old rosters and merge in current teams to see what TRUFFLE team players were on which year
-oldrosters <- as.data.table(read_csv("data/oldrosters.csv", col_types = cols()))
+#oldrosters <- as.data.table(read_csv("data/oldrosters.csv", col_types = cols()))
+#demodata
+oldrosters <- as.data.table(read_csv("demodata/oldrosters.csv", col_types = cols()))
 #calculate rings and bench cup wins to display in record books
 rings <- oldrosters[,
                     .(Rings = sum(Ring),
@@ -133,7 +169,7 @@ rings <- oldrosters[,
                       BCYears = lapply(list(paste0(" ",substr(Season[BenchCup == 1],3,4))), sort, decreasing = F),
                       BCTeams = list(unique(paste0(" ",TRUFFLE[BenchCup == 1])))
                     ),
-                    by = .(Pos, Player)]
+                    by = .(League, Pos, Player)]
 rings$RingYears[rings$RingYears == " '"] <- NA; rings$BCYears[rings$BCYears == " '"] <- NA
 ringsbyteam <- oldrosters[,
                           .(Rings = sum(Ring),
@@ -141,21 +177,23 @@ ringsbyteam <- oldrosters[,
                             BenchCups = sum(BenchCup),
                             BCYears = lapply(list(paste0(" ",substr(Season[BenchCup == 1],3,4))), sort, decreasing = F)
                           ),
-                          by = .(TRUFFLE, Pos, Player)]
+                          by = .(League, TRUFFLE, Pos, Player)]
 ringsbyteam$RingYears[ringsbyteam$RingYears == " "] <- NA; ringsbyteam$BCYears[ringsbyteam$BCYears == " "] <- NA
 #delete rings and bench cup columns after use
 oldrosters$Ring <- NULL; oldrosters$BenchCup <- NULL
 
 #add current year rosters
-mergerosters <- rosters[, .(TRUFFLE, Pos, Player, NFL, Salary, Contract)]
+mergerosters <- rosters[, .(League, TRUFFLE, Pos, Player, NFL, Salary, Contract)]
 mergerosters$Season <- currentyr
-mergerosters <- mergerosters[, .(Season, TRUFFLE, Pos, Player, NFL, Salary, Contract)]
+mergerosters <- mergerosters[, .(League, Season, TRUFFLE, Pos, Player, NFL, Salary, Contract)]
 oldrosters <- as.data.table(rbind(oldrosters, mergerosters))[order(Player,Season)]
 rm(mergerosters)
 
 # fantasy.csv ----
 #file of weekly scoring for players started/active in TRUFFLE
-fantasy <- as.data.table(read_csv("data/fantasy.csv", col_types = cols()))
+#fantasy <- as.data.table(read_csv("data/fantasy.csv", col_types = cols()))
+#demodata
+fantasy <- as.data.table(read_csv("demodata/fantasy.csv", col_types = cols()))
 #fantasy <- read_excel("data/fantasy2022test.xlsx")
 cleanFantasy <- function(file) {
   #create scoring setting column and initial PPFD file version
@@ -185,10 +223,14 @@ cleanFantasy <- function(file) {
   return(file)
 }
 fantasy <- as.data.table(cleanFantasy(fantasy))
+#no 2024 data test
+fantasy <- fantasy[Season != no2024testdata]
 
 # seasons.csv ----
 #file of full season data for players dating back to 2015
-seasons <- as.data.table(read_csv("data/seasons.csv", col_types = cols()))
+#seasons <- as.data.table(read_csv("data/seasons.csv", col_types = cols()))
+#demodata
+seasons <- as.data.table(read_csv("demodata/seasons.csv", col_types = cols()))
 cleanSeasons <- function(file) {
   #create scoring setting column and initial PPFD file version
   file$Scoring <- "PPFD"
@@ -220,7 +262,9 @@ seasons <- as.data.table(cleanSeasons(seasons))
 
 # weekly.csv ----
 #file of weekly scoring across NFL
-weekly <- as.data.table(read_csv("data/weekly.csv", col_types = cols()))
+#weekly <- as.data.table(read_csv("data/weekly.csv", col_types = cols()))
+#demodata
+weekly <- as.data.table(read_csv("demodata/weekly.csv", col_types = cols()))
 cleanWeekly <- function(file) {
   #remove players that didnt play in a week
   file <- filter(file, is.na(Avg) == F)
@@ -252,21 +296,25 @@ cleanWeekly <- function(file) {
   return(file)
 }
 weekly <- as.data.table(cleanWeekly(weekly))
+#no 2024 data test
+weekly <- weekly[Season != no2024testdata]
 
 #create weekly with original teams by old
-weeklyogteams <- weekly
-weeklyogteams$TRUFFLE <- NULL
-weeklyogteams <- merge(x = weeklyogteams, y = oldrosters[ , .(Season, Pos, Player, TRUFFLE)], by = c("Season", "Pos", "Player"), all.x=TRUE)
-weeklyogteams$TRUFFLE[is.na(weeklyogteams$TRUFFLE)] <- "FA"
+weekly_orig_teams <- weekly
+weekly_orig_teams$TRUFFLE <- NULL
+weekly_orig_teams <- merge(x = weekly_orig_teams, y = oldrosters[ , .(League, Season, Pos, Player, TRUFFLE)], by = c("League", "Season", "Pos", "Player"), all.x=TRUE)
+weekly_orig_teams$TRUFFLE[is.na(weekly_orig_teams$TRUFFLE)] <- "FA"
+#weekly just unique scoring records, no League or TRUFFLE info
+weekly_no_teams <- weekly[League == "TRUFFLE", -c("League", "TRUFFLE")]
 
 
 #add current truffle teams
 weekly$TRUFFLE <- NULL
-weekly <- merge(x = weekly, y = rosters[ , .(Pos, Player, TRUFFLE)], by = c("Pos", "Player"), all.x=TRUE)
+weekly <- merge(x = weekly, y = rosters[ , .(League, Pos, Player, TRUFFLE)], by = c("League", "Pos", "Player"), all.x=TRUE)
 weekly$TRUFFLE[is.na(weekly$TRUFFLE)] <- "FA"
 
 #add current season
-currentseason <- weekly[Season == max(weekly$Season),
+currentseason <- weekly[Season == max(weekly$Season) & League == "TRUFFLE",
                         .(NFL = NFL[1],
                           G = .N,
                           PaCmp = sum(PaCmp),
@@ -289,33 +337,86 @@ currentseason <- weekly[Season == max(weekly$Season),
                         ),
                         by = .(Scoring, Season, Pos, Player)]
 
-if (max(seasons$Season) != currentyr) {
+if (max(seasons$Season) != max(currentseason$Season)) {
   seasons <- rbind(seasons, currentseason)
 }
+rm(currentseason)
 
 seasons <- seasons[order(Scoring, -Season,-FPts, -Avg)][, `:=`(PosRk = 1:.N), by = .(Scoring, Season, Pos)]
 
+#file of projections, mainly to be used during offseason
+#demodata
+proj <- as.data.table(read_csv("demodata/projections.csv", col_types = cols()))
+#until Dre builds cleaning scrape file that accounts for names
+proj$Player <- str_replace_all(proj$Player,"\\.","")
+proj$Player <- str_replace_all(proj$Player," Jr","")
+proj$Player <- str_replace_all(proj$Player," Sr","")
+proj$Player <- str_replace_all(proj$Player," III","")
+proj$Player <- str_replace_all(proj$Player," II","")
+proj$Player <- str_replace_all(proj$Player,"Will Fuller V","Will Fuller")
+proj$Player <- str_replace_all(proj$Player,"La'Mical","Lamical")
+
+#add needed columns
+proj <- proj[order(-Season,-FPts, -Avg)][, `:=`(PosRk = 1:.N), by = .(Season, Pos)]
+proj$ptslogs <- NA
+proj$Touch <- proj$PaCmp + proj$RuAtt + proj$Rec
+proj$Opp <- proj$PaAtt + proj$RuAtt + proj$Tar
+proj$`FPts/Touch` <- round(proj$FPts / (proj$PaCmp + proj$RuAtt + proj$Rec), 3)
+proj$`FPts/Opp` <- round(proj$FPts / (proj$PaAtt + proj$RuAtt + proj$Tar), 3)
+proj$YdPts <- .04*proj$PaYd + .1*(proj$RuYd + proj$ReYd)
+proj$TDPts <- 4*proj$PaTD + 6*(proj$RuTD + proj$ReTD)
+proj$FDPts <- 0
+proj$RuPts <- .1*proj$RuYd + 6*proj$RuTD
+proj$RePts <- .1*proj$ReYd + 6*proj$ReTD
+proj$`YdPt%` <- round((.04*proj$PaYd + .1*(proj$RuYd + proj$ReYd)) / proj$FPts,3)
+proj$`TDPt%` <- round((4*proj$PaTD + 6*(proj$RuTD + proj$ReTD)) / proj$FPts,3)
+proj$`FDPt%` <- 0
+proj$`RuPt%` <- round((.1*proj$RuYd + 6*proj$RuTD)/proj$FPts,3)
+proj$`RePt%` <- round((.1*proj$ReYd + 6*proj$ReTD)/proj$FPts,3)
+proj <- proj[order(-FPts)][, `:=`(PosRk = 1:.N), by = .(Season, Pos)]
+
+
+#file of standings
+#dedmodata
+standings <- as.data.table(read_csv("demodata/standings.csv", col_types = cols()))
+
 #file to indicate what players have rookie rights
-rookierights <- read_csv("data/rookierights.csv", col_types = cols())
-rookierights <- as.vector(rookierights$Player)
+#rookierights <- read_csv("data/rookierights.csv", col_types = cols())
+#rookierights <- as.vector(rookierights$Player)
+#demodata
+rookierights <- as.data.table(read_csv("demodata/rookierights.csv", col_types = cols()))
 
 #file of draft records
-draft <- as.data.table(read_csv("data/drafts.csv", col_types = cols()))
+#draft <- as.data.table(read_csv("data/drafts.csv", col_types = cols()))
+#demodata
+draft <- as.data.table(read_csv("demodata/drafts.csv", col_types = cols()))
 
 #franchise tag files
-franchised <- as.data.table(read_csv("data/franchisetag.csv", col_types = cols()))
-top5paid <- as.data.table(read_csv("data/top5paid.csv", col_types = cols()))
+#franchised <- as.data.table(read_csv("data/franchisetag.csv", col_types = cols()))
+#top5paid <- as.data.table(read_csv("data/top5paid.csv", col_types = cols()))
+#demodata
+franchised <- as.data.table(read_csv("demodata/franchisetag.csv", col_types = cols()))
+top5paid <- as.data.table(read_csv("demodata/top5paid.csv", col_types = cols()))
 
 #rivalry scorers
-riv <- as.data.table(read_csv("data/rivalries.csv", col_types = cols()))
+#riv <- as.data.table(read_csv("data/rivalries.csv", col_types = cols()))
+#demodata
+riv <- as.data.table(read_csv("demodata/rivalries.csv", col_types = cols()))
 
-rivscores <- as.data.table(read_csv("data/rivalryscores.csv", col_types = cols()))
+#rivalry scores
+#rivscores <- as.data.table(read_csv("data/rivalryscores.csv", col_types = cols()))
+#demodata
+rivscores <- as.data.table(read_csv("demodata/rivalryscores.csv", col_types = cols()))
+#no 2024 data test
+rivscores <- rivscores[Season != no2024testdata]
+
 rivscores$Winner <- ifelse(rivscores$Team1Score > rivscores$Team2Score, rivscores$Team1, rivscores$Team2)
 rivscores$Icon <- "www/graphics/rivalrylogos/blank.png"
 rivscores$Icon[rivscores$Thanksgiving == 1] <- "www/graphics/rivalrylogos/thanksgiving.png"
 rivscores$Icon[(rivscores$Season < 2021 & rivscores$Week >= 14) | (rivscores$Season >= 2021 & rivscores$Week >= 15)] <- "www/graphics/rivalrylogos/PS.png"
 rivscores$Icon[rivscores$Championship == 1] <- "www/graphics/rivalrylogos/rfs.png"
 
+#fantasy scores by players in rivalry games
 rivfantasy <- fantasy[Scoring == "PPFD" & (paste0(Season, "-", Week, "-", TRUFFLE) %in% paste0(rivscores$Season, "-", rivscores$Week, "-", rivscores$Team1) |
                   paste0(Season, "-", Week, "-", TRUFFLE) %in% paste0(rivscores$Season, "-", rivscores$Week, "-", rivscores$Team2))]
 rivfantasy <- merge(rivfantasy, teams[, .(Abbrev, Rivalry)], by.x = "TRUFFLE", by.y = "Abbrev")
@@ -339,20 +440,26 @@ turkeyscorers <- rivfantasy[Thanksgiving == 1,
 
 
 #read in advanced combined files
-extradash <- as.data.table(read_csv("data/extraDash.csv", col_types = cols()))
-colnames(extradash)[7:20] <- c("Cmp%", "Pa20", "Pa40", "RuYPC", "Ru20", "Tar", "Tar%", "ReYPC", "Re20", "Re40", "ReFD%", "TotYd", "Avg", "FPts")
-extradash$TRUFFLE <- NULL
-extradash <- merge(x = extradash, y = rosters[ , .(Pos, Player, TRUFFLE)], by = c("Pos", "Player"), all.x=TRUE)
-extradash$TRUFFLE[!(extradash$TRUFFLE %in% teams$Abbrev)] <- "FA"
+#extradash <- as.data.table(read_csv("data/extraDash.csv", col_types = cols()))
+#demodata
+extradash <- as.data.table(read_csv("demodata/extraDash.csv", col_types = cols()))
+#no 2024 data test
+extradash <- extradash[Season != no2024testdata]
+
+colnames(extradash)[6:19] <- c("Cmp%", "Pa20", "Pa40", "RuYPC", "Ru20", "Tar", "Tar%", "ReYPC", "Re20", "Re40", "ReFD%", "TotYd", "Avg", "FPts")
+
+#don't think extradash needs TRUFFLE team info
+#extradash$TRUFFLE <- NULL
+#extradash <- merge(x = extradash, y = rosters[, .(Pos, Player, TRUFFLE)], by = c("Pos", "Player"), all.x=TRUE)
+#extradash$TRUFFLE[!(extradash$TRUFFLE %in% teams$Abbrev)] <- "FA"
 extradash <- extradash[Avg != "-"]
-extradash <- extradash[, c(3:4, 20, 1:2, 5:19)][order(-Week, -TotYd)]
+extradash <- extradash[, c(3:4, 1:2, 5:19)][order(-Week, -TotYd)]
 
 #merge in other columns for calcs
-extradash <- merge(x = extradash, y = weekly[Scoring == "PPFD" , .(Season, Week, Pos, Player, PaCmp, PaAtt, RuAtt, RuYd, Rec, ReYd, ReFD)], by = c("Season", "Week", "Pos", "Player"))
+extradash <- merge(x = extradash, y = weekly_no_teams[Scoring == "PPFD" , .(Season, Week, Pos, Player, PaCmp, PaAtt, RuAtt, RuYd, Rec, ReYd, ReFD)], by = c("Season", "Week", "Pos", "Player"))
 
 extradashszn <- extradash[,
-                          .(TRUFFLE = TRUFFLE[1],
-                            G = .N,
+                          .(G = .N,
                             `Cmp%` = ifelse(sum(PaAtt, na.rm = T) > 0, round(sum(PaCmp, na.rm = T) / sum(PaAtt, na.rm = T), 3), 0),
                             Pa20 = sum(Pa20, na.rm = T),
                             Pa40 = sum(Pa40, na.rm = T),
@@ -372,11 +479,16 @@ extradashszn <- extradash[,
 extradashszn <- extradashszn[order(-TotYd)]
 
 #espn data
-espn <- as.data.table(read_csv("data/espnStats.csv", col_types = cols(Season = col_double(), Player = col_character(), NFL = col_character(),
+#demodata
+espn <- suppressWarnings(as.data.table(read_csv("demodata/espnStats.csv", col_types = cols(Season = col_double(), Player = col_character(), NFL = col_character(),
                                                                       Pos = col_character(), xFP = col_double(), ActualPts = col_double(), xTD = col_double(),
-                                                                      TD = col_double(), Looks = col_double(), Diff = col_double(), In5 = col_double(), EZ = col_double())))
+                                                                      TD = col_double(), Looks = col_double(), Diff = col_double(), In5 = col_double(), EZ = col_double()))))
+#no 2024 data test
+espn <- espn[Season != no2024testdata]
+
+
 espn <- espn[Player != "Jeffery Simmons"]
-espn <- espn[,
+espn <- suppressWarnings(espn[,
              .(
                xFP = sum(xFP, na.rm = T),
                ActualPts = sum(ActualPts, na.rm = T),
@@ -387,22 +499,33 @@ espn <- espn[,
                In5 = max(In5, na.rm = T),
                EZ = max(EZ, na.rm = T)
              ),
-             by = .(Season, Pos, Player)]
-espn$xFP <- as.numeric(espn$xFP); espn$ActualPts <- as.numeric(espn$ActualPts); espn$xTD <- as.numeric(espn$xTD); espn$TD <- as.numeric(espn$TD)
-espn$Looks <- as.numeric(espn$Looks); espn$Diff <- as.numeric(espn$Diff); espn$In5 <- as.numeric(espn$In5); espn$EZ <- as.numeric(espn$EZ)
+             by = .(Season, Pos, Player)])
+espn[espn=="-Inf"] <- 0
+#espn$xFP <- as.numeric(espn$xFP); espn$ActualPts <- as.numeric(espn$ActualPts); espn$xTD <- as.numeric(espn$xTD); espn$TD <- as.numeric(espn$TD)
+#espn$Looks <- as.numeric(espn$Looks); espn$Diff <- as.numeric(espn$Diff); espn$In5 <- as.numeric(espn$In5); espn$EZ <- as.numeric(espn$EZ)
 espn$FPDiff <- espn$ActualPts - espn$xFP
-espn <- merge(x = espn, y = oldrosters[ , .(Season, Pos, Player, TRUFFLE)], by = c("Season", "Pos", "Player"), all.x=TRUE)
-espn$TRUFFLE[is.na(espn$TRUFFLE)] <- "FA"
+
+#get rid of TRUFFLE column, do this later
+#espn <- merge(x = espn, y = oldrosters[ , .(Season, Pos, Player, TRUFFLE)], by = c("Season", "Pos", "Player"), all.x=TRUE)
+#espn$TRUFFLE[is.na(espn$TRUFFLE)] <- "FA"
+
 colnames(espn)[9] <- "TDDiff"
-espn <- espn[, .(Season, TRUFFLE, Pos, Player, xFP, ActualPts, FPDiff, xTD, TD, TDDiff, Looks, `In5`, EZ)]
+#espn <- espn[, .(Season, TRUFFLE, Pos, Player, xFP, ActualPts, FPDiff, xTD, TD, TDDiff, Looks, `In5`, EZ)]
+espn <- espn[, .(Season, Pos, Player, xFP, ActualPts, FPDiff, xTD, TD, TDDiff, Looks, `In5`, EZ)]
 
 #snaps data
-snaps <- as.data.table(read_csv("data/snapPer.csv", col_types = cols()))
-snaps <- merge(x = snaps, y = rosters[ , .(Pos, Player, TRUFFLE)], by = c("Pos", "Player"), all.x=TRUE)
-snaps$TRUFFLE[is.na(snaps$TRUFFLE)] <- "FA"
-snaps <- snaps[, c(3, 25, 1:2, 4:22, 24, 23)]
+#demodata
+snaps <- as.data.table(read_csv("demodata/snapPer.csv", col_types = cols()))
+#no 2024 data test
+snaps <- snaps[Season != no2024testdata]
+
+#get rid of TRUFFLE column, do this later
+#snaps <- merge(x = snaps, y = rosters[ , .(Pos, Player, TRUFFLE)], by = c("Pos", "Player"), all.x=TRUE)
+#snaps$TRUFFLE[is.na(snaps$TRUFFLE)] <- "FA"
+
+snaps <- snaps[, c(1, 3, 2, 4:22, 24, 23)]
 snaps[snaps == "bye"] <- NA
-colnames(snaps)[24:25] <- c("Avg", "Tot")
+colnames(snaps)[23:24] <- c("Avg", "Tot")
 #dividing snaps by 100 for percentage formatting
 for (i in 5:24) {
   #if(is.numeric(snaps[[i]])) {
@@ -413,6 +536,7 @@ for (i in 5:24) {
 snaps[snaps == 0] <- NA
 
 # modifying tables for display -----
+#all data loads complete
 
 # helpful vectors
 positionorder <- c("QB","RB","WR","TE", "DST", "IR", "DC")
@@ -420,29 +544,39 @@ positionorder <- c("QB","RB","WR","TE", "DST", "IR", "DC")
 #ISSUE
 #possibly need to do this in server
 #team portal tables
-tpoverview <- rosters[, .(TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract)]
+tpoverview <- rosters[, .(League, TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract)]
 tpoverview$Scoring <- "PPFD"
 tpoverviewPPR <- tpoverview; tpoverviewPPR$Scoring <- "PPR"
 tpoverviewhPPR <- tpoverview; tpoverviewhPPR$Scoring <- "hPPR"
 tpoverviewSTD <- tpoverview; tpoverviewSTD$Scoring <- "STD"
 tpoverview <- rbind(tpoverview, tpoverviewPPR, tpoverviewhPPR, tpoverviewSTD); rm(tpoverviewPPR,tpoverviewhPPR,tpoverviewSTD)
 
-tpoverview <- merge(tpoverview, currentseason[Player %in% rosters$Player][, !c("Season", "NFL")], by = c('Scoring','Pos','Player'), all.x = T)
+tpoverview <- merge(tpoverview, seasons[Player %in% rosters$Player & Season == currentyr][, !c("Season", "NFL")], by = c('Scoring','Pos','Player'), all.x = T)
 tpoverview$Avg[tpoverview$Pos == "DST"] <- NA
-tpoverview <- tpoverview[, .(Scoring,TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
+tpoverview <- tpoverview[, .(Scoring,League,TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 
 ptslogs <- weekly[order(-Season, Week)][,
                                         .(ptslog = rev(list(FPts))),
                                         by = .(Scoring, Season, Pos, Player)]
 
-tpoverview <- merge(tpoverview, ptslogs[Season == max(seasons$Season), .(Player,Scoring,ptslog)], by = c('Player','Scoring'), all.x = T)
-#currentyrfix
-#if(max(currentseason$Season) > max(seasons$Season)) { tpoverview <- merge(tpoverview, seasons[Season == max(seasons$Season)][, .(Player,Scoring,PosRk)], by = c('Player','Scoring'), all.x = T) }
-tpoverview <- merge(tpoverview, seasons[Season == max(seasons$Season)][, .(Player,Scoring,PosRk)], by = c('Player','Scoring'), all.x = T)
-tpoverview <- tpoverview[, .(Scoring, TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
+tpoverview <- merge(tpoverview, ptslogs[Season == max(seasons$Season), .(Player,Pos,Scoring,ptslog)], by = c('Player','Pos','Scoring'), all.x = T)
+tpoverview <- merge(tpoverview, seasons[Season == max(seasons$Season)][, .(Player,Pos,Scoring,PosRk)], by = c('Player','Pos','Scoring'), all.x = T)
+
+if (isOffseason == T) {
+  tpoverview$Avg <- NULL
+  tpoverview$FPts <- NULL
+  tpoverview$PosRk <- NULL
+  tpoverview$ptslog <- 0
+
+  #add in projected average points and total points
+  tpoverview <- merge(tpoverview, proj[, .(Player,Pos,PosRk,Avg,FPts)], by = c('Player','Pos'), all.x = T)
+
+}
+
+tpoverview <- tpoverview[, .(Scoring, League, TRUFFLE, Pos, Player, Age, NFL, Bye, Salary, Contract, G, PosRk, ptslog, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 
 #create oldrosters views to be used in teamportal for prior years selected
-oldrosterstp <- oldrosters[Season >= 2020, .(Season, TRUFFLE, Pos, Player, NFL, Salary, Contract)]
+oldrosterstp <- oldrosters[Season >= 2020, .(Season, League, TRUFFLE, Pos, Player, NFL, Salary, Contract)]
 oldrosterstp$Scoring <- "PPFD"
 oldrosterstpPPR <- oldrosterstp; oldrosterstpPPR$Scoring <- "PPR"
 oldrosterstphPPR <- oldrosterstp; oldrosterstphPPR$Scoring <- "hPPR"
@@ -452,11 +586,9 @@ oldrosterstp <- rbind(oldrosterstp, oldrosterstpPPR, oldrosterstphPPR, oldroster
 #merge in other columns for oldrosters team portal
 oldrosterstp <- merge(oldrosterstp, seasons[Player %in% oldrosterstp$Player, -"NFL"], by = c('Scoring','Season','Pos','Player'), all.x = T)
 oldrosterstp$Avg[oldrosterstp$Pos == "DST"] <- NA
-oldrosterstp <- oldrosterstp[, .(Scoring,Season,TRUFFLE, Pos, Player, NFL, Salary, Contract, G, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
+oldrosterstp <- oldrosterstp[, .(Scoring, Season, League, TRUFFLE, Pos, Player, NFL, Salary, Contract, G, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 #merge in ptslogs and posrks
 oldrosterstp <- merge(oldrosterstp, ptslogs[, .(Scoring,Season,Pos,Player,ptslog)], by = c('Scoring','Season','Pos','Player'), all.x = T)
-#currentyrfix
-#if(max(currentseason$Season) > max(seasons$Season)) { oldrosterstp <- merge(oldrosterstp, seasons[, .(Scoring,Season,Pos,Player,PosRk)], by = c('Scoring','Season','Pos','Player'), all.x = T) }
 oldrosterstp <- merge(oldrosterstp, seasons[, .(Scoring,Season,Pos,Player,PosRk)], by = c('Scoring','Season','Pos','Player'), all.x = T)
 
 #create wayoldrostersview for before 2020
@@ -472,26 +604,31 @@ wayoldrosterstp <- merge(wayoldrosterstp, seasons[Player %in% wayoldrosterstp$Pl
 wayoldrosterstp <- wayoldrosterstp[, .(Scoring, Season, TRUFFLE, Pos, Player, NFL, G, PosRk, Avg, FPts)][order(match(Pos, positionorder), -Avg)]
 
 #franchise tag vals
-tagvals <- as.data.table(
+lgs <- c("TRUFFLE", "KERFUFFLE")
+tagvals <- data.table()
+for (i in 1:length(lgs)) {
+tagvals <- rbind(tagvals, as.data.table(
   rbind(
-    c("QB", "First", round(mean(top5paid$Salary[top5paid$Pos == "QB" & top5paid$Season == currentyr]))),
-    c("QB", "Second", max(top5paid$Salary[top5paid$Pos == "QB" & top5paid$Season == currentyr]) + 1 ),
-    c("RB", "First", round(mean(top5paid$Salary[top5paid$Pos == "RB" & top5paid$Season == currentyr]))),
-    c("RB", "Second", max(top5paid$Salary[top5paid$Pos == "RB" & top5paid$Season == currentyr]) + 1 ),
-    c("WR", "First", round(mean(top5paid$Salary[top5paid$Pos == "WR" & top5paid$Season == currentyr]))),
-    c("WR", "Second", max(top5paid$Salary[top5paid$Pos == "WR" & top5paid$Season == currentyr]) + 1 ),
-    c("TE", "First", round(mean(top5paid$Salary[top5paid$Pos == "TE" & top5paid$Season == currentyr]))),
-    c("TE", "Second", max(top5paid$Salary[top5paid$Pos == "TE" & top5paid$Season == currentyr]) + 1 )
+    c(lgs[i], "QB", "First", round(mean(top5paid$Salary[top5paid$Pos == "QB" & top5paid$Season == currentyr]))),
+    c(lgs[i], "QB", "Second", max(top5paid$Salary[top5paid$Pos == "QB" & top5paid$Season == currentyr]) + 1 ),
+    c(lgs[i], "RB", "First", round(mean(top5paid$Salary[top5paid$Pos == "RB" & top5paid$Season == currentyr]))),
+    c(lgs[i], "RB", "Second", max(top5paid$Salary[top5paid$Pos == "RB" & top5paid$Season == currentyr]) + 1 ),
+    c(lgs[i], "WR", "First", round(mean(top5paid$Salary[top5paid$Pos == "WR" & top5paid$Season == currentyr]))),
+    c(lgs[i], "WR", "Second", max(top5paid$Salary[top5paid$Pos == "WR" & top5paid$Season == currentyr]) + 1 ),
+    c(lgs[i], "TE", "First", round(mean(top5paid$Salary[top5paid$Pos == "TE" & top5paid$Season == currentyr]))),
+    c(lgs[i], "TE", "Second", max(top5paid$Salary[top5paid$Pos == "TE" & top5paid$Season == currentyr]) + 1 )
   )
-)
-colnames(tagvals) <- c("Pos", "Type", "TagVal")
+))
+}
+colnames(tagvals) <- c("League", "Pos", "Type", "TagVal")
 tagvals$TagVal <- as.numeric(tagvals$TagVal)
 
 #table of players with franchise tag values
-ft <- rosters[, .(Pos, Player, Salary, Contract)][order(-Salary)][Pos %in% c("QB", "RB", "WR", "TE")]
+ft <- rosters[, .(League, Pos, Player, Salary, Contract)][order(-Salary)][Pos %in% c("QB", "RB", "WR", "TE")]
 ft$TagVal <- NA
 
 for (i in 1:nrow(ft)) {
+  lg <- ft$League[i]
   pos <- ft$Pos[i]
   pl <- ft$Player[i]
   csal <- ft$Salary[i]
@@ -504,69 +641,88 @@ for (i in 1:nrow(ft)) {
   } else if (ccon == 1 & pl %in% rookierights) {
     ft$TagVal[i] <- "Ineligible (Rookie Ext)"
     #set players franchise tagged 2 previous seasons to ineligible
-  } else if (pl %in% franchised$Player[franchised$Season == currentyr] & pl %in% franchised$Player[franchised$Season == currentyr - 1]) {
+  } else if (pl %in% franchised$Player[franchised$Season == currentyr & franchised$League == lg] & pl %in% franchised$Player[franchised$Season == currentyr - 1 & franchised$League == lg]) {
     ft$TagVal[i] <- "Ineligible (tagged 2x)"
     #set players franchise tagged previously to second tag value based on position
-  } else if (pl %in% franchised$Player[franchised$Season == currentyr]) {
-    ft$TagVal[i] <- tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "Second"]
+  } else if (pl %in% franchised$Player[franchised$Season == currentyr & franchised$League == lg]) {
+    ft$TagVal[i] <- tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "Second" & tagvals$League == lg]
     #set players who's current salary is greater than first tag value, to current salary plus 1
-    #  } else if (csal >= tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "First"]) {
-    #ft$TagVal[i] <- csal + 1
+    } else if (csal >= tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "First" & tagvals$League == lg]) {
+    ft$TagVal[i] <- csal + 1
     #set all other players on 1 year contracts to first tag
   } else {
-    ft$TagVal[i] <- tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "First"]
+    ft$TagVal[i] <- tagvals$TagVal[tagvals$Pos == pos & tagvals$Type == "First" & tagvals$League == lg]
   }
 }
 
 #contracts table
-contracts <- rosters[, .(TRUFFLE, Pos, Player, Age, NFL, Salary, Contract)]
-contracts <- merge(x = contracts, y = draft[, .(Pos, Player, Extension)], by = c("Pos", "Player"), all.x = T)[order(Player)]
-contracts <- merge(x = contracts, y = ft[, .(Pos, Player, TagVal)], by = c("Pos", "Player"), all.x = T)[order(Player)]
-contracts <- contracts[, `:=`(`'23` = Salary,
-                              `'24` = ifelse(Contract > 1, Salary,
-                                             ifelse(Contract == 1 & is.element(Player, rookierights) == T, Extension,
-                                                    ifelse(Contract == 1 & as.numeric(TagVal) > 0 & is.na(as.numeric(TagVal)) == F, TagVal,
-                                                           ifelse(Contract == 1 & is.element(Player, rookierights) == F, "FA", "-")))),
-                              `'25` = ifelse(Contract > 2, Salary,
-                                             ifelse(Contract == 1 & is.element(Player, rookierights) == T, Extension,
-                                                    ifelse(Contract == 2 & is.element(Player, rookierights) == T, Extension,
-                                                           ifelse(Contract == 1 & is.element(Player, franchised$Player[franchised$Season == currentyr]) == F, "FT",
-                                                                  ifelse(Contract == 1 & is.element(Player, franchised$Player[franchised$Season == currentyr - 1]) == F, "FA",
-                                                                         ifelse(Contract == 2, "FT", "-")))))),
-                              `'26` = ifelse(Contract > 3, Salary,
-                                             ifelse(Contract == 1 & is.element(Player, rookierights) == T, "FT",
-                                                    ifelse(Contract == 2 & is.element(Player, rookierights) == T, Extension,
-                                                           ifelse(Contract == 3 & is.element(Player, rookierights) == T, Extension,
-                                                                  ifelse(Contract == 1 & is.element(Player, franchised$Player[franchised$Season == currentyr]) == F, "FA",
-                                                                         ifelse(Contract == 2, "FT",
-                                                                                ifelse(Contract == 3 & is.element(Player, rookierights) == F, "FT", "-"))))))),
-                              `'27` = ifelse(Contract > 4, Salary,
-                                             ifelse(Contract == 1 & is.element(Player, rookierights) == T, "FT",
-                                                    ifelse(Contract == 2 & is.element(Player, rookierights) == T, "FT",
-                                                           ifelse(Contract == 3 & is.element(Player, rookierights) == T, Extension,
-                                                                  ifelse(Contract == 4 & is.element(Player, rookierights) == T, Extension,
-                                                                         ifelse(Contract == 3 & is.element(Player, rookierights) == F, "FT",
-                                                                         ifelse(Contract == 2 & is.element(Player, rookierights) == F, "FA",
-                                                                         ifelse(Contract == 4 & is.element(Player, rookierights) == F, "FT", "-"))))))))
-)][order(-Salary)]
+contracts <- rosters[, .(League, TRUFFLE, Pos, Player, Age, NFL, Salary, Contract)]
+contracts <- merge(x = contracts, y = draft[, .(League, Pos, Player, Extension)], by = c("League", "Pos", "Player"), all.x = T)[order(Player)]
+contracts <- merge(x = contracts, y = ft[, .(League, Pos, Player, TagVal)], by = c("League", "Pos", "Player"), all.x = T)[order(Player)]
+contracts$Y1 <- NA; contracts$Y2 <- NA; contracts$Y3 <- NA; contracts$Y4 <- NA; contracts$Y5 <- NA
+
+#loop through leagues and contracts to populate future years
+suppressWarnings(for (i in 1:nrow(contracts)) {
+  lg <- contracts$League[i]
+  pl <- contracts$Player[i]
+  csal <- contracts$Salary[i]
+  ccon <- contracts$Contract[i]
+  ext <- contracts$Extension[i]
+  tagval <- contracts$TagVal[i]
+  
+  contracts$Y1[i] <- csal
+  contracts$Y2[i] <- ifelse(ccon > 1, csal,
+                            ifelse(ccon == 1 & is.element(pl, rookierights$Player[rookierights$League == lg]) == T, ext,
+                                   ifelse(ccon == 1 & as.numeric(tagval) > 0 & is.na(as.numeric(tagval)) == F, tagval,
+                                          ifelse(ccon == 1 & is.element(pl, rookierights$Player[rookierights$League == lg]) == F, "FA", "-"))))
+  contracts$Y3[i] <- ifelse(ccon > 2, csal,
+                            ifelse(ccon == 1 & is.element(pl, rookierights$Player[rookierights$League == lg]) == T, ext,
+                                   ifelse(ccon == 2 & is.element(pl, rookierights$Player[rookierights$League == lg]) == T, ext,
+                                          ifelse(ccon == 1 & is.element(pl, franchised$Player[franchised$Season == currentyr & franchised$League == lg]) == F, "FT",
+                                                 ifelse(ccon == 1 & is.element(pl, franchised$Player[franchised$Season == currentyr - 1 & franchised$League == lg]) == F, "FA",
+                                                        ifelse(ccon == 2, "FT", "-"))))))
+  contracts$Y4[i] <- ifelse(ccon > 3, csal,
+                            ifelse(ccon == 1 & is.element(pl, rookierights$Player[rookierights$League == lg]) == T, "FT",
+                                   ifelse(ccon == 2 & is.element(pl, rookierights$Player[rookierights$League == lg]) == T, ext,
+                                          ifelse(ccon == 3 & is.element(pl, rookierights$Player[rookierights$League == lg]) == T, ext,
+                                                 ifelse(ccon == 1 & is.element(pl, franchised$Player[franchised$Season == currentyr & franchised$League == lg]) == F, "FA",
+                                                        ifelse(ccon == 2, "FT",
+                                                               ifelse(ccon == 3 & is.element(pl, rookierights$Player[rookierights$League == lg]) == F, "FT", "-")))))))
+  contracts$Y5[i] <- ifelse(ccon > 4, csal,
+                            ifelse(ccon == 1 & is.element(pl, rookierights$Player[rookierights$League == lg]) == T, "FT",
+                                   ifelse(ccon == 2 & is.element(pl, rookierights$Player[rookierights$League == lg]) == T, "FT",
+                                          ifelse(ccon == 3 & is.element(pl, rookierights$Player[rookierights$League == lg]) == T, ext,
+                                                 ifelse(ccon == 4 & is.element(pl, rookierights$Player[rookierights$League == lg]) == T, ext,
+                                                        ifelse(ccon == 3 & is.element(pl, rookierights$Player[rookierights$League == lg]) == F, "FT",
+                                                               ifelse(ccon == 2 & is.element(pl, rookierights$Player[rookierights$League == lg]) == F, "FA",
+                                                                      ifelse(ccon == 4 & is.element(pl, rookierights$Player[rookierights$League == lg]) == F, "FT", "-"))))))))
+  
+})
+contracts <- contracts[order(-Salary)]
+
+#cap corner graph creation
+capbyteam <- rosters[,
+                        .(TeamSalary = sum(Salary)),
+                        by = .(League, TRUFFLE)]
+capbyteam <- merge(rosters, capbyteam, by = c("League", "TRUFFLE"))
+capbyteam$SalaryPerc <- capbyteam$Salary / capbyteam$TeamSalary
 
 #ppd <- teamportal[, `:=`(`PP$` = round(FPts/Salary,2), `wPP$`= round(Avg/Salary,2))][, c("TRUFFLE", "Pos", "Player", "Avg", "FPts", "PP$", "wPP$")]
 
 #aggregating fantasy data by team
-teamsfantasyweekly <- fantasy[,
-                              .(FPts = sum(FPts, na.rm = T)),
-                              by = .(TRUFFLE, Scoring, Season, Week)]
-
-pointsleaders <- weekly[order(-Season, Week)][,
+pointsleaders <- weekly[order(-Season, Week)][League == "TRUFFLE",
                                               .(G = .N,
                                                 ptslogs = list(FPts),
                                                 Avg = round(mean(FPts),1),
                                                 Total = round(sum(FPts),1)
                                               ),
                                               by = .(Scoring, Season, Pos, Player)][order(-Season, match(Pos, positionorder), -Total, -Avg)][, `:=`(PosRk = 1:.N), by = .(Scoring, Season, Pos)]
-pointsleaders <- merge(x = pointsleaders, y = oldrosters[ , c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE)
+pointsleaders$League <- "TRUFFLE"; pointsleaderscopy <- pointsleaders; pointsleaderscopy$League <- "KERFUFFLE"; pointsleaders <- rbind(pointsleaders, pointsleaderscopy); rm(pointsleaderscopy)
+
+#merge in seasonal ownership info
+pointsleaders <- merge(x = pointsleaders, y = oldrosters[ , c("League", "Season", "Pos", "Player", "TRUFFLE")], by = c("League", "Season", "Pos", "Player"), all.x=TRUE)
 pointsleaders$TRUFFLE[is.na(pointsleaders$TRUFFLE)] <- "FA"
-pointsleaders <- pointsleaders[, .(Scoring, Season, TRUFFLE, Player, Pos, PosRk, G, ptslogs, Avg, Total)][order(-Total, -Avg)]
+pointsleaders <- pointsleaders[, .(League, Scoring, Season, TRUFFLE, Player, Pos, PosRk, G, ptslogs, Avg, Total)][order(-Total, -Avg)]
 
 #player portal bios top table
 ppbios <- weekly[Season == max(weekly$Season)][order(-Season,-Week)]
@@ -576,13 +732,13 @@ ppbios <- ppbios[,
                    ptslogs = list(FPts),
                    Avg = round(mean(FPts),1),
                    Total = round(sum(FPts))),
-                 by = .(Scoring, Pos, Player)]
-ppbios <- merge(ppbios, rosters[, .(Player,Salary, Contract)], by = 'Player', all.x = T)
-ppbios <- merge(ppbios, fprosage[, .(Player, AgePH, DynRk, DynPosRk)])
-ppbios <- ppbios[, .(Scoring, TRUFFLE,Pos,Player,NFL,AgePH,DynRk,DynPosRk,Salary,Contract,ptslogs)]
+                 by = .(League, Scoring, Pos, Player)]
+ppbios <- merge(ppbios, rosters[, .(League, Player, Pos, Salary, Contract)], by = c('League', 'Player', 'Pos'), all.x = T)
+ppbios <- merge(ppbios, fprosage[, .(Player, Age, DynRk, DynPosRk)], by = 'Player')
+ppbios <- ppbios[, .(League, Scoring, TRUFFLE,Pos,Player,NFL,Age,DynRk,DynPosRk,Salary,Contract,ptslogs)]
 
 #creating advanced tables across scoring systems ----
-advanced <- weekly[, .(FPts = sum(FPts),
+advanced <- weekly[League == "TRUFFLE", .(FPts = sum(FPts),
                        YdPts = round(.04*sum(PaYd) + .1*(sum(RuYd) + sum(ReYd)),1),
                        TDPts = 4*sum(PaTD) + 6*(sum(RuTD) + sum(ReTD)),
                        FDPts = ifelse(Scoring == "PPFD", sum(RuFD) + sum(ReFD), 0),
@@ -594,17 +750,20 @@ advanced <- weekly[, .(FPts = sum(FPts),
                        Touch = sum(PaCmp + RuAtt + Rec),
                        Opp = sum(PaAtt + RuAtt + Tar)
 ),
-by = .(Scoring,Season,TRUFFLE,Pos,Player)][, `:=`(`YdPt%` = YdPts / FPts,
+by = .(Scoring,Season,Pos,Player)][, `:=`(`YdPt%` = YdPts / FPts,
                                                    `TDPt%` = TDPts / FPts,
                                                    `FDPt%` = FDPts / FPts,
                                                    `RuPt%` = RuPts / FPts,
                                                    `RePt%` = RePts / FPts,
                                                    `FPts/Touch` = round(FPts/Touch, 3),
                                                    `FPts/Opp` = round(FPts/Opp, 3)
-)][order(-FPts)][, .(Scoring,Season,TRUFFLE,Pos,Player,FPts,Touch,Opp,`FPts/Touch`,`FPts/Opp`,YdPts,TDPts,FDPts,RuPts,RePts,`YdPt%`,`TDPt%`,`FDPt%`,`RuPt%`,`RePt%`)]
+)][order(-FPts)][, .(Scoring,Season,Pos,Player,FPts,Touch,Opp,`FPts/Touch`,`FPts/Opp`,YdPts,TDPts,FDPts,RuPts,RePts,`YdPt%`,`TDPt%`,`FDPt%`,`RuPt%`,`RePt%`)]
+advanced$League <- "TRUFFLE"; advancedcopy <- advanced; advancedcopy$League <- "KERFUFFLE"; advanced <- rbind(advanced, advancedcopy); rm(advancedcopy)
+advanced <- merge(x = advanced, y = oldrosters[ , c("League", "Season", "Pos", "Player", "TRUFFLE")], by = c("League", "Season", "Pos", "Player"), all.x=TRUE)
+
 
 #consistencystats
-consistencystart <- weekly
+consistencystart <- weekly_no_teams
 #posrank dummies
 consistencystart$top5dum <- ifelse(consistencystart$PosRk <= 5, 1, 0)
 consistencystart$top12dum <- ifelse(consistencystart$PosRk <= 12, 1, 0)
@@ -632,13 +791,16 @@ consistency <- consistencystart[,
      `>20 %` = sum(gt20dum)/.N,
      `>30 %` = sum(gt30dum)/.N
    ),
-   by = .(Scoring, Season, TRUFFLE, Pos, Player)][order(-Avg)][, .(Scoring, Season,TRUFFLE,Pos,Player,G,Avg,RelSD,`>10 %`,`>20 %`,`>30 %`,`AvgPosRk`,`Top5 %`,`Top12 %`,`Top24 %`,`Top36 %`, `NonStart %`)]
+   by = .(Scoring, Season, Pos, Player)][order(-Avg)][, .(Scoring, Season,Pos,Player,G,Avg,RelSD,`>10 %`,`>20 %`,`>30 %`,`AvgPosRk`,`Top5 %`,`Top12 %`,`Top24 %`,`Top36 %`, `NonStart %`)]
+#rm(consistencystart)
+consistency$League <- "TRUFFLE"; consistencycopy <- consistency; consistencycopy$League <- "KERFUFFLE"; consistency <- rbind(consistency, consistencycopy); rm(consistencycopy)
+consistency <- merge(x = consistency, y = oldrosters[ , c("League", "Season", "Pos", "Player", "TRUFFLE")], by = c("League", "Season", "Pos", "Player"), all.x=TRUE)
 
 #weeklytop5s
-weeklytop5 <- weeklyogteams[order(Week,-FPts)][, .(TRUFFLE = TRUFFLE[1:30],
+weeklytop5 <- weekly_no_teams[order(Week,-FPts)][, .(#TRUFFLE = NA,
                                                    Player = Player[1:30],
                                                    FPts = FPts[1:30]), 
-                                               by = .(Scoring,Season,Week,Pos)][, .(Scoring,Season,Week,TRUFFLE,Pos,Player,FPts)]
+                                               by = .(Scoring,Season,Week,Pos)][, .(Scoring,Season,Week,Pos,Player,FPts)]
 
 #rookie extension values
 extval <- as.data.table(rbind(c("QB", "1.1-1.6", 70), c("QB", "1.7-1.12", 60), c("QB", "2", 50), c("QB", "3", 30),
@@ -662,7 +824,7 @@ truffleanalysis <- fantasy[Scoring == "PPFD",
                              FDpts = sum(RuFD + ReFD,na.rm=T),
                              TOpts = -2*sum(PaInt + FL,na.rm=T)
                            ),
-                           by = .(Season, TRUFFLE)][order(-FPts)]
+                           by = .(League, Season, TRUFFLE)][order(-FPts)]
 
 truffleanalysisperc <- fantasy[Scoring == "PPFD",
                                .(FPts = sum(FPts),
@@ -676,7 +838,7 @@ truffleanalysisperc <- fantasy[Scoring == "PPFD",
                                  FDpts = (sum(RuFD + ReFD,na.rm=T))/sum(FPts),
                                  TOpts = (-2*sum(PaInt + FL,na.rm=T))/sum(FPts)
                                ),
-                               by = .(Season, TRUFFLE)][order(-FPts)]
+                               by = .(League,Season, TRUFFLE)][order(-FPts)]
 
 pptrufflecareer <- fantasy[Pos != "DST" & Scoring == "PPFD",
                            .(G = .N,
@@ -691,7 +853,7 @@ pptrufflecareer <- fantasy[Pos != "DST" & Scoring == "PPFD",
                              ReFD = sum(ReFD, na.rm=T),
                              Avg = round(sum(FPts, na.rm=T)/.N, 1),
                              FPts = sum(FPts, na.rm=T)),
-                           by = .(Pos, Player)]
+                           by = .(League, Pos, Player)]
 
 pptrufflecareerteam <- fantasy[Pos != "DST" & Scoring == "PPFD",
                                .(Seasons = lapply(list(paste0(" ",unique(substr(Season ,3,4)))), sort, decreasing = F),
@@ -707,14 +869,14 @@ pptrufflecareerteam <- fantasy[Pos != "DST" & Scoring == "PPFD",
                                  ReFD = sum(ReFD, na.rm=T),
                                  Avg = round(sum(FPts, na.rm=T)/.N, 1),
                                  FPts = sum(FPts, na.rm=T)),
-                               by = .(Pos, Player, TRUFFLE)][order(-FPts)]
+                               by = .(Pos, Player, League, TRUFFLE)][order(-FPts)]
 
 
 #byog master table set up -----
 byog <- merge(seasons[Season > 2020], advanced[, -c("FPts","TRUFFLE")], by = c('Scoring','Season','Pos','Player'), all.x = T)
 byog <- merge(byog, consistency[, -c("Avg","G","TRUFFLE")], by = c('Scoring','Season','Pos','Player'), all.x = T)
-byog <- merge(byog, extradashszn[, -c("Tar","G","TRUFFLE")], by = c('Season','Pos','Player'), all.x = T)
-byog <- merge(byog, espn[, -c("TRUFFLE")], by = c('Season','Pos','Player'), all.x = T)
+byog <- merge(byog, extradashszn[, -c("Tar","G")], by = c('Season','Pos','Player'), all.x = T)
+byog <- merge(byog, espn, by = c('Season','Pos','Player'), all.x = T)
 byog <- merge(byog, oldrosters[, -c("TRUFFLE","NFL")], by = c('Season','Pos','Player'), all.x = T)
 byog$PPFD <- ifelse(byog$Scoring == "PPFD", byog$FPts,
                     ifelse(byog$Scoring == "PPR", byog$FPts - byog$Rec + byog$RuFD + byog$ReFD,
@@ -760,7 +922,7 @@ radchart_line <- c(
 )
 
 #aggregate weekly by season, position, player
-radarplot <- weekly[,
+radarplot <- weekly[League == "TRUFFLE",
                     .(FPts = mean(FPts, na.rm = T),
                       Touches = mean(PaCmp, na.rm = T) + mean(RuAtt, na.rm = T) + mean(Rec, na.rm = T),
                       Yd = mean(PaYd, na.rm = T) + mean(RuYd, na.rm = T) + mean(ReYd, na.rm = T),
@@ -825,7 +987,7 @@ recordbookstm <- fantasy[Scoring == "PPFD",
                            ReFD = sum(ReFD),
                            Rec = sum(Rec)
                          ),
-                         by = .(TRUFFLE, Pos, Player)][Pos != "DST"]
+                         by = .(League, TRUFFLE, Pos, Player)][Pos != "DST"]
 
 recordbookspl <- fantasy[Scoring == "PPFD",
                          .(FPts = round(sum(FPts),1),
@@ -845,76 +1007,18 @@ recordbookspl <- fantasy[Scoring == "PPFD",
                            ReFD = sum(ReFD),
                            Rec = sum(Rec)
                          ),
-                         by = .(Pos, Player)][Pos != "DST"]
+                         by = .(League, Pos, Player)][Pos != "DST"]
 
-salarybyteam <- rosters[,
-                        .(TeamSalary = sum(Salary)),
-                        by = TRUFFLE]
-rosterbreakdown <- merge(rosters, salarybyteam, by = "TRUFFLE")
-rosterbreakdown$SalaryPerc <- rosterbreakdown$Salary / rosterbreakdown$TeamSalary
-
-#column formatting ----
-#fpts
-recordplfpts <- recordbookspl[, .(Pos,Player,FPts)][order(-FPts)][1:100, ]
-recordtmfpts <- recordbookstm[, .(TRUFFLE,Pos,Player,FPts)][order(-FPts)]
-#games
-recordplgames <- recordbookspl[, .(Pos,Player,Games)][order(-Games)][1:100, ]
-recordtmgames <- recordbookstm[, .(TRUFFLE,Pos,Player,Games)][order(-Games)]
-#Avg
-recordplavg <- recordbookspl[, .(Pos,Player,Games,Avg)][Games > 10][, .(Pos, Player, Avg)][order(-Avg)][1:100, ]
-recordtmavg <- recordbookstm[, .(TRUFFLE,Pos,Player,Games,Avg)][Games > 10][, .(TRUFFLE, Pos, Player, Avg)][order(-Avg)]
-#FD
-recordplfd <- recordbookspl[, .(Pos,Player,FD)][order(-FD)][1:100, ]
-recordtmfd <- recordbookstm[, .(TRUFFLE,Pos,Player,FD)][order(-FD)]
-#PaYd
-recordplpayd <- recordbookspl[, .(Pos,Player,PaYd)][order(-PaYd)][1:100, ]
-recordtmpayd <- recordbookstm[, .(TRUFFLE,Pos,Player,PaYd)][order(-PaYd)]
-#PaTD
-recordplpatd <- recordbookspl[, .(Pos,Player,PaTD)][order(-PaTD)][1:100, ]
-recordtmpatd <- recordbookstm[, .(TRUFFLE,Pos,Player,PaTD)][order(-PaTD)]
-#PaInt
-recordplpaint <- recordbookspl[, .(Pos,Player,PaInt)][order(-PaInt)][1:100, ]
-recordtmpaint <- recordbookstm[, .(TRUFFLE,Pos,Player,PaInt)][order(-PaInt)]
-#PaCmp
-recordplpacmp <- recordbookspl[, .(Pos,Player,PaCmp)][order(-PaCmp)][1:100, ]
-recordtmpacmp <- recordbookstm[, .(TRUFFLE,Pos,Player,PaCmp)][order(-PaCmp)]
-#RuYd
-recordplruyd <- recordbookspl[, .(Pos,Player,RuYd)][order(-RuYd)][1:100, ]
-recordtmruyd <- recordbookstm[, .(TRUFFLE,Pos,Player,RuYd)][order(-RuYd)]
-#TuTD
-recordplrutd <- recordbookspl[, .(Pos,Player,RuTD)][order(-RuTD)][1:100, ]
-recordtmrutd <- recordbookstm[, .(TRUFFLE,Pos,Player,RuTD)][order(-RuTD)]
-#RuFD
-recordplrufd <- recordbookspl[, .(Pos,Player,RuFD)][order(-RuFD)][1:100, ]
-recordtmrufd <- recordbookstm[, .(TRUFFLE,Pos,Player,RuFD)][order(-RuFD)]
-#FL
-recordplfl <- recordbookspl[, .(Pos,Player,FL)][order(-FL)][1:100, ]
-recordtmfl <- recordbookstm[, .(TRUFFLE,Pos,Player,FL)][order(-FL)]
-#ReYd
-recordplreyd <- recordbookspl[, .(Pos,Player,ReYd)][order(-ReYd)][1:100, ]
-recordtmreyd <- recordbookstm[, .(TRUFFLE,Pos,Player,ReYd)][order(-ReYd)]
-#ReTD
-recordplretd <- recordbookspl[, .(Pos,Player,ReTD)][order(-ReTD)][1:100, ]
-recordtmretd <- recordbookstm[, .(TRUFFLE,Pos,Player,ReTD)][order(-ReTD)]
-#ReFD
-recordplrefd <- recordbookspl[, .(Pos,Player,ReFD)][order(-ReFD)][1:100, ]
-recordtmrefd <- recordbookstm[, .(TRUFFLE,Pos,Player,ReFD)][order(-ReFD)]
-#Rec
-recordplrec <- recordbookspl[, .(Pos,Player,Rec)][order(-Rec)][1:100, ]
-recordtmrec <- recordbookstm[, .(TRUFFLE,Pos,Player,Rec)][order(-Rec)]
-
-awards <- as.data.table(read_excel("data/awards.xlsx"))
-allt1 <- awards[Award == "1stTm"][, .(Season, Pos, Winner, TRUFFLE)]
-allt2 <- awards[Award == "2ndTm"][, .(Season, Pos, Winner, TRUFFLE)]
-award2020 <- awards[Award!="1stTm" & Award!="2ndTm"][Season==2020]
-award2021 <- awards[Award!="1stTm" & Award!="2ndTm"][Season==2021]
+#awards <- as.data.table(read_excel("data/awards.xlsx"))
+#demodata
+awards <- as.data.table(read_csv("demodata/awards.csv", col_types = cols()))
 
 #reactable column formats ----
 
 smallboxwidth <- 45
 
 #functions
-avg_pal <- function(x) { 
+z_avg_pal <- function(x) { 
   if(is.na(x) == T) {
     rgb(1, 1, 1)
   } else if (x < 0) {
@@ -927,7 +1031,7 @@ avg_pal <- function(x) {
 }
 
 #function that preps any guven data frame for the inclusion of action buttons
-action_mod <- function(df, team) {
+z_action_mod <- function(df, team) {
   myteam <- team
   df <- merge(df, ids[, .(Player, playerID, TeamNum)], by = 'Player', all.x = T)
   df$Action <- ifelse(df$TRUFFLE == myteam, "www/graphics/actions/drop.png",
@@ -939,20 +1043,20 @@ action_mod <- function(df, team) {
   return(df)
 }
 
-bar_chart <- function(label, width = "100%", height = "16px", fill = QBcolor, background = NULL, prefix = "") {
+z_bar_chart <- function(label, width = "100%", height = "16px", fill = QBcolor, background = NULL, prefix = "") {
   bar <- div(style = list(background = fill, width = width, height = height))
   chart <- div(style = list(flexGrow = 1, marginLeft = "8px", background = background), bar)
   div(style = list(display = "flex", alignItems = "center"), paste0(prefix,label), chart)
 }
 
-with_tt <- function(value, tooltip) {
+z_with_tt <- function(value, tooltip) {
   tags$abbr(style = "text-decoration: underline; text-decoration-style: dotted; cursor: help",
             title = tooltip, value)
 }
 
 #column definitions / definition functions
-actionDef <- function() {
-  colDef(header = with_tt("Act", "Drop players on your team\nTrade for players on other teams\nAdd Free Agents"),
+z_actionDef <- function() {
+  colDef(header = z_with_tt("Act", "Drop players on your team\nTrade for players on other teams\nAdd Free Agents"),
          show = !isguest,
          align="center", 
          minWidth = 35, 
@@ -965,7 +1069,7 @@ actionDef <- function() {
          })
 }
 
-trfDef <- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE, minW = 75) {
+z_trfDef <- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE, minW = 75, proj = F) {
   colDef(name = name,
          show = !isguest,
          aggregate = "unique",
@@ -983,7 +1087,7 @@ trfDef <- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE, minW = 75)
   )
 }
 
-trfDefRivScores <- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE, minW = 75) {
+z_trfDefRivScores <- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE, minW = 75) {
   colDef(name = name,
          show = !isguest,
          aggregate = "unique",
@@ -1005,7 +1109,7 @@ trfDefRivScores <- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE, m
   )
 }
 
-posDef <- function(maxW = 48, filt = T, foot = NULL, sort = T) {
+z_posDef <- function(maxW = 48, filt = T, foot = NULL, sort = T) {
   colDef(maxWidth = maxW,
          filterable = filt,
          footer = foot,
@@ -1037,7 +1141,7 @@ posDef <- function(maxW = 48, filt = T, foot = NULL, sort = T) {
          })
 }
 
-playerDef <- function(minW = 200, filt = FALSE, sort = T) {
+z_playerDef <- function(minW = 200, filt = FALSE, sort = T) {
   colDef(minWidth = minW,
          filterable = filt,
          sortable = sort,
@@ -1050,17 +1154,18 @@ playerDef <- function(minW = 200, filt = FALSE, sort = T) {
          })
 }
 
-posRkDef <- function(maxW = 62, filt = F) {
-  colDef(header = with_tt("PosRk", "Seasonal position rank by total FPts"),
+z_posRkDef <- function(maxW = 62, filt = F, proj = F) {
+  colDef(header = z_with_tt("PosRk", "Seasonal position rank by total FPts"),
          maxWidth = maxW,
          filterable = filt,
          align = 'right',
          defaultSortOrder = "asc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
          sortNALast = T)
 }
 
-ptsLogDef <- function(maxW = 75) {
-  colDef(header = with_tt("PtsLog", "Weekly log of FPts"),
+z_ptsLogDef <- function(maxW = 75) {
+  colDef(header = z_with_tt("PtsLog", "Weekly log of FPts"),
          sortable = F,
          align = 'right',
          maxWidth = maxW,
@@ -1070,7 +1175,7 @@ ptsLogDef <- function(maxW = 75) {
          })
 }
 
-salaryDefBar <- function(minW = 175, foot = F) {
+z_salaryDefBar <- function(minW = 175, foot = F) {
   colDef(minWidth = minW,
          align = 'left',
          format = colFormat(digits=0),
@@ -1080,13 +1185,13 @@ salaryDefBar <- function(minW = 175, foot = F) {
            list(color = color)},
          cell = function(value) {
            width <- paste0(value / max(rosters$Salary) * 100, "%")
-           bar_chart(ifelse(is.na(value), "", value), width = ifelse(is.na(value), 0, width), prefix = "$")
+           z_bar_chart(ifelse(is.na(value), "", value), width = ifelse(is.na(value), 0, width), prefix = "$")
          },
-         footer = function(values) if(foot == T) {paste0("$", sum(values))}
+         footer = function(values) if(foot == T) {suppressWarnings(paste0("$", sum(values)))}
   )
 }
 
-tagvalDefBar <- function(minW = 175, foot = F) {
+z_tagvalDefBar <- function(minW = 175, foot = F) {
   colDef(header = "Tag Value",
          minWidth = minW,
          align = 'left',
@@ -1097,13 +1202,13 @@ tagvalDefBar <- function(minW = 175, foot = F) {
            list(color = color)},
          cell = function(value) {
            width <- paste0(value / max(rosters$Salary) * 100, "%")
-           bar_chart(ifelse(is.na(value), "", value), width = ifelse(is.na(value), 0, width), prefix = "$")
+           z_bar_chart(ifelse(is.na(value), "", value), width = ifelse(is.na(value), 0, width), prefix = "$")
          },
-         footer = function(values) if(foot == T) {paste0("$", sum(values))}
+         footer = function(values) if(foot == T) {suppressWarnings(paste0("$", sum(values)))}
   )
 }
 
-salaryDefNobar <- function(minW = 45, foot = F, title = "$") {
+z_salaryDefNobar <- function(minW = 45, foot = F, title = "$") {
   colDef(minWidth = minW,
          name = title,
          align = 'right',
@@ -1112,11 +1217,11 @@ salaryDefNobar <- function(minW = 45, foot = F, title = "$") {
          style = function(value) {
            color <- ifelse(value <= 15, IRcolor, 'black')
            list(color = color)},
-         footer = function(values) if(foot == T) {paste0("$", sum(values))}
+         footer = function(values) if(foot == T) {suppressWarnings(paste0("$", sum(values)))}
   )
 }
 
-tagvalDefNobar <- function(minW = 45, foot = T, title = "$") {
+z_tagvalDefNobar <- function(minW = 45, foot = T, title = "$") {
   colDef(minWidth = minW,
          name = title,
          align = 'right',
@@ -1125,11 +1230,11 @@ tagvalDefNobar <- function(minW = 45, foot = T, title = "$") {
          style = function(value) {
            color <- ifelse(value <= 15, IRcolor, 'black')
            list(color = color)},
-         footer = function(values) if(foot == T) {paste0("$", round(mean(values)) )}
+         footer = function(values) if(foot == T) {suppressWarnings(paste0("$", round(mean(values)) ))}
   )
 }
 
-contractDef <- function(minW = 45, filt = T, foot = F, title = "Contract") {
+z_contractDef <- function(minW = 45, filt = T, foot = F, title = "Contract") {
   colDef(minWidth = minW,
          filterable = filt,
          name = title,
@@ -1143,8 +1248,8 @@ contractDef <- function(minW = 45, filt = T, foot = F, title = "Contract") {
 }
 
 #formatting for future columns (including FA and RR tags)
-futurecolDef <- function(maxW = 75, filt = T, foot = F, yr) {
-  colDef(header = with_tt(yr, "FA: Free Agent\nPurple: Rookie Extension Value\nBlue: Franchise Tag"),
+z_futureColDef <- function(maxW = 75, filt = T, foot = F, yr) {
+  colDef(header = z_with_tt(yr, "FA: Free Agent\nPurple: Rookie Extension Value\nBlue: Franchise Tag"),
          maxWidth = maxW,
          filterable = filt,
          align = 'right',
@@ -1157,12 +1262,12 @@ futurecolDef <- function(maxW = 75, filt = T, foot = F, yr) {
                                 ifelse(as.character(value) == "FA", textred,
                                        ifelse(as.character(value) == as.character(tag), franchisetag, tabletextcol))))
            list(color = col)},
-         footer = function(values) if(foot == T) {paste0("$", sum(as.numeric(values), na.rm=T))}
+         footer = function(values) if(foot == T) {suppressWarnings(paste0("$", sum(as.numeric(values), na.rm=T)))}
   )
 }
 
-avgDef <- function(maxW = 65, digs = 1, filt = F, col = T, borderL = F, foot = F) {
-  colDef(header = with_tt("Avg", "Weekly average FPts"),
+z_avgDef <- function(maxW = 65, digs = 1, filt = F, col = T, borderL = F, foot = F, proj = F) {
+  colDef(header = z_with_tt("Avg", "Weekly average FPts"),
          maxWidth = maxW,
          format = colFormat(digits = digs),
          filterable = filt,
@@ -1170,15 +1275,16 @@ avgDef <- function(maxW = 65, digs = 1, filt = F, col = T, borderL = F, foot = F
          class = function(value) if(borderL == T) {"border-left-grey"},
          style = function(value) { 
            normalized <- (value) / (max(seasons$Avg,na.rm=T))
-           color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
-           if(col == T) {list(background = color)}
+           color <- ifelse(value > 0, z_avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
+           if(col == T & proj == T) {list(background = color, fontStyle = 'italic')}
+           else if(col == T) {list(background = color)}
          },
          footer = function(values) if(foot == T) {round(mean(as.numeric(values), na.rm=T),2)}
   )
 }
 
-fptsDef <- function(maxW = 65, borderL = T, digs = 1, filt = F, foot = F) {
-  colDef(header = with_tt("FPts", "Fantasy points"),
+z_fptsDef <- function(maxW = 65, borderL = T, digs = 1, filt = F, foot = F) {
+  colDef(header = z_with_tt("FPts", "Fantasy points"),
          maxWidth = maxW,
          format = colFormat(digits = digs),
          filterable = filt,
@@ -1188,8 +1294,8 @@ fptsDef <- function(maxW = 65, borderL = T, digs = 1, filt = F, foot = F) {
   )
 }
 
-fptsWeekDef <- function(maxW = 65, borderL = T, digs = 1, filt = F, col = T) {
-  colDef(header = with_tt("FPts", "Fantasy points"),
+z_fptsWeekDef <- function(maxW = 65, borderL = T, digs = 1, filt = F, col = T) {
+  colDef(header = z_with_tt("FPts", "Fantasy points"),
          maxWidth = maxW,
          format = colFormat(digits = digs),
          filterable = filt,
@@ -1197,14 +1303,14 @@ fptsWeekDef <- function(maxW = 65, borderL = T, digs = 1, filt = F, col = T) {
          class = function(value) if(borderL == T) {"border-left-grey"},
          style = function(value) { 
            normalized <- (value) / (max(weekly$FPts[weekly$Season == max(weekly$Season)],na.rm=T))
-           color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
+           color <- ifelse(value > 0, z_avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
            if(col == T) {list(background = color)}
          }
   )
 }
 
-fptsSeasDef <- function(maxW = 65, borderL = F, digs = 1, filt = F, col = T) {
-  colDef(header = with_tt("FPts", "Fantasy points"),
+z_fptsSeasDef <- function(maxW = 65, borderL = F, digs = 1, filt = F, col = T, proj = F) {
+  colDef(header = z_with_tt("FPts", "Fantasy points"),
          maxWidth = maxW,
          format = colFormat(digits = digs),
          filterable = filt,
@@ -1212,13 +1318,15 @@ fptsSeasDef <- function(maxW = 65, borderL = F, digs = 1, filt = F, col = T) {
          class = function(value) if(borderL == T) {"border-left-grey"},
          style = function(value) { 
            normalized <- (value) / (max(seasons$FPts,na.rm=T))
-           color <- ifelse(value > 0, avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
-           if(col == T) {list(background = color)}
+           color <- ifelse(value > 0, z_avg_pal(ifelse(is.na(normalized), 0, normalized)), RBcolor)
+           if(col == T & proj == T) {list(background = color, fontStyle = 'italic')}
+           else if(proj == T) {list(fontStyle = 'italic')}
+           else if (col == T) {list(background = color)}
          }
   )
 }
 
-seasonDef <- function(name = "Yr", maxW = 45, filt = F) {
+z_seasonDef <- function(name = "Yr", maxW = 45, filt = F) {
   colDef(name=name,
          format = colFormat(percent = F),
          maxWidth = maxW,
@@ -1227,149 +1335,197 @@ seasonDef <- function(name = "Yr", maxW = 45, filt = F) {
          filterable = filt)
 }
 
-nflDef <- colDef(minWidth = 50, align = 'right')
+z_nflDef <- colDef(minWidth = 50, align = 'right')
 
-byeDef <- colDef(minWidth = 50, align = 'right')
+z_byeDef <- colDef(minWidth = 50, align = 'right')
 
-gDef <- function(minW = 40, foot = F) {
-  colDef(header = with_tt("G", "Games Played"),
+z_gDef <- function(minW = 40, foot = F, proj = F) {
+  colDef(header = z_with_tt("G", "Games Played"),
          minWidth = minW,
          align = 'right',
          defaultSortOrder = "desc",
          footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
   )}
 
-ageDef <- colDef(minWidth = 50, align = 'right', defaultSortOrder = "asc", sortNALast = T)
+z_ageDef <- colDef(minWidth = 50, align = 'right', defaultSortOrder = "asc", sortNALast = T)
 
-smallcolDef <- colDef(maxWidth = 100, align = 'left')
+#not used
+z_smallColDef <- colDef(maxWidth = 100, align = 'left')
 
-weekDef <- colDef("Wk",maxWidth = 44, align = 'center', defaultSortOrder = "desc")
+z_weekDef <- colDef("Wk",maxWidth = 44, align = 'center', defaultSortOrder = "desc")
 
-opDef <- colDef(header = with_tt("Op", "Opponent"), maxWidth = 60, align = 'right')
-oprkDef <- colDef(header = with_tt("OpRk", "Opponent Rankings vs. Fantasy Posision"), maxWidth = 60, align = 'center', style = function(value) {
+z_opDef <- colDef(header = z_with_tt("Op", "Opponent"), maxWidth = 60, align = 'right')
+z_oprkDef <- colDef(header = z_with_tt("OpRk", "Opponent Rankings vs. Fantasy Posision"), maxWidth = 60, align = 'center', style = function(value) {
   color <- ifelse(value <= 10, 'firebrick',
                   ifelse(value <= 20, 'black', 'green'))
   list(color = color)})
 
 #box score stats reactable formats ----
 #passing stats conditional formatting
-pacmpDef <- colDef(header = with_tt("Cmp", "Passing Completions"), minWidth = smallboxwidth + 8, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
-paattDef <- colDef(header = with_tt("Att", "Passing Attempts"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
-
-paydDefWk <- colDef(header = with_tt("Yd", "Passing Yards\nBold if >=300"), minWidth = smallboxwidth, align = 'right', style = function(value) {
-  fontWeight <- ifelse(value >= 300, 'bold', 'plain')
-  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-paydDefSsn <- colDef(header = with_tt("Yd", "Passing Yards\nBold if >=4000"), minWidth = smallboxwidth, align = 'right', style = function(value) {
-  fontWeight <- ifelse(value >= 4000, 'bold', 'plain')
-  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-paydDefNm <- colDef(header = with_tt("Yd", "Passing Yards"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
-paydDef <- function(minW = 45, foot = F, borderL = F) {
-  colDef(header = with_tt("Yd", "Passing Yards"),
-         minWidth = minW,
+z_pacmpDef <- function(borderL = T, proj = F) {
+  colDef(header = z_with_tt("Cmp", "Passing Completions"),
+         filterable = F,
+         minWidth = smallboxwidth + 8,
+         align = 'right', 
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
          class = function(value) if(borderL == T) {"border-left-grey"},
+         defaultSortOrder = "desc")
+}
+
+z_paattDef <- function(proj = F) {
+  colDef(header = z_with_tt("Att", "Passing Attempts"),
+         filterable = F,
+         minWidth = smallboxwidth,
          align = 'right',
-         defaultSortOrder = "desc",
-         footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
+         defaultSortOrder = "desc")
+}
+
+z_paydDef <- function(minW = 45, foot = F, borderL = F, proj = F, wk = F, szn = F) {
+  colDef(
+    header = function(value) 
+      if(wk == T) {z_with_tt("Yd", "Passing Yards\nBold if >=300")
+      } else if (szn == T) {z_with_tt("Yd", "Passing Yards\nBold if >=4000")
+      } else {z_with_tt("Yd", "Passing Yards")},
+    filterable = F,
+    minWidth = minW,
+    class = function(value) if(borderL == T) {"border-left-grey"},
+    align = 'right',
+    defaultSortOrder = "desc",
+    style = function(value) {
+      thresh <- ifelse(wk == T, 300, ifelse(szn == T, 4000, bigN))
+      fontW <- ifelse(value >= thresh, 'bold', 'plain')
+      fontS <- ifelse(proj == T, 'italic', 'normal')
+      list(fontWeight = fontW, fontStyle = fontS)
+      },
+    footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
   )
 }
 
-patdDefWk <- colDef(header = with_tt("TD", "Passing TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
-  fontWeight <- ifelse(value >= 3, 'bold', 'plain')
-  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-patdDefSsn <- colDef(header = with_tt("TD", "Passing TDs\nBold if >=30"), minWidth = smallboxwidth, align = 'right', style = function(value) {
-  fontWeight <- ifelse(value >= 30, 'bold', 'plain')
-  list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-patdDefNm <- colDef(header = with_tt("TD", "Passing TDs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
-patdDef <- function(minW = 45, foot = F) {
-  colDef(header = with_tt("TD", "Passing TDs"),
-         minWidth = minW,
-         align = 'right',
-         defaultSortOrder = "desc",
-         footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
+z_patdDef <- function(minW = 45, foot = F, proj = F, wk = F, szn = F) {
+  colDef(
+    header = function(value) 
+      if(wk == T) {z_with_tt("TD", "Passing TDs\nBold if >=3")
+      } else if (szn == T) {z_with_tt("TD", "Passing TDs\nBold if >=30")
+      } else {z_with_tt("TD", "Passing TDs")},
+    filterable = F,
+    minWidth = minW,
+    align = 'right',
+    defaultSortOrder = "desc",
+    style = function(value) {
+      thresh <- ifelse(wk == T, 3, ifelse(szn == T, 30, bigN))
+      fontW <- ifelse(value >= thresh, 'bold', 'plain')
+      fontS <- ifelse(proj == T, 'italic', 'normal')
+      list(fontWeight = fontW, fontStyle = fontS)
+    },
+    footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
   )
 }
 
-paintDefWk <- colDef(header = with_tt("Int", "Interceptions\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
-  fontWeight <- ifelse(value >= 3, 'italic', 'plain')
-  list(fontWeight = fontWeight)}, defaultSortOrder = "asc")
-paintDefSsn <- colDef(header = with_tt("Int", "Interceptions\nBold if >=15"), minWidth = smallboxwidth, align = 'right', style = function(value) {
-  fontWeight <- ifelse(value >= 15, 'italic', 'plain')
-  list(fontWeight = fontWeight)}, defaultSortOrder = "asc")
-paintDefNm <- colDef(header = with_tt("Int", "Interceptions"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "asc")
-paintDef <- function(minW = 45, foot = F) {
-  colDef(header = with_tt("Int", "Interceptions"),
-         minWidth = minW,
-         align = 'right',
-         defaultSortOrder = "desc",
-         footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
+z_paintDef <- function(minW = 45, foot = F, proj = F, wk = F, szn = F) {
+  colDef(
+    header = function(value) 
+      if(wk == T) {z_with_tt("Int", "Interceptions\nBold if >=3")
+      } else if (szn == T) {z_with_tt("Int", "Interceptions\nBold if >=15")
+      } else {z_with_tt("Int", "Interceptions")},
+    filterable = F,
+    minWidth = minW,
+    align = 'right',
+    defaultSortOrder = "desc",
+    style = function(value) {
+      thresh <- ifelse(wk == T, 3, ifelse(szn == T, 15, bigN))
+      fontW <- ifelse(value >= thresh, 'bold', 'plain')
+      fontS <- ifelse(proj == T, 'italic', 'normal')
+      list(fontWeight = fontW, fontStyle = fontS)
+    },
+    footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
   )
 }
 
-#Rushing stats
-ruattDefWk <- colDef(header = with_tt("Att", "Rushing Attempts\nBold if >=20"), minWidth = smallboxwidth, align = 'right', style = function(value) {
-  fontWeight <- ifelse(value >= 20, 'bold', 'plain')
-  list(fontWeight = fontWeight)}, class = "border-left-grey", defaultSortOrder = "desc")
-ruattDefSsn <- colDef(header = with_tt("Att", "Rushing Attempts\nBold if >=250"), minWidth = smallboxwidth, align = 'right', style = function(value) {
-  fontWeight <- ifelse(value >= 250, 'bold', 'plain')
-  list(fontWeight = fontWeight)}, class = "border-left-grey", defaultSortOrder = "desc")
-ruattDefNm <- colDef(header = with_tt("Att", "Rushing Attempts"), minWidth = smallboxwidth, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
-ruattDef <- function(minW = 45, foot = F, borderL = T) {
-  colDef(header = with_tt("Att", "Rushing Attempts"),
-         class = function(value) if(borderL == T) {"border-left-grey"},
-         minWidth = minW,
-         align = 'right',
-         defaultSortOrder = "desc",
-         footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
+#Rushing attempts
+z_ruattDef <- function(minW = 45, foot = F, borderL = T, proj = F, wk = F, szn = F) {
+  colDef(
+    header = function(value)
+      if(wk == T) {z_with_tt("Att", "Rushing Attempts\nBold if >=20")
+      } else if (szn == T) {z_with_tt("Att", "Rushing Attempts\nBold if >=250")
+      } else {z_with_tt("Att", "Rushing Attempts")},
+    filterable = F,
+    class = function(value) if(borderL == T) {"border-left-grey"},
+    minWidth = minW,
+    align = 'right',
+    defaultSortOrder = "desc",
+    style = function(value) {
+      thresh <- ifelse(wk == T, 20, ifelse(szn == T, 250, bigN))
+      fontW <- ifelse(value >= thresh, 'bold', 'plain')
+      fontS <- ifelse(proj == T, 'italic', 'normal')
+      list(fontWeight = fontW, fontStyle = fontS)
+    },
+    footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
   )
 }
 
 #Rushing yards
-ruydDefWk <- colDef(header = with_tt("Yd", "Rushing Yards\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_ruydDefWk <- colDef(header = z_with_tt("Yd", "Rushing Yards\nBold if >=100"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-ruydDefSsn <- colDef(header = with_tt("Yd", "Rushing Yards\nBold if >=1000"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_ruydDefSsn <- colDef(header = z_with_tt("Yd", "Rushing Yards\nBold if >=1000"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 1000, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-ruydDefNm <- colDef(header = with_tt("Yd", "Rushing Yards"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
-ruydDef <- function(minW = 45, foot = F, borderL = F) {
-  colDef(header = with_tt("Yd", "Rushing Yards"),
-         class = function(value) if(borderL == T) {"border-left-grey"},
-         minWidth = minW,
-         align = 'right',
-         defaultSortOrder = "desc",
-         footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
+z_ruydDefNm <- colDef(header = z_with_tt("Yd", "Rushing Yards"), filterable = F, minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_ruydDef <- function(minW = 45, foot = F, borderL = F, proj = F, wk = F, szn = F) {
+  colDef(
+    header = function(value) 
+      if(wk == T) {z_with_tt("Yd", "Rushing Yards\nBold if >=100")
+      } else if (szn == T) {z_with_tt("Yd", "Rushing Yards\nBold if >=1000")
+      } else {z_with_tt("Yd", "Rushing Yards")},
+    filterable = F,
+    class = function(value) if(borderL == T) {"border-left-grey"},
+    minWidth = minW,
+    align = 'right',
+    defaultSortOrder = "desc",
+    style = function(value) {
+      thresh <- ifelse(wk == T, 100, ifelse(szn == T, 1000, bigN))
+      fontW <- ifelse(value >= thresh, 'bold', 'plain')
+      fontS <- ifelse(proj == T, 'italic', 'normal')
+      list(fontWeight = fontW, fontStyle = fontS)
+    },
+    footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
   )
 }
 
 #Rushing td
-rutdDefWk <- colDef(header = with_tt("TD", "Rushing TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_rutdDefWk <- colDef(header = z_with_tt("TD", "Rushing TDs\nBold if >=3"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-rutdDefSsn <- colDef(header = with_tt("TD", "Rushing TDs\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_rutdDefSsn <- colDef(header = z_with_tt("TD", "Rushing TDs\nBold if >=10"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-rutdDefNm <- colDef(header = with_tt("TD", "Rushing TDs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
-rutdDef <- function(minW = 45, foot = F, borderL = F) {
-  colDef(header = with_tt("TD", "Rushing TDs"),
+z_rutdDefNm <- colDef(header = z_with_tt("TD", "Rushing TDs"), filterable = F, minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_rutdDef <- function(minW = 45, foot = F, borderL = F, proj = F) {
+  colDef(header = z_with_tt("TD", "Rushing TDs"),
+         filterable = F,
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
          defaultSortOrder = "desc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
          footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
   )
 }
 
 #Rushing fd
-rufdDefWk <- colDef(header = with_tt("FD", "Rushing First Downs\nBold if >=5"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_rufdDefWk <- colDef(header = z_with_tt("FD", "Rushing First Downs\nBold if >=5"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 5, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-rufdDefSsn <- colDef(header = with_tt("FD", "Rushing First Downs\nBold if >=50"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_rufdDefSsn <- colDef(header = z_with_tt("FD", "Rushing First Downs\nBold if >=50"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 50, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-rufdDefNm <- colDef(header = with_tt("FD", "Rushing First Downs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
-rufdDef <- function(minW = 45, foot = F, borderL = F) {
-  colDef(header = with_tt("FD", "Rushing TDs"),
+z_rufdDefNm <- colDef(header = z_with_tt("FD", "Rushing First Downs"), filterable = F, minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_rufdDef <- function(minW = 45, foot = F, borderL = F, disp = T) {
+  colDef(header = z_with_tt("FD", "Rushing TDs"),
          class = function(value) if(borderL == T) {"border-left-grey"},
+         show = disp,
+         filterable = F,
          minWidth = minW,
          align = 'right',
          defaultSortOrder = "desc",
@@ -1378,88 +1534,98 @@ rufdDef <- function(minW = 45, foot = F, borderL = F) {
 }
 
 #Targets
-tarDefWk <- colDef(header = with_tt("Tar", "Targets\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_tarDefWk <- colDef(header = z_with_tt("Tar", "Targets\nBold if >=10"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
   list(fontWeight = fontWeight)}, class = "border-left-grey", defaultSortOrder = "desc")
-tarDefSsn <- colDef(header = with_tt("Tar", "Targets\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_tarDefSsn <- colDef(header = z_with_tt("Tar", "Targets\nBold if >=100"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
   list(fontWeight = fontWeight)}, class = "border-left-grey", defaultSortOrder = "desc")
-tarDefNm <- colDef(header = with_tt("Tar", "Targets"), minWidth = smallboxwidth, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
-tarDef <- function(minW = 45, foot = F, borderL = F) {
-  colDef(header = with_tt("Tar", "Targets"),
+z_tarDefNm <- colDef(header = z_with_tt("Tar", "Targets"), filterable = F, minWidth = smallboxwidth, align = 'right', class = "border-left-grey", defaultSortOrder = "desc")
+z_tarDef <- function(minW = 45, foot = F, borderL = F, proj = F) {
+  colDef(header = z_with_tt("Tar", "Targets"),
+         filterable = F,
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
          defaultSortOrder = "desc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
          footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
   )
 }
 
 #Receptions
-recDefWk <- colDef(header = with_tt("Rec", "Receptions\nBold if >=10"), minWidth = smallboxwidth + 2, align = 'right', style = function(value) {
+z_recDefWk <- colDef(header = z_with_tt("Rec", "Receptions\nBold if >=10"), filterable = F, minWidth = smallboxwidth + 2, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-recDefSsn <- colDef(header = with_tt("Rec", "Receptions\nBold if >=100"), minWidth = smallboxwidth + 2, align = 'right', style = function(value) {
+z_recDefSsn <- colDef(header = z_with_tt("Rec", "Receptions\nBold if >=100"), filterable = F, minWidth = smallboxwidth + 2, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-recDefNm <- colDef(header = with_tt("Rec", "Receptions"), minWidth = smallboxwidth + 2, align = 'right', defaultSortOrder = "desc")
-recDef <- function(minW = 47, foot = F, borderL = F) {
-  colDef(header = with_tt("Rec", "Receptions"),
+z_recDefNm <- colDef(header = z_with_tt("Rec", "Receptions"), filterable = F, minWidth = smallboxwidth + 2, align = 'right', defaultSortOrder = "desc")
+z_recDef <- function(minW = 47, foot = F, borderL = F, proj = F) {
+  colDef(header = z_with_tt("Rec", "Receptions"),
+         filterable = F,
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
          defaultSortOrder = "desc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
          footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
   )
 }
 
 #receiving yards
-reydDefWk <- colDef(header = with_tt("Yd", "Receiving Yards\nBold if >=100"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_reydDefWk <- colDef(header = z_with_tt("Yd", "Receiving Yards\nBold if >=100"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 100, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-reydDefSsn <- colDef(header = with_tt("Yd", "Receiving Yards\nBold if >=1000"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_reydDefSsn <- colDef(header = z_with_tt("Yd", "Receiving Yards\nBold if >=1000"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 1000, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-reydDefNm <- colDef(header = with_tt("Yd", "Receiving Yards"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
-reydDef <- function(minW = 47, foot = F, borderL = F) {
-  colDef(header = with_tt("Yd", "Receiving Yards"),
+z_reydDefNm <- colDef(header = z_with_tt("Yd", "Receiving Yards"), filterable = F, minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_reydDef <- function(minW = 47, foot = F, borderL = F, proj = F) {
+  colDef(header = z_with_tt("Yd", "Receiving Yards"),
+         filterable = F,
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
          defaultSortOrder = "desc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
          footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
   )
 }
 
 #receiving tds
-retdDefWk <- colDef(header = with_tt("TD", "Receiving TDs\nBold if >=3"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_retdDefWk <- colDef(header = z_with_tt("TD", "Receiving TDs\nBold if >=3"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 3, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-retdDefSsn <- colDef(header = with_tt("TD", "Receiving TDs\nBold if >=10"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_retdDefSsn <- colDef(header = z_with_tt("TD", "Receiving TDs\nBold if >=10"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 10, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-retdDefNm <- colDef(header = with_tt("TD", "Receiving TDs"), minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
-retdDef <- function(minW = 47, foot = F, borderL = F) {
-  colDef(header = with_tt("TD", "Receiving TDs"),
+z_retdDefNm <- colDef(header = z_with_tt("TD", "Receiving TDs"), filterable = F, minWidth = smallboxwidth, align = 'right', defaultSortOrder = "desc")
+z_retdDef <- function(minW = 47, foot = F, borderL = F, proj = F) {
+  colDef(header = z_with_tt("TD", "Receiving TDs"),
+         filterable = F,
          class = function(value) if(borderL == T) {"border-left-grey"},
          minWidth = minW,
          align = 'right',
          defaultSortOrder = "desc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
          footer = function(values) if(foot == T) {sum(as.numeric(values), na.rm=T)}
   )
 }
 
 #Receiving fd
-refdDefWk <- colDef(header = with_tt("FD", "Receiving First Downs\nBold if >=5"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_refdDefWk <- colDef(header = z_with_tt("FD", "Receiving First Downs\nBold if >=5"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 5, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-refdDefSsn <- colDef(header = with_tt("FD", "Receiving First Downs\nBold if >=50"), minWidth = smallboxwidth, align = 'right', style = function(value) {
+z_refdDefSsn <- colDef(header = z_with_tt("FD", "Receiving First Downs\nBold if >=50"), filterable = F, minWidth = smallboxwidth, align = 'right', style = function(value) {
   fontWeight <- ifelse(value >= 50, 'bold', 'plain')
   list(fontWeight = fontWeight)}, defaultSortOrder = "desc")
-refdDefNm <- colDef(header = with_tt("FD", "Receiving First Downs"), minWidth = smallboxwidth, align = 'right')
-refdDef <- function(minW = 47, foot = F, borderL = F) {
-  colDef(header = with_tt("FD", "Receiving First Downs"),
+z_refdDefNm <- colDef(header = z_with_tt("FD", "Receiving First Downs"), filterable = F, minWidth = smallboxwidth, align = 'right')
+z_refdDef <- function(minW = 47, foot = F, borderL = F, disp = T) {
+  colDef(header = z_with_tt("FD", "Receiving First Downs"),
+         filterable = F,
          class = function(value) if(borderL == T) {"border-left-grey"},
+         show = disp,
          minWidth = minW,
          align = 'right',
          defaultSortOrder = "desc",
@@ -1467,157 +1633,201 @@ refdDef <- function(minW = 47, foot = F, borderL = F) {
   )
 }
 
-flDef <- colDef(header = with_tt("Fl", "Fumbles Lost"), minWidth = smallboxwidth - 5, align = 'right', defaultSortOrder = "desc")
+z_flDef <- colDef(header = z_with_tt("Fl", "Fumbles Lost"), minWidth = smallboxwidth - 5, align = 'right', defaultSortOrder = "desc")
 
 #advanced stats reactable formats----
-perccolwidth <- 60
-othcolwidth <- 45
-blankptwidth <- 52
-tchDef <- colDef(header = with_tt("Tch", "Touches\n(Completions + Carries + Receptions)"),
-                 minWidth = othcolwidth,
-                 align = "right",
-                 class = "border-left-grey",
-                 defaultSortOrder = "desc",
-                 sortNALast = T)
-oppDef <- colDef(header = with_tt("Opp", "Opportunities\n(Passing Attempts + Carries + Targets)"),
-                 minWidth = othcolwidth + 2,
-                 align = "right",
-                 defaultSortOrder = "desc",
-                 sortNALast = T)
-fptsPtchDef <- colDef(header = with_tt("FPt/Tch", "FPts per Touch\n(Completions + Carries + Receptions)"),
-                      minWidth = 68,
-                      align = "right",
-                      format = colFormat(digits = 2),
-                      defaultSortOrder = "desc",
-                      sortNALast = T)
-fptsPoppDef <- colDef(header = with_tt("FPt/Opp", "FPts per Opportunity\n(Passing Attempts + Carries + Targets)"),
-                      minWidth = 72,
-                      align = "right",
-                      format = colFormat(digits = 2),
-                      defaultSortOrder = "desc",
-                      sortNALast = T)
-ydptsDef <- colDef(header = with_tt("YdPt", "FPts from Yards\n(Passing + Rushing + Receiving)"),
-                   minWidth = blankptwidth,
-                   align = "right",
-                   class = "border-left-grey",
-                   format = colFormat(digits = 1),
-                   defaultSortOrder = "desc",
-                   sortNALast = T)
-tdptsDef <- colDef(header = with_tt("TDPt", "FPts from Touchdowns\n(Passing + Rushing + Receiving)"),
-                   minWidth = blankptwidth,
-                   align = "right",
-                   defaultSortOrder = "desc",
-                   sortNALast = T)
-fdptsDef <- colDef(header = with_tt("FDPt", "FPts from First Downs\n(Rushing + Receiving)"),
-                   minWidth = blankptwidth,
-                   align = "right",
-                   defaultSortOrder = "desc",
-                   sortNALast = T)
-ruptsDef <- colDef(header = with_tt("RuPt", "FPts from Rushing\n(Yards + TDs + First Downs)"),
-                   minWidth = blankptwidth,
-                   align = "right",
-                   class = "border-left-grey",
-                   format = colFormat(digits = 1),
-                   defaultSortOrder = "desc",
-                   sortNALast = T)
-reptsDef <- colDef(header = with_tt("RePt", "FPts from Receiving\n(Yards + TDs + First Downs)"),
-                   minWidth = blankptwidth,
-                   align = "right",
-                   format = colFormat(digits = 1),
-                   defaultSortOrder = "desc",
-                   sortNALast = T)
-ydptpercDef <- colDef(header = with_tt("YdPt%", "Percentage of Total FPts from Yards\n(Passing + Rushing + Receiving)"),
-                      minWidth = perccolwidth,
-                      align = "right",
-                      format = colFormat(percent = T, digits = 0),
-                      class = "border-left-grey",
-                      defaultSortOrder = "desc",
-                      sortNALast = T)
-tdptpercDef <- colDef(header = with_tt("TDPt%", "Percentage of Total FPts from Touchdowns\n(Passing + Rushing + Receiving)"),
-                      minWidth = perccolwidth + 2,
-                      align = "right",
-                      format = colFormat(percent = T, digits = 0),
-                      defaultSortOrder = "desc",
-                      sortNALast = T)
-fdptpercDef = colDef(header = with_tt("FDPt%", "Percentage of Total FPts from First Downs\n(Rushing + Receiving)"),
-                     minWidth = perccolwidth + 3,
-                     align = "right",
-                     format = colFormat(percent = T, digits = 0),
-                     defaultSortOrder = "desc",
-                     sortNALast = T)
-ruptpercDef = colDef(header = with_tt("RuPt%", "Percentage of Total FPts from Rushing\n(Yards + TDs + First Downs)"),
-                     minWidth = perccolwidth + 2,
-                     align = "right",
-                     class = "border-left-grey",
-                     format = colFormat(percent = T, digits = 0),
-                     defaultSortOrder = "desc",
-                     sortNALast = T)
-reptpercDef = colDef(header = with_tt("RePt%", "Percentage of Total FPts from Receiving\n(Yards + TDs + First Downs)"),
-                     minWidth = perccolwidth + 2,
-                     align = "right",
-                     format = colFormat(percent = T, digits = 0),
-                     defaultSortOrder = "desc",
-                     sortNALast = T)
+z_perccolwidth <- 60
+z_othcolwidth <- 45
+z_blankptwidth <- 52
+z_tchDef <- function(proj = F) {
+  colDef(header = z_with_tt("Tch", "Touches\n(Completions + Carries + Receptions)"),
+         minWidth = z_othcolwidth,
+         align = "right",
+         class = "border-left-grey",
+         defaultSortOrder = "desc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
+         sortNALast = T)
+}
+z_oppDef <- function(proj = F) {
+  colDef(header = z_with_tt("Opp", "Opportunities\n(Passing Attempts + Carries + Targets)"),
+         minWidth = z_othcolwidth + 2,
+         align = "right",
+         defaultSortOrder = "desc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
+         sortNALast = T)
+}
+z_fptsPtchDef <- function(proj = F) {
+  colDef(header = z_with_tt("Fp/T", "FPts per Touch\n(Completions + Carries + Receptions)"),
+         minWidth = 64,
+         align = "right",
+         format = colFormat(digits = 2),
+         defaultSortOrder = "desc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
+         sortNALast = T)
+}
+z_fptsPoppDef <- function(proj = F) {
+  colDef(header = z_with_tt("Fp/O", "FPts per Opportunity\n(Passing Attempts + Carries + Targets)"),
+         minWidth = 64,
+         align = "right",
+         format = colFormat(digits = 2),
+         defaultSortOrder = "desc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
+         sortNALast = T)
+}
+z_ydptsDef <- function(proj = F) {
+  colDef(header = z_with_tt("YdPt", "FPts from Yards\n(Passing + Rushing + Receiving)"),
+         minWidth = z_blankptwidth,
+         align = "right",
+         class = "border-left-grey",
+         format = colFormat(digits = 1),
+         defaultSortOrder = "desc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
+         sortNALast = T)
+}
+z_tdptsDef <- function(proj = F) {
+  colDef(header = z_with_tt("TDPt", "FPts from Touchdowns\n(Passing + Rushing + Receiving)"),
+         minWidth = z_blankptwidth,
+         align = "right",
+         defaultSortOrder = "desc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
+         sortNALast = T)
+}
+z_fdptsDef <- function(proj = F, disp = T) {
+  colDef(header = z_with_tt("FDPt", "FPts from First Downs\n(Rushing + Receiving)"),
+         show = disp,
+         minWidth = z_blankptwidth,
+         align = "right",
+         defaultSortOrder = "desc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
+         sortNALast = T)
+}
+z_ruptsDef <- function(proj = F) {
+  colDef(header = z_with_tt("RuPt", "FPts from Rushing\n(Yards + TDs + First Downs)"),
+         minWidth = z_blankptwidth,
+         align = "right",
+         class = "border-left-grey",
+         format = colFormat(digits = 1),
+         defaultSortOrder = "desc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
+         sortNALast = T)
+}
+z_reptsDef <- function(proj = F) {
+  colDef(header = z_with_tt("RePt", "FPts from Receiving\n(Yards + TDs + First Downs)"),
+         minWidth = z_blankptwidth,
+         align = "right",
+         format = colFormat(digits = 1),
+         defaultSortOrder = "desc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
+         sortNALast = T)
+}
+z_ydptpercDef <- function(proj = F) {
+  colDef(header = z_with_tt("YDp%", "Percentage of Total FPts from Yards\n(Passing + Rushing + Receiving)"),
+         minWidth = z_perccolwidth,
+         align = "right",
+         format = colFormat(percent = T, digits = 0),
+         class = "border-left-grey",
+         defaultSortOrder = "desc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
+         sortNALast = T)
+}
+z_tdptpercDef <- function(proj = F) {
+  colDef(header = z_with_tt("TDp%", "Percentage of Total FPts from Touchdowns\n(Passing + Rushing + Receiving)"),
+         minWidth = z_perccolwidth + 2,
+         align = "right",
+         format = colFormat(percent = T, digits = 0),
+         defaultSortOrder = "desc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
+         sortNALast = T)
+}
+z_fdptpercDef <- function(proj = F, disp = T) { 
+  colDef(header = z_with_tt("FDp%", "Percentage of Total FPts from First Downs\n(Rushing + Receiving)"),
+         show = disp,
+         minWidth = z_perccolwidth + 3,
+         align = "right",
+         format = colFormat(percent = T, digits = 0),
+         defaultSortOrder = "desc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
+         sortNALast = T)
+}
+z_ruptpercDef <- function(proj = F) {
+  colDef(header = z_with_tt("RuPt%", "Percentage of Total FPts from Rushing\n(Yards + TDs + First Downs)"),
+         minWidth = z_perccolwidth + 2,
+         align = "right",
+         class = "border-left-grey",
+         format = colFormat(percent = T, digits = 0),
+         defaultSortOrder = "desc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
+         sortNALast = T)
+}
+z_reptpercDef <- function(proj = F) {
+  colDef(header = z_with_tt("RePt%", "Percentage of Total FPts from Receiving\n(Yards + TDs + First Downs)"),
+         minWidth = z_perccolwidth + 2,
+         align = "right",
+         format = colFormat(percent = T, digits = 0),
+         defaultSortOrder = "desc",
+         style = function(value) if(proj == T) {list(fontStyle = 'italic')},
+         sortNALast = T)
+}
 
 #consistency stats reactable formats----
-conscolwidth <- 60
-relsdDef <- colDef(header = with_tt("RelSD", "Relative Standard Deviation of Weekly FPts\n(SD / Avg)"),
-                   minWidth = conscolwidth,
+z_conscolwidth <- 60
+z_relsdDef <- colDef(header = z_with_tt("RelSD", "Relative Standard Deviation of Weekly FPts\n(SD / Avg)"),
+                   minWidth = z_conscolwidth,
                    align = "right",
                    format = colFormat(digits = 2),
                    defaultSortOrder = "asc",
                    sortNALast = T)
-avgposrkDef <- colDef(header = with_tt("AvgPosRk", "Average Weekly Position Rank by FPts"),
-                      minWidth = conscolwidth + 10,
+z_avgposrkDef <- colDef(header = z_with_tt("AvgPosRk", "Average Weekly Position Rank by FPts"),
+                      minWidth = z_conscolwidth + 10,
                       align = "right",
                       class = "border-left-grey",
                       defaultSortOrder = "asc",
                       sortNALast = T)
-top5pDef <- colDef(header = with_tt("Top5%", "Percentage of Weeks with top 5 Positional Scoring Rank"),
-                   minWidth = conscolwidth,
+z_top5pDef <- colDef(header = z_with_tt("Top5%", "Percentage of Weeks with top 5 Positional Scoring Rank"),
+                   minWidth = z_conscolwidth,
                    align = "right",
                    format = colFormat(percent = T, digits = 0),
                    defaultSortOrder = "desc",
                    sortNALast = T)
-top12pDef <- colDef(header = with_tt("Top12%", "Percentage of Weeks with top 12 Positional Scoring Rank"),
-                    minWidth = conscolwidth,
+z_top12pDef <- colDef(header = z_with_tt("Top12%", "Percentage of Weeks with top 12 Positional Scoring Rank"),
+                    minWidth = z_conscolwidth,
                     align = "right",
                     format = colFormat(percent = T, digits = 0),
                     defaultSortOrder = "desc",
                     sortNALast = T)
-top24pDef <- colDef(header = with_tt("Top24%", "Percentage of Weeks with top 24 Positional Scoring Rank"),
-                    minWidth = conscolwidth,
+z_top24pDef <- colDef(header = z_with_tt("Top24%", "Percentage of Weeks with top 24 Positional Scoring Rank"),
+                    minWidth = z_conscolwidth,
                     align = "right",
                     format = colFormat(percent = T, digits = 0),
                     defaultSortOrder = "desc",
                     sortNALast = T)
-top36pDef <- colDef(header = with_tt("Top36%", "Percentage of Weeks with top 36 Positional Scoring Rank"),
-                    minWidth = conscolwidth,
+z_top36pDef <- colDef(header = z_with_tt("Top36%", "Percentage of Weeks with top 36 Positional Scoring Rank"),
+                    minWidth = z_conscolwidth,
                     align = "right",
                     format = colFormat(percent = T, digits = 0),
                     defaultSortOrder = "desc",
                     sortNALast = T)
-nonstartpDef <- colDef(header = with_tt("NonStart%", "Percentage of Weeks outside of top 36 Positional Scoring Rank"),
+z_nonstartpDef <- colDef(header = z_with_tt("NonStart%", "Percentage of Weeks outside of top 36 Positional Scoring Rank"),
                        minWidth = 75,
                        align = "right",
                        format = colFormat(percent = T, digits = 0),
                        defaultSortOrder = "desc",
                        sortNALast = T)
-g10pDef <- colDef(header = with_tt(">10 %", "Percentage of Weeks scoring >10 FPts"),
-                  minWidth = conscolwidth,
+z_g10pDef <- colDef(header = z_with_tt(">10%", "Percentage of Weeks scoring >10 FPts"),
+                  minWidth = z_conscolwidth,
                   class = "border-left-grey",
                   align = "right",
                   format = colFormat(percent = T,digits = 0),
                   defaultSortOrder = "desc",
                   sortNALast = T)
-g20pDef <- colDef(header = with_tt(">20 %", "Percentage of Weeks scoring >20 FPts"),
-                  minWidth = conscolwidth,
+z_g20pDef <- colDef(header = z_with_tt(">20%", "Percentage of Weeks scoring >20 FPts"),
+                  minWidth = z_conscolwidth,
                   align = "right",
                   format = colFormat(percent = T, digits = 0),
                   defaultSortOrder = "desc",
                   sortNALast = T)
-g30pDef <- colDef(header = with_tt(">30 %", "Percentage of Weeks scoring >30 FPts"),
-                  minWidth = conscolwidth,
+z_g30pDef <- colDef(header = z_with_tt(">30%", "Percentage of Weeks scoring >30 FPts"),
+                  minWidth = z_conscolwidth,
                   align = "right",
                   format = colFormat(percent = T, digits = 0),
                   defaultSortOrder = "desc",
@@ -1627,9 +1837,3 @@ g30pDef <- colDef(header = with_tt(">30 %", "Percentage of Weeks scoring >30 FPt
 source("dashboardPage.R")
 source("loginPage.R")
 source("guestUI.R")
-
-#password stuff
-# num_fails_to_lockout <- 1000
-# credentials <- data.frame(user = c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW","GUEST"),
-#                              stringsAsFactors = FALSE)
-# saveRDS(credentials, "credentials/credentials.rds")

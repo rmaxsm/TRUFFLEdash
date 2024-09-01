@@ -17,8 +17,8 @@ dashboardPageUI <-
                     menuItem("Home", tabName = "home", icon = icon("football-ball")),
                     menuItem("Team Portal", tabName = "teamportal", icon = icon("users")),
                     menuItem("Player Portal", tabName = "playerportal", icon = icon("user")),
-                    menuItem("Stat Center", tabName = "statcenter", icon = icon("chart-bar")),
-                    menuItem("BYOG", tabName = "byog", icon = icon("chart-bar")),
+                    menuItem("Stat Center", tabName = "statcenter", icon = icon("sliders")),
+                    menuItem("BYOG", tabName = "byog", icon = icon("chart-line")),
                     menuItem("Trade Machine", tabName = "trademachine" , icon = icon("gears")),
                     menuItem("Fantasy Portal", tabName = "fantasyportal", icon = icon("facebook-f")),
                     menuItem("Cap Corner", tabName = "capcorner", icon = icon("dollar-sign")),
@@ -47,7 +47,7 @@ dashboardPageUI <-
                                                  HTML(" Welcome to <span style=color:#84A4D8;font-size:14px>truffle</span><span style =color:#8C2E26;font-weight:bold;font-size:30px;font-family:'Audiowide'>dash</span>")
                                           ),
                                           column(width = 4,
-                                                 selectInput("homeseason", HTML("<span style=color:#84A4D8;font-size:14px>Season</span>"), sort(unique(weekly$Season), decreasing = T), selected = max(weekly$Season) )
+                                                 selectInput("homeseason", HTML("<span style=color:#84A4D8;font-size:14px>Season</span>"), sort(unique(c(weekly$Season, currentyr)), decreasing = T), selected = max(unique(c(weekly$Season, currentyr))) )
                                           )
                                           ,
                                           column(width=4, align = "right",
@@ -78,29 +78,59 @@ dashboardPageUI <-
                               # ),
                               
                               #draft homepage around draft time
-                              wellPanel(class = "well",
-                                        fluidRow(
-                                          column(width=8, h2("Rookie Draft")),
-                                          column(width=4, selectInput("homedraftseason", "Season", sort(unique(draft$Season), decreasing = T), selected = max(draft$Season) ))
-                                        ),
-                                        fluidRow(
-                                          column(width=4, reactableOutput('homerd1')),
-                                          column(width=4, reactableOutput('homerd2')),
-                                          column(width=4, reactableOutput('homerd3'))
-                                        )
-                              ),
+                              # wellPanel(class = "well",
+                              #           fluidRow(
+                              #             column(width=8, h2("Rookie Draft")),
+                              #             column(width=4, selectInput("homedraftseason", "Season", sort(unique(draft$Season), decreasing = T), selected = max(draft$Season) ))
+                              #           ),
+                              #           fluidRow(
+                              #             column(width=4, reactableOutput('homerd1')),
+                              #             column(width=4, reactableOutput('homerd2')),
+                              #             column(width=4, reactableOutput('homerd3'))
+                              #           )
+                              # ),
                               
                               fluidRow(
                                 column(width = 6,
                                        wellPanel(class = "well",
                                                  h2("Standings"),
-                                                 reactableOutput('hometeamsfantasy', width = "100%")
+                                                 tabsetPanel(
+                                                   tabPanel("Scoring",
+                                                            reactableOutput('hometeamsfantasy', width = "100%")),
+                                                   tabPanel("Divisions"
+                                                            ),
+                                                   tabPanel("Playoffs"
+                                                   ),
+                                                   tabPanel("Optimal"
+                                                   )
+                                                   
+                                                 )
+                                                 
                                        )
                                 ),
                                 column(width = 6,
                                        wellPanel(class = "well",
                                                  h2("Season Leaders"),
-                                                 reactableOutput('homepointsleaders') #height = "100%"),
+                                                 tabsetPanel(
+                                                   tabPanel("Fantasy",
+                                                            reactableOutput('homepointsleaders')
+                                                            ), #height = "100%"),
+                                                   tabPanel("Passing",
+                                                            reactableOutput('homepassing')
+                                                   ),
+                                                   tabPanel("Rushing",
+                                                            reactableOutput('homerushing')
+                                                   ),
+                                                   tabPanel("Receiving",
+                                                            reactableOutput('homereceiving')
+                                                   ),
+                                                   tabPanel("Advanced",
+                                                            reactableOutput('homeadvanced')
+                                                   ),
+                                                   tabPanel("Consistency",
+                                                            reactableOutput('homeconsistency')
+                                                   )
+                                                 )
                                        ))
                                 
                               ),
@@ -163,14 +193,14 @@ dashboardPageUI <-
                                                   wellPanel(class = "well",
                                                             reactableOutput('tpboxscore'),
                                                             hr(),
-                                                            em("Traditional Passing, Rushing, Receiving scoring stats. Hover over column header for definition.")
+                                                            em("Traditional Passing, Rushing, Receiving scoring stats. Hover over column header for definition. Italic values indicate CBS Projections during offseason.")
                                                   )
                                          ),
                                          tabPanel("Advanced",
                                                   wellPanel(class = "well",
                                                             reactableOutput('tpadvanced'),
                                                             hr(),
-                                                            em("Advanced stats on per-touch efficiency, and point source breakdown (Yardage vs. TD vs. First Downs / Rushing vs. Receiving). Hover over column header for definition.")
+                                                            em("Advanced stats on per-touch efficiency, and point source breakdown (Yardage vs. TD vs. First Downs / Rushing vs. Receiving). Hover over column header for definition. Italic values indicate CBS Projections during offseason.")
                                                   )
                                          ),
                                          tabPanel("Consistency",
@@ -380,14 +410,14 @@ dashboardPageUI <-
                                                   wellPanel(class = "well",
                                                             reactableOutput('scboxscore'),
                                                             hr(),
-                                                            em("Traditional Passing, Rushing, Receiving scoring stats. Hover over column header for definition.")
+                                                            em("Traditional Passing, Rushing, Receiving scoring stats. Hover over column header for definition. Italic values indicate CBS Projections during offseason.")
                                                   )
                                          ),
                                          tabPanel("Advanced",
                                                   wellPanel(class = "well",
                                                             reactableOutput('scadvanced'),
                                                             hr(),
-                                                            em("Advanced stats on per-touch efficiency, and point source breakdown (Yardage vs. TD vs. First Downs / Rushing vs. Receiving). Hover over column header for definition.")
+                                                            em("Advanced stats on per-touch efficiency, and point source breakdown (Yardage vs. TD vs. First Downs / Rushing vs. Receiving). Hover over column header for definition. Italic values indicate CBS Projections during offseason.")
                                                   )
                                          ),
                                          tabPanel("Consistency",
@@ -636,7 +666,7 @@ dashboardPageUI <-
                                                               ),
                                                               column(width = 3,
                                                                      br(),
-                                                                     selectInput("recordteams", "TRUFFLE / Team", c("TRUFFLE", unique(teams$FullName)), selected = "TRUFFLE" )
+                                                                     selectInput("recordteams", "League / Team", c("TRUFFLE", unique(teams$FullName)), selected = "TRUFFLE" )
                                                               )
                                                             )),
                                                   wellPanel(class = "well",
@@ -712,35 +742,35 @@ dashboardPageUI <-
                                                   
                                          ),
                                          
-                                         # tabPanel("Awards",
-                                         #          
-                                         #          wellPanel(class = "well",
-                                         #                    fluidRow(
-                                         #                      column(width = 9,
-                                         #                             h2("Annual End Of Season TRUFFLE Awards"),
-                                         #                             p("Awards and All-TRUFFLE Teams annually voted for by TRUFFLE owners.")
-                                         #                      ),
-                                         #                      column(width = 3,
-                                         #                             selectInput("awardseason", "Season", sort(unique(awards$Season), decreasing = T), selected = max(awards$Season))
-                                         #                      )
-                                         #                    )
-                                         #          ),
-                                         #          wellPanel(class = "well",
-                                         #                    fluidRow(
-                                         #                      column(width=6,
-                                         #                             h2("Award Winners"),
-                                         #                             br(),
-                                         #                             reactableOutput('historybooksawards')
-                                         #                      ),
-                                         #                      column(width=6,
-                                         #                             h2("All-TRUFFLE"),
-                                         #                             em("* denotes unanimous 1st Team selection"),
-                                         #                             reactableOutput('allt1'),
-                                         #                             reactableOutput('allt2')
-                                         #                      )
-                                         #                    )
-                                         #          )
-                                         # ), #end tabpanel
+                                         tabPanel("Awards",
+
+                                                  wellPanel(class = "well",
+                                                            fluidRow(
+                                                              column(width = 9,
+                                                                     h2("Annual End Of Season TRUFFLE Awards"),
+                                                                     p("Awards and All-TRUFFLE Teams annually voted for by TRUFFLE owners.")
+                                                              ),
+                                                              column(width = 3,
+                                                                     selectInput("awardseason", "Season", sort(unique(awards$Season), decreasing = T), selected = max(awards$Season))
+                                                              )
+                                                            )
+                                                  ),
+                                                  wellPanel(class = "well",
+                                                            fluidRow(
+                                                              column(width=6,
+                                                                     h2("Award Winners"),
+                                                                     br(),
+                                                                     reactableOutput('historybooksawards')
+                                                              ),
+                                                              column(width=6,
+                                                                     h2("All-TRUFFLE"),
+                                                                     em("* denotes unanimous 1st Team selection"),
+                                                                     reactableOutput('allt1'),
+                                                                     reactableOutput('allt2')
+                                                              )
+                                                            )
+                                                  )
+                                         ), #end tabpanel
                                          
                                          tabPanel("Rivalries",
                                                   wellPanel(
