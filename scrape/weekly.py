@@ -115,7 +115,8 @@ def getTeamAbbreviation(team):
   try:
     if(team == "W "):
       ##NEED TO CHECK IF THIS IS WHAT IS CORRECT. WANT SEASON NOT YEAR???
-      return "W (9/1)"
+      # return team
+      return "FA"
     return teamsDict[team]
   except Exception as exp:
     #print("An Error Occuring while trying to get the team abbreviation for " + team)
