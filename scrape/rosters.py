@@ -130,7 +130,7 @@ def separateColumns(row):
   allCols[1] = "Player"
   return allCols
 
-getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
+getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("•")])
 getPosition = lambda y: pd.Series([i for i in y.split(" ")][-1])
 getPlayer = lambda z: pd.Series(' '.join([i for i in z.split(" ")][:-1]))
   
