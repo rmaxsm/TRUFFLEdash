@@ -194,6 +194,7 @@ for index, row in teamsPd.iterrows():
   #pandas df to represent team
   df = pd.DataFrame(allPlayers, columns=cols)
   df = df.drop(columns=["Action"])
+  df = df.drop(columns=["Bye"])
   
   #apply lambda fcts to correct columns
   playerTeam = df["Player"].apply(getNFLTeam)
