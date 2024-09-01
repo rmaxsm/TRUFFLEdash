@@ -105,18 +105,12 @@ begin_time = datetime.datetime.now()
 
 #get information from teams document to refer to for shortcuts ext
 teamsPd = pd.read_csv("data/teams.csv")
+# re-assign the PD to get only TRUFFLE
+teamsPd = teamsPd[teamsPd['League'] == "TRUFFLE"]
 
 teamsDict = {}
 for index, row in teamsPd.iterrows():
   teamsDict[row["LogsScrape"]] = row["Abbrev"]  
-
-#returns team abbreviation from team name
-# def getTeamAbbreviation(team):
-#   try:
-#     return teamsDict[team]
-#   except Exception as exp:
-#     print("An Error Occuring while trying to get the team abbreviation for " + team)
-#     return
 
 #returns team abbreviation from team name
 def getTeamAbbreviation(team):
@@ -153,7 +147,7 @@ def separatePlayers(rows):
   return curRow
 
 #lamba functions to split player name team and position
-getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
+getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("•")])
 getPosition = lambda y: pd.Series([i for i in y.split(" ")][-1])
 getPlayer = lambda z: pd.Series(' '.join([i for i in z.split(" ")][:-1]))
 
@@ -168,7 +162,7 @@ for index, row in teamsPd.iterrows():
   #finds the outermost 'tables' containing the stats(3 off,kicker,dst in order)
   tbls =  soup.find_all("table", class_="data pinHeader borderTop")
   tblOffense = tbls[0]
-  tblDefense = tbls[2]
+  tblDefense = tbls[1]
   
   #gets the column header information as 'label'
   combined = tblOffense.find_all("tr", class_="label")
@@ -222,11 +216,11 @@ for index, row in teamsPd.iterrows():
   #moves defensive data - empties out old
   finalVal = len(df.index) - 1
   compToAvg = df.iloc[[finalVal]]["Comp"].values[0]
-  df.at[finalVal,"Avg"] = compToAvg
-  df.at[finalVal, "Comp"] = ''
+  df.loc[finalVal,"Avg"] = compToAvg
+  df.loc[finalVal, "Comp"] = ''
   total = df.iloc[[finalVal]]["ATT"].values[0]
-  df.at[finalVal,"Total"] = total
-  df.at[finalVal, "ATT"] = ''
+  df.loc[finalVal,"Total"] = total
+  df.loc[finalVal, "ATT"] = ''
   
   #on the first iteration we need to 'create' the main pandas table - it is naive to the size before scraping
   if index == 0:

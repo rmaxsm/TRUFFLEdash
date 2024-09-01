@@ -1,6 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
+import re
+
 
 
 cookies = {
@@ -60,52 +62,44 @@ headers = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 Edg/127.0.0.0',
 }
 
+#this is the main pandas frame that will be added to throughout
+dfGlobal = pd.DataFrame()
+
 #get year and week for url/formatting
 season = input("What SEASON is it..? ")
 while(len(season) != 4):
   print("get the SEASON right dumbass")
   season = input("What SEASON is it..? ")
 
+week = input("What WEEK is it..? ")
+while(len(week) >= 3):
+  print("get the week right dumbass")
+  week = input("What WEEK is it..? ")
+
+#use current input week year tuple as comparison
+currentWeekYear = week + season
 
 
 #get information from teams document to refer to for shortcuts ext
 teamsPd = pd.read_csv("data/teams.csv")
+
 # re-assign the PD to get only KERFUFFLE
 teamsPd = teamsPd[teamsPd['League'] == "KERFUFFLE"]
 
 teamsDict = {}
 for index, row in teamsPd.iterrows():
-  teamsDict[row["FullName"]] = row["Abbrev"]
+  teamsDict[row["LogsScrape"]] = row["Abbrev"]  
 
-
-  
 #returns team abbreviation from team name
 def getTeamAbbreviation(team):
   try:
+    waived =  re.compile("W ")
+    if(waived.match(team)):
+      return team
     return teamsDict[team]
   except Exception as exp:
-    print(teamsDict)
     print("An Error Occuring while trying to get the team abbreviation for " + team)
-    return
-  
-#takes in a single row of html and returns the stats as list (for players/dst)
-def separatePlayers(rows):
-  curRow = []
-  for i in rows:
-    curRow.append(i.getText())
-  return curRow
-
-#takes in a single row of html and returns the stats as list deadcap players only
-def separatePlayersDeadCap(rows):
-  itr = 0
-  curRow = []
-  for i in rows:
-    if itr == 0:
-      curRow.append("DC")
-    else:
-      curRow.append(i.getText())
-    itr += 1
-  return curRow
+    return "err"
 
 #separates the column names
 #returns list representing the columns for tables 
@@ -113,104 +107,145 @@ def separateColumns(row):
   allCols = []
   for i in row:
     allCols.append(i.getText())
-  allCols[1] = "Player"
+  allCols[1] = "TRUFFLE"
   return allCols
 
+#takes in a single row of html and returns the stats as list (for players/dst)
+def separatePlayers(rows):
+  itr = 0
+  curRow = []
+  for i in rows:
+    if itr == 0:    #first value always empty string
+      curRow.append("")
+    elif itr == 1:    #second value convert to team abbreviation
+      curRow.append(getTeamAbbreviation(i.getText()).strip())   
+    else:       #after first two iterations just get exact data from source
+      curRow.append(i.getText())
+    itr += 1
+  return curRow
 
+#lamba functions to split player name team and position
 getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("•")])
 getPosition = lambda y: pd.Series([i for i in y.split(" ")][-1])
 getPlayer = lambda z: pd.Series(' '.join([i for i in z.split(" ")][:-1]))
 
-#where the connection is made to the truffle cbs website
-url = "https://kerfuffle.football.cbssports.com/teams/all"
-response = requests.get(url, cookies=cookies, headers=headers)
-soup = BeautifulSoup(response.content, 'html.parser')
+for index, row in teamsPd.iterrows():
 
-
-tbls =  soup.findAll("table", {"class":"data data3 pinHeader borderTop"})
-dfGlobal = pd.DataFrame()
-counter = 0
-
-for tbl in tbls:
-  # print(tbl.prettify())
-  tableRows = tbl.findAll('tr')
+  teamNum = row["TeamNum"]
+  #where the connection is made to the truffle cbs website
+  url = "https://kerfuffle.football.cbssports.com/stats/stats-main/team:{}/period-{}:f/TRUFFLEoffense/".format(teamNum,week)
+  response = requests.get(url, cookies=cookies, headers=headers)
+  soup = BeautifulSoup(response.content, 'html.parser')
+    
+  #finds the outermost 'tables' containing the stats(3 off,kicker,dst in order)
+  tbls =  soup.find_all("table", class_="data pinHeader borderTop")
+  tblOffense = tbls[0]
+  tblDefense = tbls[1]
   
-  teamName = ""
-  cols = []
-  players = []
+  #gets the column header information as 'label'
+  combined = tblOffense.find_all("tr", class_="label")
+  label = combined[1]
   
-  for row in tableRows:
-    if row.has_attr('class') and row['class'][0] == "title":
-      # print("THIS IS THE TEAM NAME")
-      nameSplit = row.getText().split(" ")
-      nameSplit.pop()
-      teamName = ' '.join(nameSplit)
-    elif row.has_attr('class') and row['class'][0] == "label" and len(row['class']) == 1:
-      # print("THIS IS THE COLUMN HEADERS")
-      cols = separateColumns(row)
-    elif row.has_attr('class') and row['class'][0] == "playerRow" and len(row['class']) == 2:
-      # print("THESE ARE ALL THE STARTING PLAYERS")
-      players.append(separatePlayers(row))
-    elif row.has_attr('class') and row['class'][0] == "playerRow" and len(row['class']) == 3:
-      # print("THESE ARE ALL THE BENCHED PLAYERS")
-      playerName = row.find('a').getText()
-      if (playerName.split(" ")[-1] == "Cap"):
-        players.append(separatePlayersDeadCap(row))
-      else:
-        players.append(separatePlayers(row))
-
-  dfTeam = pd.DataFrame(players, columns = cols)
-  dfTeam["TRUFFLE"] = getTeamAbbreviation(teamName)
+  #calls function to clean column headers stored as cols (used in pandas df)
+  cols = separateColumns(label)
+  
+  #store all players per team as list of lists
+  allPlayers = []
+  
+  #regex used to find row1/2 (\d means only numbers following exact match of row)
+  allRowsOffense = tblOffense.find_all("tr", class_=re.compile("row\d"))
+  
+  #for every player - clean the row and add to list of lists
+  for i in allRowsOffense:
+    allPlayers.append(separatePlayers(i))
+  
+  # simlar to offense but with slightly different logic
+  defRows = tblDefense.find_all("tr", {"class": re.compile("row\d")})
+  for i in defRows:
+    curDef = separatePlayers(i)
+    #once defense stats are cleaned need to fill the rest of the list as empty
+    noneList = ["" for i in range(len(allPlayers[0]) - len(curDef))]
+    for j in noneList:
+      curDef.append(j)
+    allPlayers.append(curDef)
+    
+  #pandas df to represent team
+  df = pd.DataFrame(allPlayers, columns=cols)
+  df = df.drop(columns=["Action"])
+  df = df.drop(columns=["Avail"])
   
   #apply lambda fcts to correct columns
-  playerTeam = dfTeam["Player"].apply(getNFLTeam)
+  playerTeam = df["Player"].apply(getNFLTeam)
   position = playerTeam[0].apply(getPosition)
   player =  playerTeam[0].apply(getPlayer)
   nfl = pd.Series(playerTeam[1])
-  
-  
+
+
   #add/remove columns for TRUFFLE formatting
-  dfTeam["Player"] = player
-  dfTeam.insert(1,"PosTRUFFLE", position[0])
-  dfTeam.insert(3,"NFL", nfl)
+  # df = df.drop(["Bye","Rost", "Start"],axis=1)
+  # FIND ME - this has been changed because 'Bye' is no longer on the website
+  df = df.drop(["Rost", "Start"],axis=1)
+  df["Player"] = player
+  df.insert(0,"Season", season)
+  df.insert(1,"Week", week)
+  df.insert(3,"Pos", position[0])
+  df.insert(5,"NFL", nfl)
   
-  dfTeam['Player'] = dfTeam['Player'].str.replace(r'.', '', regex=True)
-  dfTeam['Player'] = dfTeam['Player'].str.replace(r' Jr', '', regex=True)
-  dfTeam['Player'] = dfTeam['Player'].str.replace(r' Sr', '', regex=True)
-  dfTeam['Player'] = dfTeam['Player'].str.replace(r' III', '', regex=True)
-  dfTeam['Player'] = dfTeam['Player'].str.replace(r' II', '', regex=True)
-  dfTeam['Player'] = dfTeam['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
-
-  if counter == 0:
-    dfGlobal = dfTeam
+  print(df)
+  #moves defensive data - empties out old
+  finalVal = len(df.index) - 1
+  compToAvg = df.iloc[[finalVal]]["Comp"].values[0]
+  df.loc[finalVal,"Avg"] = compToAvg
+  df.loc[finalVal, "Comp"] = ''
+  total = df.iloc[[finalVal]]["ATT"].values[0]
+  df.loc[finalVal,"Total"] = total
+  df.loc[finalVal, "ATT"] = ''
+  
+  #on the first iteration we need to 'create' the main pandas table - it is naive to the size before scraping
+  if index == 0:
+    dfGlobal = df
   else:
-    dfGlobal = pd.concat([dfGlobal, dfTeam], ignore_index = True)
-  counter += 1
-  
-  
-for index, row in dfGlobal.loc[~(dfGlobal['Pos'] == dfGlobal['PosTRUFFLE'])].iterrows():
-  if row['Pos'] == "DC":
-    # print("DEAD CAP HARD CODE ASSIGN")
-    dfGlobal.at[index, 'Pos'] = "DC"
-  else:
-    # print("NEED TO ASSIGN THE Pos = PosTRUFFLE")
-    dfGlobal.at[index, 'Pos'] = row['PosTRUFFLE']
-    
-#shifting/deleting/sorting columns for formatting
-truffle = dfGlobal.pop("TRUFFLE")
-dfGlobal.insert(2,"TRUFFLE", truffle)
-dfGlobal = dfGlobal.drop(["PosTRUFFLE"], axis=1)
-# dfGlobal = dfGlobal.sort_values(by=['TRUFFLE'])
+    dfGlobal = pd.concat([dfGlobal,df], ignore_index=True)
 
-#create roster backup
-#read the existing csv as a pd df for error checking
-masterDf = pd.read_csv("data/kerfuffle/kerfuffle_rosters.csv")
-#create backup copy
-filepath = "data/kerfuffle/backup/kerfuffle_rosters_backup.csv"
-masterDf.to_csv(filepath, index=False)
 
-#save final csv
-dfGlobal.to_csv("data/kerfuffle/kerfuffle_rosters.csv", index = False)
+#dfGlobal = dfGlobal.replace('', "NA", regex = True)
 
 print(dfGlobal)
-print("\n\nkerfuffle roster script complete. saved at data/kerfuffle/kerfuffle_rosters.csv with backup data/kerfuffle/backup/kerfuffle_rosters_backup.csv\n")
+
+masterFile = "data/kerfuffle/kerfuffle_fantasy.csv"
+
+#read the existing csv as a pd df for error checking
+masterDf = pd.read_csv(masterFile)
+filepath = "data/kerfuffle/backup/kerfuffle_fantasy_backup.csv"
+masterDf.to_csv(filepath, index=False)
+
+#reassign the columns to be equal to that of the existing csv
+dfGlobal.columns = masterDf.columns
+
+#player name replacements
+dfGlobal['Player'] = dfGlobal['Player'].str.replace(r'.', '', regex=True)
+dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' Jr', '', regex=True)
+dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' Sr', '', regex=True)
+dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' III', '', regex=True)
+dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' II', '', regex=True)
+dfGlobal['Player'] = dfGlobal['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
+
+#create weekyear column to conditionally remove existing data from week being scraped
+masterDf["WeekYear"] = masterDf["Week"].astype(str) + masterDf["Season"].astype(str)
+#remove
+masterDf = masterDf[masterDf["WeekYear"] != currentWeekYear]
+#drop the weekyear column post check
+masterDf = masterDf.drop(['WeekYear'], axis=1)
+
+#concat scraped df and the masterDf
+newmaster = pd.concat([masterDf, dfGlobal], ignore_index=True)
+
+# stores as csv
+filepath = "data/kerfuffle/backup/kerfuffle_fantasy_scraperesult.csv"
+newmaster.to_csv(masterFile, index=False)
+dfGlobal.to_csv(filepath, index=False)
+
+#ending print outs
+print(dfGlobal)
+print("\nstored file in location {}".format(filepath))
+print("\n\nkerfuffle fantasy script complete.")
