@@ -2974,7 +2974,7 @@ shinyServer(function(input, output, session) {
               ),
               details = function(index) {
                 if (index == 1) {
-                  reactable(top5paid[Pos == "QB" & Season == currentyr][, c("Player", "Salary")], 
+                  reactable(top5paid[Pos == "QB" & Season == currentyr + 1][, c("Player", "Salary")], 
                             columns = list(
                               Player = colDef(minWidth = 150, footer = "Mean"),
                               Salary = z_tagvalDefNobar()
@@ -2982,7 +2982,7 @@ shinyServer(function(input, output, session) {
                             defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
                   )
                 } else if (index == 2) {
-                  reactable(top5paid[Pos == "QB" & Season == currentyr][, c("Player", "Salary")][1], 
+                  reactable(top5paid[Pos == "QB" & Season == currentyr + 1][, c("Player", "Salary")][1], 
                             columns = list(
                               Player = colDef(minWidth = 150),
                               Salary = z_tagvalDefNobar(foot = F)
@@ -3010,7 +3010,7 @@ shinyServer(function(input, output, session) {
               ),
               details = function(index) {
                 if (index == 1) {
-                  reactable(top5paid[Pos == "RB" & Season == currentyr][, c("Player", "Salary")], 
+                  reactable(top5paid[Pos == "RB" & Season == currentyr + 1][, c("Player", "Salary")], 
                             columns = list(
                               Player = colDef(minWidth = 150, footer = "Mean"),
                               Salary = z_tagvalDefNobar()
@@ -3018,7 +3018,7 @@ shinyServer(function(input, output, session) {
                             defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
                   )
                 } else if (index == 2) {
-                  reactable(top5paid[Pos == "RB" & Season == currentyr][, c("Player", "Salary")][1], 
+                  reactable(top5paid[Pos == "RB" & Season == currentyr + 1][, c("Player", "Salary")][1], 
                             columns = list(
                               Player = colDef(minWidth = 150),
                               Salary = z_tagvalDefNobar(foot = F)
@@ -3046,7 +3046,7 @@ shinyServer(function(input, output, session) {
               ),
               details = function(index) {
                 if (index == 1) {
-                  reactable(top5paid[Pos == "WR" & Season == currentyr][, c("Player", "Salary")], 
+                  reactable(top5paid[Pos == "WR" & Season == currentyr + 1][, c("Player", "Salary")], 
                             columns = list(
                               Player = colDef(minWidth = 150, footer = "Mean"),
                               Salary = z_tagvalDefNobar()
@@ -3054,7 +3054,7 @@ shinyServer(function(input, output, session) {
                             defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
                   )
                 } else if (index == 2) {
-                  reactable(top5paid[Pos == "WR" & Season == currentyr][, c("Player", "Salary")][1], 
+                  reactable(top5paid[Pos == "WR" & Season == currentyr + 1][, c("Player", "Salary")][1], 
                             columns = list(
                               Player = colDef(minWidth = 150),
                               Salary = z_tagvalDefNobar(foot = F)
@@ -3082,7 +3082,7 @@ shinyServer(function(input, output, session) {
               ),
               details = function(index) {
                 if (index == 1) {
-                  reactable(top5paid[Pos == "TE" & Season == currentyr][, c("Player", "Salary")], 
+                  reactable(top5paid[Pos == "TE" & Season == currentyr + 1][, c("Player", "Salary")], 
                             columns = list(
                               Player = colDef(minWidth = 150, footer = "Mean"),
                               Salary = z_salaryDefNobar()
@@ -3090,7 +3090,7 @@ shinyServer(function(input, output, session) {
                             defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
                   )
                 } else if (index == 2) {
-                  reactable(top5paid[Pos == "TE" & Season == currentyr][, c("Player", "Salary")][1], 
+                  reactable(top5paid[Pos == "TE" & Season == currentyr + 1][, c("Player", "Salary")][1], 
                             columns = list(
                               Player = colDef(minWidth = 150),
                               Salary = z_salaryDefNobar(foot = F)

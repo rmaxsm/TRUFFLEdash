@@ -96,13 +96,13 @@ dashboardPageUI <-
                                                  h2("Standings"),
                                                  tabsetPanel(
                                                    tabPanel("Scoring",
-                                                            reactableOutput('hometeamsfantasy', width = "100%")),
-                                                   tabPanel("Divisions"
-                                                            ),
-                                                   tabPanel("Playoffs"
-                                                   ),
-                                                   tabPanel("Optimal"
-                                                   )
+                                                             reactableOutput('hometeamsfantasy', width = "100%"))#,
+                                                   # tabPanel("Divisions"
+                                                   #          ),
+                                                   # tabPanel("Playoffs"
+                                                   # ),
+                                                   # tabPanel("Optimal"
+                                                   # )
                                                    
                                                  )
                                                  
@@ -243,7 +243,7 @@ dashboardPageUI <-
                       # Player Portal -----
                       tabItem(tabName = "playerportal",
                               wellPanel(style = "background-color:#FFFFFF, padding-top:0px",
-                                        selectizeInput('player',h2("Select Player:"), choices = sort(unique(weekly$Player)), selected = NULL, multiple = T),
+                                        selectizeInput('player',h2("Select Player:"), choices = sort(unique(weekly$Player[weekly$Player %in% weekly[Scoring == "PPFD", .(FPts = sum(FPts, na.rm=T)), by = Player][FPts > 10]$Player])), selected = NULL, multiple = T),
                                         hr(),
                                         em("Type and select player name(s) to view/compare player stats across all Player Portal tables & charts")
                               ),

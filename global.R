@@ -80,24 +80,19 @@ bigN <- 9999999999
 
 #file of TRUFFLE team info
 # teams.csv ----
-#teams <- as.data.table(read_csv("data/teams.csv", col_types = cols()))
-#demodata
-teams <- as.data.table(read_csv("demodata/teams.csv", col_types = cols()))
+teams <- as.data.table(read_csv("data/teams.csv", col_types = cols()))
+
 
 # ids.csv ----
 #file of CBS player IDs
-#ids <- as.data.table(read_csv("data/playerIDs.csv", col_types = cols()))
-#demodata
-ids <- as.data.table(read_csv("demodata/playerIDs.csv", col_types = cols()))
+ids <- as.data.table(read_csv("data/playerIDs.csv", col_types = cols()))
 
 ids$playerID <- as.character(ids$playerID)
 ids$TRUFFLE[!(ids$TRUFFLE %in% c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW"))] <- "FA"
 ids <- merge(ids, teams[, c("Abbrev", "TeamNum")], by.x = "TRUFFLE", by.y = "Abbrev", all.x = T)
 
 #import fantasy pros file to use for age
-#fprosage <- read_excel("data/fprosage.xlsx")
-#demodata
-fprosage <- read_csv("demodata/fprosage.csv", col_types = cols())
+fprosage <- read_csv("data/fprosage.csv", col_types = cols())
 cleanFprosage <- function(file) {
   file$TIERS <- NULL
   file$`ECR VS. ADP` <- NULL
@@ -114,7 +109,7 @@ cleanFprosage <- function(file) {
   file$Pos <- substr(file$DynPosRk, 1, 2)
   
   #read in birthdays
-  bdays <- read_csv("demodata/birthdays.csv", col_types = cols())
+  bdays <- read_csv("data/birthdays.csv", col_types = cols())
   bdays$player <- str_replace_all(bdays$player,"\\.","")
   bdays$player <- str_replace_all(bdays$player," Jr","")
   bdays$player <- str_replace_all(bdays$player," Sr","")
@@ -134,10 +129,19 @@ cleanFprosage <- function(file) {
 fprosage <- as.data.table(cleanFprosage(fprosage))
 
 # rosters.csv ----
-#file of current TRUFFLE rosters
-#rosters <- read_csv("data/rosters.csv", col_types = cols())
-#demodata
-rosters <- read_csv("demodata/rosters.csv", col_types = cols())
+#file of current TRUFFLE & KERFUFFLE rosterand insert league column
+trf_rosters <- read_csv("data/rosters.csv", col_types = cols())
+trf_rosters$League <- "TRUFFLE"
+
+krf_rosters <- read_csv("data/kerfuffle/kerfuffle_rosters.csv", col_types = cols())
+krf_rosters$League <- "KERFUFFLE"
+
+#colnames discrepancy fix
+colnames(krf_rosters) <- colnames(trf_rosters)
+
+#rbind rosters across leagues
+rosters <- as.data.table(rbind(trf_rosters, krf_rosters)); rm(trf_rosters, krf_rosters)
+
 cleanRosters <- function(file) {
   
   #convert to DT
@@ -145,9 +149,12 @@ cleanRosters <- function(file) {
   
   #merge in correct team abbreviations
   file <- merge(x = file, y = fprosage[ , c("Player", "Pos", "Age")], by = c("Player", "Pos"), all.x=TRUE)
+  
+  #old
   #colnames(file) <- c("Player", "Age",  "Pos", "TRUFFLE", "NFL", "Opp", "GameTime", "Bye", "O/U", "PosRnk", "Ovp", "Rost", "Start", "Salary", "Contract", "Last", "Avg", "Proj")
   #demodata
-  colnames(file) <- c("Player", "Pos", "League", "TRUFFLE", "NFL", "Opp", "GameTime", "Bye", "O/U", "PosRnk", "Ovp", "Rost", "Start", "Salary", "Contract", "Last", "Avg", "Proj", "Age")
+  
+  colnames(file) <- c("Player", "Pos", "TRUFFLE", "NFL", "Opp", "GameTime", "Bye", "O/U", "PosRnk", "Ovp", "Rost", "Start", "Salary", "Contract", "Last", "Avg", "Proj", "League", "Age")
   file <- file[, c("League", "TRUFFLE", "Player",  "Pos", "NFL", "Age", "Opp", "GameTime", "Bye", "O/U", "PosRnk", "Ovp", "Rost", "Start", "Salary", "Contract", "Last", "Avg", "Proj")]
   
   #finalized 
@@ -157,9 +164,8 @@ rosters <- cleanRosters(rosters)
 
 # oldrosters.csv ----
 #get old rosters and merge in current teams to see what TRUFFLE team players were on which year
-#oldrosters <- as.data.table(read_csv("data/oldrosters.csv", col_types = cols()))
-#demodata
-oldrosters <- as.data.table(read_csv("demodata/oldrosters.csv", col_types = cols()))
+oldrosters <- as.data.table(read_csv("data/oldrosters.csv", col_types = cols()))
+
 #calculate rings and bench cup wins to display in record books
 rings <- oldrosters[,
                     .(Rings = sum(Ring),
@@ -345,8 +351,7 @@ rm(currentseason)
 seasons <- seasons[order(Scoring, -Season,-FPts, -Avg)][, `:=`(PosRk = 1:.N), by = .(Scoring, Season, Pos)]
 
 #file of projections, mainly to be used during offseason
-#demodata
-proj <- as.data.table(read_csv("demodata/projections.csv", col_types = cols()))
+proj <- as.data.table(read_csv("data/projections.csv", col_types = cols()))
 #until Dre builds cleaning scrape file that accounts for names
 proj$Player <- str_replace_all(proj$Player,"\\.","")
 proj$Player <- str_replace_all(proj$Player," Jr","")
@@ -377,26 +382,21 @@ proj <- proj[order(-FPts)][, `:=`(PosRk = 1:.N), by = .(Season, Pos)]
 
 
 #file of standings
-#dedmodata
-standings <- as.data.table(read_csv("demodata/standings.csv", col_types = cols()))
+#notliveyet
+standings <- as.data.table(read_csv("data/standings.csv", col_types = cols()))
 
 #file to indicate what players have rookie rights
-#rookierights <- read_csv("data/rookierights.csv", col_types = cols())
-#rookierights <- as.vector(rookierights$Player)
-#demodata
-rookierights <- as.data.table(read_csv("demodata/rookierights.csv", col_types = cols()))
+rookierights <- as.data.table(read_csv("data/rookierights.csv", col_types = cols()))
 
 #file of draft records
-#draft <- as.data.table(read_csv("data/drafts.csv", col_types = cols()))
-#demodata
-draft <- as.data.table(read_csv("demodata/drafts.csv", col_types = cols()))
+draft <- as.data.table(read_csv("data/drafts.csv", col_types = cols()))
 
 #franchise tag files
 #franchised <- as.data.table(read_csv("data/franchisetag.csv", col_types = cols()))
 #top5paid <- as.data.table(read_csv("data/top5paid.csv", col_types = cols()))
 #demodata
-franchised <- as.data.table(read_csv("demodata/franchisetag.csv", col_types = cols()))
-top5paid <- as.data.table(read_csv("demodata/top5paid.csv", col_types = cols()))
+franchised <- as.data.table(read_csv("data/franchisetag.csv", col_types = cols()))
+top5paid <- as.data.table(read_csv("data/top5paid.csv", col_types = cols()))
 
 #rivalry scorers
 #riv <- as.data.table(read_csv("data/rivalries.csv", col_types = cols()))
@@ -609,14 +609,14 @@ tagvals <- data.table()
 for (i in 1:length(lgs)) {
 tagvals <- rbind(tagvals, as.data.table(
   rbind(
-    c(lgs[i], "QB", "First", round(mean(top5paid$Salary[top5paid$Pos == "QB" & top5paid$Season == currentyr]))),
-    c(lgs[i], "QB", "Second", max(top5paid$Salary[top5paid$Pos == "QB" & top5paid$Season == currentyr]) + 1 ),
-    c(lgs[i], "RB", "First", round(mean(top5paid$Salary[top5paid$Pos == "RB" & top5paid$Season == currentyr]))),
-    c(lgs[i], "RB", "Second", max(top5paid$Salary[top5paid$Pos == "RB" & top5paid$Season == currentyr]) + 1 ),
-    c(lgs[i], "WR", "First", round(mean(top5paid$Salary[top5paid$Pos == "WR" & top5paid$Season == currentyr]))),
-    c(lgs[i], "WR", "Second", max(top5paid$Salary[top5paid$Pos == "WR" & top5paid$Season == currentyr]) + 1 ),
-    c(lgs[i], "TE", "First", round(mean(top5paid$Salary[top5paid$Pos == "TE" & top5paid$Season == currentyr]))),
-    c(lgs[i], "TE", "Second", max(top5paid$Salary[top5paid$Pos == "TE" & top5paid$Season == currentyr]) + 1 )
+    c(lgs[i], "QB", "First", round(mean(top5paid$Salary[top5paid$League == lgs[i] & top5paid$Pos == "QB" & top5paid$Season == currentyr + 1]))),
+    c(lgs[i], "QB", "Second", max(top5paid$Salary[top5paid$League == lgs[i] & top5paid$Pos == "QB" & top5paid$Season == currentyr + 1]) + 1 ),
+    c(lgs[i], "RB", "First", round(mean(top5paid$Salary[top5paid$League == lgs[i] & top5paid$Pos == "RB" & top5paid$Season == currentyr + 1]))),
+    c(lgs[i], "RB", "Second", max(top5paid$Salary[top5paid$League == lgs[i] & top5paid$Pos == "RB" & top5paid$Season == currentyr + 1]) + 1 ),
+    c(lgs[i], "WR", "First", round(mean(top5paid$Salary[top5paid$League == lgs[i] & top5paid$Pos == "WR" & top5paid$Season == currentyr + 1]))),
+    c(lgs[i], "WR", "Second", max(top5paid$Salary[top5paid$League == lgs[i] & top5paid$Pos == "WR" & top5paid$Season == currentyr + 1]) + 1 ),
+    c(lgs[i], "TE", "First", round(mean(top5paid$Salary[top5paid$League == lgs[i] & top5paid$Pos == "TE" & top5paid$Season == currentyr + 1]))),
+    c(lgs[i], "TE", "Second", max(top5paid$Salary[top5paid$League == lgs[i] & top5paid$Pos == "TE" & top5paid$Season == currentyr + 1]) + 1 )
   )
 ))
 }
