@@ -196,11 +196,23 @@ oldrosters <- as.data.table(rbind(oldrosters, mergerosters))[order(Player,Season
 rm(mergerosters)
 
 # fantasy.csv ----
-#file of weekly scoring for players started/active in TRUFFLE
-#fantasy <- as.data.table(read_csv("data/fantasy.csv", col_types = cols()))
 #demodata
-fantasy <- as.data.table(read_csv("demodata/fantasy.csv", col_types = cols()))
-#fantasy <- read_excel("data/fantasy2022test.xlsx")
+#fantasy <- as.data.table(read_csv("demodata/fantasy.csv", col_types = cols()))
+
+#file of weekly scoring for players started/active in TRUFFLE
+# #file of current TRUFFLE & KERFUFFLE fantasy and insert league column
+trf_fantasy <- as.data.table(read_csv("data/fantasy.csv", col_types = cols()))
+trf_fantasy$League <- "TRUFFLE"
+
+krf_fantasy <- read_csv("data/kerfuffle/kerfuffle_fantasy.csv", col_types = cols())
+krf_fantasy$League <- "KERFUFFLE"
+
+#colnames discrepancy fix
+colnames(krf_fantasy) <- colnames(trf_fantasy)
+
+#rbind fantasy across leagues
+fantasy <- as.data.table(rbind(trf_fantasy, krf_fantasy)); rm(trf_fantasy, krf_fantasy)
+
 cleanFantasy <- function(file) {
   #create scoring setting column and initial PPFD file version
   file$Scoring <- "PPFD"
@@ -229,8 +241,6 @@ cleanFantasy <- function(file) {
   return(file)
 }
 fantasy <- as.data.table(cleanFantasy(fantasy))
-#no 2024 data test
-fantasy <- fantasy[Season != no2024testdata]
 
 # seasons.csv ----
 #file of full season data for players dating back to 2015
@@ -265,12 +275,10 @@ cleanSeasons <- function(file) {
   return(file)
 }
 seasons <- as.data.table(cleanSeasons(seasons))
-
 # weekly.csv ----
 #file of weekly scoring across NFL
-#weekly <- as.data.table(read_csv("data/weekly.csv", col_types = cols()))
-#demodata
-weekly <- as.data.table(read_csv("demodata/weekly.csv", col_types = cols()))
+weekly <- as.data.table(read_csv("data/weekly.csv", col_types = cols()))
+
 cleanWeekly <- function(file) {
   #remove players that didnt play in a week
   file <- filter(file, is.na(Avg) == F)
@@ -299,28 +307,27 @@ cleanWeekly <- function(file) {
   
   file <- file[order(Scoring,-Season,-Week,-FPts)][, `:=`(PosRk = 1:.N), by = .(Scoring, Season, Week, Pos)]
   
+  file$TRUFFLE <- NULL
+  
   return(file)
 }
-weekly <- as.data.table(cleanWeekly(weekly))
-#no 2024 data test
-weekly <- weekly[Season != no2024testdata]
+weekly <-cleanWeekly(weekly)
 
 #create weekly with original teams by old
-weekly_orig_teams <- weekly
-weekly_orig_teams$TRUFFLE <- NULL
-weekly_orig_teams <- merge(x = weekly_orig_teams, y = oldrosters[ , .(League, Season, Pos, Player, TRUFFLE)], by = c("League", "Season", "Pos", "Player"), all.x=TRUE)
-weekly_orig_teams$TRUFFLE[is.na(weekly_orig_teams$TRUFFLE)] <- "FA"
+#weekly_orig_teams <- weekly
+#weekly_orig_teams$TRUFFLE <- NULL
+#weekly_orig_teams <- merge(x = weekly_orig_teams, y = oldrosters[ , .(League, Season, Pos, Player, TRUFFLE)], by = c("League", "Season", "Pos", "Player"), all.x=TRUE)
+#weekly_orig_teams$TRUFFLE[is.na(weekly_orig_teams$TRUFFLE)] <- "FA"
 #weekly just unique scoring records, no League or TRUFFLE info
-weekly_no_teams <- weekly[League == "TRUFFLE", -c("League", "TRUFFLE")]
-
+#weekly_no_teams <- weekly[, -c("TRUFFLE")]
 
 #add current truffle teams
-weekly$TRUFFLE <- NULL
-weekly <- merge(x = weekly, y = rosters[ , .(League, Pos, Player, TRUFFLE)], by = c("League", "Pos", "Player"), all.x=TRUE)
-weekly$TRUFFLE[is.na(weekly$TRUFFLE)] <- "FA"
+#weekly$TRUFFLE <- NULL
+#weekly <- merge(x = weekly, y = rosters[ , .(League, Pos, Player, TRUFFLE)], by = c("League", "Pos", "Player"), all.x=TRUE)
+#weekly$TRUFFLE[is.na(weekly$TRUFFLE)] <- "FA"
 
 #add current season
-currentseason <- weekly[Season == max(weekly$Season) & League == "TRUFFLE",
+currentseason <- weekly[Season == max(weekly$Season),
                         .(NFL = NFL[1],
                           G = .N,
                           PaCmp = sum(PaCmp),
@@ -448,7 +455,7 @@ extradash <- extradash[Avg != "-"]
 extradash <- extradash[, c(3:4, 1:2, 5:19)][order(-Week, -TotYd)]
 
 #merge in other columns for calcs
-extradash <- merge(x = extradash, y = weekly_no_teams[Scoring == "PPFD" , .(Season, Week, Pos, Player, PaCmp, PaAtt, RuAtt, RuYd, Rec, ReYd, ReFD)], by = c("Season", "Week", "Pos", "Player"))
+extradash <- merge(x = extradash, y = weekly[Scoring == "PPFD" , .(Season, Week, Pos, Player, PaCmp, PaAtt, RuAtt, RuYd, Rec, ReYd, ReFD)], by = c("Season", "Week", "Pos", "Player"))
 
 extradashszn <- extradash[,
                           .(G = .N,
@@ -692,7 +699,7 @@ capbyteam$SalaryPerc <- capbyteam$Salary / capbyteam$TeamSalary
 #ppd <- teamportal[, `:=`(`PP$` = round(FPts/Salary,2), `wPP$`= round(Avg/Salary,2))][, c("TRUFFLE", "Pos", "Player", "Avg", "FPts", "PP$", "wPP$")]
 
 #aggregating fantasy data by team
-pointsleaders <- weekly[order(-Season, Week)][League == "TRUFFLE",
+pointsleaders <- weekly[order(-Season, Week)][,
                                               .(G = .N,
                                                 ptslogs = list(FPts),
                                                 Avg = round(mean(FPts),1),
@@ -709,18 +716,18 @@ pointsleaders <- pointsleaders[, .(League, Scoring, Season, TRUFFLE, Player, Pos
 #player portal bios top table
 ppbios <- weekly[Season == max(weekly$Season)][order(-Season,-Week)]
 ppbios <- ppbios[,
-                 .(TRUFFLE = TRUFFLE[1],
-                   NFL = NFL[1],
+                 .(NFL = NFL[1],
                    ptslogs = list(FPts),
                    Avg = round(mean(FPts),1),
                    Total = round(sum(FPts))),
-                 by = .(League, Scoring, Pos, Player)]
-ppbios <- merge(ppbios, rosters[, .(League, Player, Pos, Salary, Contract)], by = c('League', 'Player', 'Pos'), all.x = T)
+                 by = .(Scoring, Pos, Player)]
+ppbios$League <- "TRUFFLE"; ppbioscopy <- ppbios; ppbioscopy$League <- "KERFUFFLE"; ppbios <- rbind(ppbios, ppbioscopy); rm(ppbioscopy)
+ppbios <- merge(ppbios, rosters[, .(League, TRUFFLE, Player, Pos, Salary, Contract)], by = c('League', 'Player', 'Pos'), all.x = T)
 ppbios <- merge(ppbios, fprosage[, .(Player, Age, DynRk, DynPosRk)], by = 'Player')
 ppbios <- ppbios[, .(League, Scoring, TRUFFLE,Pos,Player,NFL,Age,DynRk,DynPosRk,Salary,Contract,ptslogs)]
 
 #creating advanced tables across scoring systems ----
-advanced <- weekly[League == "TRUFFLE", .(FPts = sum(FPts),
+advanced <- weekly[, .(FPts = sum(FPts),
                        YdPts = round(.04*sum(PaYd) + .1*(sum(RuYd) + sum(ReYd)),1),
                        TDPts = 4*sum(PaTD) + 6*(sum(RuTD) + sum(ReTD)),
                        FDPts = ifelse(Scoring == "PPFD", sum(RuFD) + sum(ReFD), 0),
@@ -745,7 +752,7 @@ advanced <- merge(x = advanced, y = oldrosters[ , c("League", "Season", "Pos", "
 
 
 #consistencystats
-consistencystart <- weekly_no_teams
+consistencystart <- weekly
 #posrank dummies
 consistencystart$top5dum <- ifelse(consistencystart$PosRk <= 5, 1, 0)
 consistencystart$top12dum <- ifelse(consistencystart$PosRk <= 12, 1, 0)
@@ -779,7 +786,7 @@ consistency$League <- "TRUFFLE"; consistencycopy <- consistency; consistencycopy
 consistency <- merge(x = consistency, y = oldrosters[ , c("League", "Season", "Pos", "Player", "TRUFFLE")], by = c("League", "Season", "Pos", "Player"), all.x=TRUE)
 
 #weeklytop5s
-weeklytop5 <- weekly_no_teams[order(Week,-FPts)][, .(#TRUFFLE = NA,
+weeklytop5 <- weekly[order(Week,-FPts)][, .(#TRUFFLE = NA,
                                                    Player = Player[1:30],
                                                    FPts = FPts[1:30]), 
                                                by = .(Scoring,Season,Week,Pos)][, .(Scoring,Season,Week,Pos,Player,FPts)]
@@ -904,7 +911,7 @@ radchart_line <- c(
 )
 
 #aggregate weekly by season, position, player
-radarplot <- weekly[League == "TRUFFLE",
+radarplot <- weekly[,
                     .(FPts = mean(FPts, na.rm = T),
                       Touches = mean(PaCmp, na.rm = T) + mean(RuAtt, na.rm = T) + mean(Rec, na.rm = T),
                       Yd = mean(PaYd, na.rm = T) + mean(RuYd, na.rm = T) + mean(ReYd, na.rm = T),
