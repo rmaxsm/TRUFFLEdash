@@ -88,11 +88,12 @@ shinyServer(function(input, output, session) {
       consistency <<- consistency[League == globalleague, -"League"]; consistency$TRUFFLE[is.na(consistency$TRUFFLE)] <<- "FA"
       pointsleaders <<- pointsleaders[League == globalleague, -"League"]
       fantasy <<- fantasy[League == globalleague, -"League"]
-      weekly <<- weekly[League == globalleague, -"League"]
-      weekly_orig_teams <<- weekly_orig_teams[League == globalleague, -"League"]
+      #weekly <<- weekly[League == globalleague, -"League"]
+      #weekly_orig_teams <<- weekly_orig_teams[League == globalleague, -"League"]
       #weeklytop5 <<- weeklytop5[League == globalleague, -"League"]
       
       #doing some merging and FA assignment upon logon
+      weekly <<- merge(x = weekly, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); weekly$TRUFFLE[is.na(weekly$TRUFFLE)] <<- "FA"
       weeklytop5 <<- merge(x = weeklytop5, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); weeklytop5$TRUFFLE[is.na(weeklytop5$TRUFFLE)] <<- "FA"
       espn <<- merge(x = espn, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); espn$TRUFFLE[is.na(espn$TRUFFLE)] <<- "FA"
       snaps <<- merge(x = snaps, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); snaps$TRUFFLE[is.na(snaps$TRUFFLE)] <<- "FA"
@@ -2974,7 +2975,7 @@ shinyServer(function(input, output, session) {
               ),
               details = function(index) {
                 if (index == 1) {
-                  reactable(top5paid[Pos == "QB" & Season == currentyr][, c("Player", "Salary")], 
+                  reactable(top5paid[Pos == "QB" & Season == currentyr + 1][, c("Player", "Salary")], 
                             columns = list(
                               Player = colDef(minWidth = 150, footer = "Mean"),
                               Salary = z_tagvalDefNobar()
@@ -2982,7 +2983,7 @@ shinyServer(function(input, output, session) {
                             defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
                   )
                 } else if (index == 2) {
-                  reactable(top5paid[Pos == "QB" & Season == currentyr][, c("Player", "Salary")][1], 
+                  reactable(top5paid[Pos == "QB" & Season == currentyr + 1][, c("Player", "Salary")][1], 
                             columns = list(
                               Player = colDef(minWidth = 150),
                               Salary = z_tagvalDefNobar(foot = F)
@@ -3010,7 +3011,7 @@ shinyServer(function(input, output, session) {
               ),
               details = function(index) {
                 if (index == 1) {
-                  reactable(top5paid[Pos == "RB" & Season == currentyr][, c("Player", "Salary")], 
+                  reactable(top5paid[Pos == "RB" & Season == currentyr + 1][, c("Player", "Salary")], 
                             columns = list(
                               Player = colDef(minWidth = 150, footer = "Mean"),
                               Salary = z_tagvalDefNobar()
@@ -3018,7 +3019,7 @@ shinyServer(function(input, output, session) {
                             defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
                   )
                 } else if (index == 2) {
-                  reactable(top5paid[Pos == "RB" & Season == currentyr][, c("Player", "Salary")][1], 
+                  reactable(top5paid[Pos == "RB" & Season == currentyr + 1][, c("Player", "Salary")][1], 
                             columns = list(
                               Player = colDef(minWidth = 150),
                               Salary = z_tagvalDefNobar(foot = F)
@@ -3046,7 +3047,7 @@ shinyServer(function(input, output, session) {
               ),
               details = function(index) {
                 if (index == 1) {
-                  reactable(top5paid[Pos == "WR" & Season == currentyr][, c("Player", "Salary")], 
+                  reactable(top5paid[Pos == "WR" & Season == currentyr + 1][, c("Player", "Salary")], 
                             columns = list(
                               Player = colDef(minWidth = 150, footer = "Mean"),
                               Salary = z_tagvalDefNobar()
@@ -3054,7 +3055,7 @@ shinyServer(function(input, output, session) {
                             defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
                   )
                 } else if (index == 2) {
-                  reactable(top5paid[Pos == "WR" & Season == currentyr][, c("Player", "Salary")][1], 
+                  reactable(top5paid[Pos == "WR" & Season == currentyr + 1][, c("Player", "Salary")][1], 
                             columns = list(
                               Player = colDef(minWidth = 150),
                               Salary = z_tagvalDefNobar(foot = F)
@@ -3082,7 +3083,7 @@ shinyServer(function(input, output, session) {
               ),
               details = function(index) {
                 if (index == 1) {
-                  reactable(top5paid[Pos == "TE" & Season == currentyr][, c("Player", "Salary")], 
+                  reactable(top5paid[Pos == "TE" & Season == currentyr + 1][, c("Player", "Salary")], 
                             columns = list(
                               Player = colDef(minWidth = 150, footer = "Mean"),
                               Salary = z_salaryDefNobar()
@@ -3090,7 +3091,7 @@ shinyServer(function(input, output, session) {
                             defaultColDef = colDef(footerStyle = list(fontWeight = "bold"))
                   )
                 } else if (index == 2) {
-                  reactable(top5paid[Pos == "TE" & Season == currentyr][, c("Player", "Salary")][1], 
+                  reactable(top5paid[Pos == "TE" & Season == currentyr + 1][, c("Player", "Salary")][1], 
                             columns = list(
                               Player = colDef(minWidth = 150),
                               Salary = z_salaryDefNobar(foot = F)

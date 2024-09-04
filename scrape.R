@@ -6,11 +6,19 @@ library(reticulate)
 
 #scrape rosters and playerIDs
 source_python('scrape/rosters.py')
+source_python('scrape/kerfuffle/kerfuffle_rosters.py')
+
+#playerIDs needs an HTML fix
 source_python('scrape/playerIDs.py')
 
-#scrape weekly and fantasy
+#scrape weekly
 source_python('scrape/weekly.py')
+
+#scrape fantasy
 source_python('scrape/fantasy.py')
+source_python('scrape/kerfuffle/kerfuffle_fantasy.py')
+
+#advancedCombined needs an HTML fix
 source_python('scrape/advancedCombined.py')
 
 #scrape seasons (only need to do this end of year)
