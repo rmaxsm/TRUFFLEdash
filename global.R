@@ -399,16 +399,10 @@ franchised <- as.data.table(read_csv("data/franchisetag.csv", col_types = cols()
 top5paid <- as.data.table(read_csv("data/top5paid.csv", col_types = cols()))
 
 #rivalry scorers
-#riv <- as.data.table(read_csv("data/rivalries.csv", col_types = cols()))
-#demodata
-riv <- as.data.table(read_csv("demodata/rivalries.csv", col_types = cols()))
+riv <- as.data.table(read_csv("data/rivalries.csv", col_types = cols()))
 
 #rivalry scores
-#rivscores <- as.data.table(read_csv("data/rivalryscores.csv", col_types = cols()))
-#demodata
-rivscores <- as.data.table(read_csv("demodata/rivalryscores.csv", col_types = cols()))
-#no 2024 data test
-rivscores <- rivscores[Season != no2024testdata]
+rivscores <- as.data.table(read_csv("data/rivalryscores.csv", col_types = cols()))
 
 rivscores$Winner <- ifelse(rivscores$Team1Score > rivscores$Team2Score, rivscores$Team1, rivscores$Team2)
 rivscores$Icon <- "www/graphics/rivalrylogos/blank.png"
@@ -440,11 +434,9 @@ turkeyscorers <- rivfantasy[Thanksgiving == 1,
 
 
 #read in advanced combined files
-#extradash <- as.data.table(read_csv("data/extraDash.csv", col_types = cols()))
-#demodata
-extradash <- as.data.table(read_csv("demodata/extraDash.csv", col_types = cols()))
-#no 2024 data test
-extradash <- extradash[Season != no2024testdata]
+extradash <- as.data.table(read_csv("data/extraDash.csv", col_types = cols()))
+#remove extradash TRUFFLE column because it gets merged in Server
+extradash$TRUFFLE <- NULL
 
 colnames(extradash)[6:19] <- c("Cmp%", "Pa20", "Pa40", "RuYPC", "Ru20", "Tar", "Tar%", "ReYPC", "Re20", "Re40", "ReFD%", "TotYd", "Avg", "FPts")
 
@@ -479,12 +471,9 @@ extradashszn <- extradash[,
 extradashszn <- extradashszn[order(-TotYd)]
 
 #espn data
-#demodata
-espn <- suppressWarnings(as.data.table(read_csv("demodata/espnStats.csv", col_types = cols(Season = col_double(), Player = col_character(), NFL = col_character(),
+espn <- suppressWarnings(as.data.table(read_csv("data/espnStats.csv", col_types = cols(Season = col_double(), Player = col_character(), NFL = col_character(),
                                                                       Pos = col_character(), xFP = col_double(), ActualPts = col_double(), xTD = col_double(),
                                                                       TD = col_double(), Looks = col_double(), Diff = col_double(), In5 = col_double(), EZ = col_double()))))
-#no 2024 data test
-espn <- espn[Season != no2024testdata]
 
 
 espn <- espn[Player != "Jeffery Simmons"]
@@ -515,14 +504,7 @@ espn <- espn[, .(Season, Pos, Player, xFP, ActualPts, FPDiff, xTD, TD, TDDiff, L
 
 #snaps data
 #demodata
-snaps <- as.data.table(read_csv("demodata/snapPer.csv", col_types = cols()))
-#no 2024 data test
-snaps <- snaps[Season != no2024testdata]
-
-#get rid of TRUFFLE column, do this later
-#snaps <- merge(x = snaps, y = rosters[ , .(Pos, Player, TRUFFLE)], by = c("Pos", "Player"), all.x=TRUE)
-#snaps$TRUFFLE[is.na(snaps$TRUFFLE)] <- "FA"
-
+snaps <- as.data.table(read_csv("data/snapPer.csv", col_types = cols()))
 snaps <- snaps[, c(1, 3, 2, 4:22, 24, 23)]
 snaps[snaps == "bye"] <- NA
 colnames(snaps)[23:24] <- c("Avg", "Tot")
@@ -1009,9 +991,8 @@ recordbookspl <- fantasy[Scoring == "PPFD",
                          ),
                          by = .(League, Pos, Player)][Pos != "DST"]
 
-#awards <- as.data.table(read_excel("data/awards.xlsx"))
-#demodata
-awards <- as.data.table(read_csv("demodata/awards.csv", col_types = cols()))
+#awards data
+awards <- as.data.table(read_excel("data/awards.xlsx"))
 
 #reactable column formats ----
 
