@@ -196,9 +196,6 @@ oldrosters <- as.data.table(rbind(oldrosters, mergerosters))[order(Player,Season
 rm(mergerosters)
 
 # fantasy.csv ----
-#demodata
-#fantasy <- as.data.table(read_csv("demodata/fantasy.csv", col_types = cols()))
-
 #file of weekly scoring for players started/active in TRUFFLE
 # #file of current TRUFFLE & KERFUFFLE fantasy and insert league column
 trf_fantasy <- as.data.table(read_csv("data/fantasy.csv", col_types = cols()))
@@ -244,9 +241,8 @@ fantasy <- as.data.table(cleanFantasy(fantasy))
 
 # seasons.csv ----
 #file of full season data for players dating back to 2015
-#seasons <- as.data.table(read_csv("data/seasons.csv", col_types = cols()))
-#demodata
-seasons <- as.data.table(read_csv("demodata/seasons.csv", col_types = cols()))
+seasons <- as.data.table(read_csv("data/seasons.csv", col_types = cols()))
+
 cleanSeasons <- function(file) {
   #create scoring setting column and initial PPFD file version
   file$Scoring <- "PPFD"
