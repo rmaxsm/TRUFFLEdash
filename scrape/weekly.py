@@ -156,34 +156,34 @@ df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=T
 
 df = df.sort_values(by="FPts", ascending = False)
 
-# masterFile = "data/weekly.csv"
+masterFile = "data/weekly.csv"
 
-# #read the existing csv as a pd df for error checking
-# masterDf = pd.read_csv(masterFile)
-# #create backup copy
-# filepath = "data/backup/weekly_backup.csv"
-# masterDf.to_csv(filepath, index=False)
+#read the existing csv as a pd df for error checking
+masterDf = pd.read_csv(masterFile)
+#create backup copy
+filepath = "data/backup/weekly_backup.csv"
+masterDf.to_csv(filepath, index=False)
 
-# #reassign the columns to be equal to that of the existing csv
-# df.columns = masterDf.columns
+#reassign the columns to be equal to that of the existing csv
+df.columns = masterDf.columns
 
-# #create weekyear column to conditionally remove existing data from week being scraped
-# masterDf["WeekYear"] = masterDf["Week"].astype(str) + masterDf["Season"].astype(str)
-# #remove
-# masterDf = masterDf[masterDf["WeekYear"] != currentWeekYear]
-# #drop the weekyear column post check
-# masterDf = masterDf.drop(['WeekYear'], axis=1)
+#create weekyear column to conditionally remove existing data from week being scraped
+masterDf["WeekYear"] = masterDf["Week"].astype(str) + masterDf["Season"].astype(str)
+#remove
+masterDf = masterDf[masterDf["WeekYear"] != currentWeekYear]
+#drop the weekyear column post check
+masterDf = masterDf.drop(['WeekYear'], axis=1)
 
-# #concat scraped df and the masterDf
-# newmaster = pd.concat([masterDf, df], ignore_index=True)
+#concat scraped df and the masterDf
+newmaster = pd.concat([masterDf, df], ignore_index=True)
 
-# # stores as csv
-# filepath = "data/backup/weekly_scraperesult.csv"
-# newmaster.to_csv(masterFile, index=False)
-# df.to_csv(filepath, index=False)
+# stores as csv
+filepath = "data/backup/weekly_scraperesult.csv"
+newmaster.to_csv(masterFile, index=False)
+df.to_csv(filepath, index=False)
 
-# #ending print outs
-# print(df)
-# print("\nstored file in location {}".format(filepath))
-# print("\n\nscript complete. execution time:")
-# print(datetime.datetime.now() - begin_time)
+#ending print outs
+print(df)
+print("\nstored file in location {}".format(filepath))
+print("\n\nscript complete. execution time:")
+print(datetime.datetime.now() - begin_time)
