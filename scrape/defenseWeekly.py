@@ -243,7 +243,7 @@ newmaster = pd.concat([masterDf, df], ignore_index=True)
 
 # stores as csv
 newmaster.to_csv(masterFile, index=False)
-df.to_csv(filepathBackup, index=False)
+# df.to_csv(filepathBackup, index=False)
 
 #ending print outs
 # print(df)
