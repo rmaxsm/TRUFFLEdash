@@ -1,8 +1,8 @@
 import dre.FantasyPros.snapCountPer as snaps
 
 
-def main():
-  snaps.main()
+def main(season):
+  snaps.main(season)
   print("\nFANTASY PROS Done :)")
   
   

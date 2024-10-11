@@ -38,15 +38,13 @@ def appendToFile(df, season, filepath):
   newmaster.to_csv(masterFile, index=False)
   print("EspnAll saved at {}".format(masterFile))
 
-def main():
-  
-  season = "2023"
-  
-  qb.main()
-  rb.main()
-  wr.main()
-  te.main()
-  xtd.main()
+def main(season):
+    
+  qb.main(season)
+  rb.main(season)
+  wr.main(season)
+  te.main(season)
+  xtd.main(season)
 
   qbDf = pd.read_pickle("dre/ESPN/qb.pkl")
   rbDf = pd.read_pickle("dre/ESPN/rb.pkl")

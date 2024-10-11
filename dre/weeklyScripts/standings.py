@@ -81,7 +81,7 @@ headers = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36',
 }
 
-def runStandings(szn):
+def runStandings(szn, league):
   # season="2023"
   season = szn
   
@@ -184,7 +184,6 @@ def runStandings(szn):
   df = pd.DataFrame(teams, columns = cols)
   df["Team"] = df["Team"].apply(lambda x: getTeamAbbreviation(x))
   
-  
   masterFile = "data/standings.csv"
   
   #read the existing csv as a pd df for error checking
@@ -195,6 +194,7 @@ def runStandings(szn):
   masterDf.to_csv(backupFilepath, index=False)
   
   #reassign the columns to be equal to that of the existing csv
+  df.insert(0, 'League', league)
   df.columns = masterDf.columns
   
   #create column to conditionally remove existing data from season being scraped
@@ -215,9 +215,10 @@ def runStandings(szn):
   # 
   # print("STANDINGS ARE DONE, it took...")
   # print(datetime.datetime.now() - begin_time)
-  print("STANDINGS FINISHED")
+  print("STANDINGS FINISHED for " + league)
 def main(szn):
-  runStandings(szn)
+  runStandings(szn, "TRUFFLE")
+  # runStandings(szn, "KERFUFFLE")
 if __name__ == "__main__":
   main()
   # main("2024")

@@ -37,7 +37,7 @@ def separatePlayers(row):
   curRow.append("TE")
   return curRow
 
-def runTE():
+def runTE(season):
   cookies = {
     'edition': 'espn-en-us',
     'edition-view': 'espn-en-us',
@@ -115,7 +115,7 @@ def runTE():
       'If-None-Match': 'W/512483eb531a053b813e1053b334fca28b487287',
   }
   
-  response = requests.get('https://www.espn.com/fantasy/insider/football/insider/story/_/id/38333091/fantasy-football-2023-expected-fantasy-points-xfp-leaderboard-tes', cookies=cookies, headers=headers)
+  response = requests.get('https://www.espn.com/fantasy/football/insider/story/_/id/41121313/2024-fantasy-football-expected-fantasy-points-xfp-leaderboard-te', cookies=cookies, headers=headers)
   soup = BeautifulSoup(response.content, 'html.parser')
   
   complete =  soup.find("section", {"id": "article-feed"})
@@ -147,8 +147,8 @@ def runTE():
   # print(df)
   df.to_pickle("dre/ESPN/te.pkl")
   
-def main():
-  runTE()
+def main(season):
+  runTE(season)
   print("TE DONE")
 
 if __name__ == "__main__":

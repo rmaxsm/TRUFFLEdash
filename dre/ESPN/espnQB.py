@@ -39,7 +39,7 @@ def separatePlayers(row):
   return curRow
 
 
-def runQB():
+def runQB(season):
   cookies = {
     'edition': 'espn-en-us',
     'edition-view': 'espn-en-us',
@@ -116,7 +116,7 @@ def runQB():
       'Sec-Fetch-User': '?1',
       'If-None-Match': 'W/512483eb531a053b813e1053b334fca28b487287',
   }
-  response = requests.get('https://www.espn.com/fantasy/football/insider/story/_/id/38332865/fantasy-football-2023-expected-fantasy-points-xfp-leaderboard-qbs', cookies=cookies, headers=headers)
+  response = requests.get('https://www.espn.com/fantasy/football/insider/story/_/id/41121186/2024-fantasy-football-expected-fantasy-points-xfp-leaderboard-qb', cookies=cookies, headers=headers)
   soup = BeautifulSoup(response.content, 'html.parser')
   
   complete =  soup.find("section", {"id": "article-feed"})
@@ -143,11 +143,10 @@ def runQB():
   df = pd.DataFrame(allPlayers, columns=colHeaders)
   df = df.drop(columns=["FORP","G", "P Yds", "P TD", "R Yds", "R TD"])
   df = df.loc[:, ["Player","NFL","Pos","xFP","ActualPts"]]
-  # print(df)
   df.to_pickle("dre/ESPN/qb.pkl")
   
-def main():
-  runQB()
+def main(season):
+  runQB(season)
   print("QB DONE")
   
 if __name__ == "__main__":

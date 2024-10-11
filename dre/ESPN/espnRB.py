@@ -37,7 +37,7 @@ def separatePlayers(row):
   curRow.append("RB")
   return curRow
 
-def runRB():
+def runRB(season):
   cookies = {
     'edition': 'espn-en-us',
     'edition-view': 'espn-en-us',
@@ -115,7 +115,7 @@ def runRB():
       'If-None-Match': 'W/512483eb531a053b813e1053b334fca28b487287',
   }
   
-  response = requests.get('https://www.espn.com/fantasy/football/insider/story/_/id/38333053/fantasy-football-2023-expected-fantasy-points-xfp-leaderboard-rbs', cookies=cookies, headers=headers)
+  response = requests.get('https://www.espn.com/fantasy/football/insider/story/_/id/41121255/2024-fantasy-football-expected-fantasy-points-xfp-leaderboard-rb', cookies=cookies, headers=headers)
   soup = BeautifulSoup(response.content, 'html.parser')
   
   complete =  soup.find("section", {"id": "article-feed"})
@@ -139,8 +139,8 @@ def runRB():
   # print(df)
   df.to_pickle("dre/ESPN/rb.pkl")
   
-def main():
-  runRB()
+def main(season):
+  runRB(season)
   print("RB DONE")
   
 if __name__ == "__main__":
