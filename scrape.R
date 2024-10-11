@@ -22,4 +22,4 @@ source_python('scrape/kerfuffle/kerfuffle_fantasy.py')
 source_python('scrape/advancedCombined.py')
 
 #scrape seasons (only need to do this end of year)
-#source_python('scrape/seasons.py')
+source_python('scrape/seasons.py')

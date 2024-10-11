@@ -820,10 +820,10 @@ shinyServer(function(input, output, session) {
                   FPts = z_fptsSeasDef(proj = isOffseason)
                 ),
                 columnGroups = list(
-                  if (isOffseason == T & input$tmportalyr == currentyr) {colGroup(name = "CBS Projections for Avg & FPts shown during offseason",
+                  colGroup(name = "CBS Projections for Avg & FPts shown during offseason",
                                                   columns = c("Action", "Pos", "Player", "Age", "NFL", "Bye"),
                                                   align = 'left',
-                                                  headerStyle = list(fontStyle = 'italic', fontWeight = 'normal'))},
+                                                  headerStyle = list(fontStyle = 'italic', fontWeight = 'normal')),
                   colGroup(name = "Financials", columns = c("Salary", "Contract"), align = 'left'),
                   colGroup(name = "Fantasy", columns = c("G", "PosRk", "ptslog", "Avg", "FPts"), align = 'left')
                 ),

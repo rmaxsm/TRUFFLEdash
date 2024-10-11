@@ -27,7 +27,7 @@ library(lubridate)
 
 minAvg <- 3
 currentyr <- 2024
-isOffseason <- T
+isOffseason <- F
 
 #test it works without 2024 data
 no2024testdata <- ifelse(isOffseason == T, 2024, 2025)
@@ -862,7 +862,7 @@ byog <- merge(seasons[Season > 2020], advanced[, -c("FPts","TRUFFLE")], by = c('
 byog <- merge(byog, consistency[, -c("Avg","G","TRUFFLE")], by = c('Scoring','Season','Pos','Player'), all.x = T)
 byog <- merge(byog, extradashszn[, -c("Tar","G")], by = c('Season','Pos','Player'), all.x = T)
 byog <- merge(byog, espn, by = c('Season','Pos','Player'), all.x = T)
-byog <- merge(byog, oldrosters[, -c("TRUFFLE","NFL")], by = c('Season','Pos','Player'), all.x = T)
+#byog <- merge(byog, oldrosters[, -c("TRUFFLE","NFL")], by = c('Season','Pos','Player'), all.x = T)
 byog$PPFD <- ifelse(byog$Scoring == "PPFD", byog$FPts,
                     ifelse(byog$Scoring == "PPR", byog$FPts - byog$Rec + byog$RuFD + byog$ReFD,
                            ifelse(byog$Scoring == "hPPR", byog$FPts - 0.5*byog$Rec + byog$RuFD + byog$ReFD,
