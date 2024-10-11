@@ -142,7 +142,7 @@ def getExtraDash(week, season):
       'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36',
   }
   
-  getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
+  getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("•")])
   getPosition = lambda y: pd.Series([i for i in y.split(" ")][-1])
   getPlayer = lambda z: pd.Series(' '.join([i for i in z.split(" ")][:-1]))
     
@@ -175,7 +175,7 @@ def getExtraDash(week, season):
   # print(allPlayers)
   
   #lamba functions to split player name team and position
-  getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("|")])
+  getNFLTeam = lambda x: pd.Series([i.strip() for i in x.split("•")])
   getPosition = lambda y: pd.Series([i for i in y.split(" ")][-1])
   getPlayer = lambda z: pd.Series(' '.join([i for i in z.split(" ")][:-1]))
   
@@ -191,7 +191,7 @@ def getExtraDash(week, season):
   # #add/remove columns for TRUFFLE formatting
   # df = df.drop(["Bye","Rost", "Start"],axis=1)
   # FIND ME - this has been changed because 'Bye' is no longer on the website
-  print(df)
+  # print(df)
   df = df.drop(["Rost", "Start"],axis=1)
   df["Player"] = player
   # df.insert(0,"Season", season)
@@ -226,6 +226,9 @@ def getExtraDash(week, season):
   df.insert(0, szn.name, szn)
   wk = df.pop("Week")
   df.insert(1, wk.name, wk)
+
+  # drop the bye week column
+  df = df.drop("Bye", axis=1)
 
   df = df.set_axis(['Season', 'Week', 'TRUFFLE', 'Player', 'Pos', 'NFL', 'Cmp%', 'Pa20',
        'Pa40', 'RuYPC', 'Ru20', 'Tar', 'Tar%', 'ReYPC', 'Re20', 'Re40', 'ReFD%',

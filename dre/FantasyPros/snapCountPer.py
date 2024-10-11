@@ -55,11 +55,9 @@ def appendToFile(df, season, filepath):
   newmaster.to_csv(masterFile, index=False)
   print("Snap Per saved at {}".format(masterFile))
 
-def runSnapPer():
-  
-  season = "2023"
-  
-  response = requests.get('https://www.fantasypros.com/nfl/reports/snap-counts/?year=2023&show=perc')
+def runSnapPer(season):
+    
+  response = requests.get('https://www.fantasypros.com/nfl/reports/snap-counts/?year='+season+'&show=perc')
   soup = BeautifulSoup(response.content, 'html.parser')
   
   complete =  soup.find("div", {"id": "main-container"})
@@ -95,8 +93,8 @@ def runSnapPer():
   appendToFile(df, season, filepath)
   
   
-def main():
-  runSnapPer()
+def main(season):
+  runSnapPer(season)
   print("\nFP Snap Per DONE")
 
 if __name__ == "__main__":

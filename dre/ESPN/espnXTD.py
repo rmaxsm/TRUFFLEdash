@@ -33,7 +33,7 @@ def separatePlayers(row):
     itr += 1
   return curRow
 
-def runXTD():
+def runXTD(season):
   cookies = {
     'edition': 'espn-en-us',
     'edition-view': 'espn-en-us',
@@ -111,7 +111,7 @@ def runXTD():
       'If-None-Match': 'W/512483eb531a053b813e1053b334fca28b487287',
   }
   
-  response = requests.get('https://www.espn.com/fantasy/insider/football/insider/story/_/id/38333212/fantasy-football-rankings-nfl-expected-td-opportunity-2023', cookies=cookies, headers=headers)
+  response = requests.get('https://www.espn.com/fantasy/football/insider/story/_/id/41120743/2024-fantasy-football-rankings-nfl-expected-td-opportunity-xtd', cookies=cookies, headers=headers)
   soup = BeautifulSoup(response.content, 'html.parser')
   
   complete =  soup.find("section", {"id": "article-feed"})
@@ -135,8 +135,8 @@ def runXTD():
   df.to_pickle("dre/ESPN/xtd.pkl")
   
   
-def main():
-  runXTD()
+def main(season):
+  runXTD(season)
   print("xTD ESPN DONE")
 
 if __name__ == "__main__":

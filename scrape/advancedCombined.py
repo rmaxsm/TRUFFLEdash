@@ -17,13 +17,13 @@ def main():
     week = input("What WEEK is it..? ")
   
   try:
-    espn.main()
+    espn.main(season)
   except Exception as e:
     print("There was an error running ESPN Main from ../scrape/advancedCombined.py")
     print("Error is: ", e)
     
   try:
-    fp.main()
+    fp.main(season)
   except Exception as e:
     print("There was an error running FantasyPros Main from ../scrape/advancedCombined.py")
     print("Error is: ", e)
