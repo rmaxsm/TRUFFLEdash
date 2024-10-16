@@ -18,7 +18,11 @@ source_python('scrape/weekly.py')
 source_python('scrape/fantasy.py')
 source_python('scrape/kerfuffle/kerfuffle_fantasy.py')
 
-#advancedCombined needs an HTML fix
+#scrape optScoring
+source_python('scrape/optScoring.py')
+source_python('scrape/kerfuffle/kerfuffle_optScoring.py')
+
+#advancedCombined
 source_python('scrape/advancedCombined.py')
 
 #scrape seasons (only need to do this end of year)

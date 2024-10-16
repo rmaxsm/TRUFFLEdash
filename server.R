@@ -102,6 +102,75 @@ shinyServer(function(input, output, session) {
       seasons <<- merge(x = seasons, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); seasons$TRUFFLE[is.na(seasons$TRUFFLE)] <<- "FA"
       proj <<- merge(x = proj, y = oldrosters[, c("Season", "Pos", "Player", "TRUFFLE")], by = c("Season", "Pos", "Player"), all.x=TRUE); proj$TRUFFLE[is.na(proj$TRUFFLE)] <<- "FA"
       
+      z_action_mod <<- function(df, team) {
+        myteam <- team
+        df <- merge(df, ids[, .(Player, playerID, TeamNum)], by = 'Player', all.x = T)
+        leaguelink <- ifelse(globalleague == "TRUFFLE", "https://theradicalultimatefflexperience.", "https://kerfuffle.")
+        df$Action <- ifelse(df$TRUFFLE == myteam, "www/graphics/actions/drop.png",
+                            ifelse(df$TRUFFLE == "FA", "www/graphics/actions/add.png",
+                                   "www/graphics/actions/trade.png"))
+        df$ActionLink <- ifelse(df$TRUFFLE == myteam, paste0(leaguelink,"football.cbssports.com/stats/stats-main?selectedplayer=", df$playerID),
+                                ifelse(df$TRUFFLE == "FA", paste0(leaguelink,"football.cbssports.com/stats/stats-main?default_add=", df$Pos, ":", df$playerID),
+                                       paste0(leaguelink,"football.cbssports.com/transactions/trade/", df$playerID, "/", df$TeamNum)))
+        return(df)
+      }
+      
+      z_trfDef <<- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE, minW = 75, proj = F) {
+        colDef(name = name,
+               show = !isguest,
+               aggregate = "unique",
+               minWidth = minW,
+               maxWidth = maxW,
+               filterable = filt,
+               sortable = sort,
+               align = 'center',
+               cell = function(value) {
+                 teamnum <- teams$TeamNum[teams$Abbrev == value]
+                 leaguelink <- ifelse(globalleague == "TRUFFLE", "https://theradicalultimatefflexperience.", "https://kerfuffle.")
+                 team_url <- paste0(leaguelink, "football.cbssports.com/teams/", teamnum)
+                 class <- paste0("trf team-", value)
+                 tags$a(href = team_url, target = "_blank", class = class, value)
+               }
+        )
+      }
+      
+      z_trfDefRivScores <<- function(name = "TRF", maxW = 75, filt = TRUE, sort = TRUE, minW = 75) {
+        colDef(name = name,
+               show = !isguest,
+               aggregate = "unique",
+               minWidth = minW,
+               maxWidth = maxW,
+               filterable = filt,
+               sortable = sort,
+               align = 'center',
+               cell = function(value) {
+                 teamnum <- teams$TeamNum[teams$Abbrev == value]
+                 leaguelink <- ifelse(globalleague == "TRUFFLE", "https://theradicalultimatefflexperience.", "https://kerfuffle.")
+                 team_url <- paste0(leaguelink, "football.cbssports.com/teams/", teamnum)
+                 class <- paste0("trf team-", value)
+                 tags$a(href = team_url, target = "_blank", class = class, value)
+               },
+               footer = function(values) {
+                 tm <- unique(values)[1]
+                 paste0("W: ", nrow(rivscores[Winner == tm]))
+               }
+        )
+      }
+      
+      z_playerDef <<- function(minW = 200, filt = FALSE, sort = T) {
+        colDef(minWidth = minW,
+               filterable = filt,
+               sortable = sort,
+               align = "left",
+               
+               cell = function(value) {
+                 playerid <- ids$playerID[ids$Player == value]
+                 leaguelink <- ifelse(globalleague == "TRUFFLE", "https://theradicalultimatefflexperience.", "https://kerfuffle.")
+                 player_url <- paste0(leaguelink, "football.cbssports.com/players/playerpage/", playerid, "/")
+                 tags$a(href = player_url, target = "_blank", value)
+               })
+      }
+      
       #updating select inputs across the site at login
       updateSelectInput(session, 'tmportaltm', choices = unique(teams$FullName), selected = teams$FullName[teams$Abbrev == globalteam])
       updateSelectInput(session, 'tmportalyr', choices = if (globalleague == "TRUFFLE") { sort(c(unique(seasons$Season), currentyr), decreasing = T) } else { sort(c(unique(weekly$Season[weekly$League == globalleague]), currentyr)) }, selected = currentyr)
