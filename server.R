@@ -81,6 +81,7 @@ shinyServer(function(input, output, session) {
       tpoverview <<- tpoverview[League == globalleague, -"League"]
       truffleanalysis <<- truffleanalysis[League == globalleague, -"League"]
       truffleanalysisperc <<- truffleanalysisperc[League == globalleague, -"League"]
+      optszn <<- optszn[League == globalleague, -"League"]
       #turkeyscorers <<- turkeyscorers[League == globalleague, -"League"]
       
       #figure out how to merge team info rather than duplicate rows for two leagues
@@ -320,6 +321,55 @@ shinyServer(function(input, output, session) {
                 )}
     )
   })
+  
+  # home page optimal scoring standings
+  output$homeoptscoring <- renderReactable({
+    reactable(optszn[Season == input$homeseason, .(TRUFFLE, ptslogs, OptAvg, OptTotal, Total, PtsMissed, `%Opt`)],
+              defaultSorted = c("OptTotal"),
+              defaultSortOrder = "desc",
+              pagination = FALSE,
+              highlight = T,
+              #borderless = T,
+              compact = T,
+              resizable = F,
+              columns = list(
+                TRUFFLE = z_trfDef(filt = FALSE),
+                ptslogs = colDef(header = z_with_tt("Weekly", "Weekly log of team FPts"),
+                                 maxWidth = 70,
+                                 sortable = F,
+                                 cell = function(values) {
+                                   sparkline(values,
+                                             type = "bar",
+                                             chartRangeMin = 0,
+                                             chartRangeMax = max(optweeks$OptTotal[optweeks$Season == input$homeseason]))
+                                 }),
+                OptAvg = colDef(header = z_with_tt("OptAvg", "Weekly average Optimal FPts"),
+                                minWidth = 60,
+                                align = 'right'),
+                OptTotal = colDef(header = z_with_tt("OptTot", "Season total Optimal FPts"),
+                                  minWidth = 60,
+                                  align = 'right',
+                                  format = colFormat(digits=0)
+                ),
+                Total = colDef(header = z_with_tt("Tot", "Season total actual FPts"),
+                               defaultSortOrder = "desc",
+                               class = "border-left-grey",
+                               minWidth = 55,
+                               align = 'right',
+                               format = colFormat(digits=1)),
+                PtsMissed = colDef(header = z_with_tt("PtsMissed", "Difference between Opt and Actual Tot FPts"),
+                                   defaultSortOrder = "asc",
+                                   minWidth = 70,
+                                   align = 'right',
+                                   format = colFormat(digits=0)),
+                `%Opt` = colDef(header = z_with_tt("%Opt", "% of possible Optimal FPts scored"),
+                                defaultSortOrder = "desc",
+                                minWidth = 60,
+                                align = 'right',
+                                format = colFormat(percent = T))
+              )
+    )}
+    )
   
   #home page season leaders
   output$homepointsleaders <- renderReactable({

@@ -96,13 +96,12 @@ dashboardPageUI <-
                                                  h2("Standings"),
                                                  tabsetPanel(
                                                    tabPanel("Scoring",
-                                                             reactableOutput('hometeamsfantasy', width = "100%"))#,
-                                                   # tabPanel("Divisions"
-                                                   #          ),
-                                                   # tabPanel("Playoffs"
-                                                   # ),
-                                                   # tabPanel("Optimal"
-                                                   # )
+                                                             reactableOutput('hometeamsfantasy', width = "100%")),
+                                                   tabPanel("Optimal",
+                                                            reactableOutput('homeoptscoring', width = "100%"),
+                                                            hr(),
+                                                            em("Inverse order of Optimal Points used to determine Draft Lottery order")
+                                                   )
                                                    
                                                  )
                                                  
