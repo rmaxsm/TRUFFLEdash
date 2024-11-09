@@ -256,9 +256,12 @@ teamsfantasy <- fantasy[,
 #file of all fantasy players for optimal scoring calculation
 trfopt <- as.data.table(read_csv("data/optScoring.csv", col_types = cols()))
 krfopt <- as.data.table(read_csv("data/kerfuffle/kerfuffle_optScoring.csv", col_types = cols()))
+wks <- max(trfopt$Week)
 trfopt$League <- "TRUFFLE"
 krfopt$League <- "KERFUFFLE"
 opt <- rbind(trfopt,krfopt); rm(trfopt, krfopt)
+
+
 
 #fix
 opt$FPts[is.na(opt$FPts)] <- 0
@@ -281,7 +284,7 @@ all <- c(TRF,KRF)
 
 #linear program optiimzation loop
 for (t in 1:24) {
-  for (w in 1:6) {
+  for (w in 1:wks) {
     #filter optfile down to input data by week & team within loop
     inputdata <- opt[TRUFFLE == all[t] & Week == w]
     
@@ -342,7 +345,7 @@ optszn <- optweeks[,
                    by = .(League, Season, TRUFFLE)][order(-Season, -OptTotal)]
 
 # join in actual scoring data and create final columns
-optszn <- merge(x = optszn, y = teamsfantasy[, .(Season, TRUFFLE, Total)], by = c("Season", "TRUFFLE"))
+optszn <- merge(x = optszn, y = teamsfantasy[Scoring == "PPFD", .(Season, TRUFFLE, Total)], by = c("Season", "TRUFFLE"))
 optszn$PtsMissed <- optszn$Total - optszn$OptTotal
 optszn$`%Opt` <- round(optszn$Total / optszn$OptTotal, 3)
 optszn <- optszn[order(-OptTotal)]

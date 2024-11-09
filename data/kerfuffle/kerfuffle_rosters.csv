@@ -1,229 +1,231 @@
-Pos,TRUFFLE,Player,NFL,Opp,Game Time,Bye,O/U,PosRnk,Ovp,Rost,Start,Salary,Contract,Prd. 6,Avg,Proj
-QB,ABT,Andy Dalton,CAR,@WAS,Sun  4:05pm ET,11,51.5,20,22,21%,9%,1,2,15.94,12.23,14.39
-RB,ABT,Saquon Barkley,PHI,@NYG,Sun  1:00pm ET,5,43,2,10,100%,100%,131,2,6.40,23.08,16.41
-RB,ABT,Alvin Kamara,NO,DEN,Thu  8:15pm ET,12,37,11,14,100%,98%,40,1,15.40,21.14,12.50
-WR,ABT,Josh Downs,IND,MIA,Sun  1:00pm ET,14,43.5,29,3,80%,46%,1,4,16.60,12.72,7.71
-WR,ABT,JuJu Smith-Schuster,KC,@SF,Sun  4:25pm ET,6,47,27,13,68%,26%,1,2,0.00,5.14,5.61
-TE,ABT,Hunter Henry,NE,@JAC,Sun  9:30am ET,14,42,11,27,54%,31%,1,2,13.10,7.02,5.51
-RB,ABT,Chase Brown,CIN,@CLE,Sun  1:00pm ET,12,41.5,18,12,98%,70%,7,3,14.40,12.55,9.01
-WR,ABT,Roman Wilson,PIT,NYJ,Sun  8:20pm ET,9,38.5,---,4,5%,1%,3,3,0.00,0.00,0.60
-RB,ABT,Alexander Mattison,LV,@LAR,Sun  4:05pm ET,10,43.5,30,28,83%,42%,1,2,18.50,12.22,8.21
-DST,ABT,Seahawks,SEA,@ATL,Sun  1:00pm ET,10,51,24,6,27%,12%,1,2,2.00,7.17,5.20
-QB,ABT,Caleb Williams,CHI,BYE,,7,,---,,87%,3%,50,3,31.64,17.60,0.00
-WR,ABT,Jermaine Burton,CIN,@CLE,Sun  1:00pm ET,12,41.5,---,25,5%,1%,5,3,0.00,1.14,1.00
-WR,ABT,Chris Olave,NO,DEN,Thu  8:15pm ET,12,37,---,2,96%,5%,42,4,-1.50,8.28,0.00
-TE,ABT,Jake Ferguson,DAL,BYE,,7,,---,,85%,8%,2,2,1.10,6.60,0.00
-WR,ABT,Keenan Allen,CHI,BYE,,7,,---,,67%,2%,7,2,21.10,8.30,0.00
-WR,ABT,DJ Moore,CHI,BYE,,7,,---,,100%,7%,44,3,2.00,10.80,0.00
-QB,ABT,Dak Prescott,DAL,BYE,,7,,---,,95%,7%,77,3,3.22,15.61,0.00
-WR,ABT,Puka Nacua,LAR,LV,Sun  4:05pm ET,6,43.5,---,10,97%,2%,85,4,0.00,5.20,0.00
-RB,ABT,Keaton Mitchell,BAL,@TB,Mon  8:15pm ET,14,49.5,---,13,10%,1%,1,4,0.00,0.00,0.00
-QB,CLC,Jordan Love,GB,HOU,Sun  1:00pm ET,10,48,4,23,99%,86%,100,4,27.62,22.54,18.46
-RB,CLC,Breece Hall,NYJ,@PIT,Sun  8:20pm ET,12,38.5,12,9,100%,97%,145,2,22.90,14.73,10.61
-RB,CLC,Jordan Mason,SF,KC,Sun  4:25pm ET,9,47,---,2,97%,30%,1,2,10.20,19.40,4.60
-WR,CLC,Darnell Mooney,ATL,SEA,Sun  1:00pm ET,12,51,23,9,95%,75%,1,2,6.80,12.13,9.32
-WR,CLC,DeVonta Smith,PHI,@NYG,Sun  1:00pm ET,5,43,18,12,100%,92%,45,4,14.40,14.32,9.41
-TE,CLC,Dalton Kincaid,BUF,TEN,Sun  1:00pm ET,12,41,10,1,91%,67%,50,2,8.10,6.28,6.01
-WR,CLC,Jaylen Waddle,MIA,@IND,Sun  1:00pm ET,6,43.5,37,24,91%,23%,34,4,0.00,7.50,6.81
-RB,CLC,Javonte Williams,DEN,@NO,Thu  8:15pm ET,14,37,21,27,93%,50%,23,3,3.60,11.24,8.70
-QB,CLC,Justin Fields,PIT,NYJ,Sun  8:20pm ET,9,38.5,---,3,55%,3%,5,4,27.70,21.72,1.84
-DST,CLC,Bears,CHI,BYE,,7,,---,,61%,9%,1,1,9.00,11.33,0.00
-RB,CLC,Justice Hill,BAL,@TB,Mon  8:15pm ET,14,49.5,44,13,50%,5%,1,2,0.40,8.10,4.20
-RB,CLC,D'Ernest Johnson,JAC,NE,Sun  9:30am ET,12,42,38,26,9%,4%,2,2,6.40,2.20,6.00
-WR,CLC,Rome Odunze,CHI,BYE,,7,,---,,61%,2%,25,3,6.00,7.13,0.00
-WR,CLC,Ja'Lynn Polk,NE,@JAC,Sun  9:30am ET,14,42,---,30,12%,1%,3,3,0.40,2.80,3.51
-RB,CLC,Zack Moss,CIN,@CLE,Sun  1:00pm ET,12,41.5,37,12,90%,22%,17,3,-0.50,11.83,6.00
-WR,CLC,Nico Collins,HOU,@GB,Sun  1:00pm ET,14,48,---,20,99%,3%,40,4,0.00,20.34,0.00
-WR,CLC,Ricky Pearsall,SF,KC,Sun  4:25pm ET,9,47,---,7,11%,1%,5,3,0.00,0.00,1.70
-QB,CPC,Sam Darnold,MIN,DET,Sun  1:00pm ET,6,50.5,8,15,86%,45%,2,2,0.00,17.91,17.34
-RB,CPC,JK Dobbins,LAC,@ARI,Mon  9:00pm ET,5,44,8,25,100%,95%,16,2,22.20,17.76,16.30
-RB,CPC,Derrick Henry,BAL,@TB,Mon  8:15pm ET,14,49.5,3,13,100%,100%,85,2,31.20,27.88,16.00
-WR,CPC,Ja'Marr Chase,CIN,@CLE,Sun  1:00pm ET,12,41.5,3,25,100%,100%,84,4,10.20,18.25,11.42
-WR,CPC,Tyreek Hill,MIA,@IND,Sun  1:00pm ET,6,43.5,19,24,100%,86%,105,2,0.00,10.34,9.91
-TE,CPC,George Kittle,SF,KC,Sun  4:25pm ET,9,47,1,32,100%,97%,25,2,20.80,14.86,10.62
-RB,CPC,Tony Pollard,TEN,@BUF,Sun  1:00pm ET,5,41,7,30,100%,89%,48,2,20.30,16.12,11.90
-RB,CPC,Brian Robinson,WAS,CAR,Sun  4:05pm ET,14,51.5,15,32,100%,66%,18,3,0.00,17.86,10.71
-QB,CPC,Drake Maye,NE,@JAC,Sun  9:30am ET,14,42,18,32,30%,11%,10,3,22.52,12.80,13.11
-DST,CPC,Jets,NYJ,@PIT,Sun  8:20pm ET,12,38.5,3,10,95%,79%,2,2,2.00,7.67,7.10
-QB,CPC,Derek Carr,NO,DEN,Thu  8:15pm ET,12,37,---,5,33%,1%,3,2,0.00,14.75,0.00
-WR,CPC,Tee Higgins,CIN,@CLE,Sun  1:00pm ET,12,41.5,17,25,100%,83%,17,4,11.70,13.72,7.81
-TE,CPC,Ja'Tavion Sanders,CAR,@WAS,Sun  4:05pm ET,11,51.5,---,14,3%,1%,3,3,5.90,2.00,2.50
-RB,CPC,James Cook,BUF,TEN,Sun  1:00pm ET,12,41,14,8,100%,51%,70,2,0.00,19.04,9.81
-WR,CPC,Ladd McConkey,LAC,@ARI,Mon  9:00pm ET,5,44,39,26,71%,26%,5,3,6.30,9.18,6.91
-WR,CPC,Jakobi Meyers,LV,@LAR,Sun  4:05pm ET,10,43.5,---,18,76%,20%,1,3,0.00,10.12,0.00
-WR,CPC,Tyler Lockett,SEA,@ATL,Sun  1:00pm ET,10,51,43,21,60%,23%,1,2,16.50,10.15,6.41
-WR,CPC,Dontayvion Wicks,GB,HOU,Sun  1:00pm ET,10,48,---,19,36%,2%,3,4,1.90,6.72,2.61
-DST,CPC,Vikings,MIN,DET,Sun  1:00pm ET,6,50.5,10,4,85%,37%,1,2,0.00,15.80,7.40
-QB,DDD,Jared Goff,DET,@MIN,Sun  1:00pm ET,5,50.5,16,8,94%,40%,71,2,25.10,18.04,13.72
-RB,DDD,Jahmyr Gibbs,DET,@MIN,Sun  1:00pm ET,5,50.5,13,1,100%,96%,102,4,15.10,19.04,11.00
-RB,DDD,Kenneth Walker,SEA,@ATL,Sun  1:00pm ET,10,51,4,7,100%,97%,76,2,16.90,22.00,12.00
-WR,DDD,Tank Dell,HOU,@GB,Sun  1:00pm ET,14,48,24,20,96%,70%,29,4,16.70,8.44,8.91
-WR,DDD,Zay Flowers,BAL,@TB,Mon  8:15pm ET,14,49.5,8,22,99%,86%,21,4,20.40,11.48,8.01
-TE,DDD,Sam LaPorta,DET,@MIN,Sun  1:00pm ET,5,50.5,8,24,98%,80%,66,4,12.20,6.98,6.01
-RB,DDD,Bucky Irving,TB,BAL,Mon  8:15pm ET,11,49.5,31,3,93%,47%,3,3,21.50,11.13,9.00
-WR,DDD,Malik Nabers,NYG,PHI,Sun  1:00pm ET,11,43,4,27,98%,87%,30,3,0.00,19.25,11.72
-QB,DDD,Deshaun Watson,CLE,CIN,Sun  1:00pm ET,10,41.5,---,29,38%,10%,10,4,9.42,13.10,16.97
-DST,DDD,Bengals,CIN,@CLE,Sun  1:00pm ET,12,41.5,5,28,62%,56%,1,2,10.00,4.00,9.10
-RB,DDD,Kimani Vidal,LAC,@ARI,Mon  9:00pm ET,5,44,47,25,38%,6%,2,2,13.10,13.10,5.21
-WR,DDD,Dyami Brown,WAS,CAR,Sun  4:05pm ET,14,51.5,---,23,2%,1%,1,2,2.10,3.58,4.91
-WR,DDD,Adonai Mitchell,IND,MIA,Sun  1:00pm ET,14,43.5,---,3,11%,1%,5,3,1.90,2.54,3.40
-TE,DDD,Mike Gesicki,CIN,@CLE,Sun  1:00pm ET,12,41.5,---,9,24%,5%,1,2,0.00,4.62,3.00
-RB,DDD,De'Von Achane,MIA,@IND,Sun  1:00pm ET,6,43.5,19,24,99%,43%,79,2,0.00,13.00,9.71
-RB,DDD,Tank Bigsby,JAC,NE,Sun  9:30am ET,12,42,24,26,92%,57%,1,2,3.40,9.08,9.50
-WR,DDD,Quentin Johnston,LAC,@ARI,Mon  9:00pm ET,5,44,48,26,56%,19%,1,2,3.20,8.56,8.12
-RB,DDD,Jaleel McLaughlin,DEN,@NO,Thu  8:15pm ET,14,37,43,27,36%,6%,1,2,3.50,5.13,5.91
-QB,LBC,Bo Nix,DEN,@NO,Thu  8:15pm ET,14,37,22,7,33%,9%,5,3,25.74,17.91,14.04
-RB,LBC,Raheem Mostert,MIA,@IND,Sun  1:00pm ET,6,43.5,25,24,92%,42%,15,2,0.00,8.35,8.20
-RB,LBC,Rhamondre Stevenson,NE,@JAC,Sun  9:30am ET,14,42,---,23,98%,25%,27,3,0.00,14.06,5.70
-WR,LBC,Brandon Aiyuk,SF,KC,Sun  4:25pm ET,9,47,22,7,100%,74%,34,4,5.70,8.85,8.71
-WR,LBC,Drake London,ATL,SEA,Sun  1:00pm ET,12,51,5,9,100%,98%,36,4,17.40,14.80,11.72
-TE,LBC,Brock Bowers,LV,@LAR,Sun  4:05pm ET,10,43.5,3,31,96%,85%,15,3,9.10,10.60,8.21
-TE,LBC,Evan Engram,JAC,NE,Sun  9:30am ET,12,42,5,17,89%,70%,6,3,12.20,6.35,6.31
-TE,LBC,Trey McBride,ARI,LAC,Mon  9:00pm ET,11,44,2,13,96%,86%,21,4,14.60,8.82,7.01
-QB,LBC,Aaron Rodgers,NYJ,@PIT,Sun  8:20pm ET,12,38.5,15,4,65%,17%,8,2,17.76,14.83,12.70
-DST,LBC,Broncos,DEN,@NO,Thu  8:15pm ET,14,37,2,27,91%,83%,1,2,3.00,12.29,8.70
-QB,LBC,Anthony Richardson,IND,MIA,Sun  1:00pm ET,14,43.5,12,1,88%,44%,161,2,0.00,14.06,18.75
-RB,LBC,Travis Etienne,JAC,NE,Sun  9:30am ET,12,42,---,26,95%,8%,66,2,0.00,10.37,1.20
-WR,LBC,Devontez Walker,BAL,@TB,Mon  8:15pm ET,14,49.5,---,22,1%,1%,3,3,0.00,0.00,1.50
-WR,LBC,Jordan Whittington,LAR,LV,Sun  4:05pm ET,6,43.5,42,10,17%,4%,1,2,0.00,6.02,6.41
-WR,LBC,Jerry Jeudy,CLE,CIN,Sun  1:00pm ET,10,41.5,44,14,70%,27%,1,4,4.50,7.47,7.81
-WR,LBC,Michael Pittman,IND,MIA,Sun  1:00pm ET,14,43.5,45,3,90%,33%,16,4,11.50,8.55,6.51
-WR,LBC,Jaxon Smith-Njigba,SEA,@ATL,Sun  1:00pm ET,10,51,34,21,85%,38%,5,4,8.30,9.00,6.01
-WR,LBC,Michael Wilson,ARI,LAC,Mon  9:00pm ET,11,44,---,5,35%,9%,1,4,10.10,7.62,5.81
-RB,LBC,Isiah Pacheco,KC,@SF,Sun  4:25pm ET,6,47,---,15,93%,2%,68,3,0.00,16.95,0.00
-QB,LC,Jalen Hurts,PHI,@NYG,Sun  1:00pm ET,5,43,7,20,100%,89%,180,2,26.86,22.07,19.58
-RB,LC,Tyler Allgeier,ATL,SEA,Sun  1:00pm ET,12,51,35,20,80%,33%,11,2,26.80,10.18,8.80
-RB,LC,James Conner,ARI,LAC,Mon  9:00pm ET,11,44,20,4,100%,84%,19,2,3.60,16.35,10.30
-WR,LC,Allen Lazard,NYJ,@PIT,Sun  8:20pm ET,12,38.5,---,11,60%,22%,1,2,21.40,14.07,6.71
-WR,LC,Xavier Legette,CAR,@WAS,Sun  4:05pm ET,11,51.5,46,29,41%,13%,5,3,10.30,6.90,6.81
-TE,LC,Dalton Schultz,HOU,@GB,Sun  1:00pm ET,14,48,19,23,47%,17%,3,2,3.70,3.55,4.40
-WR,LC,DK Metcalf,SEA,@ATL,Sun  1:00pm ET,10,51,10,21,100%,93%,31,4,7.80,11.82,9.11
-WR,LC,Xavier Worthy,KC,@SF,Sun  4:25pm ET,6,47,33,13,95%,37%,15,3,0.00,11.22,7.41
-QB,LC,Patrick Mahomes,KC,@SF,Sun  4:25pm ET,6,47,19,11,100%,68%,200,2,0.00,15.38,17.53
-DST,LC,49ers,SF,KC,Sun  4:25pm ET,9,47,9,8,93%,67%,1,3,8.00,9.83,7.40
-RB,LC,Zach Charbonnet,SEA,@ATL,Sun  1:00pm ET,10,51,42,7,68%,6%,4,4,4.50,11.93,5.10
-RB,LC,Jamaal Williams,NO,DEN,Thu  8:15pm ET,12,37,---,14,9%,1%,1,2,0.70,4.17,2.80
-RB,LC,Jeff Wilson,MIA,@IND,Sun  1:00pm ET,6,43.5,---,24,4%,1%,1,2,0.00,1.55,1.70
-WR,LC,DeAndre Hopkins,TEN,@BUF,Sun  1:00pm ET,5,41,---,8,61%,12%,11,2,8.40,6.50,5.51
-TE,LC,Ben Sinnott,WAS,CAR,Sun  4:05pm ET,14,51.5,---,29,5%,1%,3,3,0.00,0.00,1.30
-WR,LC,Rashid Shaheed,NO,DEN,Thu  8:15pm ET,12,37,---,2,63%,3%,1,3,2.30,11.30,0.00
-TE,LC,Juwan Johnson,NO,DEN,Thu  8:15pm ET,12,37,18,19,17%,8%,1,2,6.80,3.66,4.71
-QB,LC,Gardner Minshew,LV,@LAR,Sun  4:05pm ET,10,43.5,---,26,6%,1%,1,2,0.00,10.73,1.08
-RB,LC,Jaylen Warren,PIT,NYJ,Sun  8:20pm ET,9,38.5,40,11,52%,6%,11,4,2.80,3.85,4.40
-QB,MB,Kyler Murray,ARI,LAC,Mon  9:00pm ET,11,44,17,6,97%,57%,51,2,11.96,18.92,17.08
-RB,MB,Bijan Robinson,ATL,SEA,Sun  1:00pm ET,12,51,5,20,100%,100%,143,3,27.50,16.52,14.80
-RB,MB,Tyrone Tracy,NYG,PHI,Sun  1:00pm ET,11,43,23,18,91%,40%,5,2,24.70,8.62,6.80
-WR,MB,Marvin Harrison,ARI,LAC,Mon  9:00pm ET,11,44,---,5,99%,30%,45,3,0.00,10.98,7.21
-WR,MB,Amon-Ra St Brown,DET,@MIN,Sun  1:00pm ET,5,50.5,12,31,100%,99%,93,4,13.70,13.84,9.41
-TE,MB,Travis Kelce,KC,@SF,Sun  4:25pm ET,6,47,4,12,100%,92%,47,2,0.00,6.58,8.71
-RB,MB,Ray Davis,BUF,TEN,Sun  1:00pm ET,12,41,41,8,84%,35%,1,4,21.20,7.10,7.10
-WR,MB,Cooper Kupp,LAR,LV,Sun  4:05pm ET,6,43.5,---,10,100%,33%,33,2,0.00,14.85,6.71
-QB,MB,Matthew Stafford,LAR,LV,Sun  4:05pm ET,6,43.5,24,24,49%,15%,21,2,0.00,10.30,14.77
-DST,MB,Buccaneers,TB,BAL,Mon  8:15pm ET,11,49.5,---,1,29%,13%,1,2,17.00,7.50,6.20
-RB,MB,Isaac Guerendo,SF,KC,Sun  4:25pm ET,9,47,28,2,52%,15%,3,3,12.90,2.67,7.50
-WR,MB,Tutu Atwell,LAR,LV,Sun  4:05pm ET,6,43.5,40,10,31%,8%,1,2,0.00,8.16,6.41
-TE,MB,Mark Andrews,BAL,@TB,Mon  8:15pm ET,14,49.5,12,16,87%,54%,1,2,15.60,5.93,5.41
-RB,MB,Cam Akers,MIN,DET,Sun  1:00pm ET,6,50.5,---,5,34%,3%,1,2,0.00,6.48,3.30
-RB,MB,Aaron Jones,MIN,DET,Sun  1:00pm ET,6,50.5,---,5,100%,13%,14,2,0.00,16.74,0.90
-WR,MB,Josh Palmer,LAC,@ARI,Mon  9:00pm ET,5,44,---,26,17%,3%,1,2,5.80,4.20,5.21
-RB,MB,Zamir White,LV,@LAR,Sun  4:05pm ET,10,43.5,---,28,45%,3%,16,2,0.00,4.20,3.70
-RB,MB,Khalil Herbert,CHI,BYE,,7,,---,,11%,1%,2,2,0.00,1.83,0.00
-QB,MB,Will Levis,TEN,@BUF,Sun  1:00pm ET,5,41,---,14,13%,2%,9,4,8.30,9.51,11.16
-QB,NBB,Josh Allen,BUF,TEN,Sun  1:00pm ET,12,41,3,12,100%,95%,199,3,27.40,22.53,22.56
-RB,NBB,Ty Chandler,MIN,DET,Sun  1:00pm ET,6,50.5,32,5,64%,19%,3,2,0.00,5.38,7.80
-RB,NBB,Nick Chubb,CLE,CIN,Sun  1:00pm ET,10,41.5,27,21,99%,45%,41,1,0.00,0.00,9.20
-WR,NBB,Jayden Reed,GB,HOU,Sun  1:00pm ET,10,48,11,19,99%,92%,8,4,10.80,16.37,12.01
-WR,NBB,Jameson Williams,DET,@MIN,Sun  1:00pm ET,5,50.5,26,31,97%,71%,5,2,18.70,14.48,8.91
-TE,NBB,Kyle Pitts,ATL,SEA,Sun  1:00pm ET,12,51,6,28,92%,72%,16,2,9.00,7.05,6.71
-WR,NBB,Chris Godwin,TB,BAL,Mon  8:15pm ET,11,49.5,6,32,99%,95%,3,2,28.50,18.55,9.41
-WR,NBB,Terry McLaurin,WAS,CAR,Sun  4:05pm ET,14,51.5,9,23,99%,96%,12,2,22.30,12.80,12.33
-QB,NBB,Trevor Lawrence,JAC,NE,Sun  9:30am ET,12,42,14,10,64%,21%,65,4,18.06,15.76,16.17
-DST,NBB,Bills,BUF,TEN,Sun  1:00pm ET,12,41,1,31,100%,98%,4,2,6.00,9.83,10.40
-RB,NBB,Blake Corum,LAR,LV,Sun  4:05pm ET,6,43.5,---,22,31%,1%,5,3,0.00,2.22,3.60
-RB,NBB,Will Shipley,PHI,@NYG,Sun  1:00pm ET,5,43,---,10,3%,1%,3,3,0.00,0.00,1.70
-RB,NBB,D'Andre Swift,CHI,BYE,,7,,---,,100%,5%,39,2,23.90,15.13,0.00
-TE,NBB,Dallas Goedert,PHI,@NYG,Sun  1:00pm ET,5,43,---,5,85%,11%,4,2,0.00,7.62,0.00
-WR,NBB,Mike Evans,TB,BAL,Mon  8:15pm ET,11,49.5,16,32,100%,90%,43,2,5.40,13.50,9.12
-WR,NBB,Brian Thomas,JAC,NE,Sun  9:30am ET,12,42,21,17,96%,62%,10,3,3.70,13.28,7.71
-WR,NBB,Gabe Davis,JAC,NE,Sun  9:30am ET,12,42,---,17,20%,3%,2,2,20.50,6.93,4.81
-TE,NBB,David Njoku,CLE,CIN,Sun  1:00pm ET,10,41.5,9,25,83%,58%,10,2,5.10,4.30,6.81
-WR,NBB,Khalil Shakir,BUF,TEN,Sun  1:00pm ET,12,41,---,1,72%,14%,14,4,2.90,9.82,6.11
-RB,NBB,Gus Edwards,LAC,@ARI,Mon  9:00pm ET,5,44,---,25,22%,1%,4,2,0.00,3.62,0.00
-QB,PCP,Joe Burrow,CIN,@CLE,Sun  1:00pm ET,12,41.5,6,16,100%,85%,93,2,21.82,21.42,17.25
-RB,PCP,Braelon Allen,NYJ,@PIT,Sun  8:20pm ET,12,38.5,39,9,67%,6%,3,3,1.80,7.88,5.50
-RB,PCP,Kyren Williams,LAR,LV,Sun  4:05pm ET,6,43.5,1,22,100%,96%,96,2,0.00,22.82,15.91
-WR,PCP,Keon Coleman,BUF,TEN,Sun  1:00pm ET,12,41,---,1,51%,9%,10,3,4.60,6.68,6.41
-WR,PCP,Garrett Wilson,NYJ,@PIT,Sun  8:20pm ET,12,38.5,20,11,100%,91%,34,4,22.70,13.57,9.11
-TE,PCP,TJ Hockenson,MIN,DET,Sun  1:00pm ET,6,50.5,---,7,81%,8%,7,4,0.00,0.00,4.11
-WR,PCP,AJ Brown,PHI,@NYG,Sun  1:00pm ET,5,43,2,12,100%,99%,79,3,22.60,22.75,11.52
-TE,PCP,Pat Freiermuth,PIT,NYJ,Sun  8:20pm ET,9,38.5,14,6,77%,38%,3,2,1.60,6.57,5.31
-QB,PCP,Geno Smith,SEA,@ATL,Sun  1:00pm ET,10,51,11,21,81%,35%,3,1,12.48,18.99,16.67
-DST,PCP,Ravens,BAL,@TB,Mon  8:15pm ET,14,49.5,12,14,88%,65%,7,4,3.00,5.17,8.90
-RB,PCP,Trey Benson,ARI,LAC,Mon  9:00pm ET,11,44,---,4,35%,2%,5,3,3.60,3.58,2.60
-RB,PCP,Rico Dowdle,DAL,BYE,,7,,---,,93%,4%,5,2,8.50,11.78,0.00
-RB,PCP,Ezekiel Elliott,DAL,BYE,,7,,---,,27%,2%,3,2,1.70,4.85,0.00
-WR,PCP,CeeDee Lamb,DAL,BYE,,7,,---,,100%,7%,126,4,12.10,13.07,0.00
-WR,PCP,Rashee Rice,KC,@SF,Sun  4:25pm ET,6,47,---,13,39%,1%,6,4,0.00,14.22,0.00
-RB,PCP,Tyjae Spears,TEN,@BUF,Sun  1:00pm ET,5,41,---,30,54%,4%,7,2,3.70,7.20,0.00
-QB,PCP,Daniel Jones,NYG,PHI,Sun  1:00pm ET,11,43,21,13,42%,11%,1,4,17.80,16.69,15.82
-TE,PCP,Luke Musgrave,GB,HOU,Sun  1:00pm ET,10,48,---,4,8%,1%,3,4,0.00,0.80,0.00
-RB,PCP,Dameon Pierce,HOU,@GB,Sun  1:00pm ET,14,48,---,17,17%,2%,3,2,14.70,8.65,3.30
-QB,PP,Kirk Cousins,ATL,SEA,Sun  1:00pm ET,12,51,9,18,94%,64%,11,2,13.00,14.99,19.10
-RB,PP,Josh Jacobs,GB,HOU,Sun  1:00pm ET,10,48,16,6,100%,94%,50,3,13.00,14.58,11.50
-RB,PP,David Montgomery,DET,@MIN,Sun  1:00pm ET,5,50.5,9,1,100%,88%,42,2,25.00,21.10,9.20
-WR,PP,Amari Cooper,BUF,TEN,Sun  1:00pm ET,12,41,28,1,100%,68%,11,3,5.20,8.00,8.32
-WR,PP,Courtland Sutton,DEN,@NO,Thu  8:15pm ET,14,37,36,15,82%,44%,3,4,14.30,7.96,7.61
-TE,PP,Tucker Kraft,GB,HOU,Sun  1:00pm ET,10,48,7,4,80%,41%,5,2,3.50,8.55,5.71
-WR,PP,Davante Adams,NYJ,@PIT,Sun  8:20pm ET,12,38.5,14,11,100%,79%,16,3,0.00,12.30,9.81
-WR,PP,Romeo Doubs,GB,HOU,Sun  1:00pm ET,10,48,41,19,65%,31%,4,3,19.90,9.16,6.91
-QB,PP,Brock Purdy,SF,KC,Sun  4:25pm ET,9,47,13,17,98%,55%,68,2,26.10,19.14,16.05
-DST,PP,Chiefs,KC,@SF,Sun  4:25pm ET,6,47,14,17,57%,16%,1,2,0.00,7.80,6.30
-QB,PP,Justin Herbert,LAC,@ARI,Mon  9:00pm ET,5,44,23,30,68%,28%,72,3,13.68,11.44,16.71
-RB,PP,Devin Singletary,NYG,PHI,Sun  1:00pm ET,11,43,---,18,90%,18%,3,2,0.00,13.07,8.20
-TE,PP,Isaiah Likely,BAL,@TB,Mon  8:15pm ET,14,49.5,13,16,79%,34%,7,3,3.70,8.28,5.61
-WR,PP,Malachi Corley,NYJ,@PIT,Sun  8:20pm ET,12,38.5,---,11,3%,1%,3,3,0.00,0.13,0.70
-WR,PP,Jauan Jennings,SF,KC,Sun  4:25pm ET,9,47,---,7,47%,5%,7,2,4.70,12.73,0.00
-WR,PP,Calvin Ridley,TEN,@BUF,Sun  1:00pm ET,5,41,47,8,74%,15%,4,4,0.90,7.20,6.21
-WR,PP,Wan'Dale Robinson,NYG,PHI,Sun  1:00pm ET,11,43,31,27,81%,48%,5,2,7.00,9.63,7.31
-RB,PP,Trey Sermon,IND,MIA,Sun  1:00pm ET,14,43.5,29,29,47%,12%,10,2,5.90,5.72,7.20
-RB,PP,MarShawn Lloyd,GB,HOU,Sun  1:00pm ET,10,48,---,6,19%,1%,5,3,0.00,1.80,1.40
-QB,PP,JJ McCarthy,MIN,DET,Sun  1:00pm ET,6,50.5,---,15,6%,1%,35,3,0.00,0.00,0.00
-RB,PP,Christian McCaffrey,SF,KC,Sun  4:25pm ET,9,47,---,2,100%,3%,102,3,0.00,0.00,1.60
-QB,RR,CJ Stroud,HOU,@GB,Sun  1:00pm ET,14,48,10,9,99%,72%,133,2,19.38,17.61,15.54
-RB,RR,Kareem Hunt,KC,@SF,Sun  4:25pm ET,6,47,17,15,95%,58%,3,2,0.00,17.60,8.00
-RB,RR,Joe Mixon,HOU,@GB,Sun  1:00pm ET,14,48,6,17,100%,94%,50,2,30.20,23.67,13.40
-WR,RR,Jordan Addison,MIN,DET,Sun  1:00pm ET,6,50.5,30,28,93%,64%,5,4,0.00,11.33,9.82
-WR,RR,Justin Jefferson,MIN,DET,Sun  1:00pm ET,6,50.5,1,28,100%,97%,111,2,0.00,17.40,14.12
-TE,RR,Cole Kmet,CHI,BYE,,7,,---,,74%,5%,1,2,22.00,10.32,0.00
-RB,RR,Najee Harris,PIT,NYJ,Sun  8:20pm ET,9,38.5,22,11,100%,74%,20,2,23.20,13.35,9.50
-WR,RR,Diontae Johnson,CAR,@WAS,Sun  4:05pm ET,11,51.5,7,29,98%,80%,4,3,18.80,12.10,9.72
-QB,RR,Baker Mayfield,TB,BAL,Mon  8:15pm ET,11,49.5,5,28,97%,54%,9,3,26.90,24.03,15.89
-DST,RR,Steelers,PIT,NYJ,Sun  8:20pm ET,9,38.5,4,22,98%,91%,1,1,13.00,9.83,9.20
-QB,RR,Spencer Rattler,NO,DEN,Thu  8:15pm ET,12,37,---,5,10%,3%,1,2,13.42,10.85,11.61
-QB,RR,Tua Tagovailoa,MIA,@IND,Sun  1:00pm ET,6,43.5,---,25,50%,1%,50,2,0.00,13.56,0.00
-WR,RR,Jalen McMillan,TB,BAL,Mon  8:15pm ET,11,49.5,---,32,6%,1%,3,3,0.00,3.73,3.00
-WR,RR,George Pickens,PIT,NYJ,Sun  8:20pm ET,9,38.5,25,4,95%,38%,23,3,7.30,8.22,5.91
-WR,RR,Tre Tucker,LV,@LAR,Sun  4:05pm ET,10,43.5,---,18,26%,4%,1,2,0.00,6.85,7.01
-"QB,TE",RR,Taysom Hill,NO,DEN,Thu  8:15pm ET,12,37,---,19,34%,1%,1,2,0.00,9.63,0.00
-RB,RR,Rachaad White,TB,BAL,Mon  8:15pm ET,11,49.5,---,3,89%,5%,52,2,0.00,8.80,0.50
-QB,RR,Michael Penix,ATL,SEA,Sun  1:00pm ET,12,51,---,18,7%,1%,5,3,0.00,0.00,0.72
-RB,RR,Jonathon Brooks,CAR,@WAS,Sun  4:05pm ET,11,51.5,---,19,82%,1%,20,3,0.00,0.00,0.00
-QB,SBS,Jayden Daniels,WAS,CAR,Sun  4:05pm ET,14,51.5,1,19,98%,94%,40,3,21.96,26.23,26.09
-RB,SBS,Austin Ekeler,WAS,CAR,Sun  4:05pm ET,14,51.5,33,32,96%,62%,16,1,8.80,11.38,8.71
-RB,SBS,Chuba Hubbard,CAR,@WAS,Sun  4:05pm ET,11,51.5,10,19,99%,95%,2,2,17.30,17.67,13.60
-WR,SBS,Stefon Diggs,HOU,@GB,Sun  1:00pm ET,14,48,13,20,100%,97%,39,2,18.70,14.99,10.91
-WR,SBS,Christian Watson,GB,HOU,Sun  1:00pm ET,10,48,32,19,70%,29%,17,4,15.80,6.56,7.71
-TE,SBS,Zach Ertz,WAS,CAR,Sun  4:05pm ET,14,51.5,15,29,73%,44%,1,2,10.80,5.97,6.11
-WR,SBS,Christian Kirk,JAC,NE,Sun  9:30am ET,12,42,38,17,90%,43%,5,4,6.90,8.45,7.21
-WR,SBS,Deebo Samuel,SF,KC,Sun  4:25pm ET,9,47,15,7,100%,92%,51,3,19.70,13.12,10.81
-QB,SBS,Lamar Jackson,BAL,@TB,Mon  8:15pm ET,14,49.5,2,31,100%,97%,201,4,21.92,27.24,20.99
-DST,SBS,Giants,NYG,PHI,Sun  1:00pm ET,11,43,20,24,32%,27%,1,2,7.00,8.67,9.90
-RB,SBS,Jerome Ford,CLE,CIN,Sun  1:00pm ET,10,41.5,---,21,66%,7%,6,3,2.40,10.02,0.00
-RB,SBS,Antonio Gibson,NE,@JAC,Sun  9:30am ET,14,42,26,23,71%,30%,1,2,7.30,8.10,8.20
-RB,SBS,Jonathan Taylor,IND,MIA,Sun  1:00pm ET,14,43.5,---,29,100%,7%,101,2,0.00,22.65,0.00
-WR,SBS,Troy Franklin,DEN,@NO,Thu  8:15pm ET,14,37,---,15,4%,1%,3,3,11.60,3.78,4.11
-WR,SBS,Andrei Iosivas,CIN,@CLE,Sun  1:00pm ET,12,41.5,---,25,14%,2%,1,2,4.60,7.98,4.61
-WR,SBS,Alec Pierce,IND,MIA,Sun  1:00pm ET,14,43.5,---,3,47%,11%,3,2,0.00,10.80,7.21
-WR,SBS,Rashod Bateman,BAL,@TB,Mon  8:15pm ET,14,49.5,---,22,12%,3%,1,3,11.10,8.88,4.91
-QB,SBS,Russell Wilson,PIT,NYJ,Sun  8:20pm ET,9,38.5,---,3,15%,3%,1,2,0.00,0.00,12.81
-RB,SBS,Jaylen Wright,MIA,@IND,Sun  1:00pm ET,6,43.5,---,24,32%,3%,5,3,0.00,4.97,4.10
+Pos,TRUFFLE,Player,NFL,Opp,Game Time,Bye,O/U,PosRnk,Ovp,Rost,Start,Salary,Contract,Prd. 9,Avg,Proj
+QB,ABT,Caleb Williams,CHI,NE,Sun  1:00pm ET,7,38.5,20,13,81%,22%,50,3,9.18,15.84,15.27
+RB,ABT,Saquon Barkley,PHI,@DAL,Sun  4:25pm ET,5,43.5,1,31,100%,100%,131,2,37.90,25.01,17.81
+RB,ABT,Najee Harris,PIT,@WAS,Sun  1:00pm ET,9,45,17,16,100%,71%,20,2,0.00,14.80,10.70
+WR,ABT,DJ Moore,CHI,NE,Sun  1:00pm ET,7,38.5,27,19,100%,75%,44,3,5.30,9.31,9.12
+WR,ABT,Puka Nacua,LAR,MIA,Mon  8:15pm ET,6,50.5,14,4,100%,89%,85,4,2.10,8.13,8.81
+TE,ABT,Jake Ferguson,DAL,PHI,Sun  4:25pm ET,7,43.5,12,4,82%,43%,2,2,10.10,6.63,4.91
+RB,ABT,Chase Brown,CIN,@BAL,Thu  8:15pm ET,12,53,23,6,99%,86%,7,3,28.70,14.01,13.41
+WR,ABT,Josh Downs,IND,BUF,Sun  1:00pm ET,14,46.5,21,5,93%,66%,1,4,10.00,11.91,8.71
+QB,ABT,Bryce Young,CAR,NYG,Sun  9:30am ET,11,40.5,---,25,11%,3%,1,3,10.74,6.67,12.10
+DST,ABT,Eagles,PHI,@DAL,Sun  4:25pm ET,5,43.5,1,21,93%,83%,1,2,10.00,6.75,9.10
+RB,ABT,Jonathon Brooks,CAR,NYG,Sun  9:30am ET,11,40.5,44,18,83%,4%,20,3,0.00,0.00,5.80
+RB,ABT,Roschon Johnson,CHI,NE,Sun  1:00pm ET,7,38.5,40,29,56%,14%,1,3,2.10,7.90,5.90
+WR,ABT,Chris Olave,NO,ATL,Sun  1:00pm ET,12,46.5,---,23,95%,8%,42,4,2.30,8.46,0.00
+TE,ABT,Hunter Henry,NE,@CHI,Sun  1:00pm ET,14,38.5,9,19,68%,39%,1,2,8.60,7.93,5.51
+WR,ABT,Keenan Allen,CHI,NE,Sun  1:00pm ET,7,38.5,40,19,72%,22%,7,2,6.60,7.62,5.41
+RB,ABT,Alexander Mattison,LV,BYE,,10,,---,,88%,4%,1,2,5.60,11.51,0.00
+WR,ABT,Jermaine Burton,CIN,@BAL,Thu  8:15pm ET,12,53,---,32,5%,1%,5,3,0.00,1.61,1.70
+RB,ABT,Keaton Mitchell,BAL,CIN,Thu  8:15pm ET,14,53,---,11,19%,1%,1,4,0.00,0.00,4.90
+QB,ABT,Dak Prescott,DAL,PHI,Sun  4:25pm ET,7,43.5,---,12,68%,5%,77,3,14.32,15.21,0.00
+WR,ABT,Roman Wilson,PIT,@WAS,Sun  1:00pm ET,9,45,---,21,4%,1%,3,3,0.00,0.00,0.00
+QB,CLC,Joe Flacco,IND,BUF,Sun  1:00pm ET,14,46.5,23,7,25%,7%,3,2,3.16,12.08,12.62
+RB,CLC,Breece Hall,NYJ,@ARI,Sun  4:25pm ET,12,46.5,19,27,100%,98%,145,2,12.50,15.21,12.91
+RB,CLC,Javonte Williams,DEN,@KC,Sun  1:00pm ET,14,41.5,29,1,96%,40%,23,3,12.40,10.81,7.10
+WR,CLC,Darnell Mooney,ATL,@NO,Sun  1:00pm ET,12,46.5,18,17,97%,86%,1,2,18.80,13.20,9.62
+WR,CLC,DeVonta Smith,PHI,@DAL,Sun  4:25pm ET,5,43.5,19,18,100%,94%,45,4,18.70,13.50,11.42
+TE,CLC,Dalton Kincaid,BUF,@IND,Sun  1:00pm ET,12,46.5,10,30,91%,70%,50,2,4.20,6.91,6.41
+WR,CLC,Nico Collins,HOU,DET,Sun  8:20pm ET,14,49,4,30,100%,48%,40,4,0.00,20.34,11.82
+WR,CLC,Jaylen Waddle,MIA,@LAR,Mon  8:15pm ET,6,50.5,35,26,96%,53%,34,4,8.00,6.76,8.21
+WR,CLC,Rome Odunze,CHI,NE,Sun  1:00pm ET,7,38.5,37,19,69%,26%,25,3,14.40,8.20,6.11
+DST,CLC,Bears,CHI,NE,Sun  1:00pm ET,7,38.5,6,27,98%,90%,1,1,8.00,9.88,9.90
+WR,CLC,Ricky Pearsall,SF,@TB,Sun  1:00pm ET,9,50.5,---,25,39%,7%,5,3,0.00,6.40,4.10
+WR,CLC,Ja'Lynn Polk,NE,@CHI,Sun  1:00pm ET,14,38.5,---,2,8%,1%,3,3,0.00,2.10,2.30
+RB,CLC,Justice Hill,BAL,CIN,Thu  8:15pm ET,14,53,38,11,50%,8%,1,2,9.80,7.51,4.00
+RB,CLC,Jordan Mason,SF,@TB,Sun  1:00pm ET,9,50.5,35,22,87%,7%,1,2,0.00,16.01,5.20
+QB,CLC,Justin Fields,PIT,@WAS,Sun  1:00pm ET,9,45,---,17,17%,1%,5,4,0.00,21.72,2.20
+QB,CLC,Jordan Love,GB,BYE,,10,,---,,98%,5%,100,4,10.92,17.67,0.00
+RB,CLC,Zack Moss,CIN,@BAL,Thu  8:15pm ET,12,53,---,6,49%,2%,17,3,0.00,10.36,0.00
+QB,CPC,Sam Darnold,MIN,@JAC,Sun  1:00pm ET,6,43.5,7,31,95%,64%,2,2,22.00,18.50,17.01
+RB,CPC,Derrick Henry,BAL,CIN,Thu  8:15pm ET,14,53,2,11,100%,100%,85,2,31.30,25.86,17.51
+RB,CPC,Tony Pollard,TEN,@LAC,Sun  4:05pm ET,5,39,22,2,100%,67%,48,2,21.40,16.02,10.00
+WR,CPC,Ja'Marr Chase,CIN,@BAL,Thu  8:15pm ET,12,53,2,32,100%,100%,84,4,7.30,20.42,13.72
+WR,CPC,Tyreek Hill,MIA,@LAR,Mon  8:15pm ET,6,50.5,12,26,100%,98%,105,2,12.00,9.40,11.71
+TE,CPC,George Kittle,SF,@TB,Sun  1:00pm ET,9,50.5,1,27,100%,93%,25,2,0.00,15.76,11.32
+RB,CPC,James Cook,BUF,@IND,Sun  1:00pm ET,12,46.5,10,20,100%,93%,70,2,9.90,18.82,11.50
+RB,CPC,JK Dobbins,LAC,TEN,Sun  4:05pm ET,5,39,8,14,100%,91%,16,2,26.50,18.09,13.60
+QB,CPC,Drake Maye,NE,@CHI,Sun  1:00pm ET,14,38.5,21,1,31%,7%,10,3,20.74,16.54,12.17
+DST,CPC,Vikings,MIN,@JAC,Sun  1:00pm ET,6,43.5,3,14,100%,86%,1,2,12.00,13.00,8.90
+RB,CPC,Brian Robinson,WAS,PIT,Sun  1:00pm ET,14,45,---,9,99%,32%,18,3,0.00,17.00,0.00
+WR,CPC,Tee Higgins,CIN,@BAL,Thu  8:15pm ET,12,53,---,32,98%,4%,17,4,0.00,14.62,0.00
+TE,CPC,Ja'Tavion Sanders,CAR,NYG,Sun  9:30am ET,11,40.5,20,1,5%,2%,3,3,11.70,3.61,3.30
+WR,CPC,Ladd McConkey,LAC,TEN,Sun  4:05pm ET,5,39,26,1,93%,62%,5,3,10.40,11.38,7.92
+WR,CPC,Jakobi Meyers,LV,BYE,,10,,---,,86%,3%,1,3,16.50,11.76,0.00
+QB,CPC,Derek Carr,NO,ATL,Sun  1:00pm ET,12,46.5,24,26,41%,13%,3,2,13.44,14.53,15.49
+WR,CPC,Tyler Lockett,SEA,BYE,,10,,---,,70%,4%,1,2,15.30,9.51,0.00
+WR,CPC,Dontayvion Wicks,GB,BYE,,10,,---,,22%,1%,3,4,0.00,6.13,0.00
+DST,CPC,Jets,NYJ,@ARI,Sun  4:25pm ET,12,46.5,13,7,91%,72%,2,2,14.00,6.56,7.10
+QB,DDD,Jared Goff,DET,@HOU,Sun  8:20pm ET,5,49,10,23,97%,51%,71,2,9.80,16.84,15.29
+RB,DDD,De'Von Achane,MIA,@LAR,Mon  8:15pm ET,6,50.5,5,21,100%,99%,79,2,33.10,16.91,15.92
+RB,DDD,Jahmyr Gibbs,DET,@HOU,Sun  8:20pm ET,5,49,11,4,100%,99%,102,4,16.60,21.01,15.10
+WR,DDD,Zay Flowers,BAL,CIN,Thu  8:15pm ET,14,53,7,15,100%,93%,21,4,28.70,12.45,10.81
+WR,DDD,Malik Nabers,NYG,@CAR,Sun  9:30am ET,11,40.5,3,11,98%,94%,30,3,9.90,15.16,11.02
+TE,DDD,Mike Gesicki,CIN,@BAL,Thu  8:15pm ET,12,53,5,24,73%,60%,1,2,27.00,7.02,7.31
+WR,DDD,Tank Dell,HOU,DET,Sun  8:20pm ET,14,49,20,30,99%,79%,29,4,16.60,8.79,9.21
+WR,DDD,Quentin Johnston,LAC,TEN,Sun  4:05pm ET,5,39,25,1,87%,57%,1,2,21.00,10.63,9.02
+TE,DDD,Sam LaPorta,DET,@HOU,Sun  8:20pm ET,5,49,13,2,97%,69%,66,4,3.80,7.12,5.91
+WR,DDD,Adonai Mitchell,IND,BUF,Sun  1:00pm ET,14,46.5,---,5,9%,1%,5,3,2.20,2.60,3.10
+RB,DDD,Tank Bigsby,JAC,MIN,Sun  1:00pm ET,12,43.5,30,3,90%,20%,1,2,3.20,11.23,6.90
+RB,DDD,Kenneth Walker,SEA,BYE,,10,,---,,100%,7%,76,2,14.70,19.50,0.00
+RB,DDD,Bucky Irving,TB,SF,Sun  1:00pm ET,11,50.5,28,12,90%,21%,3,3,4.40,11.48,6.60
+RB,DDD,Jaleel McLaughlin,DEN,@KC,Sun  1:00pm ET,14,41.5,41,1,38%,6%,1,2,2.00,6.06,4.41
+QB,DDD,Jameis Winston,CLE,BYE,,10,,---,,21%,1%,3,2,14.10,7.50,0.00
+DST,DDD,Bengals,CIN,@BAL,Thu  8:15pm ET,12,53,---,3,35%,13%,1,2,11.00,4.60,5.10
+QB,DDD,Deshaun Watson,CLE,BYE,,10,,---,,9%,1%,10,4,0.00,12.10,0.00
+QB,LBC,Bo Nix,DEN,@KC,Sun  1:00pm ET,14,41.5,22,19,64%,13%,5,3,20.72,19.76,13.05
+RB,LBC,Raheem Mostert,MIA,@LAR,Mon  8:15pm ET,6,50.5,31,21,94%,40%,15,2,11.80,10.50,8.10
+RB,LBC,Rhamondre Stevenson,NE,@CHI,Sun  1:00pm ET,14,38.5,25,19,99%,70%,27,3,21.40,15.09,9.60
+WR,LBC,Jalen Coker,CAR,NYG,Sun  9:30am ET,11,40.5,47,13,10%,3%,1,2,5.60,6.87,4.91
+WR,LBC,Drake London,ATL,@NO,Sun  1:00pm ET,12,46.5,13,17,100%,86%,36,4,10.70,13.47,10.52
+TE,LBC,Evan Engram,JAC,MIN,Sun  1:00pm ET,12,43.5,8,13,91%,68%,6,3,8.50,7.66,5.71
+TE,LBC,Trey McBride,ARI,NYJ,Sun  4:25pm ET,11,46.5,4,6,98%,89%,21,4,12.70,10.54,7.71
+WR,LBC,Michael Pittman,IND,BUF,Sun  1:00pm ET,14,46.5,---,5,88%,30%,16,4,1.40,7.07,0.00
+QB,LBC,Aaron Rodgers,NYJ,@ARI,Sun  4:25pm ET,12,46.5,14,21,72%,35%,8,2,20.44,15.53,16.21
+DST,LBC,Broncos,DEN,@KC,Sun  1:00pm ET,14,41.5,12,6,75%,37%,1,2,-3.00,10.33,7.70
+QB,LBC,Anthony Richardson,IND,BUF,Sun  1:00pm ET,14,46.5,---,7,33%,2%,161,2,0.00,13.75,0.82
+RB,LBC,Travis Etienne,JAC,MIN,Sun  1:00pm ET,12,43.5,32,3,94%,26%,66,2,4.00,9.46,6.10
+WR,LBC,Brandon Aiyuk,SF,@TB,Sun  1:00pm ET,9,50.5,---,25,26%,2%,34,4,0.00,8.06,0.00
+WR,LBC,Jaxon Smith-Njigba,SEA,BYE,,10,,---,,88%,3%,5,4,35.00,11.47,0.00
+WR,LBC,Devontez Walker,BAL,CIN,Thu  8:15pm ET,14,53,---,15,1%,1%,3,3,0.00,0.00,1.60
+TE,LBC,Brock Bowers,LV,BYE,,10,,---,,97%,8%,15,3,12.50,11.13,0.00
+WR,LBC,Jerry Jeudy,CLE,BYE,,10,,---,,62%,2%,1,4,12.30,7.98,0.00
+WR,LBC,Michael Wilson,ARI,NYJ,Sun  4:25pm ET,11,46.5,---,3,30%,8%,1,4,0.00,6.48,5.31
+RB,LBC,Isiah Pacheco,KC,DEN,Sun  1:00pm ET,6,41.5,---,15,95%,2%,68,3,0.00,16.95,0.00
+QB,LC,Jalen Hurts,PHI,@DAL,Sun  4:25pm ET,5,43.5,2,28,100%,99%,180,2,33.90,26.64,23.83
+RB,LC,Tyler Allgeier,ATL,@NO,Sun  1:00pm ET,12,46.5,33,25,77%,16%,11,2,8.80,9.19,7.00
+RB,LC,James Conner,ARI,NYJ,Sun  4:25pm ET,11,46.5,13,13,100%,83%,19,2,16.90,17.46,11.10
+WR,LC,DeAndre Hopkins,KC,DEN,Sun  1:00pm ET,6,41.5,30,9,99%,71%,11,2,25.60,8.00,8.11
+WR,LC,Xavier Legette,CAR,NYG,Sun  9:30am ET,11,40.5,31,13,60%,27%,5,3,12.90,7.51,6.21
+TE,LC,Dalton Schultz,HOU,DET,Sun  8:20pm ET,14,49,24,3,40%,13%,3,2,2.10,3.93,4.61
+RB,LC,Jaylen Warren,PIT,@WAS,Sun  1:00pm ET,9,45,34,16,66%,12%,11,4,0.00,5.37,4.80
+WR,LC,Xavier Worthy,KC,DEN,Sun  1:00pm ET,6,41.5,38,9,90%,30%,15,3,0.00,9.15,7.11
+QB,LC,Patrick Mahomes,KC,DEN,Sun  1:00pm ET,6,41.5,15,4,100%,84%,200,2,25.54,17.21,18.91
+DST,LC,49ers,SF,@TB,Sun  1:00pm ET,9,50.5,8,17,90%,61%,1,3,0.00,9.00,9.50
+RB,LC,Jamaal Williams,NO,ATL,Sun  1:00pm ET,12,46.5,---,10,6%,1%,1,2,0.00,3.70,1.30
+RB,LC,Jeff Wilson,MIA,@LAR,Mon  8:15pm ET,6,50.5,---,21,3%,1%,1,2,0.00,1.55,1.70
+WR,LC,Allen Lazard,NYJ,@ARI,Sun  4:25pm ET,12,46.5,---,24,35%,1%,1,2,0.00,13.46,0.00
+TE,LC,Ben Sinnott,WAS,PIT,Sun  1:00pm ET,14,45,---,12,5%,1%,3,3,2.20,1.09,1.20
+RB,LC,Zach Charbonnet,SEA,BYE,,10,,---,,60%,1%,4,4,4.30,9.86,0.00
+WR,LC,DK Metcalf,SEA,BYE,,10,,---,,100%,3%,31,4,0.00,12.83,0.00
+WR,LC,Rashid Shaheed,NO,ATL,Sun  1:00pm ET,12,46.5,---,23,20%,1%,1,3,0.00,11.30,0.00
+TE,LC,Juwan Johnson,NO,ATL,Sun  1:00pm ET,12,46.5,19,23,23%,12%,1,2,6.10,4.28,5.81
+QB,LC,Gardner Minshew,LV,BYE,,10,,---,,8%,1%,1,2,2.96,8.87,0.00
+QB,MB,Kyler Murray,ARI,NYJ,Sun  4:25pm ET,11,46.5,16,9,97%,53%,51,2,5.76,18.30,17.05
+RB,MB,Aaron Jones,MIN,@JAC,Sun  1:00pm ET,6,43.5,15,26,100%,92%,14,2,13.20,16.62,11.80
+RB,MB,Bijan Robinson,ATL,@NO,Sun  1:00pm ET,12,46.5,7,25,100%,100%,143,3,22.50,18.83,17.21
+WR,MB,Marvin Harrison,ARI,NYJ,Sun  4:25pm ET,11,46.5,23,3,100%,75%,45,3,1.40,10.39,8.52
+WR,MB,Amon-Ra St Brown,DET,@HOU,Sun  8:20pm ET,5,49,11,27,100%,100%,93,4,15.60,14.59,10.52
+TE,MB,Travis Kelce,KC,DEN,Sun  1:00pm ET,6,41.5,2,8,100%,98%,47,2,14.00,8.82,8.71
+WR,MB,Cooper Kupp,LAR,MIA,Mon  8:15pm ET,6,50.5,17,4,100%,97%,33,2,14.40,14.30,10.82
+RB,MB,Tyrone Tracy,NYG,@CAR,Sun  9:30am ET,11,40.5,16,32,96%,71%,5,2,8.90,10.20,10.90
+QB,MB,Matthew Stafford,LAR,MIA,Mon  8:15pm ET,6,50.5,9,3,84%,46%,21,2,17.92,12.35,16.18
+DST,MB,Buccaneers,TB,SF,Sun  1:00pm ET,11,50.5,22,12,23%,9%,1,2,5.00,5.89,6.70
+RB,MB,Isaac Guerendo,SF,@TB,Sun  1:00pm ET,9,50.5,---,22,37%,4%,3,3,0.00,4.86,4.60
+RB,MB,Cam Akers,MIN,@JAC,Sun  1:00pm ET,6,43.5,---,26,30%,4%,1,2,8.30,5.09,3.10
+TE,MB,Mark Andrews,BAL,CIN,Thu  8:15pm ET,14,53,11,28,96%,79%,1,2,4.60,8.77,8.22
+WR,MB,Tutu Atwell,LAR,MIA,Mon  8:15pm ET,6,50.5,---,4,23%,3%,1,2,2.60,6.79,3.90
+RB,MB,Ray Davis,BUF,@IND,Sun  1:00pm ET,12,46.5,37,20,74%,15%,1,4,17.00,8.58,5.70
+WR,MB,Josh Palmer,LAC,TEN,Sun  4:05pm ET,5,39,---,1,22%,8%,1,2,14.30,7.09,5.41
+RB,MB,Zamir White,LV,BYE,,10,,---,,29%,2%,16,2,8.00,4.07,0.00
+RB,MB,Khalil Herbert,CIN,@BAL,Thu  8:15pm ET,12,53,---,6,32%,2%,2,2,0.00,1.57,1.20
+QB,MB,Will Levis,TEN,@LAC,Sun  4:05pm ET,5,39,---,6,10%,1%,9,4,0.00,9.51,5.92
+QB,NBB,Josh Allen,BUF,@IND,Sun  1:00pm ET,12,46.5,4,22,100%,99%,199,3,23.10,22.46,20.93
+RB,NBB,Blake Corum,LAR,MIA,Mon  8:15pm ET,6,50.5,---,28,33%,1%,5,3,0.00,2.00,2.20
+RB,NBB,D'Andre Swift,CHI,NE,Sun  1:00pm ET,7,38.5,12,29,100%,88%,39,2,14.20,15.99,11.70
+WR,NBB,Brian Thomas,JAC,MIN,Sun  1:00pm ET,12,43.5,22,31,97%,69%,10,3,5.20,13.44,9.71
+WR,NBB,Jameson Williams,DET,@HOU,Sun  8:20pm ET,5,49,33,27,91%,33%,5,2,0.00,12.07,7.81
+TE,NBB,Kyle Pitts,ATL,@NO,Sun  1:00pm ET,12,46.5,7,17,95%,73%,16,2,1.10,8.44,7.51
+WR,NBB,Terry McLaurin,WAS,PIT,Sun  1:00pm ET,14,45,9,10,99%,93%,12,2,15.90,13.89,10.92
+WR,NBB,Khalil Shakir,BUF,@IND,Sun  1:00pm ET,12,46.5,28,22,89%,57%,14,4,9.00,9.94,7.61
+QB,NBB,Trevor Lawrence,JAC,MIN,Sun  1:00pm ET,12,43.5,---,8,59%,7%,65,4,21.56,17.61,0.00
+DST,NBB,Bills,BUF,@IND,Sun  1:00pm ET,12,46.5,4,18,96%,79%,4,2,3.00,9.33,8.30
+RB,NBB,Ty Chandler,MIN,@JAC,Sun  1:00pm ET,6,43.5,---,26,29%,1%,3,2,0.00,3.41,0.70
+RB,NBB,Nick Chubb,CLE,BYE,,10,,---,,98%,4%,41,1,5.90,8.10,0.00
+RB,NBB,Will Shipley,PHI,@DAL,Sun  4:25pm ET,5,43.5,---,31,3%,1%,3,3,0.00,0.19,1.50
+WR,NBB,Mike Evans,TB,SF,Sun  1:00pm ET,11,50.5,---,16,99%,3%,43,2,0.00,12.93,0.00
+WR,NBB,Jayden Reed,GB,BYE,,10,,---,,99%,6%,8,4,15.30,13.44,0.00
+TE,NBB,Dallas Goedert,PHI,@DAL,Sun  4:25pm ET,5,43.5,16,18,72%,13%,4,2,0.00,7.62,3.00
+TE,NBB,David Njoku,CLE,BYE,,10,,---,,90%,8%,10,2,3.90,8.08,0.00
+WR,NBB,Chris Godwin,TB,SF,Sun  1:00pm ET,11,50.5,---,16,31%,1%,3,2,0.00,17.26,0.00
+WR,NBB,Gabe Davis,JAC,MIN,Sun  1:00pm ET,12,43.5,---,31,16%,2%,2,2,0.00,5.49,4.11
+RB,NBB,Gus Edwards,LAC,TEN,Sun  4:05pm ET,5,39,---,14,18%,1%,4,2,0.00,3.62,1.10
+QB,PCP,Joe Burrow,CIN,@BAL,Thu  8:15pm ET,12,53,3,29,100%,92%,93,2,31.14,22.25,19.24
+RB,PCP,Braelon Allen,NYJ,@ARI,Sun  4:25pm ET,12,46.5,39,27,65%,8%,3,3,1.90,7.00,5.70
+RB,PCP,Kyren Williams,LAR,MIA,Mon  8:15pm ET,6,50.5,4,28,100%,99%,96,2,14.50,22.10,15.31
+WR,PCP,AJ Brown,PHI,@DAL,Sun  4:25pm ET,5,43.5,5,18,100%,97%,79,3,4.60,16.28,13.22
+WR,PCP,CeeDee Lamb,DAL,PHI,Sun  4:25pm ET,7,43.5,16,14,100%,93%,126,4,11.20,15.65,11.21
+TE,PCP,TJ Hockenson,MIN,@JAC,Sun  1:00pm ET,6,43.5,14,25,88%,43%,7,4,3.70,3.70,5.71
+RB,PCP,Rico Dowdle,DAL,PHI,Sun  4:25pm ET,7,43.5,24,5,96%,51%,5,2,23.70,13.49,9.01
+WR,PCP,Garrett Wilson,NYJ,@ARI,Sun  4:25pm ET,12,46.5,6,24,100%,98%,34,4,25.00,14.76,11.82
+QB,PCP,Daniel Jones,NYG,@CAR,Sun  9:30am ET,11,40.5,11,27,45%,26%,1,4,30.36,16.12,17.87
+DST,PCP,Ravens,BAL,CIN,Thu  8:15pm ET,14,53,16,13,91%,65%,7,4,14.00,6.00,7.60
+RB,PCP,Trey Benson,ARI,NYJ,Sun  4:25pm ET,11,46.5,43,13,33%,2%,5,3,14.50,4.30,2.50
+RB,PCP,Ezekiel Elliott,DAL,PHI,Sun  4:25pm ET,7,43.5,---,5,23%,3%,3,2,0.00,5.84,4.40
+TE,PCP,Pat Freiermuth,PIT,@WAS,Sun  1:00pm ET,9,45,22,16,57%,16%,3,2,0.00,6.17,5.21
+WR,PCP,Keon Coleman,BUF,@IND,Sun  1:00pm ET,12,46.5,---,22,77%,11%,10,3,5.10,8.63,0.00
+WR,PCP,Rashee Rice,KC,DEN,Sun  1:00pm ET,6,41.5,---,9,31%,1%,6,4,0.00,14.22,0.00
+RB,PCP,Tyjae Spears,TEN,@LAC,Sun  4:05pm ET,5,39,36,2,51%,6%,7,2,0.00,7.20,5.00
+TE,PCP,Luke Musgrave,GB,BYE,,10,,---,,6%,1%,3,4,0.00,0.80,0.00
+RB,PCP,Dameon Pierce,HOU,DET,Sun  8:20pm ET,14,49,---,7,9%,1%,3,2,0.00,4.47,0.00
+QB,PCP,Geno Smith,SEA,BYE,,10,,---,,77%,2%,3,1,23.12,18.21,0.00
+QB,PP,Kirk Cousins,ATL,@NO,Sun  1:00pm ET,12,46.5,6,10,98%,68%,11,2,18.88,16.19,18.22
+RB,PP,Christian McCaffrey,SF,@TB,Sun  1:00pm ET,9,50.5,14,22,100%,76%,102,3,0.00,0.00,13.61
+RB,PP,David Montgomery,DET,@HOU,Sun  8:20pm ET,5,49,20,4,100%,82%,42,2,16.60,18.13,10.70
+WR,PP,Davante Adams,NYJ,@ARI,Sun  4:25pm ET,12,46.5,15,24,100%,95%,16,3,19.10,11.40,11.02
+WR,PP,Calvin Ridley,TEN,@LAC,Sun  4:05pm ET,5,39,29,6,87%,39%,4,4,11.30,8.89,6.51
+TE,PP,Isaiah Likely,BAL,CIN,Thu  8:15pm ET,14,53,---,28,52%,4%,7,3,0.00,6.68,0.00
+WR,PP,Amari Cooper,BUF,@IND,Sun  1:00pm ET,12,46.5,---,22,99%,48%,11,3,0.00,8.11,6.51
+WR,PP,Courtland Sutton,DEN,@KC,Sun  1:00pm ET,14,41.5,24,7,95%,52%,3,4,21.28,10.01,6.21
+QB,PP,Justin Herbert,LAC,TEN,Sun  4:05pm ET,5,39,17,15,83%,40%,72,3,19.48,14.56,16.47
+DST,PP,Texans,HOU,DET,Sun  8:20pm ET,14,49,19,4,68%,37%,1,2,2.00,6.89,6.70
+RB,PP,Josh Jacobs,GB,BYE,,10,,---,,100%,8%,50,3,15.80,16.91,0.00
+RB,PP,Devin Singletary,NYG,@CAR,Sun  9:30am ET,11,40.5,42,32,71%,9%,3,2,6.30,9.00,4.60
+WR,PP,Adam Thielen,CAR,NYG,Sun  9:30am ET,11,40.5,---,13,26%,1%,2,2,0.00,7.30,0.00
+TE,PP,Tucker Kraft,GB,BYE,,10,,---,,77%,3%,5,2,5.60,9.44,0.00
+WR,PP,Malachi Corley,NYJ,@ARI,Sun  4:25pm ET,12,46.5,---,24,2%,1%,3,3,-0.20,0.04,1.30
+WR,PP,Romeo Doubs,GB,BYE,,10,,---,,79%,3%,4,3,2.80,9.28,0.00
+WR,PP,Jauan Jennings,SF,@TB,Sun  1:00pm ET,9,50.5,32,25,77%,20%,7,2,0.00,12.73,6.41
+WR,PP,Wan'Dale Robinson,NYG,@CAR,Sun  9:30am ET,11,40.5,39,11,59%,24%,5,2,2.00,7.34,7.21
+QB,PP,Brock Purdy,SF,@TB,Sun  1:00pm ET,9,50.5,8,32,98%,60%,68,2,0.00,20.88,18.43
+QB,PP,JJ McCarthy,MIN,@JAC,Sun  1:00pm ET,6,43.5,---,31,6%,1%,35,3,0.00,0.00,0.00
+RB,PP,MarShawn Lloyd,GB,BYE,,10,,---,,18%,1%,5,3,0.00,1.80,0.00
+DC,PP,Mark Andrews Dead Cap,BAL,CIN,Thu  8:15pm ET,14,53,---,28,0%,0%,8,1,0.00,0.00,0.00
+QB,RR,Baker Mayfield,TB,SF,Sun  1:00pm ET,11,50.5,12,11,97%,43%,9,3,19.00,23.94,16.05
+RB,RR,Kareem Hunt,KC,DEN,Sun  1:00pm ET,6,41.5,21,15,98%,87%,3,2,25.70,20.70,13.20
+RB,RR,Rachaad White,TB,SF,Sun  1:00pm ET,11,50.5,27,12,97%,56%,52,2,12.50,12.29,7.61
+WR,RR,Justin Jefferson,MIN,@JAC,Sun  1:00pm ET,6,43.5,1,28,100%,100%,111,2,19.58,17.81,13.01
+WR,RR,George Pickens,PIT,@WAS,Sun  1:00pm ET,9,45,10,21,99%,75%,23,3,0.00,10.10,8.91
+TE,RR,Cade Otton,TB,SF,Sun  1:00pm ET,11,50.5,3,11,92%,75%,1,2,16.70,9.57,6.21
+RB,RR,Alvin Kamara,NO,ATL,Sun  1:00pm ET,12,46.5,3,10,100%,99%,40,1,31.50,21.74,15.41
+RB,RR,Joe Mixon,HOU,DET,Sun  8:20pm ET,14,49,6,7,100%,98%,50,2,22.60,24.90,14.70
+QB,RR,Tua Tagovailoa,MIA,@LAR,Mon  8:15pm ET,6,50.5,13,18,81%,34%,50,2,18.54,15.33,16.05
+DST,RR,Chiefs,KC,DEN,Sun  1:00pm ET,6,41.5,5,19,100%,88%,1,2,2.00,7.25,9.00
+QB,RR,CJ Stroud,HOU,DET,Sun  8:20pm ET,14,49,19,14,96%,43%,133,2,14.54,15.66,16.65
+WR,RR,Jordan Addison,MIN,@JAC,Sun  1:00pm ET,6,43.5,34,28,92%,51%,5,4,15.10,10.15,7.91
+WR,RR,Diontae Johnson,BAL,CIN,Thu  8:15pm ET,14,53,---,15,86%,14%,4,3,0.00,8.43,5.81
+WR,RR,Jalen McMillan,TB,SF,Sun  1:00pm ET,11,50.5,---,16,47%,7%,3,3,0.00,4.62,6.41
+WR,RR,Cedric Tillman,CLE,BYE,,10,,---,,78%,2%,2,2,18.50,6.60,0.00
+TE,RR,Cole Kmet,CHI,NE,Sun  1:00pm ET,7,38.5,18,20,69%,22%,1,2,0.00,8.29,5.31
+QB,RR,Michael Penix,ATL,@NO,Sun  1:00pm ET,12,46.5,---,10,7%,1%,5,3,0.00,0.56,0.72
+DST,RR,Steelers,PIT,@WAS,Sun  1:00pm ET,9,45,9,1,89%,48%,1,1,0.00,10.12,7.20
+QB,SBS,Lamar Jackson,BAL,CIN,Thu  8:15pm ET,14,53,1,30,100%,99%,201,4,24.60,28.66,25.43
+RB,SBS,Austin Ekeler,WAS,PIT,Sun  1:00pm ET,14,45,26,9,95%,41%,16,1,19.30,10.62,8.00
+RB,SBS,Chuba Hubbard,CAR,NYG,Sun  9:30am ET,11,40.5,18,18,98%,80%,2,2,22.20,16.72,11.10
+WR,SBS,Rashod Bateman,BAL,CIN,Thu  8:15pm ET,14,53,---,15,37%,12%,1,3,3.50,9.71,6.51
+WR,SBS,Deebo Samuel,SF,@TB,Sun  1:00pm ET,9,50.5,8,25,100%,69%,51,3,0.00,10.89,9.41
+TE,SBS,Zach Ertz,WAS,PIT,Sun  1:00pm ET,14,45,15,12,74%,37%,1,2,0.50,6.89,5.61
+WR,SBS,Demarcus Robinson,LAR,MIA,Mon  8:15pm ET,6,50.5,36,4,69%,41%,1,2,26.40,10.09,8.32
+RB,SBS,Jonathan Taylor,IND,BUF,Sun  1:00pm ET,14,46.5,9,30,100%,97%,101,2,8.90,20.70,15.20
+QB,SBS,Jayden Daniels,WAS,PIT,Sun  1:00pm ET,14,45,5,2,98%,81%,40,3,22.86,23.41,23.83
+DST,SBS,Lions,DET,@HOU,Sun  8:20pm ET,5,49,7,11,79%,59%,1,2,10.00,10.62,7.80
+RB,SBS,Jerome Ford,CLE,BYE,,10,,---,,42%,1%,6,3,0.70,8.69,0.00
+RB,SBS,Antonio Gibson,NE,@CHI,Sun  1:00pm ET,14,38.5,---,19,41%,3%,1,2,1.20,5.87,2.40
+WR,SBS,Troy Franklin,DEN,@KC,Sun  1:00pm ET,14,41.5,---,7,8%,1%,3,3,2.90,3.31,2.40
+WR,SBS,Andrei Iosivas,CIN,@BAL,Thu  8:15pm ET,12,53,48,32,11%,3%,1,2,8.00,6.08,4.81
+WR,SBS,Jalen Tolbert,DAL,PHI,Sun  4:25pm ET,7,43.5,44,14,58%,21%,1,2,9.90,8.79,6.11
+WR,SBS,Alec Pierce,IND,BUF,Sun  1:00pm ET,14,46.5,---,5,34%,9%,3,2,7.10,8.50,6.51
+WR,SBS,Christian Watson,GB,BYE,,10,,---,,52%,2%,17,4,7.70,6.04,0.00
+QB,SBS,Russell Wilson,PIT,@WAS,Sun  1:00pm ET,9,45,18,17,52%,17%,1,2,0.00,20.34,15.68
+RB,SBS,Jaylen Wright,MIA,@LAR,Mon  8:15pm ET,6,50.5,---,21,24%,1%,5,3,2.80,4.11,2.80
+WR,SBS,Stefon Diggs,HOU,DET,Sun  8:20pm ET,14,49,---,30,35%,3%,39,2,0.00,13.41,0.00
+WR,SBS,Christian Kirk,JAC,MIN,Sun  1:00pm ET,12,43.5,---,31,28%,1%,5,4,0.00,7.75,0.00

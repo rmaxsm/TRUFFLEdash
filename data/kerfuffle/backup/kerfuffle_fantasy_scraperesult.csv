@@ -1,121 +1,121 @@
 Season,Week,TRUFFLE,Pos,Player,NFL,Opp,OpRk,PaCmp,PaAtt,PaYd,PaTD,PaInt,RuAtt,RuYd,RuTD,RuFD,Tar,Rec,ReYd,ReTD,ReFD,FL,Avg,FPts
-2024,7,ABT,RB,Alvin Kamara,NO,DEN,14,0,0,0,0,0,7,10,0,1,7,6,14,0,0,0,3.40,3.40
-2024,7,ABT,RB,Saquon Barkley,PHI,@NYG,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,ABT,RB,Chase Brown,CIN,@CLE,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,ABT,WR,Josh Downs,IND,MIA,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,ABT,WR,Roman Wilson,PIT,NYJ,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,ABT,RB,Alexander Mattison,LV,@LAR,29,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,ABT,QB,Andy Dalton,CAR,@WAS,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,ABT,TE,Hunter Henry,NE,@JAC,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,ABT,WR,JuJu Smith-Schuster,KC,@SF,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,ABT,DST,Seahawks,SEA,@ATL,6,,,,,,,,,,,,,,,,-,0.00
-2024,7,CLC,RB,Javonte Williams,DEN,@NO,27,0,0,0,0,0,14,88,2,6,3,3,23,0,1,0,30.10,30.10
-2024,7,CLC,QB,Justin Fields,PIT,NYJ,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,CLC,QB,Jordan Love,GB,HOU,23,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,CLC,WR,Darnell Mooney,ATL,SEA,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,CLC,WR,DeVonta Smith,PHI,@NYG,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,CLC,WR,Jaylen Waddle,MIA,@IND,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,CLC,RB,Jordan Mason,SF,KC,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,CLC,TE,Dalton Kincaid,BUF,TEN,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,CLC,RB,Breece Hall,NYJ,@PIT,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,CLC,DST,Bears,CHI,BYE,---,,,,,,,,,,,,,,,,-,0.00
-2024,7,CPC,RB,Derrick Henry,BAL,@TB,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,CPC,WR,Tyreek Hill,MIA,@IND,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,CPC,QB,Sam Darnold,MIN,DET,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,CPC,RB,Tony Pollard,TEN,@BUF,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,CPC,RB,Brian Robinson,WAS,CAR,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,CPC,RB,JK Dobbins,LAC,@ARI,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,CPC,TE,George Kittle,SF,KC,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,CPC,WR,Ja'Marr Chase,CIN,@CLE,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,CPC,QB,Drake Maye,NE,@JAC,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,CPC,DST,Jets,NYJ,@PIT,10,,,,,,,,,,,,,,,,-,0
-2024,7,DDD,QB,Jared Goff,DET,@MIN,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,DDD,QB,Deshaun Watson,CLE,CIN,29,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,DDD,WR,Tank Dell,HOU,@GB,21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,DDD,RB,Kenneth Walker,SEA,@ATL,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,DDD,TE,Sam LaPorta,DET,@MIN,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,DDD,WR,Zay Flowers,BAL,@TB,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,DDD,RB,Jahmyr Gibbs,DET,@MIN,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,DDD,RB,Bucky Irving,TB,BAL,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,DDD,WR,Malik Nabers,NYG,PHI,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,DDD,DST,Bengals,CIN,@CLE,28,,,,,,,,,,,,,,,,-,0
-2024,7,LBC,QB,Bo Nix,DEN,@NO,7,16,26,164,0,0,10,75,0,4,0,0,0,0,0,0,18.06,18.06
-2024,7,LBC,QB,Aaron Rodgers,NYJ,@PIT,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,LBC,TE,Evan Engram,JAC,NE,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,LBC,RB,Raheem Mostert,MIA,@IND,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,LBC,TE,Trey McBride,ARI,LAC,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,LBC,WR,Brandon Aiyuk,SF,KC,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,LBC,RB,Rhamondre Stevenson,NE,@JAC,23,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,LBC,WR,Drake London,ATL,SEA,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,LBC,TE,Brock Bowers,LV,@LAR,31,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
-2024,7,LBC,DST,Broncos,DEN,@NO,27,,,,,,,,,,,,,,,,21.00,21.00
-2024,7,LC,RB,James Conner,ARI,LAC,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,LC,TE,Dalton Schultz,HOU,@GB,23,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,LC,QB,Patrick Mahomes,KC,@SF,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,LC,QB,Jalen Hurts,PHI,@NYG,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,LC,WR,DK Metcalf,SEA,@ATL,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,LC,RB,Tyler Allgeier,ATL,SEA,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,LC,WR,Xavier Legette,CAR,@WAS,29,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,LC,WR,Xavier Worthy,KC,@SF,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,LC,WR,Allen Lazard,NYJ,@PIT,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,LC,DST,49ers,SF,KC,8,,,,,,,,,,,,,,,,-,0
-2024,7,MB,QB,Matthew Stafford,LAR,LV,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,MB,TE,Travis Kelce,KC,@SF,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,MB,WR,Cooper Kupp,LAR,LV,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,MB,QB,Kyler Murray,ARI,LAC,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,MB,RB,Tyrone Tracy,NYG,PHI,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,MB,WR,Amon-Ra St Brown,DET,@MIN,31,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,MB,RB,Ray Davis,BUF,TEN,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,MB,RB,Bijan Robinson,ATL,SEA,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,MB,WR,Marvin Harrison,ARI,LAC,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,MB,DST,Buccaneers,TB,BAL,1,,,,,,,,,,,,,,,,-,0
-2024,7,NBB,RB,Nick Chubb,CLE,CIN,21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,NBB,WR,Terry McLaurin,WAS,CAR,23,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,NBB,QB,Josh Allen,BUF,TEN,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,NBB,WR,Chris Godwin,TB,BAL,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,NBB,TE,Kyle Pitts,ATL,SEA,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,NBB,QB,Trevor Lawrence,JAC,NE,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,NBB,WR,Jayden Reed,GB,HOU,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,NBB,WR,Jameson Williams,DET,@MIN,31,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,NBB,RB,Ty Chandler,MIN,DET,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,NBB,DST,Bills,BUF,TEN,31,,,,,,,,,,,,,,,,-,0
-2024,7,PCP,QB,Geno Smith,SEA,@ATL,21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,PCP,QB,Joe Burrow,CIN,@CLE,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,PCP,TE,TJ Hockenson,MIN,DET,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,PCP,WR,AJ Brown,PHI,@NYG,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,PCP,TE,Pat Freiermuth,PIT,NYJ,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,PCP,RB,Kyren Williams,LAR,LV,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,PCP,WR,Garrett Wilson,NYJ,@PIT,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,PCP,WR,Keon Coleman,BUF,TEN,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,PCP,RB,Braelon Allen,NYJ,@PIT,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,PCP,DST,Ravens,BAL,@TB,14,,,,,,,,,,,,,,,,-,0
-2024,7,PP,QB,Kirk Cousins,ATL,SEA,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,PP,WR,Davante Adams,NYJ,@PIT,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,PP,WR,Amari Cooper,BUF,TEN,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,PP,WR,Courtland Sutton,DEN,@NO,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.00,0
-2024,7,PP,RB,Josh Jacobs,GB,HOU,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,PP,RB,David Montgomery,DET,@MIN,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,PP,QB,Brock Purdy,SF,KC,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,PP,WR,Romeo Doubs,GB,HOU,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,PP,TE,Tucker Kraft,GB,HOU,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,PP,DST,Chiefs,KC,@SF,17,,,,,,,,,,,,,,,,-,0
-2024,7,RR,QB,Baker Mayfield,TB,BAL,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,RR,RB,Joe Mixon,HOU,@GB,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,RR,WR,Diontae Johnson,CAR,@WAS,29,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,RR,RB,Najee Harris,PIT,NYJ,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,RR,WR,Justin Jefferson,MIN,DET,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,RR,WR,Jordan Addison,MIN,DET,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,RR,QB,CJ Stroud,HOU,@GB,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,RR,RB,Kareem Hunt,KC,@SF,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,RR,TE,Cole Kmet,CHI,BYE,---,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,RR,DST,Steelers,PIT,NYJ,22,,,,,,,,,,,,,,,,-,0
-2024,7,SBS,TE,Zach Ertz,WAS,CAR,29,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,SBS,WR,Stefon Diggs,HOU,@GB,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,SBS,WR,Deebo Samuel,SF,KC,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,SBS,WR,Christian Kirk,JAC,NE,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,SBS,QB,Lamar Jackson,BAL,@TB,31,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,SBS,RB,Austin Ekeler,WAS,CAR,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,SBS,RB,Chuba Hubbard,CAR,@WAS,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,SBS,WR,Christian Watson,GB,HOU,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,SBS,QB,Jayden Daniels,WAS,CAR,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
-2024,7,SBS,DST,Giants,NYG,PHI,24,,,,,,,,,,,,,,,,-,0
+2024,10,ABT,RB,Chase Brown,CIN,@BAL,6,0,0,0,0,0,13,42,1,1,11,9,52,0,3,1,17.40,17.40
+2024,10,ABT,WR,DJ Moore,CHI,NE,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,ABT,RB,Saquon Barkley,PHI,@DAL,31,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,ABT,TE,Jake Ferguson,DAL,PHI,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,ABT,WR,Puka Nacua,LAR,MIA,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,ABT,WR,Josh Downs,IND,BUF,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,ABT,QB,Caleb Williams,CHI,NE,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,ABT,RB,Najee Harris,PIT,@WAS,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,ABT,QB,Bryce Young,CAR,NYG,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,ABT,DST,Eagles,PHI,@DAL,21,,,,,,,,,,,,,,,,-,0.00
+2024,10,CLC,WR,Darnell Mooney,ATL,@NO,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,CLC,WR,DeVonta Smith,PHI,@DAL,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,CLC,WR,Nico Collins,HOU,DET,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,CLC,RB,Javonte Williams,DEN,@KC,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,CLC,WR,Jaylen Waddle,MIA,@LAR,26,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,CLC,TE,Dalton Kincaid,BUF,@IND,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,CLC,RB,Breece Hall,NYJ,@ARI,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,CLC,WR,Rome Odunze,CHI,NE,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,CLC,QB,Joe Flacco,IND,BUF,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,CLC,DST,Bears,CHI,NE,27,,,,,,,,,,,,,,,,-,0
+2024,10,CPC,WR,Ja'Marr Chase,CIN,@BAL,32,0,0,0,0,0,0,0,0,0,17,11,264,3,11,0,55.40,55.40
+2024,10,CPC,RB,Derrick Henry,BAL,CIN,11,0,0,0,0,0,16,68,1,3,1,1,3,0,0,0,16.10,16.10
+2024,10,CPC,WR,Tyreek Hill,MIA,@LAR,26,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,CPC,QB,Sam Darnold,MIN,@JAC,31,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,CPC,RB,Tony Pollard,TEN,@LAC,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,CPC,RB,JK Dobbins,LAC,TEN,14,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,CPC,TE,George Kittle,SF,@TB,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,CPC,RB,James Cook,BUF,@IND,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,CPC,QB,Drake Maye,NE,@CHI,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,CPC,DST,Vikings,MIN,@JAC,14,,,,,,,,,,,,,,,,-,0.00
+2024,10,DDD,QB,Jared Goff,DET,@HOU,23,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,DDD,TE,Mike Gesicki,CIN,@BAL,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,DDD,WR,Tank Dell,HOU,DET,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,DDD,TE,Sam LaPorta,DET,@HOU,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,DDD,WR,Zay Flowers,BAL,CIN,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,DDD,WR,Quentin Johnston,LAC,TEN,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,DDD,RB,Jahmyr Gibbs,DET,@HOU,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,DDD,RB,De'Von Achane,MIA,@LAR,21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,DDD,WR,Malik Nabers,NYG,@CAR,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,CPC,DST,Vikings,MIN,@JAC,14,,,,,,,,,,,,,,,,-,0.00
+2024,10,LBC,QB,Aaron Rodgers,NYJ,@ARI,21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,LBC,TE,Evan Engram,JAC,MIN,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,LBC,RB,Raheem Mostert,MIA,@LAR,21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,LBC,WR,Michael Pittman,IND,BUF,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,LBC,TE,Trey McBride,ARI,NYJ,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,LBC,QB,Bo Nix,DEN,@KC,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,LBC,RB,Rhamondre Stevenson,NE,@CHI,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,LBC,WR,Drake London,ATL,@NO,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,LBC,WR,Jalen Coker,CAR,NYG,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,LBC,DST,Broncos,DEN,@KC,6,,,,,,,,,,,,,,,,-,0
+2024,10,LC,WR,DeAndre Hopkins,KC,DEN,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,LC,RB,James Conner,ARI,NYJ,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,LC,TE,Dalton Schultz,HOU,DET,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,LC,QB,Patrick Mahomes,KC,DEN,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,LC,QB,Jalen Hurts,PHI,@DAL,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,LC,RB,Tyler Allgeier,ATL,@NO,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,LC,RB,Jaylen Warren,PIT,@WAS,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,LC,WR,Xavier Legette,CAR,NYG,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,LC,WR,Xavier Worthy,KC,DEN,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,LC,DST,49ers,SF,@TB,16,,,,,,,,,,,,,,,,-,0
+2024,10,MB,QB,Matthew Stafford,LAR,MIA,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,MB,TE,Travis Kelce,KC,DEN,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,MB,WR,Cooper Kupp,LAR,MIA,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,MB,RB,Aaron Jones,MIN,@JAC,26,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,MB,QB,Kyler Murray,ARI,NYJ,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,MB,RB,Tyrone Tracy,NYG,@CAR,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,MB,WR,Amon-Ra St Brown,DET,@HOU,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,MB,RB,Bijan Robinson,ATL,@NO,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,MB,WR,Marvin Harrison,ARI,NYJ,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,MB,DST,Buccaneers,TB,SF,12,,,,,,,,,,,,,,,,-,0
+2024,10,NBB,WR,Terry McLaurin,WAS,PIT,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,NBB,QB,Josh Allen,BUF,@IND,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,NBB,RB,D'Andre Swift,CHI,NE,29,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,NBB,TE,Kyle Pitts,ATL,@NO,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,NBB,QB,Trevor Lawrence,JAC,MIN,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,NBB,WR,Khalil Shakir,BUF,@IND,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,NBB,WR,Jameson Williams,DET,@HOU,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,NBB,WR,Brian Thomas,JAC,MIN,31,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,NBB,RB,Blake Corum,LAR,MIA,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,NBB,DST,Bills,BUF,@IND,18,,,,,,,,,,,,,,,,-,0
+2024,10,PCP,QB,Joe Burrow,CIN,@BAL,29,34,56,428,4,0,2,6,0,0,0,0,0,0,0,0,33.72,33.72
+2024,10,PCP,QB,Daniel Jones,NYG,@CAR,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,PCP,TE,TJ Hockenson,MIN,@JAC,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,PCP,RB,Rico Dowdle,DAL,PHI,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,PCP,WR,AJ Brown,PHI,@DAL,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,PCP,WR,CeeDee Lamb,DAL,PHI,14,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,PCP,RB,Kyren Williams,LAR,MIA,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,PCP,WR,Garrett Wilson,NYJ,@ARI,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,PCP,RB,Braelon Allen,NYJ,@ARI,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,PCP,DST,Ravens,BAL,CIN,13,,,,,,,,,,,,,,,,6.00,6.00
+2024,10,PP,QB,Kirk Cousins,ATL,@NO,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,PP,WR,Davante Adams,NYJ,@ARI,24,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,PP,WR,Amari Cooper,BUF,@IND,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,PP,RB,Christian McCaffrey,SF,@TB,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,PP,WR,Calvin Ridley,TEN,@LAC,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,PP,WR,Courtland Sutton,DEN,@KC,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,PP,QB,Justin Herbert,LAC,TEN,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,PP,RB,David Montgomery,DET,@HOU,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,PP,TE,Isaiah Likely,BAL,CIN,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,PP,DST,Texans,HOU,DET,4,,,,,,,,,,,,,,,,-,0
+2024,10,RR,QB,Baker Mayfield,TB,SF,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,RR,RB,Joe Mixon,HOU,DET,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,RR,QB,Tua Tagovailoa,MIA,@LAR,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,RR,TE,Cade Otton,TB,SF,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,RR,WR,Justin Jefferson,MIN,@JAC,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,RR,WR,George Pickens,PIT,@WAS,21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,RR,RB,Rachaad White,TB,SF,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,RR,RB,Kareem Hunt,KC,DEN,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,RR,RB,Alvin Kamara,NO,ATL,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0
+2024,10,RR,DST,Chiefs,KC,DEN,19,,,,,,,,,,,,,,,,-,0
+2024,10,SBS,QB,Lamar Jackson,BAL,CIN,30,25,33,290,4,0,7,33,0,2,0,0,0,0,0,0,34.90,34.90
+2024,10,SBS,WR,Rashod Bateman,BAL,CIN,15,0,0,0,0,0,0,0,0,0,8,6,54,1,4,0,15.40,15.40
+2024,10,SBS,TE,Zach Ertz,WAS,PIT,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,SBS,WR,Deebo Samuel,SF,@TB,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,SBS,RB,Austin Ekeler,WAS,PIT,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,SBS,RB,Chuba Hubbard,CAR,NYG,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,SBS,RB,Jonathan Taylor,IND,BUF,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,SBS,QB,Jayden Daniels,WAS,PIT,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,SBS,WR,Demarcus Robinson,LAR,MIA,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-,0.00
+2024,10,SBS,DST,Lions,DET,@HOU,11,,,,,,,,,,,,,,,,-,0.00

@@ -57,7 +57,7 @@ def getTeamAbbreviation(team):
     return teamsDict[team]
   except Exception as exp:
     #print("An Error Occuring while trying to get the team abbreviation for " + team)
-    return "W (9/1)"
+    return "FA"
 
 #separates the column names
 #returns list representing the columns for tables 
