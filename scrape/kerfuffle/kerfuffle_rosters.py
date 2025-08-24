@@ -10,14 +10,6 @@ headers = {}
 with open('dre/kerfuffle_headers.json', 'r') as file:
     headers = json.load(file)
 
-#get year and week for url/formatting
-season = input("What SEASON is it..? ")
-while(len(season) != 4):
-  print("get the SEASON right dumbass")
-  season = input("What SEASON is it..? ")
-
-
-
 #get information from teams document to refer to for shortcuts ext
 teamsPd = pd.read_csv("data/teams.csv")
 # re-assign the PD to get only KERFUFFLE
@@ -162,5 +154,5 @@ masterDf.to_csv(filepath, index=False)
 #save final csv
 dfGlobal.to_csv("data/kerfuffle/kerfuffle_rosters.csv", index = False)
 
-# print(dfGlobal)
+print(dfGlobal)
 print("\n\nkerfuffle roster script complete. saved at data/kerfuffle/kerfuffle_rosters.csv with backup data/kerfuffle/backup/kerfuffle_rosters_backup.csv\n")

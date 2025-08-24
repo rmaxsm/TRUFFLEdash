@@ -3,46 +3,38 @@ import dre.FantasyPros.fpAll as fp
 import dre.CBS.cbsAll as cbs
 import scrape.standingsScript as st
 import pandas as pd
+import argparse
 
+def main(season, week):
+    try:
+        espn.main(season)
+    except Exception as e:
+        print("There was an error running ESPN Main from ../scrape/advancedCombined.py")
+        print("Error is: ", e)
+        
+    try:
+        fp.main(season)
+    except Exception as e:
+        print("There was an error running FantasyPros Main from ../scrape/advancedCombined.py")
+        print("Error is: ", e)
+        
+    try:  
+        cbs.main(week, season)
+    except Exception as e:
+        print("There was an error running CBS Main from ../scrape/advancedCombined.py")
+        print("Error is: ", e)
+    
+    try:
+        st.main(season)
+    except Exception as e:
+        print("There was an error running Standings Script from ../scrape/advancedCombined.py")
+        print("Error is: ", e)
+        
+    print("\nALL DONE :)")
 
-def main():
-  
-  #get year and week for url/formatting
-  season = input("What SEASON is it..? ")
-  while(len(season) != 4):
-    season = input("What SEASON is it..? ")
-  
-  week = input("What WEEK is it..? ")
-  while(len(week) >= 3):
-    week = input("What WEEK is it..? ")
-  
-  try:
-    espn.main(season)
-  except Exception as e:
-    print("There was an error running ESPN Main from ../scrape/advancedCombined.py")
-    print("Error is: ", e)
-    
-  try:
-    fp.main(season)
-  except Exception as e:
-    print("There was an error running FantasyPros Main from ../scrape/advancedCombined.py")
-    print("Error is: ", e)
-    
-  try:  
-    cbs.main(week,season)
-  except Exception as e:
-    print("There was an error running CBS Main from ../scrape/advancedCombined.py")
-    print("Error is: ", e)
-  
-  try:
-    st.main(season)
-  except Exception as e:
-    print("There was an error running Standings Script from ../scrape/advancedCombined.py")
-    print("Error is: ", e)
-    
-  
-  print("\nALL DONE :)")
-
-  
 if __name__ == "__main__":
-  main()
+    parser = argparse.ArgumentParser(description="Run advanced combined script.")
+    parser.add_argument("--season", required=True, help="Season year (e.g., 2024)")
+    parser.add_argument("--week", required=True, help="Week number (e.g., 1)")
+    args = parser.parse_args()
+    main(args.season, args.week)
