@@ -160,13 +160,13 @@ response = requests.get(url, cookies=cookies, headers=headers)
 soup = BeautifulSoup(response.content, 'html.parser')
 
 # complete =  soup.find("div", {"id": "sortableStats"})
-tbls =  soup.findAll("table", {"class":"data data3 pinHeader borderTop"})
+tbls =  soup.find_all("table", {"class":"data data3 pinHeader borderTop"})
 dfGlobal = pd.DataFrame()
 counter = 0
 
 for tbl in tbls:
   # print(tbl.prettify())
-  tableRows = tbl.findAll('tr')
+  tableRows = tbl.find_all('tr')
   
   teamName = ""
   cols = []

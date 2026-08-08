@@ -81,19 +81,19 @@ bigN <- 9999999999
 
 #file of TRUFFLE team info
 # teams.csv ----
-teams <- as.data.table(read_csv("data/teams.csv", col_types = cols()))
+teams <- as.data.table(readr::read_csv("data/teams.csv", col_types = cols()))
 
 
 # ids.csv ----
 #file of CBS player IDs
-ids <- as.data.table(read_csv("data/playerIDs.csv", col_types = cols()))
+ids <- as.data.table(readr::read_csv("data/playerIDs.csv", col_types = cols()))
 
 ids$playerID <- as.character(ids$playerID)
-ids$TRUFFLE[!(ids$TRUFFLE %in% c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW"))] <- "FA"
-ids <- merge(ids, teams[, c("Abbrev", "TeamNum")], by.x = "TRUFFLE", by.y = "Abbrev", all.x = T)
+#ids$TRUFFLE[!(ids$TRUFFLE %in% c("AFL","CC","CRB","ELP","FRR","GF","MAM","MCM","MWM","NN","VD","WLW"))] <- "FA"
+#ids <- merge(ids, teams[, c("Abbrev", "TeamNum")], by.x = "TRUFFLE", by.y = "Abbrev", all.x = T)
 
 #import fantasy pros file to use for age
-fprosage <- read_csv("data/fprosage.csv", col_types = cols())
+fprosage <- readr::read_csv("data/fprosage.csv", col_types = cols())
 cleanFprosage <- function(file) {
   file$TIERS <- NULL
   file$`ECR VS. ADP` <- NULL
@@ -110,7 +110,7 @@ cleanFprosage <- function(file) {
   file$Pos <- substr(file$DynPosRk, 1, 2)
   
   #read in birthdays
-  bdays <- read_csv("data/birthdays.csv", col_types = cols())
+  bdays <- readr::read_csv("data/birthdays.csv", col_types = cols())
   bdays$player <- str_replace_all(bdays$player,"\\.","")
   bdays$player <- str_replace_all(bdays$player," Jr","")
   bdays$player <- str_replace_all(bdays$player," Sr","")
@@ -129,12 +129,25 @@ cleanFprosage <- function(file) {
 }
 fprosage <- as.data.table(cleanFprosage(fprosage))
 
+#read in birthdays
+bdays <- readr::read_csv("data/birthdays.csv", col_types = cols())
+bdays$player <- str_replace_all(bdays$player,"\\.","")
+bdays$player <- str_replace_all(bdays$player," Jr","")
+bdays$player <- str_replace_all(bdays$player," Sr","")
+bdays$player <- str_replace_all(bdays$player," III","")
+bdays$player <- str_replace_all(bdays$player," II","")
+bdays$player <- str_replace_all(bdays$player,"Will Fuller V","Will Fuller")
+bdays$player <- str_replace_all(bdays$player,"La'Mical","Lamical")
+
+bdays$birthday <- as.Date(bdays$birthday, "%m/%d/%y")
+colnames(bdays) <- c("Player", "Pos", "NFL", "Birthday")
+
 # rosters.csv ----
 #file of current TRUFFLE & KERFUFFLE rosterand insert league column
-trf_rosters <- read_csv("data/rosters.csv", col_types = cols())
+trf_rosters <- readr::read_csv("data/rosters.csv", col_types = cols())
 trf_rosters$League <- "TRUFFLE"
 
-krf_rosters <- read_csv("data/kerfuffle/kerfuffle_rosters.csv", col_types = cols())
+krf_rosters <- readr::read_csv("data/kerfuffle/kerfuffle_rosters.csv", col_types = cols())
 krf_rosters$League <- "KERFUFFLE"
 
 #colnames discrepancy fix
@@ -162,10 +175,11 @@ cleanRosters <- function(file) {
   return(file)
 }
 rosters <- cleanRosters(rosters)
+#rosters$Pos[rosters$Pos == "QB,TE"] <- "TE"
 
 # oldrosters.csv ----
 #get old rosters and merge in current teams to see what TRUFFLE team players were on which year
-oldrosters <- as.data.table(read_csv("data/oldrosters.csv", col_types = cols()))
+oldrosters <- as.data.table(readr::read_csv("data/oldrosters.csv", col_types = cols()))
 
 #calculate rings and bench cup wins to display in record books
 rings <- oldrosters[,
@@ -191,18 +205,19 @@ oldrosters$Ring <- NULL; oldrosters$BenchCup <- NULL
 
 #add current year rosters
 mergerosters <- rosters[, .(League, TRUFFLE, Pos, Player, NFL, Salary, Contract)]
-mergerosters$Season <- currentyr
+mergerosters$Season <- 2025
 mergerosters <- mergerosters[, .(League, Season, TRUFFLE, Pos, Player, NFL, Salary, Contract)]
 oldrosters <- as.data.table(rbind(oldrosters, mergerosters))[order(Player,Season)]
+#oldrosters$Pos[oldrosters$Pos == "QB,TE"] <- "TE"
 rm(mergerosters)
 
 # fantasy.csv ----
 #file of weekly scoring for players started/active in TRUFFLE
 # #file of current TRUFFLE & KERFUFFLE fantasy and insert league column
-trf_fantasy <- as.data.table(read_csv("data/fantasy.csv", col_types = cols()))
+trf_fantasy <- as.data.table(readr::read_csv("data/fantasy.csv", col_types = cols()))
 trf_fantasy$League <- "TRUFFLE"
 
-krf_fantasy <- read_csv("data/kerfuffle/kerfuffle_fantasy.csv", col_types = cols())
+krf_fantasy <- readr::read_csv("data/kerfuffle/kerfuffle_fantasy.csv", col_types = cols())
 krf_fantasy$League <- "KERFUFFLE"
 
 #colnames discrepancy fix
@@ -252,16 +267,28 @@ teamsfantasy <- fantasy[,
                                                                 ),
                                                                 by = .(Scoring, Season, TRUFFLE)][order(-Total)]
 
+teamsfantasy_regszn <- fantasy[Week <= 14,
+                        .(FPts = sum(FPts, na.rm = T)),
+                        by = .(TRUFFLE, Scoring, Season, Week)][Scoring == "PPFD",
+                                                                .(Weekly = list(round(FPts,2)),
+                                                                  Low = min(FPts, na.rm = T),
+                                                                  High = max(FPts, na.rm = T),
+                                                                  StdDev = round(sd(FPts, na.rm = T)),
+                                                                  Avg = round(mean(FPts, na.rm = T)),
+                                                                  Total = round(sum(FPts, na.rm = T))
+                                                                ),
+                                                                by = .(Scoring, Season, TRUFFLE)][order(-Total)]
+
 #optscoring.csv ----
 #file of all fantasy players for optimal scoring calculation
-trfopt <- as.data.table(read_csv("data/optScoring.csv", col_types = cols()))
-krfopt <- as.data.table(read_csv("data/kerfuffle/kerfuffle_optScoring.csv", col_types = cols()))
-wks <- max(trfopt$Week)
+trfopt <- as.data.table(readr::read_csv("data/optScoring.csv", col_types = cols()))
+krfopt <- as.data.table(readr::read_csv("data/kerfuffle/kerfuffle_optScoring.csv", col_types = cols()))
+wks <- ifelse(max(trfopt$Week) < 14, max(trfopt$Week), 14)
+szns <- length(unique(trfopt$Season))
 trfopt$League <- "TRUFFLE"
 krfopt$League <- "KERFUFFLE"
 opt <- rbind(trfopt,krfopt); rm(trfopt, krfopt)
-
-
+opt$FPts[opt$Pos == "DST" & is.na(opt$FPts)] <- opt$PaCmp[opt$Pos == "DST" & is.na(opt$FPts)]
 
 #fix
 opt$FPts[is.na(opt$FPts)] <- 0
@@ -283,48 +310,50 @@ KRF <- c( "ABT","CLC","CPC","DDD","LBC","LC", "MB","NBB","PCP","PP","RR","SBS")
 all <- c(TRF,KRF)
 
 #linear program optiimzation loop
-for (t in 1:24) {
-  for (w in 1:wks) {
-    #filter optfile down to input data by week & team within loop
-    inputdata <- opt[TRUFFLE == all[t] & Week == w]
-    
-    #linear program definition
-    #constraints
-    constraints <- rbind(inputdata$Pos == "QB", inputdata$Pos == "QB",
-                         inputdata$Pos == "RB", inputdata$Pos == "RB",
-                         inputdata$Pos == "WR", inputdata$Pos == "WR",
-                         inputdata$Pos == "TE", inputdata$Pos == "TE",
-                         inputdata$Pos == "DST",
-                         rep(1,nrow(inputdata)))
-    #limits
-    rhs <- c(1,2,
-             2,5,
-             2,5,
-             1,4,
-             1,
-             10)
-    
-    #directions
-    dir <- c(">=","<=",
-             ">=","<=",
-             ">=","<=",
-             ">=","<=",
-             "=",
-             "=")
-    
-    #define objective function values & run optimization
-    obj <- inputdata$FPts
-    optimum <- lp("max",obj,constraints,dir,rhs,all.bin = TRUE)
-    bestsol <- optimum$solution
-    
-    #index optimal lineup and order positions
-    solution <- inputdata[bestsol > 0, .(Season, Week, TRUFFLE, Pos, Player, FPts, League)]
-    positionorder <- c("QB","RB","WR","TE","DST")
-    
-    optlineups <- rbind(optlineups, solution[order(match(solution$Pos, positionorder)),])
-    # Check the value of objective function at optimal point
-    #print(paste("Total Points: ", optimum$objval, sep=""))
-    
+for(s in 1:szns) {
+  for (t in 1:24) {
+    for (w in 1:wks) {
+      #filter optfile down to input data by week & team within loop
+      inputdata <- opt[TRUFFLE == all[t] & Week == w & Season == (2023 + s)]
+      
+      #linear program definition
+      #constraints
+      constraints <- rbind(inputdata$Pos == "QB", inputdata$Pos == "QB",
+                           inputdata$Pos == "RB", inputdata$Pos == "RB",
+                           inputdata$Pos == "WR", inputdata$Pos == "WR",
+                           inputdata$Pos == "TE", inputdata$Pos == "TE",
+                           inputdata$Pos == "DST",
+                           rep(1,nrow(inputdata)))
+      #limits
+      rhs <- c(1,2,
+               2,5,
+               2,5,
+               1,4,
+               1,
+               10)
+      
+      #directions
+      dir <- c(">=","<=",
+               ">=","<=",
+               ">=","<=",
+               ">=","<=",
+               "=",
+               "=")
+      
+      #define objective function values & run optimization
+      obj <- inputdata$FPts
+      optimum <- lp("max",obj,constraints,dir,rhs,all.bin = TRUE)
+      bestsol <- optimum$solution
+      
+      #index optimal lineup and order positions
+      solution <- inputdata[bestsol > 0, .(Season, Week, TRUFFLE, Pos, Player, FPts, League)]
+      positionorder <- c("QB","RB","WR","TE","DST")
+      
+      optlineups <- rbind(optlineups, solution[order(match(solution$Pos, positionorder)),])
+      # Check the value of objective function at optimal point
+      #print(paste("Total Points: ", optimum$objval, sep=""))
+      
+    }
   }
 }
 
@@ -345,14 +374,14 @@ optszn <- optweeks[,
                    by = .(League, Season, TRUFFLE)][order(-Season, -OptTotal)]
 
 # join in actual scoring data and create final columns
-optszn <- merge(x = optszn, y = teamsfantasy[Scoring == "PPFD", .(Season, TRUFFLE, Total)], by = c("Season", "TRUFFLE"))
+optszn <- merge(x = optszn, y = teamsfantasy_regszn[Scoring == "PPFD", .(Season, TRUFFLE, Total)], by = c("Season", "TRUFFLE"))
 optszn$PtsMissed <- optszn$Total - optszn$OptTotal
 optszn$`%Opt` <- round(optszn$Total / optszn$OptTotal, 3)
 optszn <- optszn[order(-OptTotal)]
 
 # seasons.csv ----
 #file of full season data for players dating back to 2015
-seasons <- as.data.table(read_csv("data/seasons.csv", col_types = cols()))
+seasons <- as.data.table(readr::read_csv("data/seasons.csv", col_types = cols()))
 
 cleanSeasons <- function(file) {
   #create scoring setting column and initial PPFD file version
@@ -384,7 +413,7 @@ cleanSeasons <- function(file) {
 seasons <- as.data.table(cleanSeasons(seasons))
 # weekly.csv ----
 #file of weekly scoring across NFL
-weekly <- as.data.table(read_csv("data/weekly.csv", col_types = cols()))
+weekly <- as.data.table(readr::read_csv("data/weekly.csv", col_types = cols()))
 
 cleanWeekly <- function(file) {
   #remove players that didnt play in a week
@@ -465,7 +494,7 @@ rm(currentseason)
 seasons <- seasons[order(Scoring, -Season,-FPts, -Avg)][, `:=`(PosRk = 1:.N), by = .(Scoring, Season, Pos)]
 
 #file of projections, mainly to be used during offseason
-proj <- as.data.table(read_csv("data/projections.csv", col_types = cols()))
+proj <- as.data.table(readr::read_csv("data/projections.csv", col_types = cols()))
 #until Dre builds cleaning scrape file that accounts for names
 proj$Player <- str_replace_all(proj$Player,"\\.","")
 proj$Player <- str_replace_all(proj$Player," Jr","")
@@ -497,26 +526,26 @@ proj <- proj[order(-FPts)][, `:=`(PosRk = 1:.N), by = .(Season, Pos)]
 
 #file of standings
 #notliveyet
-standings <- as.data.table(read_csv("data/standings.csv", col_types = cols()))
+standings <- as.data.table(readr::read_csv("data/standings.csv", col_types = cols()))
 
 #file to indicate what players have rookie rights
-rookierights <- as.data.table(read_csv("data/rookierights.csv", col_types = cols()))
+rookierights <- as.data.table(readr::read_csv("data/rookierights.csv", col_types = cols()))
 
 #file of draft records
-draft <- as.data.table(read_csv("data/drafts.csv", col_types = cols()))
+draft <- as.data.table(readr::read_csv("data/drafts.csv", col_types = cols()))
 
 #franchise tag files
-#franchised <- as.data.table(read_csv("data/franchisetag.csv", col_types = cols()))
-#top5paid <- as.data.table(read_csv("data/top5paid.csv", col_types = cols()))
+#franchised <- as.data.table(readr::read_csv("data/franchisetag.csv", col_types = cols()))
+#top5paid <- as.data.table(readr::read_csv("data/top5paid.csv", col_types = cols()))
 #demodata
-franchised <- as.data.table(read_csv("data/franchisetag.csv", col_types = cols()))
-top5paid <- as.data.table(read_csv("data/top5paid.csv", col_types = cols()))
+franchised <- as.data.table(readr::read_csv("data/franchisetag.csv", col_types = cols()))
+top5paid <- as.data.table(readr::read_csv("data/top5paid.csv", col_types = cols()))
 
 #rivalry scorers
-riv <- as.data.table(read_csv("data/rivalries.csv", col_types = cols()))
+riv <- as.data.table(readr::read_csv("data/rivalries.csv", col_types = cols()))
 
 #rivalry scores
-rivscores <- as.data.table(read_csv("data/rivalryscores.csv", col_types = cols()))
+rivscores <- as.data.table(readr::read_csv("data/rivalryscores.csv", col_types = cols()))
 
 rivscores$Winner <- ifelse(rivscores$Team1Score > rivscores$Team2Score, rivscores$Team1, rivscores$Team2)
 rivscores$Icon <- "www/graphics/rivalrylogos/blank.png"
@@ -548,7 +577,7 @@ turkeyscorers <- rivfantasy[Thanksgiving == 1,
 
 
 #read in advanced combined files
-extradash <- as.data.table(read_csv("data/extraDash.csv", col_types = cols()))
+extradash <- as.data.table(readr::read_csv("data/extraDash.csv", col_types = cols()))
 #remove extradash TRUFFLE column because it gets merged in Server
 extradash$TRUFFLE <- NULL
 
@@ -585,7 +614,7 @@ extradashszn <- extradash[,
 extradashszn <- extradashszn[order(-TotYd)]
 
 #espn data
-espn <- suppressWarnings(as.data.table(read_csv("data/espnStats.csv", col_types = cols(Season = col_double(), Player = col_character(), NFL = col_character(),
+espn <- suppressWarnings(as.data.table(readr::read_csv("data/espnStats.csv", col_types = cols(Season = col_double(), Player = col_character(), NFL = col_character(),
                                                                       Pos = col_character(), xFP = col_double(), ActualPts = col_double(), xTD = col_double(),
                                                                       TD = col_double(), Looks = col_double(), Diff = col_double(), In5 = col_double(), EZ = col_double()))))
 
@@ -617,8 +646,7 @@ colnames(espn)[9] <- "TDDiff"
 espn <- espn[, .(Season, Pos, Player, xFP, ActualPts, FPDiff, xTD, TD, TDDiff, Looks, `In5`, EZ)]
 
 #snaps data
-#demodata
-snaps <- as.data.table(read_csv("data/snapPer.csv", col_types = cols()))
+snaps <- as.data.table(readr::read_csv("data/snapPer.csv", col_types = cols()))
 snaps <- snaps[, c(1, 3, 2, 4:22, 24, 23)]
 snaps[snaps == "bye"] <- NA
 colnames(snaps)[23:24] <- c("Avg", "Tot")
@@ -1932,3 +1960,4 @@ z_g30pDef <- colDef(header = z_with_tt(">30%", "Percentage of Weeks scoring >30 
 source("dashboardPage.R")
 source("loginPage.R")
 source("guestUI.R")
+#source("TRUFFLEdashOmni.R")
