@@ -1,0 +1,64 @@
+name: Rosters scrape
+
+on:
+  schedule:
+    # Daily at 13:00 UTC (~9am ET) - rosters can change any day (waivers/trades),
+    # unlike week-scoped data.
+    - cron: "0 13 * * *"
+  workflow_dispatch:
+    inputs:
+      database:
+        description: "MotherDuck database to write to"
+        required: true
+        default: "td_backup_2025"
+      dry_run:
+        description: "Report what would change without writing"
+        type: boolean
+        required: true
+        default: true
+
+jobs:
+  scrape-rosters:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Scrape TRUFFLE rosters
+        working-directory: scrape
+        env:
+          CBS_TRUFFLE_COOKIES_JSON: ${{ secrets.CBS_TRUFFLE_COOKIES_JSON }}
+          CBS_TRUFFLE_HEADERS_JSON: ${{ secrets.CBS_TRUFFLE_HEADERS_JSON }}
+        run: python rosters.py
+
+      - name: Scrape KERFUFFLE rosters
+        working-directory: scrape
+        env:
+          CBS_KERFUFFLE_COOKIES_JSON: ${{ secrets.CBS_KERFUFFLE_COOKIES_JSON }}
+          CBS_KERFUFFLE_HEADERS_JSON: ${{ secrets.CBS_KERFUFFLE_HEADERS_JSON }}
+        run: python kerfuffle/kerfuffle_rosters.py
+
+      - name: Write current season to MotherDuck
+        working-directory: scrape
+        env:
+          MOTHERDUCK_TOKEN: ${{ secrets.MOTHERDUCK_TOKEN }}
+        run: >
+          python rosters_to_motherduck.py
+          --database "${{ github.event.inputs.database || 'td_backup_2025' }}"
+          ${{ (github.event.inputs.dry_run == 'false') && ' ' || '--dry-run' }}
+
+      - name: Upload scraped CSVs as artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rosters-csv-${{ github.run_id }}
+          path: |
+            data/rosters.csv
+            data/kerfuffle/kerfuffle_rosters.csv
+          retention-days: 30
