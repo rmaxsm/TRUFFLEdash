@@ -22,8 +22,9 @@ import datetime
 import pandas as pd
 from playwright.sync_api import sync_playwright
 
-from cbs_scrape_utils import get_current_season_week
+from cbs_scrape_utils import clean_player_name, get_current_season_week
 from fantasypros_auth import get_cookies_and_headers, to_playwright_cookies
+from snaps_name_aliases import apply_name_aliases
 
 WK_COLS = [str(i) for i in range(1, 19)]
 
@@ -65,6 +66,12 @@ def scrape_snap_counts(season: int) -> pd.DataFrame:
     df = pd.DataFrame(rows, columns=columns)
     df.insert(0, "Season", season)
     df = df.rename(columns={"Team": "NFL", "TTL": "Total"})
+
+    # clean names before writing the raw CSV, same convention as every other
+    # scraper (rosters.py, playerIDs.py) - not deferred to the MotherDuck
+    # transform step, so data/snapPer.csv itself always has correct names.
+    df["Player"] = clean_player_name(df["Player"])
+    df["Player"] = apply_name_aliases(df["Player"])
 
     # normalize source formatting: strip "%" and convert to 0-1 proportions,
     # strip comma-thousands-separators from Total. "BYE" (and anything else
