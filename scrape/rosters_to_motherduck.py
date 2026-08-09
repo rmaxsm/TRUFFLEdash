@@ -1,5 +1,5 @@
-"""Combines the TRUFFLE + KERFUFFLE roster scrape CSVs and upserts the current
-season's rows into MotherDuck's `rosters` table.
+"""Upserts the current season's rows from the combined roster scrape CSV into
+MotherDuck's `rosters` table.
 
 Ports the logic from global.R's rosters.csv/oldrosters.csv merge (see
 truffledash.com/R to Python Scripts/rosters.R) with one key change: rather than
@@ -26,15 +26,8 @@ TARGET_COLUMNS = [
 ]
 
 
-def build_current_season_rosters(trf_csv: str, krf_csv: str, season: int) -> pd.DataFrame:
-    trf = pd.read_csv(trf_csv)
-    trf["League"] = "TRUFFLE"
-
-    krf = pd.read_csv(krf_csv)
-    krf["League"] = "KERFUFFLE"
-    krf.columns = trf.columns  # colname discrepancy fix, matching global.R
-
-    combined = pd.concat([trf, krf], ignore_index=True)
+def build_current_season_rosters(rosters_csv: str, season: int) -> pd.DataFrame:
+    combined = pd.read_csv(rosters_csv)
     combined = combined[["League", "TRUFFLE", "Pos", "Player", "NFL", "Salary", "Contract"]].copy()
 
     # Build the composite-key strings using the plain int season (so keys read
@@ -88,5 +81,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     season = get_current_season()
-    df = build_current_season_rosters("data/rosters.csv", "data/kerfuffle/kerfuffle_rosters.csv", season)
+    df = build_current_season_rosters("data/rosters.csv", season)
     upsert_rosters(df, args.database, season, dry_run=args.dry_run)

@@ -30,19 +30,14 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Scrape TRUFFLE rosters
+      - name: Scrape TRUFFLE + KERFUFFLE rosters
         env:
           CBS_TRUFFLE_COOKIES_JSON: ${{ secrets.CBS_TRUFFLE_COOKIES_JSON }}
           CBS_TRUFFLE_HEADERS_JSON: ${{ secrets.CBS_TRUFFLE_HEADERS_JSON }}
-          OMNI_API_KEY: ${{ secrets.OMNI_API_KEY }}
-        run: python scrape/rosters.py
-
-      - name: Scrape KERFUFFLE rosters
-        env:
           CBS_KERFUFFLE_COOKIES_JSON: ${{ secrets.CBS_KERFUFFLE_COOKIES_JSON }}
           CBS_KERFUFFLE_HEADERS_JSON: ${{ secrets.CBS_KERFUFFLE_HEADERS_JSON }}
           OMNI_API_KEY: ${{ secrets.OMNI_API_KEY }}
-        run: python scrape/kerfuffle/kerfuffle_rosters.py
+        run: python scrape/rosters.py
 
       - name: Write current season to MotherDuck
         env:
@@ -57,7 +52,5 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: rosters-csv-${{ github.run_id }}
-          path: |
-            data/rosters.csv
-            data/kerfuffle/kerfuffle_rosters.csv
+          path: data/rosters.csv
           retention-days: 30
