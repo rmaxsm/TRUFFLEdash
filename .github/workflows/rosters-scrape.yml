@@ -8,11 +8,11 @@ on:
   workflow_dispatch:
     inputs:
       database:
-        description: "MotherDuck database to write to"
+        description: "MotherDuck DB to write to"
         required: true
         default: "td_backup_2025"
       dry_run:
-        description: "Report what would change without writing"
+        description: "Dry Run (Report Diff, No Overwrite)"
         type: boolean
         required: true
         default: true
