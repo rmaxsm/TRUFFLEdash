@@ -37,13 +37,40 @@ def get_current_season(as_of: datetime.date = None) -> int:
     return as_of.year if as_of.month >= 6 else as_of.year - 1
 
 
+def get_current_season_week(as_of: datetime.date = None,
+                             sundates_csv: str = "TRUFFLEdashOmni/data/sundates.csv") -> tuple:
+    """Active (season, week) for a given date, looked up from the Sunday-kickoff
+    reference table - unlike get_current_season() (a simple June-rollover rule
+    for roster/contract labeling), this tracks actual NFL game weeks, needed by
+    any scraper whose CBS URL is parameterized by week (e.g. playerIDs.py,
+    weekly.py, fantasy.py).
+
+    Returns the most recent (Season, Week) whose sunDate is <= as_of - i.e. the
+    week whose games have already happened, matching how these scrapers are
+    always run mid-week to fetch the just-completed week's data.
+    """
+    as_of = as_of or datetime.date.today()
+    dates = pd.read_csv(sundates_csv)
+    dates["sunDate"] = pd.to_datetime(dates["sunDate"], format="%m/%d/%y")
+    dates = dates[dates["sunDate"] <= pd.Timestamp(as_of)]
+    if dates.empty:
+        raise ValueError(f"No sundates.csv row on or before {as_of} - reference table needs extending")
+    row = dates.sort_values("sunDate").iloc[-1]
+    return int(row["Season"]), int(row["Week"])
+
+
 _WAIVED_PREFIX = re.compile(r"^W ")
 
 
-def get_team_abbreviation_lookup(teams_df: pd.DataFrame, league: str) -> dict:
-    """Team FullName -> Abbrev lookup for a given league, from data/teams.csv."""
+def get_team_abbreviation_lookup(teams_df: pd.DataFrame, league: str, name_col: str = "FullName") -> dict:
+    """Team name -> Abbrev lookup for a given league, from data/teams.csv.
+
+    name_col varies by which CBS page is being scraped: the roster page shows
+    full team names (FullName), while the stats pages truncate them
+    (LogsScrape, e.g. "Arctic..." for "Arctic Fighting Lemurloos").
+    """
     league_teams = teams_df[teams_df["League"] == league.upper()]
-    return dict(zip(league_teams["FullName"], league_teams["Abbrev"]))
+    return dict(zip(league_teams[name_col], league_teams["Abbrev"]))
 
 
 def get_team_abbreviation(team_name: str, lookup: dict) -> str:

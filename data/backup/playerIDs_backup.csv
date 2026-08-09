@@ -1,1836 +1,1969 @@
 playerID,Player,Pos,NFL,TRUFFLE
-1925,49ers,DST,SF,W (10/23)
-3169283,AJ Barner,TE,SEA,MCM
-2258303,AJ Brown,WR,PHI,AFL
-2867083,AJ Dillon,RB,PHI,W (10/23)
-3169276,AJ Henning,WR,MIA,W (10/23)
-1691424,AJ McCarron,QB,CIN,W (10/23)
-3117015,AJ Richardson,WR,ARI,W (10/23)
-2245147,AJ Rose,RB,LAR,W (10/23)
-2965235,AT Perry,WR,DEN,W (10/23)
-2820501,Aaron Bailey,WR,BAL,W (10/23)
-2964516,Aaron Dykes,RB,MIN,W (10/23)
-2071937,Aaron Jones,RB,MIN,AFL
-419780,Aaron Rodgers,QB,PIT,CC
-2820186,Aaron Shampklin,RB,MIA,W (10/23)
-2807112,Abram Smith,RB,MIN,W (10/23)
-3127655,Aca'Cedric Ware,RB,TB,W (10/23)
-2133458,Adam Choice,RB,SEA,W (10/23)
-2188826,Adam Prentice,RB,DEN,W (10/23)
-2059362,Adam Thielen,WR,MIN,W (10/23)
-2182228,Adam Trautman,TE,DEN,W (10/23)
-26701928,Adonai Mitchell,WR,IND,AFL
-2966360,Adrian Martinez,QB,SF,W (10/23)
-3162108,Ahmani Marshall,RB,CLE,W (10/23)
-3123946,Ahmarean Brown,WR,BUF,W (10/23)
-2868716,Aidan O'Connell,QB,LV,W (10/23)
-3123398,Aidan Robbins,RB,CLE,W (10/23)
-3131553,Ainias Smith,WR,CAR,W (10/23)
-3161800,Ajou Ajou,WR,IND,W (10/23)
-2245117,Albert Okwuegbunam,TE,LV,W (10/23)
-2966128,Alec Holler,TE,DAL,W (10/23)
-2183930,Alec Ingold,RB,MIA,W (10/23)
-2965664,Alec Pierce,WR,IND,WLW
-3159106,Aleva Hifo,WR,ARI,W (10/23)
-2818312,Alex Armah,RB,WAS,W (10/23)
-2186388,Alex Bachman,WR,LV,W (10/23)
-1983823,Alex Erickson,WR,HOU,W (10/23)
-2828649,Alex Gray,TE,ATL,W (10/23)
-2132602,Alex McGough,QB,GB,W (10/23)
-2142830,Alex Wesley,WR,CHI,W (10/23)
-2257933,Alexander Mattison,RB,MIA,W (10/23)
-26745241,Alfonzo Graham,RB,PIT,W (10/23)
-2186666,Alize Mack,TE,TEN,W (10/23)
-2141655,Allen Lazard,WR,NYJ,W (10/23)
-1889923,Allen Robinson,WR,DET,W (10/23)
-2082721,Alvin Kamara,RB,NO,MAM
-26745358,Amar Johnson,RB,LAC,W (10/23)
-1984220,Amari Cooper,WR,LV,W (10/23)
-2001582,Amba Etta-Tawo,WR,HOU,W (10/23)
-1824308,Ameer Abdullah,RB,IND,W (10/23)
+1925,49ers,DST,SF,W 
+3169283,AJ Barner,TE,SEA,W 
+2258303,AJ Brown,WR,NE,W 
+2867083,AJ Dillon,RB,CAR,W 
+3169276,AJ Henning,WR,MIA,W 
+3117015,AJ Richardson,WR,ARI,W 
+2245147,AJ Rose,RB,LAR,W 
+2965235,AT Perry,WR,PIT,W 
+28877406,Aaron Anderson,WR,CLE,W 
+2820501,Aaron Bailey,WR,BAL,W 
+2964516,Aaron Dykes,RB,MIN,W 
+2071937,Aaron Jones,RB,MIN,W 
+419780,Aaron Rodgers,QB,PIT,W 
+2820186,Aaron Shampklin,RB,MIA,W 
+2807112,Abram Smith,RB,MIN,W 
+3127655,Aca'Cedric Ware,RB,TB,W 
+2133458,Adam Choice,RB,SEA,W 
+2188826,Adam Prentice,RB,DEN,W 
+28878514,Adam Randall,RB,BAL,MCM
+2059362,Adam Thielen,WR,PIT,W 
+2182228,Adam Trautman,TE,DEN,W 
+26701928,Adonai Mitchell,WR,NYJ,AFL
+2966360,Adrian Martinez,QB,SF,W 
+3162108,Ahmani Marshall,RB,CLE,W 
+3123946,Ahmarean Brown,WR,BUF,W 
+2868716,Aidan O'Connell,QB,LV,W 
+3123398,Aidan Robbins,RB,CLE,W 
+3131553,Ainias Smith,WR,CAR,W 
+3161800,Ajou Ajou,WR,IND,W 
+2245117,Albert Okwuegbunam,TE,LV,W 
+2966128,Alec Holler,TE,DAL,W 
+2183930,Alec Ingold,RB,LAC,W 
+2965664,Alec Pierce,WR,IND,W 
+3159106,Aleva Hifo,WR,ARI,W 
+2186388,Alex Bachman,WR,LV,W 
+2828649,Alex Gray,TE,ATL,W 
+2132602,Alex McGough,QB,GB,W 
+2142830,Alex Wesley,WR,CHI,W 
+2257933,Alexander Mattison,RB,MIA,W 
+26745241,Alfonzo Graham,RB,PIT,W 
+2186666,Alize Mack,TE,TEN,W 
+2141655,Allen Lazard,WR,NYJ,W 
+1889923,Allen Robinson,WR,DET,W 
+2082721,Alvin Kamara,RB,NO,W 
+26745358,Amar Johnson,RB,LAC,W 
+1984220,Amari Cooper,WR,LV,W 
+2001582,Amba Etta-Tawo,WR,HOU,W 
+1824308,Ameer Abdullah,RB,JAC,W 
 2967690,Amon-Ra St Brown,WR,DET,CC
-3159102,Andre Baccellia,WR,ARI,W (10/23)
-2963411,Andre Miller,WR,GB,W (10/23)
-2966908,Andrei Iosivas,WR,CIN,W (10/23)
-28926946,Andrew Armstrong,WR,MIA,W (10/23)
-2131774,Andrew Beck,RB,NYJ,W (10/23)
-26725942,Andrew Ogletree,TE,IND,W (10/23)
-2252355,Andrew Parchment,WR,CAR,W (10/23)
-2966161,Andrew Peasley,QB,NYJ,W (10/23)
-2161771,Andrew Vollert,TE,IND,W (10/23)
-1125961,Andy Dalton,QB,CAR,W (10/23)
-2182851,Andy Isabella,WR,SF,W (10/23)
-2223222,Anthony Brown,QB,BUF,W (10/23)
-2818971,Anthony Firkser,TE,KC,W (10/23)
-2251387,Anthony Gordon,QB,KC,W (10/23)
-3122031,Anthony Gould,WR,IND,W (10/23)
-2258536,Anthony Johnson,WR,PIT,W (10/23)
-2804293,Anthony McFarland,RB,MIA,W (10/23)
-2082810,Anthony Miller,WR,BAL,W (10/23)
-1906458,Anthony Norris,TE,DEN,W (10/23)
-2179349,Anthony Ratliff-Williams,WR,SEA,W (10/23)
-3163263,Anthony Richardson,QB,IND,VD
-2965374,Anthony Schwartz,WR,MIA,W (10/23)
-2960827,Anthony Torres,TE,LAR,W (10/23)
-26696862,Anthony Tyus,RB,CAR,W (10/23)
-2962502,Antoine Green,WR,DET,W (10/23)
-1272852,Antonio Brown,WR,TB,W (10/23)
-2960976,Antonio Gibson,RB,NE,W (10/23)
-2258543,Antonio Nunn,WR,ATL,W (10/23)
-3161901,Antwane Wells,WR,NYG,W (10/23)
-3163930,Arian Smith,WR,NYJ,W (10/23)
-2258253,Armani Rogers,TE,BUF,W (10/23)
-2925428,Armanti Foreman,WR,MIN,W (10/23)
-2961237,Aron Cruickshank,WR,PIT,W (10/23)
-2133477,Artavis Scott,WR,HOU,W (10/23)
-2240334,Artayvious Lynn,TE,DAL,W (10/23)
-2185867,Arthur Williams,WR,NYJ,W (10/23)
-3116796,Ashton Dulin,WR,IND,W (10/23)
+3172308,Anderson Castle,RB,IND,W 
+3159102,Andre Baccellia,WR,ARI,W 
+2963411,Andre Miller,WR,GB,W 
+2966908,Andrei Iosivas,WR,CIN,W 
+28926946,Andrew Armstrong,WR,KC,W 
+2131774,Andrew Beck,RB,NYJ,W 
+26725942,Andrew Ogletree,TE,IND,W 
+2252355,Andrew Parchment,WR,CAR,W 
+2966161,Andrew Peasley,QB,NYJ,W 
+2161771,Andrew Vollert,TE,IND,W 
+1125961,Andy Dalton,QB,PHI,W 
+2182851,Andy Isabella,WR,SF,W 
+2818971,Anthony Firkser,TE,DET,W 
+2251387,Anthony Gordon,QB,KC,W 
+3122031,Anthony Gould,WR,IND,W 
+28900555,Anthony Hankerson,RB,MIA,W 
+2258536,Anthony Johnson,WR,PIT,W 
+2082810,Anthony Miller,WR,BAL,W 
+1906458,Anthony Norris,TE,DEN,W 
+2179349,Anthony Ratliff-Williams,WR,SEA,W 
+3163263,Anthony Richardson,QB,IND,W 
+2965374,Anthony Schwartz,WR,MIA,W 
+3164577,Anthony Smith,WR,DAL,W 
+2960827,Anthony Torres,TE,LAR,W 
+26696862,Anthony Tyus,RB,CAR,W 
+2962502,Antoine Green,WR,DET,W 
+1272852,Antonio Brown,WR,TB,W 
+2960976,Antonio Gibson,RB,NE,W 
+2258543,Antonio Nunn,WR,ATL,W 
+28877974,Antonio Williams,WR,WAS,CRB
+3161901,Antwane Wells,WR,ATL,W 
+3163930,Arian Smith,WR,NYJ,W 
+2258253,Armani Rogers,TE,BUF,W 
+2925428,Armanti Foreman,WR,MIN,W 
+2961237,Aron Cruickshank,WR,PIT,W 
+2133477,Artavis Scott,WR,HOU,W 
+2240334,Artayvious Lynn,TE,DAL,W 
+2185867,Arthur Williams,WR,NYJ,W 
+3116796,Ashton Dulin,WR,IND,W 
 28874008,Ashton Jeanty,RB,LV,GF
-26713577,Audric Estime,RB,PHI,W (10/23)
-2804325,Austin Allen,TE,GB,W (10/23)
-2053471,Austin Aune,QB,ATL,W (10/23)
-2820090,Austin Ekeler,RB,WAS,W (10/23)
-2131959,Austin Fort,TE,TEN,W (10/23)
-2067004,Austin Hooper,TE,NE,W (10/23)
-3121977,Austin Jones,RB,WAS,W (10/23)
-2239784,Austin Mack,WR,ATL,W (10/23)
-2130950,Austin Proehl,WR,NYG,W (10/23)
-2926510,Austin Ramesh,RB,ARI,W (10/23)
-2967693,Austin Reed,QB,CHI,W (10/23)
-3121976,Austin Stogner,TE,ATL,W (10/23)
-2838491,Austin Trammell,WR,JAC,W (10/23)
-2961443,Austin Watkins,WR,PHI,W (10/23)
-2175115,Austin Willis,WR,DET,W (10/23)
-2868630,Avery Davis,WR,DET,W (10/23)
-2257948,Avery Williams,RB,NYJ,W (10/23)
-3124133,Ayir Asante,WR,NYG,W (10/23)
-2868250,BJ Baylor,RB,ATL,W (10/23)
-1984363,BJ Catalon,RB,FA,W (10/23)
-2252835,BJ Emmons,RB,HOU,W (10/23)
-2184609,Bailey Gaither,WR,BAL,W (10/23)
-2866483,Bailey Zappe,QB,CLE,W (10/23)
-2080032,Baker Mayfield,QB,TB,VD
-3122788,Baylor Cupp,TE,BAL,W (10/23)
-1906,Bears,DST,CHI,NN
-26694592,Beaux Collins,WR,NYG,W (10/23)
-28866830,Ben Beise,TE,TB,W (10/23)
-2961091,Ben Bryant,QB,NYJ,W (10/23)
-2179411,Ben DiNucci,QB,ATL,W (10/23)
-395994,Ben Johnson,TE,LAC,W (10/23)
-2819118,Ben Mason,TE,LAC,W (10/23)
-2964709,Ben Sims,TE,GB,W (10/23)
-3168647,Ben Sinnott,TE,WAS,W (10/23)
-2247046,Ben Skowronek,WR,PIT,W (10/23)
-2965115,Ben Wooldridge,QB,NE,W (10/23)
-3163725,Ben Yurosek,TE,MIN,W (10/23)
-1907,Bengals,DST,CIN,W (10/23)
-2258154,Benny LeMay,RB,CLE,W (10/23)
-26665068,Bernhard Seikovits,TE,ARI,W (10/23)
+26700919,Athan Kaliakmanis,QB,WAS,W 
+26713577,Audric Estime,RB,NO,W 
+2804325,Austin Allen,TE,GB,W 
+2053471,Austin Aune,QB,ATL,W 
+2820090,Austin Ekeler,RB,WAS,W 
+2131959,Austin Fort,TE,TEN,W 
+2067004,Austin Hooper,TE,ATL,W 
+3121977,Austin Jones,RB,WAS,W 
+2130950,Austin Proehl,WR,NYG,W 
+2926510,Austin Ramesh,RB,ARI,W 
+2967693,Austin Reed,QB,CHI,W 
+3121976,Austin Stogner,TE,ATL,W 
+2838491,Austin Trammell,WR,JAC,W 
+2961443,Austin Watkins,WR,PHI,W 
+2175115,Austin Willis,WR,DET,W 
+2868630,Avery Davis,WR,DET,W 
+2257948,Avery Williams,RB,NYJ,W 
+3124133,Ayir Asante,WR,NYG,W 
+2868250,BJ Baylor,RB,ATL,W 
+1984363,BJ Catalon,RB,FA,W 
+2252835,BJ Emmons,RB,HOU,W 
+2184609,Bailey Gaither,WR,BAL,W 
+2866483,Bailey Zappe,QB,NYJ,W 
+2080032,Baker Mayfield,QB,TB,W 
+28900204,Barion Brown,WR,NO,W 
+26730919,Bauer Sharp,TE,TB,W 
+3122788,Baylor Cupp,TE,BAL,W 
+1906,Bears,DST,CHI,AFL
+26694592,Beaux Collins,WR,NYG,W 
+26696177,Behren Morton,QB,NE,W 
+28866830,Ben Beise,TE,TB,W 
+2961091,Ben Bryant,QB,NYJ,W 
+2179411,Ben DiNucci,QB,DEN,W 
+395994,Ben Johnson,TE,LAC,W 
+50048410,Ben Patterson,WR,JAC,W 
+2964709,Ben Sims,TE,MIA,W 
+3168647,Ben Sinnott,TE,WAS,W 
+2247046,Ben Skowronek,WR,PIT,W 
+2968491,Ben VanSumeren,RB,BUF,W 
+2965115,Ben Wooldridge,QB,NE,W 
+3163725,Ben Yurosek,TE,MIN,W 
+1907,Bengals,DST,CIN,W 
+2258154,Benny LeMay,RB,CLE,W 
+26665068,Bernhard Seikovits,TE,ARI,W 
 26732838,Bhayshul Tuten,RB,JAC,MAM
 3168163,Bijan Robinson,RB,ATL,VD
-1904,Bills,DST,BUF,W (10/23)
-2820079,Billy Brown,TE,IND,W (10/23)
-1630777,Blaine Gabbert,QB,KC,W (10/23)
-1737101,Blake Bell,TE,KC,W (10/23)
+1904,Bills,DST,BUF,W 
+2820079,Billy Brown,TE,IND,W 
 3169252,Blake Corum,RB,LAR,FRR
-2827939,Blake Proehl,WR,MIN,W (10/23)
-2963426,Blake Watson,RB,TEN,W (10/23)
-2964419,Blake Whiteheart,TE,CLE,W (10/23)
-28914781,Blayne Taylor,WR,IND,W (10/23)
-2870475,Bo Melton,WR,GB,W (10/23)
+2827939,Blake Proehl,WR,MIN,W 
+2963426,Blake Watson,RB,TEN,W 
+2964419,Blake Whiteheart,TE,CLE,W 
+28914781,Blayne Taylor,WR,IND,W 
 3121193,Bo Nix,QB,DEN,CRB
-1840609,Bobo Beathard,WR,ARI,W (10/23)
-2079334,Boston Scott,RB,PIT,W (10/23)
-3163207,Brady Cook,QB,NYJ,W (10/23)
-2866240,Brady Russell,TE,SEA,W (10/23)
-26726580,Braelon Allen,RB,NYJ,NN
-2256707,Branden Mack,WR,DEN,W (10/23)
-1880880,Brandin Cooks,WR,NO,W (10/23)
+1840609,Bobo Beathard,WR,ARI,W 
+26696036,Brady Boyd,WR,JAC,W 
+3163207,Brady Cook,QB,NYJ,W 
+2866240,Brady Russell,RB,SEA,W 
+26726580,Braelon Allen,RB,NYJ,W 
+2256707,Branden Mack,WR,DEN,W 
+1880880,Brandin Cooks,WR,BUF,W 
 2967489,Brandon Aiyuk,WR,SF,MAM
-1852876,Brandon Allen,QB,TEN,W (10/23)
-1776297,Brandon Bridge,QB,FA,W (10/23)
-3116815,Brandon Dillon,TE,WAS,W (10/23)
-2245903,Brandon Johnson,RB,PIT,W (10/23)
-2247509,Brandon Johnson,WR,PIT,W (10/23)
-3044909,Brandon Lewis,WR,TEN,W (10/23)
-2239738,Brandon Peters,QB,LAC,W (10/23)
-2926490,Brandon Powell,WR,MIN,W (10/23)
-2865783,Brandon Smith,WR,NYJ,W (10/23)
+1852876,Brandon Allen,QB,NYG,W 
+1776297,Brandon Bridge,QB,FA,W 
+3170373,Brandon Hayes,WR,PHI,W 
+2245903,Brandon Johnson,RB,PIT,W 
+2247509,Brandon Johnson,WR,LV,W 
+3044909,Brandon Lewis,WR,TEN,W 
+2239738,Brandon Peters,QB,LAC,W 
+2926490,Brandon Powell,WR,MIN,W 
+2865783,Brandon Smith,WR,PIT,W 
 26694196,Brashard Smith,RB,KC,MCM
-2130981,Braxton Berrios,WR,HOU,W (10/23)
-2815157,Braxton Burmeister,WR,LAR,W (10/23)
-2240959,Braxton Westfield,WR,IND,W (10/23)
-28867632,Brayden Lenius,TE,ATL,W (10/23)
-2963088,Brayden Willis,TE,SF,W (10/23)
-2864986,Braydon Johnson,WR,BUF,W (10/23)
-2869933,Braylon Sanders,WR,WAS,W (10/23)
+2130981,Braxton Berrios,WR,NYG,W 
+2815157,Braxton Burmeister,WR,LAR,W 
+2240959,Braxton Westfield,WR,IND,W 
+28867632,Brayden Lenius,TE,ATL,W 
+2963088,Brayden Willis,TE,SF,W 
+2864986,Braydon Johnson,WR,BUF,W 
+2869933,Braylon Sanders,WR,WAS,W 
 3123469,Breece Hall,RB,NYJ,NN
-2130622,Brelan Chancellor,WR,PIT,W (10/23)
-2963924,Brenden Bates,TE,HOU,W (10/23)
-2864720,Brenden Knox,RB,KC,W (10/23)
-3166803,Brenden Rice,WR,LAC,W (10/23)
-2965527,Brennan Eagles,WR,DAL,W (10/23)
-3169136,Brennan Presley,WR,LAR,W (10/23)
-3121696,Brenton Strange,TE,JAC,GF
-3123271,Brett Gabbert,QB,MIA,W (10/23)
-2181392,Brett Rypien,QB,IND,W (10/23)
-28887494,Brevin Easton,WR,JAC,W (10/23)
-2964787,Brevin Jordan,TE,HOU,W (10/23)
-2961760,Brevyn Spann-Ford,TE,DAL,W (10/23)
-2961430,Brian Cobbs,WR,ARI,W (10/23)
-517243,Brian Hoyer,QB,LV,W (10/23)
-2186429,Brian Lewerke,QB,NYG,W (10/23)
-2741207,Brian Robinson,RB,SF,NN
+2130622,Brelan Chancellor,WR,PIT,W 
+2963924,Brenden Bates,TE,CLE,W 
+2864720,Brenden Knox,RB,KC,W 
+3166803,Brenden Rice,WR,GB,W 
+28909756,Brenen Thompson,WR,LAC,W 
+2965527,Brennan Eagles,WR,DAL,W 
+3169136,Brennan Presley,WR,LAR,W 
+3121696,Brenton Strange,TE,JAC,WLW
+3123271,Brett Gabbert,QB,MIA,W 
+2181392,Brett Rypien,QB,MIN,W 
+28887494,Brevin Easton,WR,JAC,W 
+2964787,Brevin Jordan,TE,HOU,W 
+2961760,Brevyn Spann-Ford,TE,DAL,W 
+2961430,Brian Cobbs,WR,ARI,W 
+2186429,Brian Lewerke,QB,NYG,W 
+2741207,Brian Robinson,RB,ATL,NN
 3132164,Brian Thomas,WR,JAC,CC
-29113614,Brian Walker,TE,BAL,W (10/23)
-2247169,Briley Moore-McKinney,TE,TEN,W (10/23)
-2185571,Britain Covey,WR,PHI,W (10/23)
-2961993,British Brooks,RB,HOU,W (10/23)
-2249805,Brittain Brown,RB,CHI,W (10/23)
+29113614,Brian Walker,TE,BAL,W 
+2247169,Briley Moore-McKinney,TE,TEN,W 
+2185571,Britain Covey,WR,PHI,W 
+2961993,British Brooks,RB,HOU,W 
+2249805,Brittain Brown,RB,CHI,W 
 26693971,Brock Bowers,TE,LV,AFL
-26701144,Brock Lampe,RB,NE,W (10/23)
+26701144,Brock Lampe,RB,NE,W 
 2961306,Brock Purdy,QB,SF,CC
-2807423,Brock Wright,TE,DET,W (10/23)
-1909,Broncos,DST,DEN,WLW
+26725349,Brock Rechsteiner,WR,NO,W 
+2807423,Brock Wright,TE,DET,W 
+1909,Broncos,DST,DEN,W 
 1930,Browns,DST,CLE,MCM
-2190739,Bruce Anderson,RB,IND,W (10/23)
-2240557,Bruno Labelle,TE,ARI,W (10/23)
-2827539,Bryan Thompson,WR,BUF,W (10/23)
-2803780,Bryant Koback,RB,SEA,W (10/23)
-3103642,Bryant Mitchell,WR,TB,W (10/23)
-2963723,Bryce Ford-Wheaton,WR,NYG,W (10/23)
-2186835,Bryce Love,RB,WAS,W (10/23)
-2967309,Bryce Oliver,WR,TEN,W (10/23)
-3159114,Bryce Perkins,QB,CAR,W (10/23)
-28877722,Bryce Pierre,TE,CAR,W (10/23)
-3161957,Bryce Young,QB,CAR,VD
-2183906,Brycen Hopkins,TE,LAR,W (10/23)
-2967463,Brycen Tremayne,WR,CAR,W (10/23)
-26696745,Bryson Green,WR,ARI,W (10/23)
-26695112,Bryson Nesbit,TE,MIN,W (10/23)
-3123413,Bub Means,WR,NO,W (10/23)
-1927,Buccaneers,DST,TB,W (10/23)
+2190739,Bruce Anderson,RB,IND,W 
+2240557,Bruno Labelle,TE,ARI,W 
+2827539,Bryan Thompson,WR,BUF,W 
+2803780,Bryant Koback,RB,SEA,W 
+3103642,Bryant Mitchell,WR,TB,W 
+2963723,Bryce Ford-Wheaton,WR,NYG,W 
+26725855,Bryce Lance,WR,NO,W 
+2186835,Bryce Love,RB,WAS,W 
+2967309,Bryce Oliver,WR,TEN,W 
+3159114,Bryce Perkins,QB,CAR,W 
+28877722,Bryce Pierre,TE,CAR,W 
+3161957,Bryce Young,QB,CAR,W 
+2967463,Brycen Tremayne,WR,CAR,W 
+26696745,Bryson Green,WR,ARI,W 
+26695112,Bryson Nesbit,TE,MIN,W 
+3123413,Bub Means,WR,NO,W 
+1927,Buccaneers,DST,TB,W 
 26693770,Bucky Irving,RB,TB,VD
-2060469,Bug Howard,WR,TB,W (10/23)
-1998463,CJ Beathard,QB,DET,W (10/23)
-2180481,CJ Conrad,TE,NYG,W (10/23)
-26698858,CJ Dippre,TE,NE,W (10/23)
-2237239,CJ Ham,RB,MIN,W (10/23)
-3123939,CJ Johnson,WR,SEA,W (10/23)
-2239828,CJ Marable,RB,NE,W (10/23)
+2060469,Bug Howard,WR,TB,W 
+1998463,CJ Beathard,QB,DET,W 
+2180481,CJ Conrad,TE,NYG,W 
+3167404,CJ Daniels,WR,LAR,W 
+26698858,CJ Dippre,TE,NE,W 
+28900249,CJ Donaldson,RB,NO,W 
+2237239,CJ Ham,RB,MIN,W 
+3123939,CJ Johnson,WR,SEA,W 
+2239828,CJ Marable,RB,NE,W 
 3163079,CJ Stroud,QB,HOU,WLW
-2174118,CJ Uzomah,TE,PHI,W (10/23)
-2866324,CJ Verdell,RB,IND,W (10/23)
-2868649,Cade Brewer,TE,SEA,W (10/23)
-3132630,Cade McDonald,WR,CLE,W (10/23)
-2815179,Cade Otton,TE,TB,ELP
-3125978,Cade Stover,TE,HOU,W (10/23)
-3162059,Caden Prieskorn,TE,TB,W (10/23)
-3177905,Caleb Lohner,TE,DEN,W (10/23)
-2139757,Caleb Scott,WR,LV,W (10/23)
+2174118,CJ Uzomah,TE,PHI,W 
+2866324,CJ Verdell,RB,IND,W 
+28875641,CJ Williams,WR,JAC,W 
+2868649,Cade Brewer,TE,SEA,W 
+28874636,Cade Klubnik,QB,NYJ,VD
+3132630,Cade McDonald,WR,CLE,W 
+2815179,Cade Otton,TE,TB,W 
+3125978,Cade Stover,TE,HOU,W 
+3162059,Caden Prieskorn,TE,CAR,W 
+28900321,Caleb Douglas,WR,MIA,W 
+3177905,Caleb Lohner,TE,DEN,W 
+2139757,Caleb Scott,WR,LV,W 
 26695775,Caleb Williams,QB,CHI,MAM
-2866214,Calvin Austin,WR,PIT,CC
-2968105,Calvin Jackson,WR,MIA,W (10/23)
-2186328,Calvin Ridley,WR,TEN,FRR
-2870612,Calvin Tyler,RB,CIN,W (10/23)
-2804034,Cam Akers,RB,MIN,W (10/23)
-29148608,Cam Grandy,TE,CIN,W (10/23)
-2966680,Cam Johnson,WR,CAR,W (10/23)
-3175318,Cam Miller,QB,LV,W (10/23)
+2866214,Calvin Austin,WR,NYG,CC
+2968105,Calvin Jackson,WR,MIA,W 
+2186328,Calvin Ridley,WR,TEN,W 
+2870612,Calvin Tyler,RB,CIN,W 
+2804034,Cam Akers,RB,SEA,W 
+29148608,Cam Grandy,TE,CIN,W 
+2966680,Cam Johnson,WR,CAR,W 
+3175318,Cam Miller,QB,MIA,W 
+3122246,Cam Ross,WR,DEN,W 
 26697012,Cam Skattebo,RB,NYG,MWM
-2968097,Cam Sutton,TE,SEA,W (10/23)
+2968097,Cam Sutton,TE,SEA,W 
 3168422,Cam Ward,QB,TEN,MWM
-28874582,Cameron Camper,WR,JAC,W (10/23)
-2964535,Cameron Latu,TE,PHI,W (10/23)
-3161136,Cameron Scarlett,RB,SEA,W (10/23)
-2967422,Camerun Peoples,RB,CAR,W (10/23)
-2965370,Camren McDonald,TE,LAR,W (10/23)
-1901,Cardinals,DST,ARI,W (10/23)
-2179354,Carl Tucker,TE,MIA,W (10/23)
-2867377,Carlos Washington,RB,ATL,W (10/23)
-26698435,Carson Steele,RB,KC,W (10/23)
-2963002,Carson Strong,QB,ARI,W (10/23)
-1907522,Carson Wentz,QB,MIN,NN
-2355180,Carson Williams,TE,LV,W (10/23)
-2961526,Carter Bradley,QB,JAC,W (10/23)
-29184228,Carter Runyon,TE,LV,W (10/23)
-2242759,Cary Angeline,TE,PHI,W (10/23)
-2194263,Case Cookus,QB,LAR,W (10/23)
-1137118,Case Keenum,QB,CHI,W (10/23)
-2965414,Casey Bauman,QB,LAC,W (10/23)
-3126493,Casey Washington,WR,ATL,W (10/23)
-2962120,Cedric Tillman,WR,CLE,W (10/23)
-2240685,Cedrick Wilson,WR,MIA,W (10/23)
+28877638,Camden Brown,WR,DAL,W 
+28874582,Cameron Camper,WR,NYJ,W 
+29721343,Cameron Dorner,WR,NE,W 
+2964535,Cameron Latu,TE,PHI,W 
+3161136,Cameron Scarlett,RB,SEA,W 
+2967422,Camerun Peoples,RB,CAR,W 
+2965370,Camren McDonald,TE,LAR,W 
+1901,Cardinals,DST,ARI,W 
+2179354,Carl Tucker,TE,MIA,W 
+2867377,Carlos Washington,RB,MIA,W 
+29124411,Carnell Tate,WR,TEN,ELP
+28873701,Carsen Ryan,TE,CLE,W 
+3163129,Carson Beck,QB,ARI,ELP
+26698435,Carson Steele,RB,PHI,W 
+2963002,Carson Strong,QB,ARI,W 
+3158076,Carson Towt,TE,IND,W 
+1907522,Carson Wentz,QB,MIN,W 
+2355180,Carson Williams,TE,LV,W 
+2961526,Carter Bradley,QB,JAC,W 
+29184228,Carter Runyon,TE,LV,W 
+2242759,Cary Angeline,TE,PHI,W 
+2194263,Case Cookus,QB,LAR,W 
+1137118,Case Keenum,QB,CHI,W 
+2965414,Casey Bauman,QB,LAC,W 
+3126493,Casey Washington,WR,CAR,W 
+26738725,Cash Jones,RB,ATL,W 
+3172596,Caullin Lacy,WR,NYJ,W 
+2962120,Cedric Tillman,WR,CLE,W 
+2240685,Cedrick Wilson,WR,DET,W 
 2865251,CeeDee Lamb,WR,DAL,WLW
-2868267,Cephus Johnson,WR,TB,W (10/23)
-2092376,Chad Kanoff,QB,TB,W (10/23)
-3121489,Chandler Brayboy,WR,JAC,W (10/23)
-2262609,Changa Hodge,WR,ARI,W (10/23)
-1924,Chargers,DST,LAC,W (10/23)
-3117020,Charles Holland,WR,CIN,W (10/23)
-2965633,Charles McClelland,RB,TEN,W (10/23)
-2141604,Charles Scarff,TE,BAL,W (10/23)
-2867306,Charleston Rambo,WR,PHI,W (10/23)
-2868959,Charlie Jones,WR,CIN,W (10/23)
-2866273,Charlie Kolar,TE,BAL,W (10/23)
-2183178,Charlie Taumoepeau,TE,DET,W (10/23)
-2248629,Charlie Woerner,TE,ATL,W (10/23)
+2868267,Cephus Johnson,WR,TB,W 
+2092376,Chad Kanoff,QB,TB,W 
+26693575,Chamon Metayer,TE,CAR,W 
+3121489,Chandler Brayboy,WR,JAC,W 
+2262609,Changa Hodge,WR,ARI,W 
+1924,Chargers,DST,LAC,W 
+3117020,Charles Holland,WR,CIN,W 
+2965633,Charles McClelland,RB,TEN,W 
+2141604,Charles Scarff,TE,BAL,W 
+2867306,Charleston Rambo,WR,PHI,W 
+2868959,Charlie Jones,WR,CIN,W 
+2866273,Charlie Kolar,TE,LAC,W 
+2183178,Charlie Taumoepeau,TE,DET,W 
+2248629,Charlie Woerner,TE,ATL,W 
 2965160,Chase Brown,RB,CIN,WLW
-2260676,Chase Claypool,WR,BUF,W (10/23)
-2965589,Chase Cota,WR,CLE,W (10/23)
-2137507,Chase Edmonds,RB,WAS,W (10/23)
-2770158,Chase Garbers,QB,LV,W (10/23)
-2179546,Chase Harrell,TE,SF,W (10/23)
-2182351,Chase Litton,QB,JAC,W (10/23)
-2968919,Chevan Cordeiro,QB,SEA,W (10/23)
-2185503,Cheyenne O'Grady,TE,CIN,W (10/23)
-1914,Chiefs,DST,KC,AFL
-2965208,Chigoziem Okonkwo,TE,TEN,W (10/23)
-3162452,Chimere Dike,WR,TEN,W (10/23)
-2965618,Chris Blair,WR,ATL,W (10/23)
-2804779,Chris Coleman,WR,MIA,W (10/23)
-3161765,Chris Collier,RB,LV,W (10/23)
-1824756,Chris Conley,WR,SF,W (10/23)
-2260647,Chris Evans,RB,CIN,W (10/23)
-2186662,Chris Finke,WR,CHI,W (10/23)
-2818150,Chris Godwin,WR,TB,VD
-2167520,Chris Manhertz,TE,NYG,W (10/23)
-1871375,Chris Moore,WR,WAS,W (10/23)
-3117054,Chris Myarick,TE,MIA,W (10/23)
-2261701,Chris Oladokun,QB,KC,W (10/23)
-2963666,Chris Olave,WR,NO,FRR
-2835008,Chris Pierce,TE,CAR,W (10/23)
-2964667,Chris Rodriguez,RB,WAS,W (10/23)
-2962556,Chris Smith,RB,SEA,W (10/23)
-3171678,Chris Tyree,WR,NO,W (10/23)
-2180820,Christian Kirk,WR,HOU,WLW
+2965589,Chase Cota,WR,CLE,W 
+3171155,Chase Curtis,TE,NYJ,W 
+2137507,Chase Edmonds,RB,WAS,W 
+2770158,Chase Garbers,QB,LV,W 
+2179546,Chase Harrell,TE,SF,W 
+2182351,Chase Litton,QB,JAC,W 
+26728791,Chase Roberts,WR,LV,W 
+2968919,Chevan Cordeiro,QB,SEA,W 
+2185503,Cheyenne O'Grady,TE,CIN,W 
+1914,Chiefs,DST,KC,MWM
+2965208,Chigoziem Okonkwo,TE,WAS,W 
+3162452,Chimere Dike,WR,TEN,W 
+3162240,Chip Trayanum,RB,NYJ,W 
+28877196,Chris Bell,WR,MIA,NN
+2965618,Chris Blair,WR,ATL,W 
+26904572,Chris Brazzell,WR,CAR,NN
+2804779,Chris Coleman,WR,MIA,W 
+3161765,Chris Collier,RB,LV,W 
+2260647,Chris Evans,RB,CIN,W 
+2186662,Chris Finke,WR,CHI,W 
+2818150,Chris Godwin,WR,TB,W 
+26700928,Chris Hilton,WR,WAS,W 
+2167520,Chris Manhertz,TE,NYG,W 
+1871375,Chris Moore,WR,BAL,W 
+3117054,Chris Myarick,TE,LV,W 
+2261701,Chris Oladokun,QB,KC,W 
+2963666,Chris Olave,WR,NO,ELP
+2835008,Chris Pierce,TE,CAR,W 
+2964667,Chris Rodriguez,RB,JAC,W 
+2962556,Chris Smith,RB,SEA,W 
+3171678,Chris Tyree,WR,NO,W 
+2180820,Christian Kirk,WR,SF,W 
 2136743,Christian McCaffrey,RB,SF,FRR
-2926331,Christian Scotland-Williamson,TE,PIT,W (10/23)
-3133400,Christian Sims,TE,LAR,W (10/23)
-2961033,Christian Trahan,TE,CIN,W (10/23)
-3114045,Christian Wade,RB,BUF,W (10/23)
-2869806,Christian Watson,WR,GB,MWM
-1893141,Christion Jones,WR,MIA,W (10/23)
-2962350,Christopher Brooks,RB,GB,W (10/23)
-2926929,Christopher Ezeala,RB,BAL,W (10/23)
-2865693,Chuba Hubbard,RB,CAR,WLW
-2136556,Clayton Thorson,QB,NYG,W (10/23)
-2964808,Clayton Tune,QB,GB,W (10/23)
-2241761,Clint Ratkovich,RB,ATL,W (10/23)
-2804554,Clyde Edwards-Helaire,RB,KC,W (10/23)
-2241883,Cody Chrest,WR,GB,W (10/23)
-1749732,Cody Fajardo,QB,LV,W (10/23)
-28876935,Cody Schrader,RB,JAC,W (10/23)
-2136709,Cody Thompson,WR,TB,W (10/23)
-2865884,Cody White,WR,SEA,W (10/23)
-2867522,Colby Parkinson,TE,LAR,W (10/23)
-2966664,Colby Suits,QB,NYJ,W (10/23)
-29362393,Cole Burgess,WR,CIN,W (10/23)
-2240503,Cole Fotheringham,TE,NE,W (10/23)
-2136567,Cole Herdman,TE,TEN,W (10/23)
-2247069,Cole Kelley,QB,WAS,W (10/23)
-2868619,Cole Kmet,TE,CHI,W (10/23)
-2257005,Cole McDonald,QB,ARI,W (10/23)
-2961855,Cole Turner,TE,WAS,W (10/23)
-3137926,Coleman Owen,WR,IND,W (10/23)
-3177592,Colin Granger,TE,CAR,W (10/23)
-2240315,Collin Johnson,WR,LV,W (10/23)
-1630750,Collin Klein,QB,FA,W (10/23)
-2961827,Colson Yankoff,RB,WAS,W (10/23)
+2926331,Christian Scotland-Williamson,TE,PIT,W 
+3133400,Christian Sims,TE,LAR,W 
+2961033,Christian Trahan,TE,CIN,W 
+3114045,Christian Wade,RB,BUF,W 
+2869806,Christian Watson,WR,GB,W 
+1893141,Christion Jones,WR,MIA,W 
+2962350,Christopher Brooks,RB,GB,W 
+2926929,Christopher Ezeala,RB,BAL,W 
+2865693,Chuba Hubbard,RB,CAR,W 
+2136556,Clayton Thorson,QB,NYG,W 
+2964808,Clayton Tune,QB,GB,W 
+2241761,Clint Ratkovich,RB,ATL,W 
+2804554,Clyde Edwards-Helaire,RB,KC,W 
+2241883,Cody Chrest,WR,GB,W 
+1749732,Cody Fajardo,QB,LV,W 
+28891820,Cody Hardy,TE,NO,W 
+28876935,Cody Schrader,RB,DEN,W 
+2865884,Cody White,WR,SEA,W 
+28934874,Colbie Young,WR,CIN,W 
+2867522,Colby Parkinson,TE,LAR,MAM
+2966664,Colby Suits,QB,NYJ,W 
+29362393,Cole Burgess,WR,PIT,W 
+2240503,Cole Fotheringham,TE,NE,W 
+2136567,Cole Herdman,TE,TEN,W 
+2247069,Cole Kelley,QB,WAS,W 
+2868619,Cole Kmet,TE,CHI,W 
+2257005,Cole McDonald,QB,ARI,W 
+26725861,Cole Payton,QB,PHI,W 
+2961855,Cole Turner,TE,MIA,W 
+3163724,Coleman Bennett,RB,CHI,W 
+3137926,Coleman Owen,WR,IND,W 
+3177592,Colin Granger,TE,CAR,W 
+2240315,Collin Johnson,WR,LV,W 
+1630750,Collin Klein,QB,FA,W 
+2961827,Colson Yankoff,TE,WAS,W 
 28874696,Colston Loveland,TE,CHI,MCM
-2828751,Colton Dowell,WR,BAL,W (10/23)
-1912,Colts,DST,IND,W (10/23)
-1929,Commanders,DST,WAS,CRB
-3123601,Connor Bazelak,QB,TB,W (10/23)
-3170411,Connor Davis,TE,CLE,W (10/23)
-2867599,Connor Heyward,TE,PIT,W (10/23)
-2866341,Connor Wedington,WR,SEA,W (10/23)
+2828751,Colton Dowell,WR,PIT,W 
+1912,Colts,DST,IND,W 
+1929,Commanders,DST,WAS,W 
+3123601,Connor Bazelak,QB,TB,W 
+3170411,Connor Davis,TE,CLE,W 
+2867599,Connor Heyward,TE,LV,W 
+2866341,Connor Wedington,WR,SEA,W 
 2006951,Cooper Kupp,WR,SEA,MWM
-2000176,Cooper Rush,QB,BAL,W (10/23)
-1996183,Cordarrelle Patterson,RB,PIT,W (10/23)
-3123126,Corey Crooms,WR,DAL,W (10/23)
-26698879,Corey Kiner,RB,MIN,W (10/23)
-2239648,Corey Sutton,WR,DET,W (10/23)
-26734864,Corey Taylor,RB,CLE,W (10/23)
-3133361,Cornelius Johnson,WR,BAL,W (10/23)
-2239529,Cornell Powell,WR,HOU,W (10/23)
-3117088,Cortrelle Simpson,WR,TB,W (10/23)
-2218461,Courtland Sutton,WR,DEN,CRB
-3123345,Courtney Jackson,WR,SEA,W (10/23)
-1908,Cowboys,DST,DAL,W (10/23)
-3117134,Craig Reynolds,RB,DET,W (10/23)
-2760856,Curtis Hodges,TE,CAR,W (10/23)
-2131252,Curtis Samuel,WR,BUF,W (10/23)
-2242794,Cyrus Holder,WR,CHI,W (10/23)
+2000176,Cooper Rush,QB,ATL,W 
+1996183,Cordarrelle Patterson,RB,PIT,W 
+3123126,Corey Crooms,WR,DAL,W 
+26698879,Corey Kiner,RB,ARI,W 
+3163046,Corey Rucker,WR,LV,W 
+2239648,Corey Sutton,WR,DET,W 
+26734864,Corey Taylor,RB,CLE,W 
+3133361,Cornelius Johnson,WR,BAL,W 
+2239529,Cornell Powell,WR,PIT,W 
+28919816,Cortez Braham,WR,BAL,W 
+3117088,Cortrelle Simpson,WR,TB,W 
+2218461,Courtland Sutton,WR,DEN,W 
+3123345,Courtney Jackson,WR,TEN,W 
+1908,Cowboys,DST,DAL,W 
+3117134,Craig Reynolds,RB,NE,W 
+2760856,Curtis Hodges,TE,CAR,W 
+2131252,Curtis Samuel,WR,BUF,W 
+28875899,Cyrus Allen,WR,KC,W 
+2242794,Cyrus Holder,WR,CHI,W 
 2871710,D'Andre Swift,RB,CHI,FRR
-2247544,D'Eriq King,QB,CAR,W (10/23)
-3117165,D'Ernest Johnson,RB,ARI,W (10/23)
-2139847,D'Onta Foreman,RB,CLE,W (10/23)
-2252411,D'Wayne Eskridge,WR,MIA,W (10/23)
-2131689,DJ Chark,WR,ATL,W (10/23)
-26695679,DJ Giddens,RB,IND,W (10/23)
-3116788,DJ Montgomery,WR,IND,W (10/23)
-2179328,DJ Moore,WR,CHI,MAM
-3168777,DJ Thomas-Jones,TE,PIT,W (10/23)
-2251084,DJ Turner,WR,LV,W (10/23)
-3162292,DJ Uiagalelei,QB,LAC,W (10/23)
-3122835,DJ Williams,RB,TB,W (10/23)
-3161707,DK Kaufman,RB,SEA,W (10/23)
+2247544,D'Eriq King,QB,CAR,W 
+3117165,D'Ernest Johnson,RB,NE,W 
+2139847,D'Onta Foreman,RB,CLE,W 
+2252411,D'Wayne Eskridge,WR,MIA,W 
+2131689,DJ Chark,WR,ATL,W 
+26695679,DJ Giddens,RB,IND,W 
+26734114,DJ Herman,RB,MIA,W 
+3116788,DJ Montgomery,WR,IND,W 
+2179328,DJ Moore,WR,BUF,W 
+26693776,DJ Rogers,TE,DAL,W 
+3168777,DJ Thomas-Jones,TE,PIT,W 
+2251084,DJ Turner,WR,HOU,W 
+3162292,DJ Uiagalelei,QB,LAC,W 
+3122835,DJ Williams,RB,TB,W 
+3161707,DK Kaufman,RB,SEA,W 
 2260185,DK Metcalf,WR,PIT,CC
-3128608,Da'Quan Felton,WR,NYG,W (10/23)
-2186347,DaMarkus Lodge,WR,CIN,W (10/23)
-1762348,DaRon Brown,WR,FA,W (10/23)
-1888751,DaVaris Daniels,WR,NE,W (10/23)
-2867589,Daewood Davis,WR,CAR,W (10/23)
-2864965,Dai'Jean Dixon,WR,NO,W (10/23)
-3163944,Daijun Edwards,RB,PIT,W (10/23)
-1996830,Daje Johnson,WR,ATL,W (10/23)
-1824864,Dak Prescott,QB,DAL,NN
-3131659,Dalen Cambre,WR,NYG,W (10/23)
-3126518,Dalevon Campbell,WR,LAC,W (10/23)
-3166474,Dallas Daniels,WR,DEN,W (10/23)
-2132551,Dallas Goedert,TE,PHI,AFL
-2975555,Dallin Holker,TE,NO,W (10/23)
-2805113,Dalton Keene,TE,HOU,W (10/23)
+29122875,DT Sheffield,WR,NYJ,W 
+3128608,Da'Quan Felton,WR,NYJ,W 
+2186347,DaMarkus Lodge,WR,CIN,W 
+1762348,DaRon Brown,WR,FA,W 
+1888751,DaVaris Daniels,WR,NE,W 
+28874125,Dae'Quan Wright,TE,PHI,W 
+2867589,Daewood Davis,WR,CAR,W 
+2864965,Dai'Jean Dixon,WR,NO,W 
+3163944,Daijun Edwards,RB,PIT,W 
+1996830,Daje Johnson,WR,ATL,W 
+1824864,Dak Prescott,QB,DAL,W 
+3131659,Dalen Cambre,WR,NYG,W 
+3126518,Dalevon Campbell,WR,LAC,W 
+3166474,Dallas Daniels,WR,DEN,W 
+2132551,Dallas Goedert,TE,PHI,W 
+29164633,Dallen Bentley,TE,DEN,W 
+2975555,Dallin Holker,TE,NO,W 
+2805113,Dalton Keene,TE,HOU,W 
 2982991,Dalton Kincaid,TE,BUF,GF
-2179601,Dalton Schoen,WR,KC,W (10/23)
-2136748,Dalton Schultz,TE,HOU,W (10/23)
-2130893,Dalvin Cook,RB,DAL,W (10/23)
-2241450,Dalyn Williams,QB,CHI,W (10/23)
-2964236,Dameon Pierce,RB,HOU,W (10/23)
-3138466,Damien Caffrey,TE,CHI,W (10/23)
-2186318,Damien Harris,RB,BUF,W (10/23)
-28873395,Damien Martinez,RB,SEA,W (10/23)
-2174809,Damiere Byrd,WR,BUF,W (10/23)
-3117009,Damion Jeanpiere,WR,CAR,W (10/23)
-2252367,Damon Hazelton,WR,HOU,W (10/23)
-3159144,Dan Chisena,WR,CAR,W (10/23)
-2966863,Daniel Arias,WR,ARI,W (10/23)
-2963615,Daniel Bellinger,TE,NYG,W (10/23)
-2188929,Daniel Crawford,TE,GB,W (10/23)
-3178022,Daniel Jackson,WR,HOU,W (10/23)
+2179601,Dalton Schoen,WR,KC,W 
+2136748,Dalton Schultz,TE,HOU,MAM
+2241450,Dalyn Williams,QB,CHI,W 
+2964236,Dameon Pierce,RB,PHI,W 
+3168395,Damien Alford,WR,NO,W 
+3138466,Damien Caffrey,TE,CHI,W 
+28873395,Damien Martinez,RB,GB,W 
+3117009,Damion Jeanpiere,WR,CAR,W 
+26725313,Damon Bankston,RB,NYG,W 
+2252367,Damon Hazelton,WR,HOU,W 
+3159144,Dan Chisena,WR,CAR,W 
+3169258,Dan Villari,TE,LAR,W 
+28873407,Dane Key,WR,DEN,W 
+2966863,Daniel Arias,WR,ARI,W 
+2963615,Daniel Bellinger,TE,TEN,W 
+2188929,Daniel Crawford,TE,GB,W 
+3178022,Daniel Jackson,WR,HOU,W 
 2179245,Daniel Jones,QB,IND,MCM
-2866956,Danny Davis,WR,GB,W (10/23)
-2060804,Danny Etling,QB,GB,W (10/23)
-3168336,Danny Gray,WR,PHI,W (10/23)
-2961818,Dante Miller,RB,NYG,W (10/23)
-2139642,Dante Pettis,WR,NO,W (10/23)
-2010409,Dare Ogunbowale,RB,HOU,W (10/23)
-26654230,Darece Roberson,WR,SEA,W (10/23)
-27017067,Dareke Young,WR,SEA,W (10/23)
-3157668,Darion Clark,TE,CHI,W (10/23)
-2240319,Darius Anderson,RB,HOU,W (10/23)
-26642430,Darius Clark,RB,CAR,W (10/23)
-3165205,Darius Cooper,WR,PHI,W (10/23)
-29113333,Darius Hagans,RB,PIT,W (10/23)
-28874276,Darius Lassiter,WR,JAC,W (10/23)
-2183982,Darius Slayton,WR,NYG,W (10/23)
-3117071,Darnell Holland,RB,NO,W (10/23)
-2240651,Darnell Mooney,WR,ATL,MWM
-3163963,Darnell Washington,TE,PIT,W (10/23)
-1850793,Darren Waller,TE,MIA,FRR
-3116786,Darrin Hall,RB,PIT,W (10/23)
-2240806,Darrynton Evans,RB,BUF,W (10/23)
-2136930,Daurice Fountain,WR,DET,W (10/23)
+26716333,Daniel Sobkowicz,WR,HOU,W 
+2866956,Danny Davis,WR,GB,W 
+2060804,Danny Etling,QB,GB,W 
+3168336,Danny Gray,WR,PHI,W 
+2961818,Dante Miller,RB,NYG,W 
+2139642,Dante Pettis,WR,BUF,W 
+2010409,Dare Ogunbowale,RB,LV,W 
+26654230,Darece Roberson,WR,SEA,W 
+27017067,Dareke Young,WR,LV,W 
+3157668,Darion Clark,TE,CHI,W 
+2240319,Darius Anderson,RB,HOU,W 
+26642430,Darius Clark,RB,CAR,W 
+3165205,Darius Cooper,WR,PHI,W 
+29113333,Darius Hagans,RB,PIT,W 
+28874276,Darius Lassiter,WR,JAC,W 
+2183982,Darius Slayton,WR,NYG,MAM
+3117071,Darnell Holland,RB,NO,W 
+2240651,Darnell Mooney,WR,NYG,W 
+3163963,Darnell Washington,TE,PIT,W 
+1850793,Darren Waller,TE,MIA,W 
+3116786,Darrin Hall,RB,PIT,W 
+2240806,Darrynton Evans,RB,BUF,W 
 1893167,Davante Adams,WR,LAR,GF
-3131708,David Bell,WR,CLE,W (10/23)
-2836832,David Durden,WR,DAL,W (10/23)
-2962690,David Martin-Robinson,TE,TEN,W (10/23)
-2261252,David Montgomery,RB,DET,CC
-2818351,David Moore,WR,CAR,W (10/23)
-2136474,David Njoku,TE,CLE,MAM
-2179491,David Sills,WR,ATL,W (10/23)
-29383209,David Wallis,WR,NE,W (10/23)
-2080164,David Wells,TE,TB,W (10/23)
-28910909,David White,WR,BUF,W (10/23)
-3116814,Davion Davis,WR,WAS,W (10/23)
-3123267,Davis Allen,TE,LAR,W (10/23)
-2816170,Davis Cheek,QB,CAR,W (10/23)
-2867381,Davis Mills,QB,HOU,W (10/23)
-2080267,Davon Grayson,WR,KC,W (10/23)
-1892454,Davonte Allen,WR,BUF,W (10/23)
-2186345,Dawson Knox,TE,BUF,W (10/23)
-2975629,Dax Milne,WR,CAR,W (10/23)
-2189163,Dax Raymond,TE,PIT,W (10/23)
-3121829,Dayton Wade,WR,BAL,W (10/23)
-3125318,De'Montre Tuggle,RB,CHI,W (10/23)
-2925144,De'Mornay Pierson-El,WR,DEN,W (10/23)
-2180325,De'Quan Hampton,WR,SEA,W (10/23)
+3131708,David Bell,WR,CLE,W 
+2836832,David Durden,WR,DAL,W 
+2962690,David Martin-Robinson,TE,TEN,W 
+2261252,David Montgomery,RB,HOU,W 
+2818351,David Moore,WR,CAR,W 
+2136474,David Njoku,TE,LAC,W 
+2179491,David Sills,WR,TB,W 
+29383209,David Wallis,WR,NE,W 
+3123267,Davis Allen,TE,LAR,W 
+2816170,Davis Cheek,QB,CAR,W 
+2867381,Davis Mills,QB,HOU,W 
+29122230,Davon Booth,RB,CLE,W 
+2080267,Davon Grayson,WR,KC,W 
+1892454,Davonte Allen,WR,BUF,W 
+2186345,Dawson Knox,TE,BUF,W 
+2975629,Dax Milne,WR,CAR,W 
+2189163,Dax Raymond,TE,PIT,W 
+3121829,Dayton Wade,WR,BAL,W 
+3125318,De'Montre Tuggle,RB,CHI,W 
+2925144,De'Mornay Pierson-El,WR,DEN,W 
+2180325,De'Quan Hampton,WR,SEA,W 
 3171161,De'Von Achane,RB,MIA,CRB
-2174795,DeAndre Carter,WR,CLE,W (10/23)
-1737078,DeAndre Hopkins,WR,BAL,W (10/23)
-2131257,DeAndre Thompkins,WR,GB,W (10/23)
-2960960,DeAndre Torrey,RB,PHI,W (10/23)
-29376463,DeAngelo Hardy,WR,BAL,W (10/23)
-2868230,DeShon Williams,TE,SEA,W (10/23)
-2866975,DeVonta Smith,WR,PHI,CRB
-1621175,DeVonte Christopher,WR,FA,W (10/23)
-2137691,DeVonte Dedmon,WR,MIA,W (10/23)
-2261694,DeVontres Dukes,WR,DEN,W (10/23)
-3168024,DeWayne McBride,RB,MIN,W (10/23)
-2239541,Dedrick Mills,RB,DET,W (10/23)
-1824784,Dee Hart,RB,FA,W (10/23)
-28873388,Dee Williams,WR,CLE,W (10/23)
-2804094,DeeJay Dallas,RB,CAR,W (10/23)
-2139735,Deebo Samuel,WR,WAS,GF
-3133199,Deion Hankins,RB,CHI,W (10/23)
-2061095,Demarcus Robinson,WR,SF,W (10/23)
-3126241,Demario Douglas,WR,NE,W (10/23)
-2131493,Demario Richard,RB,ATL,W (10/23)
-3166844,Demeer Blankumsee,WR,NE,W (10/23)
-2240193,Demetric Felton,RB,WAS,W (10/23)
-2250830,Demetris Robertson,WR,SEA,W (10/23)
-2964540,Deneric Prince,RB,NE,W (10/23)
-2866062,Dennis Houston,WR,TB,W (10/23)
-2179211,Deon Cain,WR,BUF,W (10/23)
-2866237,Deon Jackson,RB,DET,W (10/23)
-2189487,Deontay Burnett,WR,DAL,W (10/23)
-3116892,Deonte Harty,WR,BAL,W (10/23)
-2926949,Deontez Alexander,WR,SEA,W (10/23)
-1664819,Derek Carr,QB,NO,W (10/23)
-3124074,Derek Wright,WR,CAR,W (10/23)
-2966544,Derius Davis,WR,LAC,W (10/23)
-2969083,Derrick Deese,TE,DET,W (10/23)
-2180617,Derrick Dillon,WR,CLE,W (10/23)
-2061188,Derrick Henry,RB,BAL,MCM
-2130883,Derrick Johnson,WR,NYG,W (10/23)
-2965278,Deshaun Fenwick,RB,GB,W (10/23)
-2133482,Deshaun Watson,QB,CLE,W (10/23)
-2864759,Desmond Ridder,QB,MIN,W (10/23)
-2925203,Detrich Clark,WR,ATL,W (10/23)
-3168666,Deuce Vaughn,RB,DEN,W (10/23)
-1868418,Devante Davis,WR,PHI,W (10/23)
-3121113,Devaughn Vele,WR,NO,W (10/23)
-2969006,Deven Thompkins,WR,ATL,W (10/23)
-2966243,Devin Carter,WR,CAR,W (10/23)
-2967413,Devin Culp,TE,TB,W (10/23)
-2246849,Devin Duvernay,WR,CHI,W (10/23)
-2925207,Devin Gray,WR,KC,W (10/23)
-2964337,Devin Leary,QB,BAL,W (10/23)
-26703005,Devin Neal,RB,NO,WLW
-2082532,Devin Ross,WR,LV,W (10/23)
-2241251,Devin Singletary,RB,NYG,W (10/23)
-29456571,Devon Garrison,TE,SEA,W (10/23)
-1243006,Devon Ramsay,RB,FA,W (10/23)
-2966004,Devon Williams,WR,BAL,W (10/23)
-2139449,Devonte Robinson,WR,GB,W (10/23)
-26702084,Devontez Walker,WR,BAL,W (10/23)
-3121796,Devron Harper,WR,MIN,W (10/23)
-2251151,Dez Fitzpatrick,WR,LAC,W (10/23)
-3121534,Dillon Gabriel,QB,CLE,CRB
-3171023,Dillon Johnson,RB,CAR,W (10/23)
-2221967,Dillon Mitchell,WR,MIN,W (10/23)
-2962329,Dimitri Stanley,WR,GB,W (10/23)
-2194164,Diontae Johnson,WR,CLE,W (10/23)
-1915,Dolphins,DST,MIA,W (10/23)
-2967157,Dom Wood-Anderson,TE,SEA,W (10/23)
-26696063,Dominic Lovett,WR,DET,W (10/23)
-3172375,Dominique Dafney,TE,CAR,W (10/23)
-2183713,Donald Parham,TE,PIT,W (10/23)
-26697211,Donovan Edwards,RB,WAS,W (10/23)
-2819119,Donovan Peoples-Jones,WR,NO,W (10/23)
-26694424,Dont'e Thornton,WR,LV,W (10/23)
-3164185,Dontae Fleming,WR,MIN,W (10/23)
-3122376,Dontario Drummond,WR,DAL,W (10/23)
-2963923,Dontay Demus,WR,BAL,W (10/23)
-3122375,Dontayvion Wicks,WR,GB,W (10/23)
-26664285,Donte Sylencieux,WR,BAL,W (10/23)
-26730616,Dorian Singer,WR,JAC,W (10/23)
-2964729,Dorian Thompson-Robinson,QB,PHI,W (10/23)
-3168310,Drake Dabney,TE,TEN,W (10/23)
+26696676,De'Zhaun Stribling,WR,SF,WLW
+2174795,DeAndre Carter,WR,CLE,W 
+1737078,DeAndre Hopkins,WR,BAL,W 
+2131257,DeAndre Thompkins,WR,GB,W 
+2960960,DeAndre Torrey,RB,PHI,W 
+29376463,DeAngelo Hardy,WR,BAL,W 
+2868230,DeShon Williams,TE,SEA,W 
+2866975,DeVonta Smith,WR,PHI,W 
+1621175,DeVonte Christopher,WR,FA,W 
+2137691,DeVonte Dedmon,WR,MIA,W 
+2261694,DeVontres Dukes,WR,DEN,W 
+3168024,DeWayne McBride,RB,MIN,W 
+28874921,Dean Connors,RB,LAR,W 
+26696444,Dean Patterson,WR,TB,W 
+2239541,Dedrick Mills,RB,DET,W 
+1824784,Dee Hart,RB,FA,W 
+2804094,DeeJay Dallas,RB,JAC,W 
+2139735,Deebo Samuel,WR,SF,GF
+26694367,Deion Burks,WR,IND,W 
+3133199,Deion Hankins,RB,CHI,W 
+2061095,Demarcus Robinson,WR,SF,W 
+3126241,Demario Douglas,WR,NE,W 
+2131493,Demario Richard,RB,ATL,W 
+3166844,Demeer Blankumsee,WR,NE,W 
+2240193,Demetric Felton,RB,WAS,W 
+2250830,Demetris Robertson,WR,SEA,W 
+28883197,Demond Claiborne,RB,MIN,WLW
+2964540,Deneric Prince,RB,NE,W 
+2866062,Dennis Houston,WR,TB,W 
+28875368,Denzel Boston,WR,CLE,CC
+2179211,Deon Cain,WR,BUF,W 
+2866237,Deon Jackson,RB,DET,W 
+3116892,Deonte Harty,WR,BAL,W 
+2926949,Deontez Alexander,WR,SEA,W 
+1664819,Derek Carr,QB,NO,W 
+3124074,Derek Wright,WR,CAR,W 
+2966544,Derius Davis,WR,LAC,W 
+2969083,Derrick Deese,TE,DET,W 
+2180617,Derrick Dillon,WR,CLE,W 
+2061188,Derrick Henry,RB,BAL,MWM
+2130883,Derrick Johnson,WR,NYG,W 
+2965278,Deshaun Fenwick,RB,GB,W 
+2133482,Deshaun Watson,QB,CLE,W 
+28911101,Desmond Reid,RB,BUF,W 
+2864759,Desmond Ridder,QB,GB,W 
+2925203,Detrich Clark,WR,ATL,W 
+3168666,Deuce Vaughn,RB,DEN,W 
+1868418,Devante Davis,WR,PHI,W 
+3121113,Devaughn Vele,WR,NO,W 
+2969006,Deven Thompkins,WR,LV,W 
+2966243,Devin Carter,WR,CAR,W 
+2967413,Devin Culp,TE,TB,W 
+2246849,Devin Duvernay,WR,ARI,W 
+2925207,Devin Gray,WR,KC,W 
+2964337,Devin Leary,QB,BAL,W 
+26703005,Devin Neal,RB,NO,W 
+2082532,Devin Ross,WR,LV,W 
+2241251,Devin Singletary,RB,NYG,W 
+29456571,Devon Garrison,TE,SEA,W 
+1243006,Devon Ramsay,RB,FA,W 
+2966004,Devon Williams,WR,BAL,W 
+2139449,Devonte Robinson,WR,GB,W 
+26703014,Devonte Ross,WR,LAC,W 
+26702084,Devontez Walker,WR,BAL,W 
+3121796,Devron Harper,WR,MIN,W 
+2251151,Dez Fitzpatrick,WR,LAC,W 
+28873851,Diego Pavia,QB,BAL,W 
+28903382,Dillon Bell,WR,MIN,W 
+3121534,Dillon Gabriel,QB,CLE,W 
+3171023,Dillon Johnson,RB,CAR,W 
+2221967,Dillon Mitchell,WR,MIN,W 
+2962329,Dimitri Stanley,WR,GB,W 
+2194164,Diontae Johnson,WR,CLE,W 
+2978569,Dohnte Meyers,WR,CIN,W 
+1915,Dolphins,DST,MIA,W 
+2967157,Dom Wood-Anderson,TE,SEA,W 
+26696063,Dominic Lovett,WR,DET,W 
+3161882,Dominic Richardson,RB,DAL,W 
+3172375,Dominique Dafney,TE,CAR,W 
+2183713,Donald Parham,TE,PIT,W 
+26702279,Donaven McCulley,WR,MIA,W 
+26697211,Donovan Edwards,RB,MIA,W 
+2819119,Donovan Peoples-Jones,WR,NO,W 
+26694424,Dont'e Thornton,WR,LV,W 
+3164185,Dontae Fleming,WR,MIN,W 
+3121365,Dontae McMillan,RB,BAL,W 
+3122376,Dontario Drummond,WR,DAL,W 
+2963923,Dontay Demus,WR,BAL,W 
+3122375,Dontayvion Wicks,WR,PHI,W 
+26664285,Donte Sylencieux,WR,BAL,W 
+26730616,Dorian Singer,WR,JAC,W 
+2964729,Dorian Thompson-Robinson,QB,PHI,W 
+3168310,Drake Dabney,TE,GB,W 
 3127902,Drake London,WR,ATL,FRR
 26695757,Drake Maye,QB,NE,CC
-2961345,Drake Stoops,WR,LAR,W (10/23)
-2828767,Dresser Winn,QB,LAR,W (10/23)
-3117010,Drew Anderson,QB,ARI,W (10/23)
-3117011,Drew Belcher,TE,WAS,W (10/23)
-2242283,Drew Estrada,WR,HOU,W (10/23)
-2185479,Drew Lock,QB,SEA,W (10/23)
-2252376,Drew Plitt,QB,CIN,W (10/23)
-2139646,Drew Sample,TE,CIN,W (10/23)
-3163069,Duece Watts,WR,PIT,W (10/23)
-2082845,Durham Smythe,TE,CHI,W (10/23)
-2867334,Dustin Crum,QB,KC,W (10/23)
-1995653,Dy'Shawn Mobley,RB,CIN,W (10/23)
-2965973,Dyami Brown,WR,JAC,W (10/23)
-2080023,Dylan Cantrell,WR,WAS,W (10/23)
-2963946,Dylan Drummond,WR,ATL,W (10/23)
-2964322,Dylan Laube,RB,LV,W (10/23)
-3127183,Dylan Leonard,TE,DEN,W (10/23)
-2223195,Dylan Parham,TE,DEN,W (10/23)
+2961345,Drake Stoops,WR,LAR,W 
+2828767,Dresser Winn,QB,LAR,W 
+28876938,Drew Allar,QB,PIT,VD
+3117010,Drew Anderson,QB,ARI,W 
+3117011,Drew Belcher,TE,WAS,W 
+26727217,Drew Biber,TE,GB,W 
+2242283,Drew Estrada,WR,HOU,W 
+2185479,Drew Lock,QB,SEA,W 
+2252376,Drew Plitt,QB,CIN,W 
+2139646,Drew Sample,TE,CIN,W 
+3163069,Duece Watts,WR,PIT,W 
+2082845,Durham Smythe,TE,BAL,W 
+2867334,Dustin Crum,QB,KC,W 
+1995653,Dy'Shawn Mobley,RB,CIN,W 
+2965973,Dyami Brown,WR,WAS,W 
+2080023,Dylan Cantrell,WR,WAS,W 
+2963946,Dylan Drummond,WR,ATL,W 
+2964322,Dylan Laube,RB,LV,W 
+3127183,Dylan Leonard,TE,DEN,W 
+2223195,Dylan Parham,TE,DEN,W 
 28912068,Dylan Sampson,RB,CLE,AFL
-2261259,Dylan Soehner,TE,NO,W (10/23)
-3163055,Dymere Miller,WR,NYJ,W (10/23)
-2820917,EJ Jenkins,TE,PHI,W (10/23)
-2804090,EJ Perry,QB,JAC,W (10/23)
-1921,Eagles,DST,PHI,CRB
-3159184,Easop Winston,WR,NYJ,W (10/23)
-2137911,Easton Stick,QB,ATL,W (10/23)
-2830185,Ed Lee,WR,NE,W (10/23)
-3163509,Efton Chism,WR,NE,W (10/23)
-3121378,Eli Pancol,WR,JAC,W (10/23)
-2241806,Eli Stove,WR,LAC,W (10/23)
-3172301,Eli Wilson,RB,CLE,W (10/23)
-3161106,Eli Wolf,TE,WAS,W (10/23)
+2261259,Dylan Soehner,TE,NO,W 
+3163055,Dymere Miller,WR,NYJ,W 
+3168807,EJ Horton,WR,IND,W 
+2820917,EJ Jenkins,TE,PHI,W 
+2804090,EJ Perry,QB,JAC,W 
+3163764,EJ Smith,RB,KC,W 
+3162445,EJ Williams,WR,LV,W 
+1921,Eagles,DST,PHI,W 
+3159184,Easop Winston,WR,NYJ,W 
+2137911,Easton Stick,QB,IND,W 
+2830185,Ed Lee,WR,NE,W 
+3163509,Efton Chism,WR,NE,W 
+28901170,Eli Heidenreich,RB,PIT,VD
+3121378,Eli Pancol,WR,IND,W 
+28924611,Eli Raridon,TE,NE,W 
+2241806,Eli Stove,WR,LAC,W 
+26696120,Eli Stowers,TE,PHI,CRB
+3172301,Eli Wilson,RB,CLE,W 
+3161106,Eli Wolf,TE,WAS,W 
 28900714,Elic Ayomanor,WR,TEN,MAM
-26700496,Elijah Arroyo,TE,SEA,W (10/23)
-2961847,Elijah Collins,RB,CIN,W (10/23)
-2804732,Elijah Cooks,WR,PHI,W (10/23)
-2830007,Elijah Dotson,RB,ATL,W (10/23)
-3122914,Elijah Higgins,TE,ARI,W (10/23)
-2819876,Elijah Mitchell,RB,KC,W (10/23)
-2963569,Elijah Moore,WR,BUF,W (10/23)
-3161976,Elijah Young,RB,BUF,W (10/23)
-3163150,Elijhah Badger,WR,KC,W (10/23)
-3161644,Ellis Merriweather,RB,GB,W (10/23)
-3164304,Emani Bailey,RB,CAR,W (10/23)
-2185471,Emanuel Hall,WR,WAS,W (10/23)
-29104952,Emanuel Wilson,RB,GB,CRB
-2964372,Emari Demercado,RB,ARI,CRB
+26700496,Elijah Arroyo,TE,SEA,W 
+2961847,Elijah Collins,RB,CIN,W 
+2804732,Elijah Cooks,WR,CAR,W 
+2830007,Elijah Dotson,RB,ATL,W 
+3122914,Elijah Higgins,TE,ARI,W 
+2819876,Elijah Mitchell,RB,PHI,W 
+2963569,Elijah Moore,WR,PHI,W 
+28888850,Elijah Sarratt,WR,BAL,MAM
+26697830,Elijah Tau-Tolliver,RB,BAL,W 
+3161976,Elijah Young,RB,BUF,W 
+3163150,Elijhah Badger,WR,KC,W 
+3161644,Ellis Merriweather,RB,GB,W 
+3164304,Emani Bailey,RB,CAR,W 
+2185471,Emanuel Hall,WR,WAS,W 
+29104952,Emanuel Wilson,RB,SEA,CRB
+2964372,Emari Demercado,RB,KC,CRB
 26696165,Emeka Egbuka,WR,TB,AFL
-2867204,Emeka Emezie,WR,ATL,W (10/23)
-2142440,Emmanuel Butler,WR,NO,W (10/23)
-2967045,Emory Jones,QB,ATL,W (10/23)
-2760832,Eno Benjamin,RB,NO,W (10/23)
-2186674,Equanimeous St Brown,WR,SF,W (10/23)
-3116821,Eric Dungey,QB,CIN,W (10/23)
-3123569,Eric Gray,RB,NYG,W (10/23)
-2001018,Eric Saubert,TE,SEA,W (10/23)
-1759992,Eric Tomlinson,TE,LAC,W (10/23)
-3121555,Erick All,TE,CIN,W (10/23)
-2962352,Erik Ezukanma,WR,JAC,W (10/23)
-2868233,Erik Krommenhoek,TE,LAC,W (10/23)
-2412493,Ethan Fernea,WR,IND,W (10/23)
-3162542,Ethan Garbers,QB,CAR,W (10/23)
-2079887,Evan Engram,TE,DEN,W (10/23)
-3124679,Evan Hull,RB,PIT,W (10/23)
-2060769,Ezekiel Elliott,RB,LAC,W (10/23)
-1902,Falcons,DST,ATL,W (10/23)
-2221829,Feleipe Franks,TE,ATL,W (10/23)
-2261052,Felix Harper,QB,CLE,W (10/23)
-2186422,Felton Davis,WR,KC,W (10/23)
-2180634,Foster Moreau,TE,NO,W (10/23)
-2242757,Frank Darby,WR,SF,W (10/23)
-3172189,Frank Gore,RB,BUF,W (10/23)
-2221836,Freddie Swain,WR,CHI,W (10/23)
-2804813,Gabe Davis,WR,BUF,W (10/23)
-26718347,Gage Larvadain,WR,CLE,W (10/23)
-2183083,Gardner Minshew,QB,KC,W (10/23)
-2962429,Garett Maag,WR,MIN,W (10/23)
-3162974,Garrett Greene,QB,TB,W (10/23)
-2251875,Garrett Groshek,RB,MIN,W (10/23)
-2239574,Garrett Walston,TE,SF,W (10/23)
+2867204,Emeka Emezie,WR,ATL,W 
+2142440,Emmanuel Butler,WR,NO,W 
+28909837,Emmanuel Henderson,WR,SEA,W 
+28877097,Emmett Johnson,RB,KC,MAM
+2967045,Emory Jones,QB,ATL,W 
+2186674,Equanimeous St Brown,WR,SF,W 
+3116821,Eric Dungey,QB,CIN,W 
+3123569,Eric Gray,RB,NYG,W 
+29122776,Eric Rivers,WR,TB,W 
+2001018,Eric Saubert,TE,SEA,W 
+3121555,Erick All,TE,CIN,W 
+2962352,Erik Ezukanma,WR,PHI,W 
+2868233,Erik Krommenhoek,TE,LAC,W 
+29121831,Ethan Conner,TE,JAC,W 
+3162542,Ethan Garbers,QB,CAR,W 
+2079887,Evan Engram,TE,DEN,W 
+3124679,Evan Hull,RB,ARI,W 
+28877391,Evan Svoboda,TE,LAC,W 
+1902,Falcons,DST,ATL,CC
+2221829,Feleipe Franks,TE,CAR,W 
+2261052,Felix Harper,QB,CLE,W 
+2186422,Felton Davis,WR,KC,W 
+28916321,Fernando Mendoza,QB,LV,MCM
+2180634,Foster Moreau,TE,HOU,W 
+3172189,Frank Gore,RB,BUF,W 
+2804813,Gabe Davis,WR,BUF,W 
+29417586,Gabriel Benyard,WR,CAR,W 
+26718347,Gage Larvadain,WR,CLE,W 
+2183083,Gardner Minshew,QB,ARI,W 
+2962429,Garett Maag,WR,MIN,W 
+3162974,Garrett Greene,WR,TB,W 
+2251875,Garrett Groshek,RB,MIN,W 
+26701706,Garrett Nussmeier,QB,KC,W 
+2239574,Garrett Walston,TE,SF,W 
 3123864,Garrett Wilson,WR,NYJ,MAM
-2870531,Gary Brightwell,RB,CIN,W (10/23)
-1851098,Gary Chambers,WR,BUF,W (10/23)
-26702972,Gavin Bartholomew,TE,MIN,W (10/23)
-3133986,Gavin Hardison,QB,MIA,W (10/23)
-2868689,Gavin Holmes,WR,TEN,W (10/23)
-3163073,Gee Scott,TE,NE,W (10/23)
-1700358,Geno Smith,QB,LV,MCM
-2174207,Geoff Swaim,TE,CLE,W (10/23)
-2965537,Geor'quarius Spivey,TE,KC,W (10/23)
-3116741,George Aston,RB,NYG,W (10/23)
-3131661,George Holani,RB,SEA,W (10/23)
-2818265,George Kittle,TE,SF,MWM
+2870531,Gary Brightwell,RB,CIN,W 
+1851098,Gary Chambers,WR,BUF,W 
+26702972,Gavin Bartholomew,TE,MIN,W 
+3133986,Gavin Hardison,QB,MIA,W 
+2868689,Gavin Holmes,WR,TEN,W 
+3163073,Gee Scott,TE,NYJ,W 
+1700358,Geno Smith,QB,NYJ,W 
+2174207,Geoff Swaim,TE,CLE,W 
+2965537,Geor'quarius Spivey,TE,KC,W 
+3116741,George Aston,RB,NYG,W 
+3131661,George Holani,RB,SEA,W 
+2818265,George Kittle,TE,SF,FRR
 3123212,George Pickens,WR,DAL,CRB
-2142692,Gerald Everett,TE,CHI,W (10/23)
-2240551,Gerrid Doaks,RB,HOU,W (10/23)
-2969148,Gerrit Prince,TE,KC,W (10/23)
-1918,Giants,DST,NYG,MAM
-3133264,Giles Jackson,WR,PHI,W (10/23)
-2189091,Giovanni Ricci,TE,MIN,W (10/23)
-1265470,Golden Tate,WR,TEN,W (10/23)
-2184656,Graham Adomitis,TE,IND,W (10/23)
-3122664,Graham Mertz,QB,HOU,W (10/23)
-2804129,Grant Calcaterra,TE,PHI,W (10/23)
-26720345,Grant DuBose,WR,BUF,W (10/23)
-2247058,Grayson Gunter,TE,JAC,W (10/23)
-3137978,Greg Bell,RB,PIT,W (10/23)
-2223207,Greg Dortch,WR,ARI,W (10/23)
-2964274,Greg Dulcich,TE,MIA,W (10/23)
-2820084,Greg Ward,WR,IND,W (10/23)
-2816291,Griffin Hebert,TE,PHI,W (10/23)
-2233463,Griffin Neal,QB,NO,W (10/23)
-26696189,Gunnar Helm,TE,TEN,W (10/23)
-2805178,Gunnar Oakes,TE,DET,W (10/23)
-3117210,Gunner Olszewski,WR,NYG,W (10/23)
-2925410,Gus Edwards,RB,LAC,W (10/23)
-2185654,Hakeem Butler,TE,CIN,W (10/23)
-26727031,Hal Presley,WR,KC,W (10/23)
-2820465,Hamze El-Zayat,WR,NYJ,W (10/23)
+2142692,Gerald Everett,TE,CHI,W 
+28878358,Germie Bernard,WR,PIT,AFL
+2240551,Gerrid Doaks,RB,HOU,W 
+2969148,Gerrit Prince,TE,KC,W 
+1918,Giants,DST,NYG,W 
+3133264,Giles Jackson,WR,PHI,W 
+2189091,Giovanni Ricci,TE,DET,W 
+1265470,Golden Tate,WR,TEN,W 
+2184656,Graham Adomitis,TE,IND,W 
+3122664,Graham Mertz,QB,HOU,W 
+2804129,Grant Calcaterra,TE,PHI,W 
+26720345,Grant DuBose,WR,BUF,W 
+2247058,Grayson Gunter,TE,JAC,W 
+3137978,Greg Bell,RB,PIT,W 
+26697079,Greg Desrosiers,RB,LAC,W 
+2223207,Greg Dortch,WR,DET,W 
+2964274,Greg Dulcich,TE,MIA,W 
+2816291,Griffin Hebert,TE,PHI,W 
+2233463,Griffin Neal,QB,NO,W 
+26696189,Gunnar Helm,TE,TEN,W 
+2805178,Gunnar Oakes,TE,DET,W 
+3117210,Gunner Olszewski,WR,NYG,W 
+2925410,Gus Edwards,RB,LAC,W 
+2185654,Hakeem Butler,TE,DEN,W 
+26727031,Hal Presley,WR,TEN,W 
+2820465,Hamze El-Zayat,WR,NYJ,W 
+28915401,Hank Beatty,WR,TEN,W 
 28900882,Harold Fannin,TE,CLE,GF
-2241240,Harrison Bryant,TE,HOU,W (10/23)
-2252503,Harvey Binford,WR,IND,W (10/23)
-2960978,Hassan Hall,RB,ARI,W (10/23)
-2968506,Hassan Haskins,RB,LAC,W (10/23)
-3125550,Hayden Hatten,WR,SEA,W (10/23)
-2185053,Hayden Hurst,TE,LAC,W (10/23)
-3131519,Hayden Rucci,TE,MIA,W (10/23)
-2805110,Hendon Hooker,QB,CAR,W (10/23)
-28869012,Henry Litwin,WR,CHI,W (10/23)
-2967084,Henry Pearson,TE,GB,W (10/23)
-2962387,Holton Ahlers,QB,SEA,W (10/23)
-3164837,Hunter Dekkers,QB,NO,W (10/23)
+2241240,Harrison Bryant,TE,SEA,W 
+26698495,Harrison Wallace,WR,ARI,W 
+2252503,Harvey Binford,WR,IND,W 
+2960978,Hassan Hall,RB,ARI,W 
+2968506,Hassan Haskins,RB,LAC,W 
+3125550,Hayden Hatten,WR,SEA,W 
+2185053,Hayden Hurst,TE,LAC,W 
+29122200,Hayden Large,TE,CHI,W 
+3131519,Hayden Rucci,TE,SF,W 
+3162966,Haynes King,QB,CAR,W 
+26701120,Heinrich Haarberg,TE,CAR,W 
+2805110,Hendon Hooker,QB,TEN,W 
+28869012,Henry Litwin,WR,CHI,W 
+2962387,Holton Ahlers,QB,SEA,W 
+3164837,Hunter Dekkers,QB,NO,W 
 2079848,Hunter Henry,TE,NE,CRB
-2221963,Hunter Kampmoyer,TE,DEN,W (10/23)
-2867428,Hunter Long,TE,JAC,W (10/23)
-2969438,Hunter Luepke,RB,DAL,W (10/23)
-2144726,Hunter Renfrow,WR,CAR,W (10/23)
-2180777,Hunter Thedford,TE,CLE,W (10/23)
-2260674,Ian Book,QB,PHI,W (10/23)
-2253359,Ian Thomas,TE,LV,W (10/23)
-3126061,Ian Wheeler,RB,CHI,W (10/23)
-3124097,Ife Adeyi,WR,PHI,W (10/23)
-2865894,Ihmir Smith-Marsette,WR,NYG,W (10/23)
-2257888,Irv Smith,TE,HOU,W (10/23)
-2185963,Irvin Charles,WR,NYJ,W (10/23)
-2964154,Isaac Guerendo,RB,SF,W (10/23)
-3127763,Isaac Rex,TE,LAC,W (10/23)
+2867428,Hunter Long,TE,JAC,W 
+2969438,Hunter Luepke,RB,DAL,W 
+2144726,Hunter Renfrow,WR,CAR,W 
+2180777,Hunter Thedford,TE,CLE,W 
+2253359,Ian Thomas,TE,LV,W 
+3126061,Ian Wheeler,RB,BUF,W 
+3124097,Ife Adeyi,WR,PHI,W 
+2865894,Ihmir Smith-Marsette,WR,ARI,W 
+2257888,Irv Smith,TE,HOU,W 
+2185963,Irvin Charles,WR,SEA,W 
+2964154,Isaac Guerendo,RB,SF,W 
+3127763,Isaac Rex,TE,LAC,W 
 29122587,Isaac TeSlaa,WR,DET,ELP
-3117099,Isaac Zico,WR,ARI,W (10/23)
-28910521,Isaiah Bond,WR,CLE,W (10/23)
-2966767,Isaiah Bowser,RB,BUF,W (10/23)
-26718641,Isaiah Davis,RB,NYJ,W (10/23)
-2783899,Isaiah Hodgins,WR,PIT,W (10/23)
-2961906,Isaiah Likely,TE,BAL,W (10/23)
-2131587,Isaiah McKenzie,WR,MIA,W (10/23)
-2965743,Isaiah McKoy,WR,IND,W (10/23)
-3121203,Isaiah Neyor,WR,GB,W (10/23)
-2182104,Isaiah Searight,TE,NYG,W (10/23)
-3131703,Isaiah Spiller,RB,LV,W (10/23)
-2256694,Isaiah Washington,WR,BAL,W (10/23)
-2247180,Isaiah Weston,WR,CLE,W (10/23)
-3126581,Isaiah Williams,WR,NYJ,W (10/23)
-2835033,Isaiah Winstead,WR,NYJ,W (10/23)
-3139308,Isaiah Wooden,WR,LAC,W (10/23)
-1679913,Isi Sofele,RB,FA,W (10/23)
-2966551,Isiah Pacheco,RB,KC,ELP
-3163291,Israel Abanikanda,RB,GB,W (10/23)
-2961109,Izaiah Gathings,TE,KC,W (10/23)
-1752358,JC Copeland,RB,NYJ,W (10/23)
-26719274,JJ Galbreath,TE,PIT,W (10/23)
-2864966,JJ Howland,TE,TB,W (10/23)
-26701622,JJ Jones,WR,JAC,W (10/23)
-29379354,JJ Laap,WR,LAR,W (10/23)
+3117099,Isaac Zico,WR,ARI,W 
+28910521,Isaiah Bond,WR,CLE,W 
+2966767,Isaiah Bowser,RB,BUF,W 
+26718641,Isaiah Davis,RB,NYJ,W 
+2783899,Isaiah Hodgins,WR,NYG,W 
+2961906,Isaiah Likely,TE,NYG,MCM
+2965743,Isaiah McKoy,WR,IND,W 
+3121203,Isaiah Neyor,WR,GB,W 
+2182104,Isaiah Searight,TE,NYG,W 
+3131703,Isaiah Spiller,RB,LV,W 
+2256694,Isaiah Washington,WR,BAL,W 
+2247180,Isaiah Weston,WR,CLE,W 
+3126581,Isaiah Williams,WR,NYJ,W 
+2835033,Isaiah Winstead,WR,NYJ,W 
+3139308,Isaiah Wooden,WR,CLE,W 
+1679913,Isi Sofele,RB,FA,W 
+2966551,Isiah Pacheco,RB,DET,W 
+3163291,Israel Abanikanda,RB,DAL,W 
+2961109,Izaiah Gathings,TE,KC,W 
+26723673,J Michael Sturdivant,WR,GB,W 
+26726239,J'Mari Taylor,RB,JAC,W 
+1752358,JC Copeland,RB,NYJ,W 
+26719274,JJ Galbreath,TE,PIT,W 
+2864966,JJ Howland,TE,TB,W 
+26701622,JJ Jones,WR,JAC,W 
+29379354,JJ Laap,WR,LAR,W 
 26695214,JJ McCarthy,QB,MIN,GF
-2252786,JJ Taylor,RB,HOU,W (10/23)
-2804420,JK Dobbins,RB,DEN,WLW
-26693430,JP Richardson,WR,CHI,W (10/23)
-2060760,JT Barrett,QB,PIT,W (10/23)
-26702195,Ja'Corey Brooks,WR,WAS,W (10/23)
-3162664,Ja'Lynn Polk,WR,NO,W (10/23)
+2252786,JJ Taylor,RB,HOU,W 
+2804420,JK Dobbins,RB,DEN,NN
+26693430,JP Richardson,WR,CHI,W 
+2060760,JT Barrett,QB,PIT,W 
+26702195,Ja'Corey Brooks,WR,WAS,W 
+29158151,Ja'Kobi Lane,WR,BAL,MWM
+3162664,Ja'Lynn Polk,WR,NO,W 
 2966320,Ja'Marr Chase,WR,CIN,FRR
-3168195,Ja'Quinden Jackson,RB,JAC,W (10/23)
-26731381,Ja'Tavion Sanders,TE,CAR,W (10/23)
-26717711,Ja'seem Reed,WR,CAR,W (10/23)
-2189504,JaMycal Hasty,RB,MIA,W (10/23)
-29166460,JaQuae Jackson,WR,LAC,W (10/23)
-3126147,JaVonta Payton,WR,ARI,W (10/23)
-3128825,Jaaron Hayek,WR,KC,W (10/23)
-3171876,Jabari Small,RB,DET,W (10/23)
-3124997,Jacardia Wright,RB,SEA,W (10/23)
-26700682,Jack Bech,WR,LV,W (10/23)
-2804446,Jack Coan,QB,IND,W (10/23)
-2962220,Jack Colletto,RB,PIT,W (10/23)
-2961162,Jack Plummer,QB,CAR,W (10/23)
-2240110,Jack Sorenson,WR,CIN,W (10/23)
-2239684,Jack Stoll,TE,NO,W (10/23)
-2964293,Jack Westover,TE,NE,W (10/23)
-3135324,Jackson Hawes,TE,BUF,W (10/23)
-26700892,Jackson Meeks,WR,DET,W (10/23)
-2180288,Jacob Breeland,TE,BAL,W (10/23)
-2964883,Jacob Copeland,WR,PIT,W (10/23)
-3133200,Jacob Cowing,WR,SF,W (10/23)
-2189290,Jacob Harris,TE,TB,W (10/23)
-2818962,Jacob Hollister,TE,CAR,W (10/23)
-2865854,Jacob Kibodi,RB,CLE,W (10/23)
-2976071,Jacob Saylors,RB,DET,W (10/23)
-2964138,Jacob Sirmon,QB,CLE,W (10/23)
-2963488,Jacob Warren,TE,NE,W (10/23)
-1877247,Jacoby Brissett,QB,ARI,AFL
-28878082,Jacoby Jones,WR,WAS,W (10/23)
-26700358,Jacolby George,WR,CAR,W (10/23)
+3162257,Ja'Mori Maclin,WR,BUF,W 
+3168195,Ja'Quinden Jackson,RB,JAC,W 
+26731381,Ja'Tavion Sanders,TE,CAR,W 
+26717711,Ja'seem Reed,WR,CAR,W 
+2189504,JaMycal Hasty,RB,MIA,W 
+29166460,JaQuae Jackson,WR,LAC,W 
+3126147,JaVonta Payton,WR,ARI,W 
+3128825,Jaaron Hayek,WR,KC,W 
+3171876,Jabari Small,RB,DET,W 
+3124997,Jacardia Wright,RB,SEA,W 
+26700682,Jack Bech,WR,LV,W 
+2804446,Jack Coan,QB,IND,W 
+2962220,Jack Colletto,RB,PIT,W 
+28916552,Jack Endries,TE,CIN,W 
+2961162,Jack Plummer,QB,CAR,W 
+2240110,Jack Sorenson,WR,CIN,W 
+2239684,Jack Stoll,TE,CLE,W 
+50048640,Jack Strand,QB,ATL,W 
+28923845,Jack Velling,TE,ATL,W 
+2964293,Jack Westover,TE,NE,W 
+26726610,Jackson Acker,RB,BUF,W 
+3135324,Jackson Hawes,TE,BUF,W 
+26700892,Jackson Meeks,WR,DET,W 
+2180288,Jacob Breeland,TE,BAL,W 
+3123588,Jacob Clark,QB,LV,W 
+2964883,Jacob Copeland,WR,PIT,W 
+3133200,Jacob Cowing,WR,SF,W 
+29121519,Jacob De Jesus,WR,KC,W 
+2189290,Jacob Harris,TE,TB,W 
+2976071,Jacob Saylors,RB,DET,W 
+2964138,Jacob Sirmon,QB,CLE,W 
+2963488,Jacob Warren,TE,NE,W 
+1877247,Jacoby Brissett,QB,ARI,FRR
+28878082,Jacoby Jones,WR,WAS,W 
+26700358,Jacolby George,WR,CAR,W 
 3126952,Jacory Croskey-Merritt,RB,WAS,CRB
-2982608,Jadakis Bonds,WR,GB,W (10/23)
-26693614,Jaden Shirden,RB,CAR,W (10/23)
-3133126,Jaden Smith,WR,TB,W (10/23)
-3122363,Jadon Haselwood,WR,PHI,W (10/23)
-2976448,Jadon Janke,WR,GB,W (10/23)
-2967603,Jaelen Gill,WR,CLE,W (10/23)
-2836391,Jaelon Darden,WR,SEA,W (10/23)
-1913,Jaguars,DST,JAC,W (10/23)
-2962944,Jahan Dotson,WR,PHI,W (10/23)
-29174299,Jahdae Walker,WR,CHI,W (10/23)
-3169583,Jaheim Bell,TE,PHI,W (10/23)
-3162810,Jahmal Banks,WR,BAL,W (10/23)
+2982608,Jadakis Bonds,WR,GB,W 
+28875230,Jadarian Price,RB,SEA,NN
+26713355,Jaden Bradley,WR,WAS,W 
+26727476,Jaden Nixon,RB,GB,W 
+26693614,Jaden Shirden,RB,CAR,W 
+3133126,Jaden Smith,WR,DAL,W 
+3122363,Jadon Haselwood,WR,PHI,W 
+2976448,Jadon Janke,WR,GB,W 
+2967603,Jaelen Gill,WR,CLE,W 
+2836391,Jaelon Darden,WR,SEA,W 
+1913,Jaguars,DST,JAC,W 
+2962944,Jahan Dotson,WR,ATL,W 
+29174299,Jahdae Walker,WR,CHI,W 
+3169583,Jaheim Bell,TE,PIT,W 
+3162810,Jahmal Banks,WR,BAL,W 
 3162723,Jahmyr Gibbs,RB,DET,AFL
-2962413,Jaivon Heiligh,WR,CIN,W (10/23)
-2962336,Jake Bobo,WR,SEA,W (10/23)
-26697836,Jake Briningstool,TE,KC,W (10/23)
-2180355,Jake Browning,QB,CIN,W (10/23)
-3159209,Jake Burt,TE,NE,W (10/23)
-3117019,Jake Dolegala,QB,MIA,W (10/23)
+2962413,Jaivon Heiligh,WR,CIN,W 
+2962336,Jake Bobo,WR,SEA,W 
+26697836,Jake Briningstool,TE,KC,W 
+2180355,Jake Browning,QB,TB,W 
+3159209,Jake Burt,TE,NE,W 
+3117019,Jake Dolegala,QB,MIA,W 
 2867159,Jake Ferguson,TE,DAL,NN
-2803326,Jake Fromm,QB,DET,W (10/23)
-2239544,Jake Funk,RB,JAC,W (10/23)
-2815170,Jake Haener,QB,NO,W (10/23)
-2260981,Jake Hausmann,TE,WAS,W (10/23)
-2252298,Jake Herslow,WR,SEA,W (10/23)
-2132133,Jake Luton,QB,LV,W (10/23)
-2253478,Jake Phillips,TE,PIT,W (10/23)
-2925215,Jake Roh,TE,ATL,W (10/23)
-2870660,Jake Tonges,TE,SF,W (10/23)
-1860924,Jakeem Grant,WR,ATL,W (10/23)
-3114047,Jakob Johnson,RB,HOU,W (10/23)
-2183835,Jakobi Meyers,WR,LV,MCM
-3122024,Jakobie Keeney-James,WR,GB,W (10/23)
-26725939,Jaleel McLaughlin,RB,DEN,W (10/23)
-3165078,Jalen Brooks,WR,DAL,W (10/23)
-3163990,Jalen Coker,WR,CAR,NN
-2186663,Jalen Guyton,WR,LV,W (10/23)
-2131633,Jalen Hurd,WR,NE,W (10/23)
+2803326,Jake Fromm,QB,DET,W 
+2815170,Jake Haener,QB,KC,W 
+2260981,Jake Hausmann,TE,WAS,W 
+2252298,Jake Herslow,WR,SEA,W 
+2253478,Jake Phillips,TE,PIT,W 
+2925215,Jake Roh,TE,ATL,W 
+2870660,Jake Tonges,TE,SF,W 
+3114047,Jakob Johnson,RB,HOU,W 
+2183835,Jakobi Meyers,WR,JAC,MCM
+3122024,Jakobie Keeney-James,WR,PIT,W 
+26725939,Jaleel McLaughlin,RB,DEN,W 
+3165078,Jalen Brooks,WR,ARI,W 
+3163990,Jalen Coker,WR,CAR,ELP
+2131633,Jalen Hurd,WR,NE,W 
 2240246,Jalen Hurts,QB,PHI,MWM
-2968156,Jalen Jackson,RB,JAC,W (10/23)
-2185697,Jalen McCleskey,WR,NO,W (10/23)
-3162347,Jalen McMillan,WR,TB,W (10/23)
-26694943,Jalen Milroe,QB,SEA,FRR
-3122722,Jalen Moreno-Cropper,WR,DAL,W (10/23)
-3159098,Jalen Morton,QB,IND,W (10/23)
-2967232,Jalen Nailor,WR,MIN,GF
-2803733,Jalen Reagor,WR,LAC,W (10/23)
-28924106,Jalen Royals,WR,KC,W (10/23)
-29100602,Jalen Sample,WR,WAS,W (10/23)
-2868238,Jalen Tolbert,WR,DAL,W (10/23)
-2240825,Jalen Virgil,WR,BUF,W (10/23)
-2869352,Jalen Wayne,WR,GB,W (10/23)
-3166561,Jalen White,RB,GB,W (10/23)
-2820236,Jalen Williams,WR,NYG,W (10/23)
-3131559,Jalen Wydermyer,TE,IND,W (10/23)
-3168876,Jalin Conyers,TE,MIA,W (10/23)
-3171911,Jalin Hyatt,WR,NYG,W (10/23)
-3124664,Jalon Calhoun,WR,DET,W (10/23)
-28877767,Jamaal Pritchett,WR,NYJ,W (10/23)
-2001287,Jamaal Williams,RB,NO,W (10/23)
-2818264,Jamal Agnew,WR,ATL,W (10/23)
-2139136,Jamal Custis,WR,PIT,W (10/23)
-2240263,Jamal Pettigrew,TE,LAR,W (10/23)
-3127827,Jamari Thrash,WR,CLE,W (10/23)
-1998197,Jameis Winston,QB,NYG,W (10/23)
-2866514,James Blackman,QB,MIA,W (10/23)
-2164714,James Butler,RB,LV,W (10/23)
-2071585,James Conner,RB,ARI,MCM
+2968156,Jalen Jackson,RB,JAC,W 
+2185697,Jalen McCleskey,WR,NO,W 
+3162347,Jalen McMillan,WR,TB,W 
+26694943,Jalen Milroe,QB,SEA,W 
+3122722,Jalen Moreno-Cropper,WR,NO,W 
+3159098,Jalen Morton,QB,IND,W 
+2967232,Jalen Nailor,WR,LV,W 
+2803733,Jalen Reagor,WR,MIA,W 
+28924106,Jalen Royals,WR,KC,W 
+29100602,Jalen Sample,WR,WAS,W 
+2868238,Jalen Tolbert,WR,MIA,W 
+2240825,Jalen Virgil,WR,BUF,W 
+26713535,Jalen Walthall,WR,NYJ,W 
+2869352,Jalen Wayne,WR,GB,W 
+3166561,Jalen White,RB,GB,W 
+2820236,Jalen Williams,WR,NYG,W 
+3131559,Jalen Wydermyer,TE,IND,W 
+3168876,Jalin Conyers,TE,MIA,W 
+3171911,Jalin Hyatt,WR,NYG,W 
+3124664,Jalon Calhoun,WR,DET,W 
+3166688,Jalon Daniels,QB,TB,W 
+28875653,Jam Miller,RB,NE,W 
+28877767,Jamaal Pritchett,WR,NYJ,W 
+2001287,Jamaal Williams,RB,NO,W 
+2818264,Jamal Agnew,WR,ATL,W 
+2139136,Jamal Custis,WR,PIT,W 
+26698534,Jamal Haynes,RB,CIN,W 
+2240263,Jamal Pettigrew,TE,LAR,W 
+3127827,Jamari Thrash,WR,CLE,W 
+1998197,Jameis Winston,QB,NYG,W 
+2866514,James Blackman,QB,MIA,W 
+2164714,James Butler,RB,LV,W 
+2071585,James Conner,RB,ARI,W 
 2975698,James Cook,RB,BUF,CC
-2963242,James Mitchell,TE,CAR,W (10/23)
-2180077,James Morgan,QB,ARI,W (10/23)
-2180769,James Proche,WR,TEN,W (10/23)
-2257036,James Robinson,RB,NO,W (10/23)
-2146188,James Washington,WR,ATL,W (10/23)
+2963242,James Mitchell,TE,CAR,W 
+2180077,James Morgan,QB,ARI,W 
+2180769,James Proche,WR,TEN,W 
+26694253,Jameson Geers,TE,ARI,W 
 3125968,Jameson Williams,WR,DET,ELP
-2223214,Jamie Newman,QB,PHI,W (10/23)
-1850749,Jamison Crowder,WR,WAS,W (10/23)
-26719064,Jamoi Mayes,WR,CIN,W (10/23)
-2805613,Jaquarii Roberson,WR,LAR,W (10/23)
-2965695,Jaray Jenkins,WR,PIT,W (10/23)
-1824667,Jared Baker,RB,ARI,W (10/23)
-2061053,Jared Goff,QB,DET,WLW
-2866491,Jared Scott,TE,IND,W (10/23)
-3123048,Jared Smart,WR,ARI,W (10/23)
-3126867,Jared Wayne,WR,HOU,W (10/23)
-3123819,Jared Wiley,TE,KC,W (10/23)
-2975722,Jaren Hall,QB,SEA,W (10/23)
-2964701,Jaret Patterson,RB,LAC,W (10/23)
-26700820,Jarquez Hunter,RB,LAR,MAM
-2247508,Jarrett Guarantano,QB,DEN,W (10/23)
-2180697,Jarrett Stidham,QB,DEN,W (10/23)
-2965481,Jarveon Howard,RB,BUF,W (10/23)
-3162688,Jase McClellan,RB,TB,W (10/23)
-2965967,Jashaun Corbin,RB,NE,W (10/23)
-2962302,Jason Bean,QB,IND,W (10/23)
-3170352,Jason Brownlee,WR,KC,W (10/23)
-2180514,Jauan Jennings,WR,SF,MCM
-2965989,Javian Hawkins,RB,LAR,W (10/23)
-3170860,Javon Baker,WR,PHI,W (10/23)
-2260685,Javon McKinley,WR,PIT,W (10/23)
-2961719,Javonte Williams,RB,DAL,ELP
-3121704,Jawhar Jordan,RB,HOU,W (10/23)
-2185207,Jawon Chisholm,RB,PIT,W (10/23)
-2976447,Jaxon Janke,WR,HOU,W (10/23)
+2223214,Jamie Newman,QB,PHI,W 
+1850749,Jamison Crowder,WR,WAS,W 
+26719064,Jamoi Mayes,WR,CIN,W 
+2805613,Jaquarii Roberson,WR,LAR,W 
+2965695,Jaray Jenkins,WR,PIT,W 
+1824667,Jared Baker,RB,ARI,W 
+2061053,Jared Goff,QB,DET,W 
+2866491,Jared Scott,TE,IND,W 
+3123048,Jared Smart,WR,ARI,W 
+3126867,Jared Wayne,WR,HOU,W 
+3123819,Jared Wiley,TE,KC,W 
+2975722,Jaren Hall,QB,SEA,W 
+28875704,Jaren Kanak,TE,TEN,W 
+2964701,Jaret Patterson,RB,LAC,W 
+26700820,Jarquez Hunter,RB,LAR,W 
+2247508,Jarrett Guarantano,QB,DEN,W 
+2180697,Jarrett Stidham,QB,DEN,W 
+2965481,Jarveon Howard,RB,BUF,W 
+3162688,Jase McClellan,RB,TB,W 
+2965967,Jashaun Corbin,RB,NE,W 
+2962302,Jason Bean,QB,IND,W 
+3170352,Jason Brownlee,WR,KC,W 
+2180514,Jauan Jennings,WR,MIN,W 
+2965989,Javian Hawkins,RB,LAR,W 
+3170860,Javon Baker,WR,SF,W 
+2260685,Javon McKinley,WR,PIT,W 
+2961719,Javonte Williams,RB,DAL,W 
+3121704,Jawhar Jordan,RB,HOU,W 
+2185207,Jawon Chisholm,RB,PIT,W 
+2976447,Jaxon Janke,WR,HOU,W 
 3162959,Jaxon Smith-Njigba,WR,SEA,GF
 26694019,Jaxson Dart,QB,NYG,ELP
-1877289,Jay Rome,TE,PIT,W (10/23)
+1877289,Jay Rome,TE,PIT,W 
 3123337,Jayden Daniels,QB,WAS,AFL
-26708551,Jayden Higgins,WR,HOU,FRR
-2967762,Jayden Reed,WR,GB,ELP
-28875227,Jaydon Blue,RB,DAL,ELP
-2975613,Jaylen Johnson,WR,LAC,W (10/23)
-26698771,Jaylen Jones,WR,LAC,W (10/23)
-2181185,Jaylen Smith,WR,SEA,W (10/23)
-2962110,Jaylen Waddle,WR,MIA,MWM
+26708551,Jayden Higgins,WR,HOU,AFL
+2967762,Jayden Reed,WR,GB,W 
+28876778,Jaydn Ott,RB,KC,W 
+28875227,Jaydon Blue,RB,DAL,W 
+2975613,Jaylen Johnson,WR,LAC,W 
+26698771,Jaylen Jones,WR,LAC,W 
+2181185,Jaylen Smith,WR,SEA,W 
+2962110,Jaylen Waddle,WR,DEN,W 
 3126535,Jaylen Warren,RB,PIT,GF
-26698774,Jaylen Wright,RB,MIA,W (10/23)
+26698774,Jaylen Wright,RB,MIA,MAM
 3162484,Jaylin Lane,WR,WAS,CRB
 26697286,Jaylin Noel,WR,HOU,VD
-2181988,Jaylon Moore,WR,JAC,W (10/23)
-2180620,Jazz Ferguson,WR,SEA,W (10/23)
-2962576,Je'Quan Burton,WR,MIA,W (10/23)
-1824745,Jeff Driskel,QB,LV,W (10/23)
-3121012,Jeff Foreman,WR,LV,W (10/23)
-2185927,Jeff Smith,WR,ARI,W (10/23)
-2925161,Jeff Wilson,RB,MIA,W (10/23)
-2787078,Jelani Woods,TE,NYJ,W (10/23)
-2237669,Jenson Stoshak,WR,CAR,W (10/23)
-2260702,Jequez Ezzard,WR,WAS,W (10/23)
-2804133,Jeremiah Hall,TE,NYG,W (10/23)
-2815197,Jeremiah Haydel,WR,LAR,W (10/23)
-3135525,Jeremiah Webb,WR,NE,W (10/23)
-2129680,Jeremy Gallon,WR,LV,W (10/23)
-2139987,Jeremy McNichols,RB,WAS,W (10/23)
-2965446,Jeremy Ruckert,TE,NYJ,W (10/23)
-2176561,Jeret Smith,WR,KC,W (10/23)
-2129436,Jerick McKinnon,RB,KC,W (10/23)
-3125586,Jerjuan Newton,WR,DEN,W (10/23)
-3163951,Jermaine Burton,WR,CIN,W (10/23)
-26717777,Jermaine Jackson,WR,NO,W (10/23)
-26700676,Jermaine Terry,TE,NYG,W (10/23)
-2964472,Jermar Jefferson,RB,ARI,W (10/23)
-2966543,Jerome Ford,RB,CLE,MWM
-29118901,Jerome Kapp,WR,NYJ,W (10/23)
-2179406,Jerome Washington,TE,ARI,W (10/23)
-3123544,Jerreth Sterns,WR,LAR,W (10/23)
-3126859,Jerrion Ealy,RB,KC,W (10/23)
+2181988,Jaylon Moore,WR,JAC,W 
+2180620,Jazz Ferguson,WR,SEA,W 
+2962576,Je'Quan Burton,WR,MIA,W 
+28900417,Jeff Caldwell,WR,KC,W 
+1824745,Jeff Driskel,QB,WAS,W 
+3121012,Jeff Foreman,WR,LV,W 
+28878520,Jeff Weimer,WR,KC,W 
+2925161,Jeff Wilson,RB,MIA,W 
+2787078,Jelani Woods,TE,NYJ,W 
+2237669,Jenson Stoshak,WR,CAR,W 
+2260702,Jequez Ezzard,WR,WAS,W 
+26701763,Jerand Bradley,WR,LAC,W 
+28876766,Jeremiah Franklin,TE,MIA,W 
+2804133,Jeremiah Hall,TE,NYG,W 
+2815197,Jeremiah Haydel,WR,LAR,W 
+3135525,Jeremiah Webb,WR,NE,W 
+29133405,Jeremiyah Love,RB,ARI,AFL
+2129680,Jeremy Gallon,WR,LV,W 
+2139987,Jeremy McNichols,RB,WAS,W 
+2965446,Jeremy Ruckert,TE,NYJ,W 
+2176561,Jeret Smith,WR,KC,W 
+3125586,Jerjuan Newton,WR,DEN,W 
+3163951,Jermaine Burton,WR,CIN,W 
+26700676,Jermaine Terry,TE,NYG,W 
+2964472,Jermar Jefferson,RB,SF,W 
+2966543,Jerome Ford,RB,WAS,W 
+29118901,Jerome Kapp,WR,NYJ,W 
+2179406,Jerome Washington,TE,ARI,W 
+3123544,Jerreth Sterns,WR,LAR,W 
+3126859,Jerrion Ealy,RB,KC,W 
 2741201,Jerry Jeudy,WR,CLE,MAM
-2961918,Jeshaun Jones,WR,MIN,W (10/23)
-3117107,Jesper Horsted,TE,CAR,W (10/23)
-2976870,Jesse Matthews,WR,ATL,W (10/23)
-1919,Jets,DST,NYJ,W (10/23)
-3122336,Jha'Quan Jackson,WR,TEN,W (10/23)
-2758267,Jhamon Ausbon,WR,PHI,W (10/23)
-2202419,Jibri Blount,TE,MIA,W (10/23)
-1760229,Jimmy Garoppolo,QB,LAR,W (10/23)
-1691166,Jimmy Graham,TE,NO,W (10/23)
-3163391,Jimmy Holiday,WR,KC,W (10/23)
-26717166,Jimmy Horn,WR,CAR,W (10/23)
-3159155,JoJo Ward,WR,ARI,W (10/23)
-26726311,Joaquin Davis,WR,DEN,W (10/23)
-3117124,Jody Fortson,TE,KC,W (10/23)
-2179798,Joe Burrow,QB,CIN,NN
-1250697,Joe Flacco,QB,CIN,CC
-2962193,Joe Milton,QB,DAL,W (10/23)
-2131143,Joe Mixon,RB,HOU,MWM
-2251260,Joe Reed,WR,CHI,W (10/23)
-2878156,Joel Honigford,TE,ARI,W (10/23)
-2962072,Joel Wilson,TE,TEN,W (10/23)
-2257291,John Bates,TE,WAS,W (10/23)
-3162185,John Copenhaver,TE,JAC,W (10/23)
-2975736,John FitzPatrick,TE,GB,W (10/23)
-29119112,John Hall,WR,SEA,W (10/23)
-3159214,John Hurst,WR,IND,W (10/23)
-3123560,John Jackson,WR,CHI,W (10/23)
-29362392,John Jiles,WR,NE,W (10/23)
-2180519,John Kelly,RB,CLE,W (10/23)
-2868681,John Lovett,RB,PIT,W (10/23)
-3121171,John Metchie,WR,PHI,W (10/23)
-2252295,John Mitchell,WR,SEA,W (10/23)
-2963887,John Paddock,QB,ATL,W (10/23)
-2241250,John Raine,TE,ATL,W (10/23)
-3126959,John Rhys Plumlee,QB,SEA,W (10/23)
-2079710,John Ross,WR,PHI,W (10/23)
-2829996,John Samuel Shenker,TE,LV,W (10/23)
-2962043,John Stephens,WR,DAL,W (10/23)
-2983467,John Wolford,QB,JAC,W (10/23)
-3159233,Johnathon Johnson,WR,WAS,W (10/23)
-2131248,Johnnie Dixon,WR,DAL,W (10/23)
-2864938,Johnny Johnson,WR,HOU,W (10/23)
-3163632,Johnny King,WR,PHI,W (10/23)
-2963046,Johnny Lumpkin,TE,GB,W (10/23)
-2818622,Johnny Mundt,TE,JAC,W (10/23)
-3163268,Johnny Wilson,WR,PHI,W (10/23)
-2136691,Jon'Vea Johnson,WR,CHI,W (10/23)
-2805617,Jonathan Adams,WR,DET,W (10/23)
-3117025,Jonathan Duhart,WR,DET,W (10/23)
-3126905,Jonathan Mingo,WR,DAL,W (10/23)
+2961918,Jeshaun Jones,WR,MIN,W 
+2976870,Jesse Matthews,WR,ATL,W 
+1919,Jets,DST,NYJ,W 
+3122336,Jha'Quan Jackson,WR,HOU,W 
+2758267,Jhamon Ausbon,WR,PHI,W 
+2202419,Jibri Blount,TE,MIA,W 
+1760229,Jimmy Garoppolo,QB,LAR,W 
+3163391,Jimmy Holiday,WR,KC,W 
+26717166,Jimmy Horn,WR,CAR,W 
+28925542,Jimmy Kibble,WR,NE,W 
+3159155,JoJo Ward,WR,ARI,W 
+26726311,Joaquin Davis,WR,PIT,W 
+3117124,Jody Fortson,TE,KC,W 
+2179798,Joe Burrow,QB,CIN,W 
+3121127,Joe Fagnano,QB,BAL,W 
+1250697,Joe Flacco,QB,CIN,W 
+2962193,Joe Milton,QB,DAL,W 
+2131143,Joe Mixon,RB,HOU,W 
+3169621,Joe Royer,TE,CLE,W 
+2878156,Joel Honigford,TE,ARI,W 
+2962072,Joel Wilson,TE,TEN,W 
+29123610,Joey Aguilar,QB,JAC,W 
+2257291,John Bates,TE,WAS,W 
+3162185,John Copenhaver,TE,JAC,W 
+2975736,John FitzPatrick,TE,GB,W 
+29119112,John Hall,WR,SEA,W 
+3159214,John Hurst,WR,IND,W 
+3123560,John Jackson,WR,CHI,W 
+29362392,John Jiles,WR,NE,W 
+2180519,John Kelly,RB,CLE,W 
+2868681,John Lovett,RB,PIT,W 
+3121171,John Metchie,WR,CAR,W 
+26695610,John Michael Gyllenborg,TE,KC,W 
+2252295,John Mitchell,WR,SEA,W 
+2963887,John Paddock,QB,ATL,W 
+2241250,John Raine,TE,ATL,W 
+3126959,John Rhys Plumlee,WR,PIT,W 
+2962043,John Stephens,TE,DAL,W 
+2983467,John Wolford,QB,MIN,W 
+3159233,Johnathon Johnson,WR,WAS,W 
+2131248,Johnnie Dixon,WR,DAL,W 
+2864938,Johnny Johnson,WR,HOU,W 
+3163632,Johnny King,WR,PHI,W 
+2963046,Johnny Lumpkin,TE,GB,W 
+2818622,Johnny Mundt,TE,PHI,W 
+26699834,Johnny Pascuzzi,TE,LAC,W 
+3163268,Johnny Wilson,WR,PHI,W 
+2136691,Jon'Vea Johnson,WR,CHI,W 
+28877250,Jonah Coleman,RB,DEN,GF
+2805617,Jonathan Adams,WR,DET,W 
+28901278,Jonathan Brady,WR,LV,W 
+3117025,Jonathan Duhart,WR,DET,W 
+3126905,Jonathan Mingo,WR,DAL,W 
 2866395,Jonathan Taylor,RB,IND,CRB
-3159088,Jonathan Ward,RB,NYG,W (10/23)
-26730706,Jonathon Brooks,RB,CAR,W (10/23)
-2175993,Jonathon Rumph,WR,NYJ,W (10/23)
-2081506,Jonnu Smith,TE,PIT,W (10/23)
-2804559,Jontre Kirklin,WR,SF,W (10/23)
-3162290,Jordan Addison,WR,MIN,MCM
-2142712,Jordan Akins,TE,JAC,W (10/23)
-26697040,Jordan Bly,WR,NYG,W (10/23)
-2969002,Jordan Byrd,RB,PIT,W (10/23)
-2139040,Jordan Ellis,RB,CIN,W (10/23)
-28916212,Jordan James,RB,SF,W (10/23)
+3159088,Jonathan Ward,RB,BAL,W 
+26730706,Jonathon Brooks,RB,CAR,W 
+2175993,Jonathon Rumph,WR,NYJ,W 
+2081506,Jonnu Smith,TE,PIT,W 
+2804559,Jontre Kirklin,WR,SF,W 
+3162290,Jordan Addison,WR,MIN,W 
+2142712,Jordan Akins,TE,JAC,W 
+26697040,Jordan Bly,WR,NYG,W 
+2969002,Jordan Byrd,RB,PIT,W 
+2139040,Jordan Ellis,RB,CIN,W 
+28875996,Jordan Hudson,WR,DAL,W 
+28916212,Jordan James,RB,SF,W 
 2239997,Jordan Love,QB,GB,GF
-2967536,Jordan Mason,RB,MIN,ELP
-1759816,Jordan Matthews,WR,CAR,W (10/23)
-2804786,Jordan Mims,RB,TEN,W (10/23)
-26698828,Jordan Moore,WR,CIN,W (10/23)
-2963239,Jordan Murray,TE,CHI,W (10/23)
-29711196,Jordan Petaia,TE,LAC,W (10/23)
-2758265,Jordan Ta'amu-Perifanos,QB,MIN,W (10/23)
-2249166,Jordan Thomas,TE,ATL,W (10/23)
-2963373,Jordan Travis,QB,NYJ,W (10/23)
-3124649,Jordan Waters,RB,LAR,W (10/23)
-3164736,Jordan Watkins,WR,SF,W (10/23)
-3122843,Jordan Whittington,WR,LAR,W (10/23)
-2237119,Jordan Williams-Lambert,WR,CHI,W (10/23)
-2963601,Jose Barbon,WR,DAL,W (10/23)
-3122907,Joseph Ngata,WR,PHI,W (10/23)
-28873479,Joseph Scates,WR,JAC,W (10/23)
-2875348,Josh Ali,WR,ATL,W (10/23)
+2967536,Jordan Mason,RB,MIN,FRR
+1759816,Jordan Matthews,WR,CAR,W 
+2804786,Jordan Mims,RB,MIN,W 
+26698828,Jordan Moore,WR,CIN,W 
+2963239,Jordan Murray,TE,CHI,W 
+29711196,Jordan Petaia,TE,LAC,W 
+2758265,Jordan Ta'amu-Perifanos,QB,MIN,W 
+3124649,Jordan Waters,RB,LAR,W 
+3164736,Jordan Watkins,WR,SF,W 
+3122843,Jordan Whittington,WR,LAR,W 
+2237119,Jordan Williams-Lambert,WR,CHI,W 
+28900885,Jordyn Tyson,WR,NO,VD
+2963601,Jose Barbon,WR,DAL,W 
+26720249,Joseph Manjack IV,WR,DEN,W 
+3122907,Joseph Ngata,WR,PHI,W 
+28873479,Joseph Scates,WR,JAC,W 
 2181054,Josh Allen,QB,BUF,CRB
-2869854,Josh Babicz,TE,GB,W (10/23)
-3162970,Josh Downs,WR,IND,MAM
-1766833,Josh Harper,WR,LV,W (10/23)
-2257897,Josh Hokit,RB,ARI,W (10/23)
-2240184,Josh Imatorbhebhe,WR,JAC,W (10/23)
+2869854,Josh Babicz,TE,GB,W 
+26726935,Josh Cameron,WR,JAC,W 
+26706410,Josh Cuevas,TE,BAL,W 
+3162970,Josh Downs,WR,IND,W 
+1766833,Josh Harper,WR,LV,W 
+2257897,Josh Hokit,RB,ARI,W 
+2240184,Josh Imatorbhebhe,WR,JAC,W 
 2257876,Josh Jacobs,RB,GB,GF
-1684461,Josh Jarboe,WR,FA,W (10/23)
-1325808,Josh Johnson,QB,WAS,W (10/23)
-2867095,Josh Johnson,WR,DET,W (10/23)
-3121933,Josh Kelly,WR,HOU,W (10/23)
-3159112,Josh Love,QB,CAR,W (10/23)
-2184618,Josh Oliver,TE,MIN,W (10/23)
-2867325,Josh Palmer,WR,BUF,W (10/23)
-3159217,Josh Pearson,WR,TB,W (10/23)
-2240612,Josh Pederson,TE,JAC,W (10/23)
-2174982,Josh Reese,WR,PHI,W (10/23)
-2131796,Josh Reynolds,WR,NYJ,W (10/23)
-2965222,Josh Vann,WR,CAR,W (10/23)
-2962513,Josh Whyle,TE,GB,W (10/23)
-3121241,Josh Williams,RB,TB,W (10/23)
-1893731,Josh Woodrum,QB,WAS,W (10/23)
-3127909,Joshua Cephus,WR,JAC,W (10/23)
-2071844,Joshua Dobbs,QB,NE,W (10/23)
-2183195,Joshua Kelley,RB,TEN,W (10/23)
-3123950,Joshua Simon,TE,ATL,W (10/23)
-2181108,Josiah Deguara,TE,ARI,W (10/23)
-2139620,JuJu Smith-Schuster,WR,KC,W (10/23)
-2866554,Julian Hicks,WR,GB,W (10/23)
-2961743,Julian Hill,TE,MIA,W (10/23)
-2967664,Julius Chestnut,RB,TEN,W (10/23)
-26731678,Junior Bergen,WR,SF,W (10/23)
-2250388,Justice Hill,RB,BAL,W (10/23)
-1273205,Justin Fields,QB,NYJ,VD
-2865819,Justin Hall,WR,MIN,W (10/23)
+1684461,Josh Jarboe,WR,FA,W 
+1325808,Josh Johnson,QB,CIN,W 
+2867095,Josh Johnson,WR,DET,W 
+28901524,Josh Kattus,TE,CIN,W 
+3121933,Josh Kelly,WR,HOU,W 
+3159112,Josh Love,QB,CAR,W 
+2184618,Josh Oliver,TE,MIN,W 
+2867325,Josh Palmer,WR,BUF,W 
+3159217,Josh Pearson,WR,TB,W 
+28938986,Josh Pitsenberger,RB,HOU,W 
+2174982,Josh Reese,WR,PHI,W 
+2131796,Josh Reynolds,WR,NYJ,W 
+2965222,Josh Vann,WR,CAR,W 
+2962513,Josh Whyle,TE,GB,W 
+3121241,Josh Williams,RB,TB,W 
+1893731,Josh Woodrum,QB,WAS,W 
+3127909,Joshua Cephus,WR,JAC,W 
+2071844,Joshua Dobbs,QB,NE,W 
+2183195,Joshua Kelley,RB,TEN,W 
+3123950,Joshua Simon,TE,ATL,W 
+2181108,Josiah Deguara,TE,SF,W 
+2139620,JuJu Smith-Schuster,WR,NYG,W 
+2866554,Julian Hicks,WR,GB,W 
+2961743,Julian Hill,TE,NE,W 
+2967664,Julius Chestnut,RB,TEN,W 
+26731678,Junior Bergen,WR,SF,W 
+2250388,Justice Hill,RB,BAL,W 
+1273205,Justin Fields,QB,KC,W 
+2865819,Justin Hall,WR,MIN,W 
 2221960,Justin Herbert,QB,LAC,MAM
-2871343,Justin Jefferson,WR,MIN,NN
-3117392,Justin Johnson,TE,ARI,W (10/23)
-3125802,Justin Lockhart,WR,KC,W (10/23)
-2866624,Justin Marshall,WR,SEA,W (10/23)
-2245145,Justin Rigg,TE,TEN,W (10/23)
-2965077,Justin Shorter,WR,LV,W (10/23)
-2174961,Justin Tukes,TE,PHI,W (10/23)
-2137198,Justin Watson,WR,HOU,W (10/23)
-2965335,Justyn Ross,WR,KC,W (10/23)
-2967680,Juwan Green,WR,KC,W (10/23)
+2871343,Justin Jefferson,WR,MIN,W 
+3117392,Justin Johnson,TE,ARI,W 
+28927892,Justin Joly,TE,DEN,W 
+3125802,Justin Lockhart,WR,KC,W 
+2866624,Justin Marshall,WR,SEA,W 
+2245145,Justin Rigg,TE,TEN,W 
+2965077,Justin Shorter,TE,LV,W 
+2174961,Justin Tukes,TE,PHI,W 
+2137198,Justin Watson,WR,HOU,W 
+2965335,Justyn Ross,WR,KC,W 
+2967680,Juwan Green,WR,KC,W 
 2186637,Juwan Johnson,TE,NO,VD
-3116589,Juwann Winfree,WR,HOU,W (10/23)
-2251134,KJ Costello,QB,NO,W (10/23)
-2804432,KJ Hamler,WR,BUF,W (10/23)
-2184383,KJ Osborn,WR,WAS,W (10/23)
-2180870,KaVontae Turpin,WR,DAL,W (10/23)
-2767487,Kadarius Toney,WR,CLE,W (10/23)
-2804353,Kade Warner,WR,TB,W (10/23)
-28868815,Kaden Davis,WR,CLE,W (10/23)
-26694721,Kaden Prather,WR,BUF,W (10/23)
-2186493,Kai Locksley,WR,MIA,W (10/23)
-3121812,Kairee Robinson,RB,SEA,W (10/23)
+3116589,Juwann Winfree,WR,HOU,W 
+29123718,KC Concepcion,WR,CLE,MAM
+2251134,KJ Costello,QB,NO,W 
+2804432,KJ Hamler,WR,BUF,W 
+2184383,KJ Osborn,WR,TEN,W 
+2180870,KaVontae Turpin,WR,DAL,W 
+29123778,Kadarius Calloway,RB,TB,W 
+2804353,Kade Warner,WR,TB,W 
+28868815,Kaden Davis,WR,CHI,W 
+26694721,Kaden Prather,WR,GB,W 
+28876038,Kaden Wetjen,WR,PIT,W 
+3162599,Kaelon Black,RB,SF,ELP
+2186493,Kai Locksley,WR,MIA,W 
+3121812,Kairee Robinson,RB,SEA,W 
 28875572,Kaleb Johnson,RB,PIT,VD
-3169471,Kalel Mullings,RB,TEN,W (10/23)
-2180433,Kalif Jackson,TE,MIA,W (10/23)
-1999329,Kalif Raymond,WR,DET,W (10/23)
-2247525,Kalija Lipscomb,WR,TEN,W (10/23)
-2805116,Kalil Pimpleton,WR,NYG,W (10/23)
-2191099,Kameron Brown,WR,TB,W (10/23)
-29380891,Kameron Johnson,WR,TB,W (10/23)
-2139794,Kamryn Pettway,RB,MIN,W (10/23)
-2185711,Karan Higdon,RB,HOU,W (10/23)
+3169471,Kalel Mullings,RB,TEN,W 
+2180433,Kalif Jackson,TE,MIA,W 
+1999329,Kalif Raymond,WR,CHI,W 
+2247525,Kalija Lipscomb,WR,TEN,W 
+2805116,Kalil Pimpleton,WR,NYG,W 
+2191099,Kameron Brown,WR,TB,W 
+29380891,Kameron Johnson,WR,TB,W 
+2139794,Kamryn Pettway,RB,MIN,W 
+2185711,Karan Higdon,RB,HOU,W 
 2079567,Kareem Hunt,RB,KC,MWM
-2264866,Kawaan Baker,WR,GB,W (10/23)
-3127817,Kay'ron Lynch-Adams,RB,CAR,W (10/23)
-3163170,Kayshon Boutte,WR,NE,FRR
-2962093,Kazmeir Allen,WR,WAS,W (10/23)
-2179704,Ke'Shawn Vaughn,RB,SF,W (10/23)
-3171149,Ke'Shawn Williams,WR,PIT,W (10/23)
-3163041,KeAndre Lambert-Smith,WR,LAC,W (10/23)
-2962791,Keaontay Ingram,RB,KC,W (10/23)
-2963747,Kearis Jackson,WR,HOU,W (10/23)
-3164710,Keaton Mitchell,RB,BAL,VD
-3123467,Kedon Slovis,QB,ARI,W (10/23)
-2137866,Keelan Doss,WR,LV,W (10/23)
-1737096,Keenan Allen,WR,LAC,AFL
-2139241,Keenen Brown,TE,HOU,W (10/23)
-28867199,Kehinde Oginni,TE,ATL,W (10/23)
-29119117,Keilahn Harris,WR,PIT,W (10/23)
-3121310,Keilan Robinson,RB,NYJ,W (10/23)
-2925874,Keith Kirkwood,WR,BAL,W (10/23)
-2130290,Keith Smith,RB,ATL,W (10/23)
-2819975,Keith Towbridge,TE,WAS,W (10/23)
-2260488,Kekoa Crawford,WR,KC,W (10/23)
-26723643,Keleki Latu,TE,BUF,W (10/23)
-2758278,Kellen Mond,QB,NO,W (10/23)
-28874246,Kelly Akharaiyi,WR,ARI,W (10/23)
-2179210,Kelly Bryant,QB,FA,W (10/23)
-2246942,Kelvin Harmon,WR,DAL,W (10/23)
-2186057,Kelvin McKnight,WR,DEN,W (10/23)
-3162977,Kendall Milton,RB,CIN,W (10/23)
+2264866,Kawaan Baker,WR,GB,W 
+3127817,Kay'ron Lynch-Adams,RB,CAR,W 
+3163170,Kayshon Boutte,WR,NE,CC
+28875485,Kaytron Allen,RB,WAS,MWM
+2962093,Kazmeir Allen,WR,WAS,W 
+2179704,Ke'Shawn Vaughn,RB,SF,W 
+3171149,Ke'Shawn Williams,WR,CIN,W 
+3163041,KeAndre Lambert-Smith,WR,LAC,W 
+2962791,Keaontay Ingram,RB,KC,W 
+2963747,Kearis Jackson,WR,HOU,W 
+3164710,Keaton Mitchell,RB,LAC,VD
+3123467,Kedon Slovis,QB,ARI,W 
+3162048,Keelan Marion,WR,ATL,W 
+1737096,Keenan Allen,WR,LAC,W 
+2139241,Keenen Brown,TE,HOU,W 
+28867199,Kehinde Oginni,TE,ATL,W 
+29119117,Keilahn Harris,WR,PIT,W 
+3121310,Keilan Robinson,RB,NYJ,W 
+2925874,Keith Kirkwood,WR,BAL,W 
+2819975,Keith Towbridge,TE,WAS,W 
+3165466,Kejon Owens,RB,MIN,W 
+2260488,Kekoa Crawford,WR,KC,W 
+26723643,Keleki Latu,TE,BUF,W 
+28874246,Kelly Akharaiyi,WR,ARI,W 
+2179210,Kelly Bryant,QB,FA,W 
+2246942,Kelvin Harmon,WR,DAL,W 
+2186057,Kelvin McKnight,WR,DEN,W 
+3162977,Kendall Milton,RB,CIN,W 
 3162256,Kendre Miller,RB,NO,MAM
-2251888,Kendric Pryor,WR,CIN,W (10/23)
-2088428,Kendrick Bourne,WR,SF,ELP
-2261254,Kene Nwangwu,RB,NYJ,W (10/23)
-2182974,Kenji Bahar,QB,BAL,W (10/23)
-2867341,Kennedy Brooks,RB,PHI,W (10/23)
-2968948,Kenneth Gainwell,RB,PIT,MCM
-2175119,Kenneth Harper,RB,NYG,W (10/23)
-3121372,Kenneth Walker,RB,SEA,ELP
-3121460,Kenny McIntosh,RB,SEA,W (10/23)
-2804969,Kenny Pickett,QB,LV,W (10/23)
-2256993,Kenny Yeboah,TE,DET,W (10/23)
-2185868,Kenzel Doe,WR,PIT,W (10/23)
-26717289,Keon Coleman,WR,BUF,NN
-3122481,Keric Wheatfall,WR,PHI,W (10/23)
-3126551,Keshunn Abram,WR,NYJ,W (10/23)
-26698032,Ketron Jackson,WR,LV,W (10/23)
-2969073,Kevin Austin,WR,NO,W (10/23)
-29380772,Kevin Foelsch,TE,PIT,W (10/23)
-3122797,Kevin Harris,RB,JAC,W (10/23)
-2261023,Kevin Kassis,WR,SEA,W (10/23)
-2868972,Kevin Marks,RB,LAC,W (10/23)
-2965479,Kevin Shaa,WR,CHI,W (10/23)
-3161656,Key'Shawn Smith,WR,KC,W (10/23)
-2744571,Keytaon Thompson,WR,DET,W (10/23)
-2954080,Khadarel Hodge,WR,ATL,W (10/23)
-2867448,Khalan Laborn,RB,SF,W (10/23)
-2818380,Khalfani Muhammad,RB,ARI,W (10/23)
-2253041,Khalil Herbert,RB,NYJ,W (10/23)
-2866259,Khalil McClain,WR,MIA,W (10/23)
+2251888,Kendric Pryor,WR,CIN,W 
+2088428,Kendrick Bourne,WR,ARI,W 
+28874888,Kendrick Law,WR,DET,W 
+2261254,Kene Nwangwu,RB,NYJ,W 
+2182974,Kenji Bahar,QB,BAL,W 
+2867341,Kennedy Brooks,RB,PHI,W 
+2968948,Kenneth Gainwell,RB,TB,CRB
+2175119,Kenneth Harper,RB,NYG,W 
+3121372,Kenneth Walker,RB,KC,ELP
+28873912,Kenny Fletcher,TE,TB,W 
+3121460,Kenny McIntosh,RB,SEA,W 
+2804969,Kenny Pickett,QB,CAR,W 
+2256993,Kenny Yeboah,TE,ARI,W 
+3168827,Kentrel Bullock,RB,CIN,W 
+29125433,Kenyon Sadiq,TE,NYJ,CC
+2185868,Kenzel Doe,WR,PIT,W 
+26717289,Keon Coleman,WR,BUF,W 
+3122481,Keric Wheatfall,WR,PHI,W 
+3126551,Keshunn Abram,WR,NYJ,W 
+26698032,Ketron Jackson,WR,LV,W 
+2969073,Kevin Austin,WR,NO,W 
+28909178,Kevin Coleman,WR,MIA,W 
+29380772,Kevin Foelsch,TE,PIT,W 
+3122797,Kevin Harris,RB,JAC,W 
+2261023,Kevin Kassis,WR,SEA,W 
+2868972,Kevin Marks,RB,LAC,W 
+2965479,Kevin Shaa,WR,CHI,W 
+3161656,Key'Shawn Smith,WR,KC,W 
+2744571,Keytaon Thompson,WR,DET,W 
+2954080,Khadarel Hodge,WR,SF,W 
+2867448,Khalan Laborn,RB,SF,W 
+2818380,Khalfani Muhammad,RB,ARI,W 
+26697764,Khalil Dinkins,TE,SF,W 
+2253041,Khalil Herbert,RB,SF,W 
+2866259,Khalil McClain,WR,MIA,W 
 2969119,Khalil Shakir,WR,BUF,MCM
-3159159,Khalil Tate,WR,PHI,W (10/23)
-2139744,Khari Blasingame,RB,PHI,W (10/23)
+3159159,Khalil Tate,WR,PHI,W 
 3163421,Kimani Vidal,RB,LAC,MCM
-1272574,Kirk Cousins,QB,ATL,W (10/23)
-26730190,Kisean Johnson,WR,CLE,W (10/23)
-2239763,Ko Kieft,TE,TB,W (10/23)
-3161851,Kobe Hudson,WR,CAR,W (10/23)
-2962483,Kobe Lewis,RB,SEA,W (10/23)
-2867551,Kody Case,WR,IND,W (10/23)
-3163049,Kole Taylor,TE,CIN,W (10/23)
-26694679,Konata Mumpfield,WR,LAR,W (10/23)
-2838551,Kris Leach,TE,DEN,W (10/23)
-3161137,Kristian Wilkerson,WR,BUF,W (10/23)
-3122216,Kurtis Rourke,QB,SF,W (10/23)
-2253045,Kwamie Lassiter,WR,CIN,W (10/23)
-26705587,Kye Robichaux,RB,DET,W (10/23)
-2131782,Kyle Allen,QB,DET,W (10/23)
-1683145,Kyle Juszczyk,RB,SF,W (10/23)
-2185055,Kyle Markway,TE,LAR,W (10/23)
-26702687,Kyle McCord,QB,PHI,W (10/23)
+1272574,Kirk Cousins,QB,LV,W 
+26730190,Kisean Johnson,WR,GB,W 
+2239763,Ko Kieft,TE,TB,W 
+3161851,Kobe Hudson,WR,CAR,W 
+2962483,Kobe Lewis,RB,SEA,W 
+28909320,Kobe Prentice,WR,NE,W 
+2867551,Kody Case,WR,IND,W 
+29423982,Kolbe Katsis,WR,DEN,W 
+3163049,Kole Taylor,TE,CIN,W 
+28950335,Kole Wilson,WR,CLE,W 
+26694679,Konata Mumpfield,WR,LAR,W 
+2838551,Kris Leach,TE,DEN,W 
+3161137,Kristian Wilkerson,WR,ATL,W 
+3122216,Kurtis Rourke,QB,SF,W 
+26705587,Kye Robichaux,RB,DET,W 
+2131782,Kyle Allen,QB,BUF,W 
+50049245,Kyle Dixon,WR,NE,W 
+1683145,Kyle Juszczyk,RB,SF,W 
+2185055,Kyle Markway,TE,LAR,W 
+26702687,Kyle McCord,QB,GB,W 
 3177368,Kyle Monangai,RB,CHI,NN
-2966039,Kyle Philips,WR,LV,W (10/23)
+2966039,Kyle Philips,WR,LV,W 
 2964514,Kyle Pitts,TE,ATL,VD
-29379128,Kyle Sheets,WR,KC,W (10/23)
-2180561,Kyle Shurmur,QB,WAS,W (10/23)
-2820013,Kyle Sloter,QB,JAC,W (10/23)
-2221839,Kyle Trask,QB,TB,W (10/23)
-3167684,Kyle Williams,WR,NE,W (10/23)
-2247146,Kylen Granson,TE,PHI,W (10/23)
-2180829,Kyler Murray,QB,ARI,AFL
+29379128,Kyle Sheets,WR,KC,W 
+2180561,Kyle Shurmur,QB,WAS,W 
+2820013,Kyle Sloter,QB,JAC,W 
+2221839,Kyle Trask,QB,ATL,W 
+3167684,Kyle Williams,WR,NE,W 
+2247146,Kylen Granson,TE,TEN,W 
+2180829,Kyler Murray,QB,MIN,W 
+26699047,Kyre Duplessis,WR,SEA,W 
 3121836,Kyren Williams,RB,LAR,MCM
-3131544,Kyrese Rowan,WR,DEN,W (10/23)
-2835698,Kyric McGowan,WR,MIA,W (10/23)
-2248610,La'Mical Perine,RB,PIT,W (10/23)
-2185504,La'Michael Pettway,TE,NE,W (10/23)
-3170389,LaJohntay Wester,WR,BAL,W (10/23)
-2925157,LaQuvionte Gonzalez,WR,LAR,W (10/23)
-2185128,LaVance Taylor,RB,KC,W (10/23)
-2818058,Lachlan Pitts,TE,CHI,W (10/23)
+3131544,Kyrese Rowan,WR,DEN,W 
+26698149,Kyron Drones,QB,GB,W 
+26720252,Kyron Hudson,WR,CHI,W 
+2185504,La'Michael Pettway,TE,NE,W 
+3170389,LaJohntay Wester,WR,BAL,W 
+2925157,LaQuvionte Gonzalez,WR,LAR,W 
+2185128,LaVance Taylor,RB,KC,W 
+2818058,Lachlan Pitts,TE,CHI,W 
 3163962,Ladd McConkey,WR,LAC,VD
-2181169,Lamar Jackson,QB,BAL,WLW
-3161645,Lan Larison,RB,NE,W (10/23)
-2836356,Lance McCutcheon,WR,PIT,W (10/23)
-2247199,Landon Lenoir,WR,CHI,W (10/23)
-2962034,Landon Parker,WR,IND,W (10/23)
-2079899,Laquon Treadwell,WR,IND,W (10/23)
-1637004,Latavius Murray,RB,BUF,W (10/23)
-28875290,Latreal Jones,WR,TB,W (10/23)
-2866321,Laviska Shenault,WR,BUF,W (10/23)
-3164862,Lawrance Toafili,RB,NYJ,W (10/23)
-2183845,Lawrence Cager,TE,WAS,W (10/23)
-2969108,Lawrence Keys,WR,BUF,W (10/23)
-28877884,LeQuint Allen,RB,JAC,W (10/23)
-2963315,Leddie Brown,RB,LAC,W (10/23)
-29125075,Leon Johnson,WR,LAC,W (10/23)
-2966865,Leonard Taylor,TE,JAC,W (10/23)
-2819874,Levi Lewis,QB,SEA,W (10/23)
-3121706,Lew Nichols,RB,PIT,W (10/23)
-3171022,Lideatrick Griffin,WR,GB,W (10/23)
-2246852,Lil'Jordan Humphrey,WR,NYG,W (10/23)
-26701907,Lincoln Sefcik,TE,NYJ,W (10/23)
-3127480,Lincoln Victor,WR,DEN,W (10/23)
-1910,Lions,DST,DET,MWM
-1691193,Logan Thomas,TE,SF,W (10/23)
-2060999,Logan Woodside,QB,PIT,W (10/23)
-2966652,Lorenzo Lingard,RB,NYG,W (10/23)
-29375761,Louis Rees-Zammit,RB,JAC,W (10/23)
-2961761,Lucas Krull,TE,DEN,W (10/23)
-26728625,Lucas Scott,RB,BAL,W (10/23)
-2184739,Lucky Jackson,WR,MIN,W (10/23)
-2927085,Luis Perez,QB,LAC,W (10/23)
-2828807,Lujuan Winningham,WR,JAC,W (10/23)
-3126340,Luke Benson,TE,LAC,W (10/23)
-3122054,Luke Deal,TE,DET,W (10/23)
-2260977,Luke Farrell,TE,SF,W (10/23)
-3164098,Luke Floriea,WR,CLE,W (10/23)
-3166697,Luke Grimm,WR,LAC,W (10/23)
-3163014,Luke Lachey,TE,HOU,W (10/23)
+26697547,Lake McRee,TE,PIT,W 
+2181169,Lamar Jackson,QB,BAL,W 
+3161645,Lan Larison,RB,NE,W 
+28936051,Lance Mason,TE,PIT,W 
+2836356,Lance McCutcheon,WR,TEN,W 
+2247199,Landon Lenoir,WR,CHI,W 
+2962034,Landon Parker,WR,IND,W 
+2079899,Laquon Treadwell,WR,IND,W 
+28875290,Latreal Jones,WR,TB,W 
+2866321,Laviska Shenault,WR,BUF,W 
+3164862,Lawrance Toafili,RB,NYJ,W 
+2183845,Lawrence Cager,TE,WAS,W 
+2969108,Lawrence Keys,WR,DET,W 
+26729515,Layne Pryor,TE,HOU,W 
+26695012,Le'Meke Brockington,WR,ATL,W 
+28923721,Le'Veon Moss,RB,MIA,W 
+28877884,LeQuint Allen,RB,JAC,W 
+2963315,Leddie Brown,RB,LAC,W 
+29125075,Leon Johnson,WR,LAC,W 
+2966865,Leonard Taylor,TE,JAC,W 
+2819874,Levi Lewis,QB,SEA,W 
+3164057,Levi Wentz,WR,PIT,W 
+3121706,Lew Nichols,RB,PIT,W 
+26695655,Lewis Bond,WR,HOU,W 
+26695271,Liam Clifford,WR,IND,W 
+3171022,Lideatrick Griffin,WR,GB,W 
+2246852,Lil'Jordan Humphrey,WR,DEN,W 
+3162885,Lincoln Pare,RB,IND,W 
+26701907,Lincoln Sefcik,TE,NYJ,W 
+3127480,Lincoln Victor,WR,DEN,W 
+1910,Lions,DST,DET,W 
+2060999,Logan Woodside,QB,ARI,W 
+2966652,Lorenzo Lingard,RB,NYG,W 
+26727305,Louis Hansen,TE,HOU,W 
+29375761,Louis Rees-Zammit,RB,JAC,W 
+2961761,Lucas Krull,TE,DEN,W 
+26728625,Lucas Scott,RB,BAL,W 
+2184739,Lucky Jackson,WR,DET,W 
+2927085,Luis Perez,QB,LAC,W 
+2828807,Lujuan Winningham,WR,JAC,W 
+26701853,Luke Altmyer,QB,DET,W 
+3126340,Luke Benson,TE,LAC,W 
+3122054,Luke Deal,TE,DET,W 
+2260977,Luke Farrell,TE,SF,W 
+3164098,Luke Floriea,WR,CLE,W 
+3166697,Luke Grimm,WR,LAC,W 
+3163014,Luke Lachey,TE,GB,W 
 3121502,Luke McCaffrey,WR,WAS,CRB
-3129283,Luke Musgrave,TE,GB,W (10/23)
-2968473,Luke Schoonmaker,TE,DAL,W (10/23)
+3129283,Luke Musgrave,TE,GB,W 
+2968473,Luke Schoonmaker,TE,DAL,W 
+26717211,Luke Wysong,WR,MIN,W 
 28874444,Luther Burden,WR,CHI,ELP
-2875380,Lynn Bowden,WR,NO,W (10/23)
-3165469,Mac Dalena,WR,KC,W (10/23)
-2868995,Mac Hippenhammer,WR,CIN,W (10/23)
-2741202,Mac Jones,QB,SF,MCM
-2010349,Mack Hollins,WR,NE,W (10/23)
-3122839,Makai Polk,WR,ATL,W (10/23)
-2961890,Malachi Carter,WR,CIN,W (10/23)
-3162613,Malachi Corley,WR,CLE,W (10/23)
-2175065,Malcome Kennedy,WR,NO,W (10/23)
-2866334,Malik Cunningham,QB,DET,W (10/23)
-2773009,Malik Davis,RB,DAL,W (10/23)
-2865446,Malik Flowers,WR,LV,W (10/23)
-3171033,Malik Heath,WR,GB,W (10/23)
-3116830,Malik Henry,WR,NO,W (10/23)
-2966553,Malik Knowles,WR,SF,W (10/23)
+3165469,Mac Dalena,WR,BUF,W 
+2868995,Mac Hippenhammer,WR,CIN,W 
+2741202,Mac Jones,QB,SF,FRR
+2010349,Mack Hollins,WR,NE,MCM
+29123772,Makai Lemon,WR,PHI,MCM
+3122839,Makai Polk,WR,ATL,W 
+2961890,Malachi Carter,WR,CIN,W 
+3162613,Malachi Corley,WR,CLE,W 
+26706066,Malachi Fields,WR,NYG,AFL
+2175065,Malcome Kennedy,WR,NO,W 
+3168821,Malick Meiga,WR,CAR,W 
+29121426,Malik Benson,WR,LV,W 
+2866334,Malik Cunningham,WR,DET,W 
+2773009,Malik Davis,RB,DAL,W 
+2865446,Malik Flowers,WR,LV,W 
+3171033,Malik Heath,WR,ATL,W 
+3116830,Malik Henry,WR,NO,W 
+2966553,Malik Knowles,WR,SF,W 
+26693641,Malik McClain,WR,NYJ,W 
 26697761,Malik Nabers,WR,NYG,NN
-3117089,Malik Taylor,WR,DET,W (10/23)
-2136527,Malik Turner,WR,SF,W (10/23)
-3124729,Malik Washington,WR,MIA,W (10/23)
-2780940,Malik Williams,WR,BUF,W (10/23)
-2804167,Malik Willis,QB,GB,W (10/23)
-3159152,Manasseh Bailey,WR,NYJ,W (10/23)
-2131504,Manny Wilkins,QB,GB,W (10/23)
-3162514,MarShawn Lloyd,RB,GB,GF
-415313,Marcedes Lewis,TE,CHI,W (10/23)
-2181212,Marcus Green,WR,PHI,W (10/23)
-3125801,Marcus Major,RB,BAL,W (10/23)
-1880862,Marcus Mariota,QB,WAS,W (10/23)
-3133994,Marcus Riley,WR,NYJ,W (10/23)
-3163938,Marcus Rosemy-Jacksaint,WR,PHI,W (10/23)
-2893412,Marcus Santos-Silva,TE,CLE,W (10/23)
-3125670,Marcus Simms,WR,SEA,W (10/23)
-26728267,Marcus Yarns,RB,NO,W (10/23)
-26697388,Mario Williams,WR,LAR,W (10/23)
+3117089,Malik Taylor,WR,DET,W 
+2136527,Malik Turner,WR,SF,W 
+3124729,Malik Washington,WR,MIA,W 
+2780940,Malik Williams,WR,BUF,W 
+2804167,Malik Willis,QB,MIA,ELP
+3159152,Manasseh Bailey,WR,NYJ,W 
+2131504,Manny Wilkins,QB,GB,W 
+50049265,Mante Morrow,WR,LAC,W 
+3162514,MarShawn Lloyd,RB,GB,W 
+415313,Marcedes Lewis,TE,DEN,W 
+2181212,Marcus Green,WR,PHI,W 
+3125801,Marcus Major,RB,BAL,W 
+1880862,Marcus Mariota,QB,WAS,W 
+3133994,Marcus Riley,WR,NYJ,W 
+3163938,Marcus Rosemy-Jacksaint,WR,PHI,W 
+28924530,Marcus Sanders,WR,MIN,W 
+2893412,Marcus Santos-Silva,TE,CLE,W 
+3125670,Marcus Simms,WR,SEA,W 
+26728267,Marcus Yarns,RB,NO,W 
+26697388,Mario Williams,WR,LAR,W 
 2131121,Mark Andrews,TE,BAL,MWM
-3162063,Mark Redman,TE,LAR,W (10/23)
-2925520,Mark Thompson,RB,LV,W (10/23)
-2354807,Mark Vital,TE,KC,W (10/23)
-2965517,Markese Stepp,RB,NYJ,W (10/23)
-2145762,Marlon Mack,RB,ARI,W (10/23)
-2247505,Marquez Callaway,WR,LV,W (10/23)
-2071540,Marquez Valdes-Scantling,WR,SF,W (10/23)
-2804128,Marquise Brown,WR,KC,WLW
-1691489,Marquise Goodwin,WR,CLE,W (10/23)
-3164086,Marshall Lang,TE,SEA,W (10/23)
-1737158,Martavis Bryant,WR,WAS,W (10/23)
+26719097,Mark Gronowski,QB,MIA,W 
+3162063,Mark Redman,TE,LAR,W 
+2925520,Mark Thompson,RB,LV,W 
+2354807,Mark Vital,TE,KC,W 
+2965517,Markese Stepp,RB,NYJ,W 
+28927889,Marlin Klein,TE,HOU,W 
+2247505,Marquez Callaway,WR,LV,W 
+2071540,Marquez Valdes-Scantling,WR,DAL,W 
+2804128,Marquise Brown,WR,PHI,W 
+3164086,Marshall Lang,TE,MIN,W 
 26701883,Marvin Harrison,WR,ARI,VD
-3162586,Marvin Mims,WR,DEN,W (10/23)
-3127029,Mason Fairchild,TE,NO,W (10/23)
-3161133,Mason Kinsey,WR,TEN,W (10/23)
-29176455,Mason Pline,TE,NO,W (10/23)
-2131167,Mason Rudolph,QB,PIT,W (10/23)
-2251890,Mason Stokke,RB,CAR,W (10/23)
+3162586,Marvin Mims,WR,DEN,W 
+3127029,Mason Fairchild,TE,NO,W 
+3161133,Mason Kinsey,WR,TEN,W 
+29176455,Mason Pline,TE,KC,W 
+2131167,Mason Rudolph,QB,PIT,W 
+2251890,Mason Stokke,RB,CAR,W 
 28878064,Mason Taylor,TE,NYJ,CC
-3135304,Mason Tipton,WR,NO,W (10/23)
-2962320,Master Teague,RB,PIT,W (10/23)
-2966697,Mataeo Durant,RB,PIT,W (10/23)
-2240073,Mathew Sexton,WR,MIA,W (10/23)
-1664140,Matt Barkley,QB,JAC,W (10/23)
-2819100,Matt Breida,RB,SF,W (10/23)
-3117152,Matt Colburn,RB,JAC,W (10/23)
-2961962,Matt Corral,QB,MIN,W (10/23)
-1851039,Matt Johnson,QB,CIN,W (10/23)
-2871748,Matt Landers,WR,TEN,W (10/23)
-2184386,Matt Seybert,TE,LAC,W (10/23)
-2131215,Matt Sokol,TE,PIT,W (10/23)
+3135304,Mason Tipton,WR,NO,W 
+2962320,Master Teague,RB,PIT,W 
+2966697,Mataeo Durant,RB,PIT,W 
+2240073,Mathew Sexton,WR,MIA,W 
+3117152,Matt Colburn,RB,JAC,W 
+2961962,Matt Corral,QB,MIN,W 
+1851039,Matt Johnson,QB,CIN,W 
+2871748,Matt Landers,WR,TEN,W 
+2184386,Matt Seybert,TE,LAC,W 
+2131215,Matt Sokol,TE,PIT,W 
+26724746,Matthew Caldwell,QB,LAR,W 
 28874927,Matthew Golden,WR,GB,ELP
-1615610,Matthew Slater,WR,NE,W (10/23)
-1114942,Matthew Stafford,QB,LAR,FRR
-28926362,Maurice Alexander,WR,CHI,W (10/23)
-2965014,Max Borghi,RB,PIT,W (10/23)
-3122489,Max Brosmer,QB,MIN,W (10/23)
-3120848,Max Duggan,QB,LAC,W (10/23)
-3163775,Max Hurleman,RB,PIT,W (10/23)
-3161969,Maximilian Mang,TE,IND,W (10/23)
-2964061,McCallan Castles,TE,LAR,W (10/23)
-2248618,Mecole Hardman,WR,GB,W (10/23)
-2966595,Messiah Swinson,TE,SF,W (10/23)
-3122912,Micah Bernard,RB,NE,W (10/23)
-2188221,Micah Simon,WR,CAR,W (10/23)
-2245832,Michael Bandy,WR,DEN,W (10/23)
-1759407,Michael Burton,RB,DEN,W (10/23)
-2804075,Michael Carter,RB,ARI,FRR
-3161102,Michael Dereus,WR,BAL,W (10/23)
-2080283,Michael Dyer,RB,LV,W (10/23)
-2966873,Michael Ezeike,TE,SEA,W (10/23)
-2240415,Michael Gallup,WR,WAS,W (10/23)
-2202932,Michael Jacobson,TE,NO,W (10/23)
-2185524,Michael Johnson,WR,PHI,W (10/23)
-3171673,Michael Mayer,TE,LV,W (10/23)
+3169490,Matthew Hibner,TE,BAL,W 
+1114942,Matthew Stafford,QB,LAR,W 
+28926362,Maurice Alexander,WR,CHI,W 
+2965014,Max Borghi,RB,PIT,W 
+26727130,Max Bredeson,TE,MIN,W 
+3122489,Max Brosmer,QB,MIN,W 
+3120848,Max Duggan,QB,LAC,W 
+3163775,Max Hurleman,RB,PIT,W 
+28921209,Max Klare,TE,LAR,W 
+26725930,Max Tomczak,WR,BUF,W 
+3161969,Maximilian Mang,TE,NYG,W 
+2964061,McCallan Castles,TE,GB,W 
+2248618,Mecole Hardman,WR,BUF,W 
+2966595,Messiah Swinson,TE,GB,W 
+3122912,Micah Bernard,RB,NE,W 
+2188221,Micah Simon,WR,CAR,W 
+2245832,Michael Bandy,WR,DEN,W 
+26706359,Michael Briscoe,WR,MIN,W 
+1759407,Michael Burton,RB,CLE,W 
+2804075,Michael Carter,RB,TEN,W 
+3161102,Michael Dereus,WR,BAL,W 
+2080283,Michael Dyer,RB,LV,W 
+2966873,Michael Ezeike,TE,SEA,W 
+2240415,Michael Gallup,WR,WAS,W 
+2202932,Michael Jacobson,TE,NO,W 
+2185524,Michael Johnson,WR,PHI,W 
+3171673,Michael Mayer,TE,LV,W 
 2963496,Michael Penix,QB,ATL,GF
-2240188,Michael Pittman,WR,IND,VD
-3163083,Michael Pratt,QB,TB,W (10/23)
-1983802,Michael Thomas,WR,NO,W (10/23)
-3128079,Michael Wiley,RB,TB,W (10/23)
-2965181,Michael Wilson,WR,ARI,W (10/23)
-2965459,Michael Woods,WR,CLE,W (10/23)
-2868607,Michael Young,WR,HOU,W (10/23)
-2924894,Mikah Holder,WR,WAS,W (10/23)
-2925551,Mike Boone,RB,MIA,W (10/23)
-1824909,Mike Evans,WR,TB,ELP
-2139298,Mike Gesicki,TE,CIN,W (10/23)
-2826762,Mike Harley,WR,MIA,W (10/23)
-29376329,Mike Rigerman,TE,BAL,W (10/23)
-26650288,Mike Strachan,WR,WAS,W (10/23)
-2179830,Mike Weber,RB,NYG,W (10/23)
-2072143,Mike White,QB,CIN,W (10/23)
-2082516,Mike Williams,WR,LAC,W (10/23)
-2195033,Mikey Daniel,RB,CAR,W (10/23)
-2186656,Miles Boykin,WR,CHI,W (10/23)
-2251305,Miles Sanders,RB,DAL,W (10/23)
-2240245,Miller Forristall,TE,LAR,W (10/23)
-2175046,Milton Williams,WR,LV,W (10/23)
-3131611,Milton Wright,WR,LAC,W (10/23)
-2060476,Mitch Trubisky,QB,BUF,W (10/23)
-29738519,Mitch Van Vooren,TE,CLE,W (10/23)
-26693662,Mitchell Evans,TE,CAR,W (10/23)
-3162481,Mitchell Tinsley,WR,CIN,W (10/23)
-2188431,Mitchell Wilcox,TE,NE,W (10/23)
-2815925,Mo Alie-Cox,TE,IND,W (10/23)
-2804395,Mohamed Ibrahim,RB,MIN,W (10/23)
-26693980,Moliki Matavao,TE,NO,W (10/23)
-26727563,Monaray Baldwin,WR,MIA,W (10/23)
-3166692,Montana Lemonious-Craig,WR,PIT,W (10/23)
-1630429,Montel Harris,RB,FA,W (10/23)
-3169784,Montorie Foster,WR,SEA,W (10/23)
-26699807,Montrell Johnson,RB,PHI,W (10/23)
-2866191,Montrell Washington,WR,NYG,W (10/23)
-3168156,Moochie Dixon,WR,NO,W (10/23)
-3162427,Moose Muhammad,WR,CAR,W (10/23)
-2235403,Moritz Boehringer,TE,CIN,W (10/23)
-1760327,MyCole Pruitt,TE,PIT,W (10/23)
-2180360,Myles Gaskin,RB,SEA,W (10/23)
-3168525,Myles Price,WR,MIN,W (10/23)
-2221807,N'Keal Harry,WR,SEA,W (10/23)
-2741200,Najee Harris,RB,LAC,CC
-2977285,Nate Adkins,TE,DEN,W (10/23)
-3163182,Nate Carter,RB,ATL,W (10/23)
-3162296,Nate McCollum,WR,ARI,W (10/23)
-26664471,Nate McCrary,RB,GB,W (10/23)
-3172309,Nate Noel,RB,IND,W (10/23)
-2251110,Nate Stanley,QB,MIN,W (10/23)
-2001862,Nate Sudfeld,QB,SF,W (10/23)
-2179741,Nate Wieting,TE,NYG,W (10/23)
-1984209,Nathan Peterman,QB,ATL,W (10/23)
-2818390,Nathan Rourke,QB,ATL,W (10/23)
-3121003,Nathaniel Peat,RB,DAL,W (10/23)
-3125818,Nay'Quan Wright,RB,IND,W (10/23)
-2893513,Naz Bohannon,TE,JAC,W (10/23)
-3131532,Neal Johnson,TE,NYJ,W (10/23)
-2807947,Neil Pau'u,WR,BUF,W (10/23)
-1996508,Nelson Agholor,WR,BAL,W (10/23)
-2180613,Nick Brossette,RB,DET,W (10/23)
-2131579,Nick Chubb,RB,HOU,MWM
-2804380,Nick Easley,WR,BUF,W (10/23)
-2260646,Nick Eubanks,TE,IND,W (10/23)
-2131743,Nick Fitzgerald,QB,TB,W (10/23)
-26661732,Nick Guggemos,TE,BUF,W (10/23)
-3123192,Nick Kallerup,TE,SEA,W (10/23)
-2819104,Nick Mullens,QB,JAC,W (10/23)
-2818056,Nick Muse,TE,ARI,W (10/23)
-3123884,Nick Nash,WR,ATL,W (10/23)
-2925439,Nick Sharga,RB,LV,W (10/23)
-2927394,Nick Stevens,QB,DEN,W (10/23)
-1871322,Nick Vannett,TE,MIN,W (10/23)
-2185954,Nick Westbrook-Ikhine,WR,MIA,W (10/23)
-28908782,Nick Williams,WR,DEN,W (10/23)
+2240188,Michael Pittman,WR,PIT,VD
+3163083,Michael Pratt,QB,TB,W 
+26720219,Michael Trigg,TE,DAL,W 
+3128079,Michael Wiley,RB,TB,W 
+2965181,Michael Wilson,WR,ARI,NN
+2965459,Michael Woods,WR,DEN,W 
+29137521,Michael Wortham,WR,JAC,W 
+2868607,Michael Young,WR,HOU,W 
+2924894,Mikah Holder,WR,WAS,W 
+2925551,Mike Boone,RB,MIA,W 
+1824909,Mike Evans,WR,SF,W 
+2139298,Mike Gesicki,TE,CIN,W 
+2826762,Mike Harley,WR,MIA,W 
+29376329,Mike Rigerman,TE,BAL,W 
+26650288,Mike Strachan,WR,WAS,W 
+26693539,Mike Washington,RB,LV,GF
+2179830,Mike Weber,RB,NYG,W 
+2072143,Mike White,QB,CAR,W 
+2082516,Mike Williams,WR,LAC,W 
+2195033,Mikey Daniel,RB,CAR,W 
+2186656,Miles Boykin,WR,CHI,W 
+3174323,Miles Davis,RB,CAR,W 
+28912020,Miles Kitselman,TE,DET,W 
+2251305,Miles Sanders,RB,DAL,W 
+26696204,Miller Moss,QB,CHI,W 
+2175046,Milton Williams,WR,LV,W 
+3131611,Milton Wright,WR,LAC,W 
+2060476,Mitch Trubisky,QB,TEN,W 
+29738519,Mitch Van Vooren,TE,NE,W 
+26693662,Mitchell Evans,TE,CAR,W 
+3162481,Mitchell Tinsley,WR,CIN,W 
+2815925,Mo Alie-Cox,TE,IND,W 
+26693980,Moliki Matavao,TE,NO,W 
+26727563,Monaray Baldwin,WR,MIA,W 
+3166692,Montana Lemonious-Craig,WR,PIT,W 
+1630429,Montel Harris,RB,FA,W 
+3169784,Montorie Foster,WR,SEA,W 
+26699807,Montrell Johnson,RB,CAR,W 
+2866191,Montrell Washington,WR,HOU,W 
+3168156,Moochie Dixon,WR,NO,W 
+3162427,Moose Muhammad,WR,CAR,W 
+2235403,Moritz Boehringer,TE,CIN,W 
+1760327,MyCole Pruitt,TE,PIT,W 
+2180360,Myles Gaskin,RB,SEA,W 
+26703126,Myles Montgomery,RB,NE,W 
+3168525,Myles Price,WR,MIN,W 
+2221807,N'Keal Harry,TE,SEA,W 
+2741200,Najee Harris,RB,LAC,W 
+2977285,Nate Adkins,TE,DEN,W 
+3162867,Nate Boerkircher,TE,JAC,W 
+3163182,Nate Carter,RB,ATL,W 
+3162296,Nate McCollum,WR,ARI,W 
+3172309,Nate Noel,RB,IND,W 
+2251110,Nate Stanley,QB,MIN,W 
+2001862,Nate Sudfeld,QB,SF,W 
+2179741,Nate Wieting,TE,NYG,W 
+2818390,Nathan Rourke,QB,ATL,W 
+3121003,Nathaniel Peat,RB,DAL,W 
+3125818,Nay'Quan Wright,RB,IND,W 
+2893513,Naz Bohannon,TE,JAC,W 
+3131532,Neal Johnson,TE,NYJ,W 
+2807947,Neil Pau'u,WR,BUF,W 
+1996508,Nelson Agholor,WR,BAL,W 
+28876754,Nicholas Singleton,RB,TEN,FRR
+2180613,Nick Brossette,RB,DET,W 
+2131579,Nick Chubb,RB,HOU,W 
+3166956,Nick DeGennaro,WR,NE,W 
+2804380,Nick Easley,WR,BUF,W 
+2260646,Nick Eubanks,TE,IND,W 
+2131743,Nick Fitzgerald,QB,TB,W 
+26661732,Nick Guggemos,TE,BUF,W 
+3123192,Nick Kallerup,TE,SEA,W 
+2819104,Nick Mullens,QB,JAC,W 
+2818056,Nick Muse,TE,DET,W 
+3123884,Nick Nash,WR,WAS,W 
+2925439,Nick Sharga,RB,LV,W 
+2927394,Nick Stevens,QB,DEN,W 
+1871322,Nick Vannett,TE,SEA,W 
+2185954,Nick Westbrook-Ikhine,WR,IND,W 
+28908782,Nick Williams,WR,DEN,W 
 2878193,Nico Collins,WR,HOU,WLW
-2131958,Nico Evans,RB,PHI,W (10/23)
-2964863,Nikko Remigio,WR,KC,W (10/23)
-28867671,Nikola Kalinic,TE,CHI,W (10/23)
-2139270,Noah Brown,WR,WAS,W (10/23)
-3122713,Noah Cain,RB,CIN,W (10/23)
-2251095,Noah Fant,TE,CIN,W (10/23)
-2869790,Noah Gindorff,TE,PIT,W (10/23)
-2866903,Noah Gray,TE,KC,W (10/23)
-2252366,Nolan Givan,TE,DET,W (10/23)
-2816145,Nolan Henderson,QB,BAL,W (10/23)
-3117157,Nsimba Webster,WR,CHI,W (10/23)
-2183832,Nyheim Miller-Hines,RB,LAC,W (10/23)
-1824823,Odell Beckham,WR,MIA,W (10/23)
-3138422,Odieu Hiliare,WR,ATL,W (10/23)
-2186266,Olamide Zaccheaus,WR,CHI,W (10/23)
-2878230,Oliver Martin,WR,JAC,W (10/23)
+2131958,Nico Evans,RB,PHI,W 
+2964863,Nikko Remigio,WR,KC,W 
+28867671,Nikola Kalinic,TE,CHI,W 
+2139270,Noah Brown,WR,WAS,W 
+3122713,Noah Cain,RB,CIN,W 
+2251095,Noah Fant,TE,NO,W 
+2869790,Noah Gindorff,TE,PIT,W 
+2866903,Noah Gray,TE,KC,W 
+28922853,Noah Thomas,WR,CIN,W 
+3161758,Noah Whittington,RB,HOU,W 
+2252366,Nolan Givan,TE,DET,W 
+2816145,Nolan Henderson,QB,BAL,W 
+3117157,Nsimba Webster,WR,CHI,W 
+2183832,Nyheim Miller-Hines,RB,NO,W 
+28900666,Octavian Smith,WR,BAL,W 
+1824823,Odell Beckham,WR,NYG,W 
+3138422,Odieu Hiliare,WR,ATL,W 
+2186266,Olamide Zaccheaus,WR,ATL,W 
+2878230,Oliver Martin,WR,JAC,W 
 28873887,Ollie Gordon,RB,MIA,VD
-2179863,Omar Bayless,WR,KC,W (10/23)
+2179863,Omar Bayless,WR,KC,W 
+28900921,Omar Cooper,WR,NYJ,WLW
+28875329,Omari Evans,WR,KC,W 
+28875866,Omari Kelly,WR,CHI,W 
 28908905,Omarion Hampton,RB,LAC,VD
-2865393,Ontaria Wilson,WR,NYJ,W (10/23)
-26727374,Oronde Gadsden,TE,LAC,W (10/23)
-3127887,Oscar Cardenas,TE,ARI,W (10/23)
-2249164,Osirus Mitchell,WR,GB,W (10/23)
-2804600,Otis Anderson,RB,LAR,W (10/23)
-2818062,Owen Wright,RB,TB,W (10/23)
+2865393,Ontaria Wilson,WR,NYJ,W 
+26727374,Oronde Gadsden,TE,LAC,MWM
+3127887,Oscar Cardenas,TE,ARI,W 
+28873644,Oscar Delp,TE,NO,W 
+2249164,Osirus Mitchell,WR,GB,W 
+2804600,Otis Anderson,RB,LAR,W 
+2818062,Owen Wright,RB,TB,W 
 1911,Packers,DST,GB,VD
-1905,Panthers,DST,CAR,W (10/23)
-2139547,Papi White,WR,TEN,W (10/23)
-3117115,Parker Hesse,TE,DET,W (10/23)
-3168820,Parker Washington,WR,JAC,W (10/23)
-2139271,Parris Campbell,WR,DAL,W (10/23)
-26697415,Pat Bryant,WR,DEN,NN
-3138345,Pat Conroy,TE,LV,W (10/23)
-2961270,Pat Freiermuth,TE,PIT,W (10/23)
-3159195,Patrick Carr,RB,SEA,W (10/23)
-3121535,Patrick Herbert,TE,JAC,W (10/23)
-2139562,Patrick Laird,RB,TB,W (10/23)
+1905,Panthers,DST,CAR,W 
+2139547,Papi White,WR,TEN,W 
+3168820,Parker Washington,WR,JAC,WLW
+2139271,Parris Campbell,WR,DAL,W 
+26697415,Pat Bryant,WR,DEN,W 
+3138345,Pat Conroy,TE,LV,W 
+2961270,Pat Freiermuth,TE,PIT,W 
+3159195,Patrick Carr,RB,SEA,W 
+3169599,Patrick Gurd,TE,LV,W 
+3121535,Patrick Herbert,TE,JAC,W 
 2142052,Patrick Mahomes,QB,KC,ELP
-29375400,Patrick Murtagh,TE,DEN,W (10/23)
-2818911,Patrick Ricard,RB,BAL,W (10/23)
-2256736,Patrick Taylor,RB,SF,W (10/23)
-1931,Patriots,DST,NE,GF
-2968469,Payne Durham,TE,TB,W (10/23)
-3132633,Payton Thorne,QB,CIN,W (10/23)
-3172327,Pete Guerriero,RB,PIT,W (10/23)
-3131648,Peter LeBlanc,WR,CHI,W (10/23)
-2867545,Peyton Hendershot,TE,KC,W (10/23)
-2819155,Pharaoh Brown,TE,ARI,W (10/23)
-29152034,Phil Lutz,WR,NE,W (10/23)
-26695049,Phil Mafah,RB,DAL,W (10/23)
-2961854,Phillip Brooks,WR,KC,W (10/23)
-1836058,Phillip Dorsett,WR,LV,W (10/23)
-2175073,Phillip Sims,QB,SEA,W (10/23)
-2819247,Pierre Strong,RB,GB,W (10/23)
-29385901,Praise Olatoke,WR,CAR,W (10/23)
-2865409,Princeton Fant,TE,DAL,W (10/23)
-2965260,Pro Wells,TE,CIN,W (10/23)
+29375400,Patrick Murtagh,TE,DEN,W 
+2818911,Patrick Ricard,RB,NYG,W 
+2256736,Patrick Taylor,RB,SF,W 
+1931,Patriots,DST,NE,W 
+2968469,Payne Durham,TE,TB,W 
+3132633,Payton Thorne,QB,CIN,W 
+3172327,Pete Guerriero,RB,PIT,W 
+3131648,Peter LeBlanc,WR,CHI,W 
+2867545,Peyton Hendershot,TE,KC,W 
+2819155,Pharaoh Brown,TE,IND,W 
+29152034,Phil Lutz,WR,NE,W 
+26695049,Phil Mafah,RB,DAL,W 
+493041,Philip Rivers,QB,IND,W 
+2961854,Phillip Brooks,WR,KC,W 
+1836058,Phillip Dorsett,WR,LV,W 
+2175073,Phillip Sims,QB,SEA,W 
+2819247,Pierre Strong,RB,GB,W 
+29385901,Praise Olatoke,WR,CAR,W 
+2865409,Princeton Fant,TE,DAL,W 
+2965260,Pro Wells,TE,CIN,W 
 3121687,Puka Nacua,WR,LAR,MCM
-2968088,Qadir Ismail,WR,JAC,W (10/23)
-3164735,Quali Conley,RB,CIN,W (10/23)
-2249179,Quartney Davis,WR,IND,W (10/23)
+2968088,Qadir Ismail,TE,CHI,W 
+3164735,Quali Conley,RB,CIN,W 
+2249179,Quartney Davis,WR,IND,W 
 3162609,Quentin Johnston,WR,LAC,AFL
-3166676,Quentin Skinner,WR,NYJ,W (10/23)
-2262953,Quez Watkins,WR,PHI,W (10/23)
-26697082,Quincy Skinner,WR,ATL,W (10/23)
-26746721,Quinn Ewers,QB,MIA,W (10/23)
+26702243,Quentin Moore,TE,WAS,W 
+3166676,Quentin Skinner,WR,BUF,W 
+2262953,Quez Watkins,WR,PHI,W 
+26697082,Quincy Skinner,WR,NYJ,W 
+26746721,Quinn Ewers,QB,MIA,W 
 28878286,Quinshon Judkins,RB,CLE,NN
-2251870,Quintez Cephus,WR,BUF,W (10/23)
-2864581,Quintin Morris,TE,JAC,W (10/23)
+2251870,Quintez Cephus,WR,BUF,W 
+2864581,Quintin Morris,TE,JAC,W 
 3121207,RJ Harvey,RB,DEN,MAM
-2980231,RJ Starkey,WR,GB,W (10/23)
-2248189,Ra'Shaun Henry,WR,SEA,W (10/23)
-2804561,Racey McMath,WR,DAL,W (10/23)
-3169147,Rachaad White,RB,TB,CC
-2870476,Raheem Blackshear,RB,PIT,W (10/23)
-2174957,Raheem Mostert,RB,LV,W (10/23)
-26700087,Raheim Sanders,RB,CLE,W (10/23)
-1920,Raiders,DST,LV,W (10/23)
-2260196,Rakeem Boyd,RB,DET,W (10/23)
-3166901,Rakim Jarrett,WR,PIT,W (10/23)
-2248289,Raleigh Webb,WR,TB,W (10/23)
-2079834,Ralph Webb,RB,PIT,W (10/23)
-3123657,Ramel Keyton,WR,TEN,W (10/23)
-2816981,Ramon Jefferson,RB,TB,W (10/23)
+28915341,RJ Maryland,TE,GB,W 
+2980231,RJ Starkey,WR,GB,W 
+2248189,Ra'Shaun Henry,WR,SEA,W 
+3169147,Rachaad White,RB,WAS,CC
+2870476,Raheem Blackshear,RB,DET,W 
+2174957,Raheem Mostert,RB,LV,W 
+26700087,Raheim Sanders,RB,CLE,W 
+1920,Raiders,DST,LV,W 
+2260196,Rakeem Boyd,RB,DET,W 
+3166901,Rakim Jarrett,WR,PIT,W 
+2079834,Ralph Webb,RB,PIT,W 
+3123657,Ramel Keyton,WR,TEN,W 
+2816981,Ramon Jefferson,RB,TB,W 
 1923,Rams,DST,LAR,MAM
+28873470,Rashad Rochelle,WR,SEA,W 
 3124978,Rashee Rice,WR,KC,MAM
-3168797,Rasheen Ali,RB,BAL,W (10/23)
-2250863,Rashid Shaheed,WR,NO,MWM
-2960940,Rashod Bateman,WR,BAL,WLW
-3169153,Rashod Owens,WR,CIN,W (10/23)
-2237133,Rashon Ceaser,WR,TEN,W (10/23)
-1903,Ravens,DST,BAL,W (10/23)
-3123108,Ray Davis,RB,BUF,W (10/23)
-2179226,Ray-Ray McCloud,WR,ATL,W (10/23)
-2239232,Reece Horn,WR,CIN,W (10/23)
-2961395,Reggie Brown,WR,KC,W (10/23)
-2820499,Reggie Davis,WR,DAL,W (10/23)
-3161112,Reggie Gilliam,RB,BUF,W (10/23)
-2835560,Reggie Roberson,WR,TEN,W (10/23)
-3116826,Reggie White,WR,NYG,W (10/23)
-3159194,Reid Sinnett,QB,CIN,W (10/23)
-3125832,Rhamondre Stevenson,RB,NE,AFL
-2132282,Richie James,WR,KC,W (10/23)
+3168797,Rasheen Ali,RB,BAL,W 
+2250863,Rashid Shaheed,WR,SEA,MWM
+2960940,Rashod Bateman,WR,BAL,W 
+3169153,Rashod Owens,WR,CIN,W 
+2237133,Rashon Ceaser,WR,TEN,W 
+1903,Ravens,DST,BAL,W 
+3123108,Ray Davis,RB,BUF,W 
+2179226,Ray-Ray McCloud,WR,NYG,W 
+26698282,Raylen Sharpe,WR,IND,W 
+2239232,Reece Horn,WR,CIN,W 
+2961395,Reggie Brown,WR,KC,W 
+2820499,Reggie Davis,WR,DAL,W 
+3161112,Reggie Gilliam,RB,NE,W 
+2835560,Reggie Roberson,WR,TEN,W 
+28883008,Reggie Virgil,WR,ARI,W 
+3116826,Reggie White,WR,NYG,W 
+3159194,Reid Sinnett,QB,CIN,W 
+3125832,Rhamondre Stevenson,RB,NE,GF
 3122949,Ricky Pearsall,WR,SF,CC
-2966141,Ricky Person,RB,SEA,W (10/23)
-3169795,Ricky White,WR,SEA,W (10/23)
-2251993,Rico Bussey,WR,PIT,W (10/23)
-2252798,Rico Dowdle,RB,CAR,WLW
-2247038,Riley Lees,WR,CIN,W (10/23)
-26699092,Riley Leonard,QB,IND,W (10/23)
-3047671,Riley Sharp,TE,BAL,W (10/23)
-3165468,Rivaldo Fairweather,TE,DAL,W (10/23)
-2890282,River Cracraft,WR,WAS,W (10/23)
-1886746,Robbie Chosen,WR,WAS,W (10/23)
-26697728,Robbie Ouzts,TE,SEA,W (10/23)
-2804092,Robert Burns,RB,ATL,W (10/23)
-3166596,Robert Lewis,WR,MIN,W (10/23)
-2820026,Robert Tonyan,TE,KC,W (10/23)
-1754280,Robert Woods,WR,PIT,W (10/23)
-26733219,Roc Taylor,WR,PIT,W (10/23)
-2867061,Rocky Lombardi,QB,CIN,W (10/23)
-26696826,Roderick Daniels,WR,NO,W (10/23)
-2179644,Rodney Anderson,RB,CIN,W (10/23)
-2262718,Rodney Williams,TE,PIT,W (10/23)
-3169495,Roman Wilson,WR,PIT,W (10/23)
+2966141,Ricky Person,RB,SEA,W 
+3169795,Ricky White,WR,SEA,W 
+2251993,Rico Bussey,WR,PIT,W 
+2252798,Rico Dowdle,RB,PIT,W 
+2247038,Riley Lees,WR,CIN,W 
+26699092,Riley Leonard,QB,IND,W 
+3175781,Riley Nowakowski,TE,PIT,W 
+3047671,Riley Sharp,TE,BAL,W 
+3165468,Rivaldo Fairweather,TE,ARI,W 
+2890282,River Cracraft,WR,WAS,W 
+1886746,Robbie Chosen,WR,WAS,W 
+26697728,Robbie Ouzts,RB,SEA,W 
+2804092,Robert Burns,RB,ATL,W 
+29123025,Robert Henry,RB,WAS,W 
+3166596,Robert Lewis,WR,MIN,W 
+2820026,Robert Tonyan,TE,PIT,W 
+1754280,Robert Woods,WR,PIT,W 
+26733219,Roc Taylor,WR,CAR,W 
+2867061,Rocky Lombardi,QB,CIN,W 
+26696826,Roderick Daniels,WR,NO,W 
+2179644,Rodney Anderson,RB,CIN,W 
+28887229,Rohan Jones,TE,LAR,W 
+26700412,Roman Hemby,RB,LV,W 
+3169495,Roman Wilson,WR,PIT,W 
 3162979,Rome Odunze,WR,CHI,VD
-2961886,Romeo Doubs,WR,GB,GF
-2805483,Ronald Awatt,RB,SF,W (10/23)
-2968526,Rondale Moore,WR,MIN,W (10/23)
-2968474,Ronnie Bell,WR,NO,W (10/23)
-29117338,Ronnie Brown,RB,TB,W (10/23)
-2804793,Ronnie Rivers,RB,LAR,W (10/23)
-3121395,Roschon Johnson,RB,CHI,W (10/23)
-2924888,Ross Dwelley,TE,DET,W (10/23)
-2139588,Royce Freeman,RB,CHI,W (10/23)
-26693659,Rushawn Baker,RB,NYG,W (10/23)
-2131694,Russell Gage,WR,SF,W (10/23)
-1272242,Russell Wilson,QB,NYG,MWM
-1631205,Ryan Aplin,QB,FA,W (10/23)
-3159083,Ryan Becker,TE,ATL,W (10/23)
-28891456,Ryan Flournoy,WR,DAL,W (10/23)
-2879694,Ryan McDaniel,WR,JAC,W (10/23)
-2964726,Ryan Miller,WR,TB,W (10/23)
-1273654,Ryan Tannehill,QB,TEN,W (10/23)
-2219913,Ryan Williams,QB,GB,W (10/23)
-2179571,Ryan Willis,QB,CHI,W (10/23)
-3159167,Rysen John,TE,CHI,W (10/23)
-2966205,SaRodorick Thompson,RB,LAR,W (10/23)
-2806063,Sage Surratt,WR,ARI,W (10/23)
-1917,Saints,DST,NO,W (10/23)
-2804541,Sal Cannella,TE,CLE,W (10/23)
-2815163,Salvon Ahmed,RB,IND,W (10/23)
-29052184,Sam Brown,WR,GB,W (10/23)
-2180320,Sam Darnold,QB,SEA,FRR
-2803330,Sam Ehlinger,QB,DEN,W (10/23)
-2965037,Sam Hartman,QB,WAS,W (10/23)
-3123797,Sam Howell,QB,PHI,W (10/23)
-2965746,Sam James,WR,LAR,W (10/23)
+26694913,Romello Brinson,WR,DAL,W 
+2961886,Romeo Doubs,WR,NE,GF
+2805483,Ronald Awatt,RB,SF,W 
+2968474,Ronnie Bell,WR,NO,W 
+29117338,Ronnie Brown,RB,TB,W 
+2804793,Ronnie Rivers,RB,LAR,W 
+3121395,Roschon Johnson,RB,CHI,W 
+2924888,Ross Dwelley,TE,CAR,W 
+2139588,Royce Freeman,RB,LAC,W 
+3162757,Roydell Williams,RB,IND,W 
+26693659,Rushawn Baker,RB,NE,W 
+2131694,Russell Gage,WR,SF,W 
+1272242,Russell Wilson,QB,NYG,W 
+1631205,Ryan Aplin,QB,FA,W 
+3159083,Ryan Becker,TE,ATL,W 
+28891456,Ryan Flournoy,WR,DAL,W 
+2879694,Ryan McDaniel,WR,JAC,W 
+2964726,Ryan Miller,WR,NYG,W 
+2219913,Ryan Williams,QB,GB,W 
+2179571,Ryan Willis,QB,CHI,W 
+3159167,Rysen John,TE,CHI,W 
+2806063,Sage Surratt,WR,ARI,W 
+26697142,Sahmir Hagans,WR,IND,W 
+1917,Saints,DST,NO,W 
+2804541,Sal Cannella,TE,CLE,W 
+2815163,Salvon Ahmed,RB,CHI,W 
+29052184,Sam Brown,WR,GB,W 
+2180320,Sam Darnold,QB,SEA,W 
+2803330,Sam Ehlinger,QB,DEN,W 
+2965037,Sam Hartman,QB,WAS,W 
+3123797,Sam Howell,QB,DAL,W 
+2965746,Sam James,WR,LAR,W 
 3124197,Sam LaPorta,TE,DET,WLW
-2961512,Sam Pinckney,WR,CAR,W (10/23)
-29722440,Sam Pitz,TE,BAL,W (10/23)
-2968047,Sam Schnee,RB,TEN,W (10/23)
-2984114,Sam Wiglusz,WR,LAR,W (10/23)
-2131148,Samaje Perine,RB,CIN,W (10/23)
-2157431,Sammis Reyes,TE,MIN,W (10/23)
-2245831,Samori Toure,WR,DEN,W (10/23)
-2260501,Samson Nacua,WR,NO,W (10/23)
-3168435,Sandro Platzgummer,RB,NYG,W (10/23)
-2185957,Saquon Barkley,RB,PHI,MAM
-3161844,Savion Williams,WR,GB,W (10/23)
-2869196,Savon Scarver,WR,CHI,W (10/23)
-2251139,Scooter Harrington,TE,CHI,W (10/23)
-2180075,Scott Miller,WR,PIT,W (10/23)
-2060508,Scott Orndoff,TE,PHI,W (10/23)
-2186416,Scotty Washington,TE,BAL,W (10/23)
-1926,Seahawks,DST,SEA,CC
-2868998,Sean Clifford,QB,CIN,W (10/23)
-2239736,Sean McKeon,TE,IND,W (10/23)
-3116763,Sean Modster,WR,BAL,W (10/23)
-2963218,Sean Ryan,WR,BAL,W (10/23)
-3168416,Sean Tucker,RB,TB,AFL
-2239758,Seth Green,TE,NO,W (10/23)
-26697328,Seth Henigan,QB,JAC,W (10/23)
-2965944,Seth Williams,WR,LV,W (10/23)
-26695205,Shae Wyatt,WR,SF,W (10/23)
-2240307,Shane Buechele,QB,BUF,W (10/23)
-50024129,Shane Watts,RB,NE,W (10/23)
-26688308,Shane Zylstra,TE,DET,W (10/23)
-2926785,Shaq Roland,WR,CHI,W (10/23)
-3137942,Shaquan Davis,WR,PIT,W (10/23)
-2251090,Shaun Beyer,TE,GB,W (10/23)
-2962851,Shawn Bowman,TE,JAC,W (10/23)
-3116832,Shawn Poindexter,WR,SF,W (10/23)
+2961512,Sam Pinckney,WR,CAR,W 
+29722440,Sam Pitz,TE,BAL,W 
+28877184,Sam Roush,TE,CHI,W 
+2968047,Sam Schnee,RB,TEN,W 
+26700754,Sam Scott,RB,NYJ,W 
+2984114,Sam Wiglusz,WR,LAR,W 
+2131148,Samaje Perine,RB,CIN,W 
+2245831,Samori Toure,WR,PHI,W 
+2260501,Samson Nacua,WR,NO,W 
+3168435,Sandro Platzgummer,RB,NYG,W 
+2185957,Saquon Barkley,RB,PHI,W 
+3161844,Savion Williams,WR,GB,W 
+2869196,Savon Scarver,WR,CHI,W 
+2251139,Scooter Harrington,TE,CHI,W 
+2180075,Scott Miller,WR,CHI,W 
+2060508,Scott Orndoff,TE,PHI,W 
+2186416,Scotty Washington,TE,BAL,W 
+1926,Seahawks,DST,SEA,MCM
+2868998,Sean Clifford,QB,CIN,W 
+2239736,Sean McKeon,TE,IND,W 
+3116763,Sean Modster,WR,BAL,W 
+2963218,Sean Ryan,WR,BAL,W 
+3168416,Sean Tucker,RB,TB,CRB
+2239758,Seth Green,TE,NO,W 
+26697328,Seth Henigan,QB,IND,W 
+3161581,Seth McGowan,RB,IND,GF
+2965944,Seth Williams,WR,LV,W 
+26696643,Seydou Traore,TE,MIA,W 
+26695205,Shae Wyatt,WR,SF,W 
+28901305,Shaleak Knotts,WR,MIN,W 
+2240307,Shane Buechele,QB,BUF,W 
+50024129,Shane Watts,RB,NE,W 
+26688308,Shane Zylstra,TE,BUF,W 
+2926785,Shaq Roland,WR,CHI,W 
+3137942,Shaquan Davis,WR,PIT,W 
+2251090,Shaun Beyer,TE,GB,W 
+2962851,Shawn Bowman,TE,JAC,W 
+3116832,Shawn Poindexter,WR,SF,W 
 26710004,Shedeur Sanders,QB,CLE,MCM
-2962459,Shedrick Jackson,WR,LV,W (10/23)
-28866847,Shemar Bridges,WR,BAL,W (10/23)
-3162906,Shermari Jones,RB,CIN,W (10/23)
-2869963,Shi Smith,WR,KC,W (10/23)
-26695018,ShunDerrick Powell,RB,PHI,W (10/23)
-3161110,Siaosi Mariner,WR,BAL,W (10/23)
-3176940,Silas Bolden,WR,HOU,W (10/23)
-2965289,Simi Fehoko,WR,ARI,W (10/23)
-3121308,Sincere McCormick,RB,SF,W (10/23)
-28877349,Sione Vaki,RB,DET,W (10/23)
-2239649,Skylar Thompson,QB,PIT,W (10/23)
-3126874,Skyy Moore,WR,SF,W (10/23)
-2960931,Slade Bolden,WR,ATL,W (10/23)
-3121004,Snoop Conner,RB,DAL,W (10/23)
-3121137,Sone Ntoh,RB,BAL,W (10/23)
-3125863,Spencer Rattler,QB,NO,ELP
-2179632,Stanley Morgan,WR,TEN,W (10/23)
-1922,Steelers,DST,PIT,FRR
-2000038,Stefon Diggs,WR,NE,MWM
-3116783,Stephen Carlson,TE,CHI,W (10/23)
-3162073,Stephen Gosnell,WR,BUF,W (10/23)
-2961462,Stephen Guidry,WR,DAL,W (10/23)
-2223251,Stephen Sullivan,TE,CAR,W (10/23)
-2961667,Stephon Robinson,WR,ARI,W (10/23)
-1996786,Sterling Shepard,WR,TB,W (10/23)
-2871628,Stetson Bennett,QB,LAR,W (10/23)
-2925153,Steve Ishmael,WR,IND,W (10/23)
-2185536,Steven Montez,QB,DET,W (10/23)
-3116703,Steven Sims,WR,SEA,W (10/23)
-2961775,Steven Stilianos,TE,DET,W (10/23)
-2967217,Stevie Scott,RB,ARI,W (10/23)
-3164867,Stevo Klotz,TE,LAC,W (10/23)
-2864800,Stone Smartt,TE,NYJ,W (10/23)
-29116249,Sy Barnett,WR,NO,W (10/23)
+2962459,Shedrick Jackson,WR,LV,W 
+28866847,Shemar Bridges,WR,BAL,W 
+3162906,Shermari Jones,RB,CIN,W 
+26695018,ShunDerrick Powell,RB,KC,W 
+3161110,Siaosi Mariner,WR,BAL,W 
+3176940,Silas Bolden,WR,HOU,W 
+2965289,Simi Fehoko,WR,ARI,W 
+3173147,Sincere Brown,WR,LAC,W 
+3121308,Sincere McCormick,RB,SF,W 
+28877349,Sione Vaki,RB,DET,W 
+2239649,Skylar Thompson,QB,BAL,W 
+26726589,Skyler Bell,WR,BUF,MCM
+3126874,Skyy Moore,WR,GB,W 
+2960931,Slade Bolden,WR,ATL,W 
+3121137,Sone Ntoh,RB,BAL,W 
+3125863,Spencer Rattler,QB,NO,W 
+2179632,Stanley Morgan,WR,TEN,W 
+1922,Steelers,DST,PIT,W 
+2000038,Stefon Diggs,WR,WAS,W 
+3116783,Stephen Carlson,TE,CHI,W 
+3162073,Stephen Gosnell,WR,BUF,W 
+2961462,Stephen Guidry,WR,DAL,W 
+2961667,Stephon Robinson,WR,ARI,W 
+1996786,Sterling Shepard,WR,TB,W 
+2871628,Stetson Bennett,QB,LAR,W 
+2925153,Steve Ishmael,WR,IND,W 
+2185536,Steven Montez,QB,DET,W 
+3116703,Steven Sims,WR,ARI,W 
+2961775,Steven Stilianos,TE,DET,W 
+2967217,Stevie Scott,RB,ARI,W 
+3164867,Stevo Klotz,TE,LAC,W 
+2864800,Stone Smartt,TE,PHI,W 
+29116249,Sy Barnett,WR,NO,W 
+28926779,TJ Harden,RB,SEA,W 
 2251097,TJ Hockenson,TE,MIN,CRB
-2963021,TJ Luther,WR,CAR,W (10/23)
-2963440,TJ Pledger,RB,ARI,W (10/23)
-3116702,TJ Rahming,WR,MIA,W (10/23)
-3131565,TJ Sheffield,WR,TEN,W (10/23)
-2240254,TJ Simmons,WR,TB,W (10/23)
-2252275,TJ Vasher,WR,DAL,W (10/23)
-2961275,TaMerik Williams,RB,SEA,W (10/23)
-3168518,Tahj Brooks,RB,CIN,W (10/23)
-3122529,Tahj Washington,WR,MIA,W (10/23)
-26702969,Tai Felton,WR,MIN,W (10/23)
-1679885,Taimi Tutogi,RB,FA,W (10/23)
-3117391,Taj McGowan,RB,JAC,W (10/23)
-2250273,Talolo Limu-Jones,WR,CAR,W (10/23)
-2866340,Tamorrion Terry,WR,SEA,W (10/23)
-3162021,Tank Bigsby,RB,PHI,MWM
-2963970,Tank Dell,WR,HOU,W (10/23)
-2260697,Tanner Conner,TE,MIA,W (10/23)
-2926606,Tanner Hudson,TE,CIN,W (10/23)
-2964657,Tanner Knue,WR,TB,W (10/23)
-2963945,Tanner McKee,QB,PHI,W (10/23)
-2980252,Tanner McLachlan,TE,CIN,W (10/23)
-2965998,Tanner Mordecai,QB,SF,W (10/23)
-2804401,Tanner Morgan,QB,MIN,W (10/23)
-2865559,Tanner Taula,TE,TB,W (10/23)
-2819115,Tarik Black,WR,MIA,W (10/23)
-2183276,Taryn Christion,QB,PIT,W (10/23)
-3153041,Tavonn Salter,WR,ATL,W (10/23)
-2865709,Tay Martin,WR,WAS,W (10/23)
-2962839,Taye Barber,WR,TB,W (10/23)
-29675766,Taylor Elgersma,QB,GB,W (10/23)
-2963130,Taylor Grimes,WR,DEN,W (10/23)
-2174914,Taylor Heinicke,QB,LAC,W (10/23)
-3127330,Taylor Morin,WR,PHI,W (10/23)
-2804284,Tayon Fleet-Davis,RB,KC,W (10/23)
-2253350,Taysir Mack,WR,SF,W (10/23)
-2818935,Taysom Hill,"QB,TE",NO,MWM
-3126630,Tayvion Robinson,WR,CAR,W (10/23)
-2965963,Teagan Quitoriano,TE,ATL,W (10/23)
-1825122,Teddy Bridgewater,QB,TB,W (10/23)
-2809208,Tee Higgins,WR,CIN,AFL
-26702915,Tejhaun Palmer,WR,ARI,W (10/23)
-2071631,Temuchin Hodges,TE,PIT,W (10/23)
-3124921,Terique Owens,WR,SF,W (10/23)
-2963214,Terrace Marshall,WR,PHI,W (10/23)
-2130333,Terrance Cobb,RB,LV,W (10/23)
+2963021,TJ Luther,WR,CAR,W 
+2963440,TJ Pledger,RB,ARI,W 
+3116702,TJ Rahming,WR,MIA,W 
+3131565,TJ Sheffield,WR,TEN,W 
+2240254,TJ Simmons,WR,TB,W 
+2252275,TJ Vasher,WR,DAL,W 
+2961275,TaMerik Williams,RB,SEA,W 
+3168518,Tahj Brooks,RB,CIN,W 
+3122529,Tahj Washington,WR,MIA,W 
+26702969,Tai Felton,WR,MIN,W 
+1679885,Taimi Tutogi,RB,FA,W 
+3117391,Taj McGowan,RB,JAC,W 
+2250273,Talolo Limu-Jones,WR,CAR,W 
+2866340,Tamorrion Terry,WR,SEA,W 
+3162021,Tank Bigsby,RB,PHI,W 
+2963970,Tank Dell,WR,HOU,W 
+26713728,Tanner Arkin,TE,NE,W 
+2260697,Tanner Conner,TE,NYG,W 
+2926606,Tanner Hudson,TE,CIN,W 
+2964657,Tanner Knue,WR,TB,W 
+28874303,Tanner Koziol,TE,JAC,W 
+2963945,Tanner McKee,QB,PHI,W 
+2980252,Tanner McLachlan,TE,SF,W 
+2965998,Tanner Mordecai,QB,SF,W 
+2804401,Tanner Morgan,QB,MIN,W 
+2865559,Tanner Taula,TE,TB,W 
+2819115,Tarik Black,WR,DET,W 
+2183276,Taryn Christion,QB,PIT,W 
+3153041,Tavonn Salter,WR,ATL,W 
+2865709,Tay Martin,WR,DET,W 
+2962839,Taye Barber,WR,TB,W 
+26697553,Taylen Green,QB,CLE,W 
+29675766,Taylor Elgersma,QB,GB,W 
+2963130,Taylor Grimes,WR,DEN,W 
+2174914,Taylor Heinicke,QB,LAC,W 
+3127330,Taylor Morin,WR,PHI,W 
+2804284,Tayon Fleet-Davis,RB,KC,W 
+2253350,Taysir Mack,WR,SF,W 
+2818935,Taysom Hill,"QB,TE",NO,W 
+3126630,Tayvion Robinson,WR,CAR,W 
+2965963,Teagan Quitoriano,TE,ARI,W 
+29421796,Ted Hurst,WR,TB,MCM
+1825122,Teddy Bridgewater,QB,DET,W 
+2809208,Tee Higgins,WR,CIN,W 
+26702915,Tejhaun Palmer,WR,NE,W 
+2071631,Temuchin Hodges,TE,PIT,W 
+3124921,Terique Owens,WR,SF,W 
+2963214,Terrace Marshall,WR,MIA,W 
+2130333,Terrance Cobb,RB,LV,W 
 26701481,Terrance Ferguson,TE,LAR,MWM
-2815167,Terrell Bynum,WR,LV,W (10/23)
-3133899,Terrell Jennings,RB,NE,W (10/23)
-2139279,Terry McLaurin,WR,WAS,FRR
-3116837,Terry Wright,WR,MIA,W (10/23)
+3133899,Terrell Jennings,RB,NE,W 
+50007644,Terrill Davis,WR,MIN,W 
+2139279,Terry McLaurin,WR,WAS,MWM
+3116837,Terry Wright,WR,MIA,W 
 28877124,Tetairoa McMillan,WR,CAR,CRB
-1932,Texans,DST,HOU,ELP
+1932,Texans,DST,HOU,FRR
 3161539,Tez Johnson,WR,TB,GF
-2246946,Thaddeus Moss,TE,CIN,W (10/23)
-2865035,Thayer Thomas,WR,DEN,W (10/23)
-3162129,Theo Johnson,TE,NYG,NN
-3124276,Theo Wease,WR,MIA,W (10/23)
-26699695,Thomas Fidone,TE,NYG,W (10/23)
-3124711,Thomas Gordon,TE,CHI,W (10/23)
-2967042,Thomas Greaney,TE,CLE,W (10/23)
-2780930,Thomas Hennigan,WR,MIN,W (10/23)
-3116774,Thomas Ives,WR,CHI,W (10/23)
-2964832,Thomas Odukoya,TE,NE,W (10/23)
-2819114,Thomas Sperbeck,WR,TB,W (10/23)
-2966406,Thomas Yassmin,TE,LAC,W (10/23)
-2816155,Thyrick Pitts,WR,GB,W (10/23)
-2071997,Tim Boyle,QB,TEN,W (10/23)
-2236987,Tim Brown,TE,TB,W (10/23)
-2966739,Tim DeMorat,QB,WAS,W (10/23)
-2839207,Tim Jones,WR,JAC,W (10/23)
-2818910,Tim Patrick,WR,JAC,W (10/23)
-3169268,Tip Reiman,TE,ARI,W (10/23)
-1928,Titans,DST,TEN,W (10/23)
-3122982,Titus Swen,RB,IND,W (10/23)
-26701126,Tiyon Evans,RB,CAR,W (10/23)
-2964065,Toa Taua,RB,CLE,W (10/23)
-3117113,Tom Kennedy,WR,DET,W (10/23)
-2865426,Tommy DeVito,QB,NE,W (10/23)
-3161130,Tommy Hudson,TE,NO,W (10/23)
-3162687,Tommy Mellott,WR,NO,W (10/23)
-2139106,Tommy Sweeney,TE,CHI,W (10/23)
-2969027,Tommy Tremble,TE,CAR,W (10/23)
-2260681,Tony Jones,RB,ARI,W (10/23)
-2184011,Tony Pollard,RB,TEN,WLW
-29169380,Toriano Clinton,RB,IND,W (10/23)
-3165177,Tory Horton,WR,SEA,MAM
-1705702,Trabis Ward,RB,FA,W (10/23)
-2139306,Trace McSorley,QB,WAS,W (10/23)
-1685895,Tracy Moore,WR,FA,W (10/23)
-3163354,Traeshon Holden,WR,DAL,W (10/23)
-2865807,Travell Harris,WR,CLE,W (10/23)
-2967055,Travis Dye,RB,NYJ,W (10/23)
-2809206,Travis Etienne,RB,JAC,AFL
-2249831,Travis Homer,RB,CHI,W (10/23)
+2246946,Thaddeus Moss,TE,CIN,W 
+2865035,Thayer Thomas,WR,DEN,W 
+3162129,Theo Johnson,TE,NYG,W 
+3124276,Theo Wease,WR,MIA,W 
+26699695,Thomas Fidone,TE,NYG,W 
+3124711,Thomas Gordon,TE,DET,W 
+2967042,Thomas Greaney,TE,CLE,W 
+2780930,Thomas Hennigan,WR,MIN,W 
+3116774,Thomas Ives,WR,CHI,W 
+2964832,Thomas Odukoya,TE,NE,W 
+2819114,Thomas Sperbeck,WR,TB,W 
+2966406,Thomas Yassmin,TE,GB,W 
+2816155,Thyrick Pitts,WR,GB,W 
+2071997,Tim Boyle,QB,TEN,W 
+2236987,Tim Brown,TE,TB,W 
+2966739,Tim DeMorat,QB,WAS,W 
+2839207,Tim Jones,WR,JAC,W 
+2818910,Tim Patrick,WR,NYJ,W 
+3169268,Tip Reiman,TE,ARI,W 
+1928,Titans,DST,TEN,W 
+3122982,Titus Swen,RB,IND,W 
+26701126,Tiyon Evans,RB,CAR,W 
+2964065,Toa Taua,RB,CLE,W 
+3117113,Tom Kennedy,WR,DET,W 
+2865426,Tommy DeVito,QB,NE,W 
+3162687,Tommy Mellott,WR,NO,W 
+2969027,Tommy Tremble,TE,CAR,W 
+2184011,Tony Pollard,RB,TEN,W 
+29169380,Toriano Clinton,RB,IND,W 
+3165177,Tory Horton,WR,SEA,W 
+1705702,Trabis Ward,RB,FA,W 
+1685895,Tracy Moore,WR,FA,W 
+3163354,Traeshon Holden,WR,DAL,W 
+2865807,Travell Harris,WR,CLE,W 
+2967055,Travis Dye,RB,NYJ,W 
+2809206,Travis Etienne,RB,NO,W 
+2249831,Travis Homer,RB,PIT,W 
 28909849,Travis Hunter,WR,JAC,WLW
-3159190,Travis Jonsen,WR,TB,W (10/23)
+3159190,Travis Jonsen,WR,TB,W 
 1725130,Travis Kelce,TE,KC,FRR
-3127726,Travis Koontz,TE,LV,W (10/23)
-2261149,Travis Toivonen,WR,MIN,W (10/23)
-2870478,Travis Vokolek,TE,ARI,W (10/23)
-2222046,Trayveon Williams,RB,CLE,W (10/23)
-2239576,Tre Harbison,RB,CLE,W (10/23)
+3127726,Travis Koontz,TE,LV,W 
+2261149,Travis Toivonen,WR,MIN,W 
+2870478,Travis Vokolek,TE,ARI,W 
+2222046,Trayveon Williams,RB,CLE,W 
+3167411,Trayvon Rudolph,WR,MIN,W 
+2239576,Tre Harbison,RB,CLE,W 
 3162525,Tre Harris,WR,LAC,CC
-3121001,Tre Mosley,WR,CIN,W (10/23)
-2260187,Tre Nixon,WR,NE,W (10/23)
-29426636,Tre Stewart,RB,MIN,W (10/23)
+3121001,Tre Mosley,WR,CIN,W 
+2260187,Tre Nixon,WR,NE,W 
+29426636,Tre Stewart,RB,MIN,W 
 3121848,Tre Tucker,WR,LV,WLW
-2966451,Tre Turner,WR,LV,W (10/23)
-2864807,Tre Walker,WR,BUF,W (10/23)
-26699319,Tre Watson,TE,KC,W (10/23)
-2804040,Tre' McKitty,TE,HOU,W (10/23)
-2142731,Tre'Quan Smith,WR,DET,W (10/23)
-2963056,Tre'Shaun Harrison,WR,TEN,W (10/23)
+2966451,Tre Turner,WR,LV,W 
+2864807,Tre Walker,WR,BUF,W 
+26699319,Tre Watson,TE,KC,W 
+2804040,Tre' McKitty,TE,HOU,W 
+2963056,Tre'Shaun Harrison,WR,TEN,W 
 26699547,TreVeyon Henderson,RB,NE,CC
-2965838,Trent Pennix,RB,IND,W (10/23)
-2139758,Trent Sherfield,WR,DEN,W (10/23)
-2060838,Trent Taylor,WR,SF,W (10/23)
-3117052,Trenton Irwin,WR,NYJ,W (10/23)
-2133481,Trevion Thompson,WR,TEN,W (10/23)
-2240172,Trevon Bradford,WR,LAC,W (10/23)
-3127826,Trevon Clark,WR,BAL,W (10/23)
-2826772,Trevon Grimes,WR,PHI,W (10/23)
-2243366,Trevon Wesco,TE,LV,W (10/23)
-28901419,Trevor Etienne,RB,CAR,AFL
-2967185,Trevor Lawrence,QB,JAC,GF
-2174210,Trevor Siemian,QB,TEN,W (10/23)
+3168420,Trebor Pena,WR,JAC,W 
+2965838,Trent Pennix,RB,IND,W 
+2139758,Trent Sherfield,WR,BUF,W 
+2060838,Trent Taylor,WR,SF,W 
+3117052,Trenton Irwin,WR,SF,W 
+2133481,Trevion Thompson,WR,TEN,W 
+2240172,Trevon Bradford,WR,LAC,W 
+3127826,Trevon Clark,WR,BAL,W 
+2826772,Trevon Grimes,WR,PHI,W 
+28901419,Trevor Etienne,RB,CAR,W 
+2967185,Trevor Lawrence,QB,JAC,W 
+2174210,Trevor Siemian,QB,ATL,W 
 3176915,Trey Benson,RB,ARI,VD
-3122488,Trey Knox,TE,MIN,W (10/23)
-2969444,Trey Lance,QB,LAC,W (10/23)
-2963385,Trey McBride,TE,ARI,CC
-3122273,Trey Palmer,WR,NO,W (10/23)
-2804142,Trey Sermon,RB,PIT,W (10/23)
-3122944,Treylon Burks,WR,WAS,W (10/23)
-3123913,Treyton Welch,TE,NO,W (10/23)
-2253371,Trishton Jackson,WR,ARI,W (10/23)
-26693436,Troy Franklin,WR,DEN,NN
-2880293,Troy Hairston,RB,CLE,W (10/23)
-26710155,Tru Edwards,WR,LAR,W (10/23)
-2741209,Tua Tagovailoa,QB,MIA,FRR
-2866766,Tucker Fisk,TE,LAC,W (10/23)
-3133332,Tucker Kraft,TE,GB,MAM
-2965372,Tutu Atwell,WR,LAR,MCM
-2867472,Ty Chandler,RB,MIN,W (10/23)
-2866135,Ty Fryfogle,WR,KC,W (10/23)
-3135294,Ty James,WR,MIN,W (10/23)
-2179323,Ty Johnson,RB,BUF,W (10/23)
-2960933,Ty Scott,WR,SEA,W (10/23)
-3122588,Tyjae Spears,RB,TEN,GF
-2804338,Tyjon Lindsey,WR,SEA,W (10/23)
-2866424,Tylan Wallace,WR,BAL,W (10/23)
-2820164,Tyler Adams,WR,IND,W (10/23)
-2975590,Tyler Allgeier,RB,ATL,NN
-2964494,Tyler Badie,RB,DEN,W (10/23)
-2071582,Tyler Boyd,WR,TEN,W (10/23)
-2165249,Tyler Conklin,TE,LAC,W (10/23)
-2182811,Tyler Davis,TE,NE,W (10/23)
-2219915,Tyler Davis,WR,MIA,W (10/23)
-2061073,Tyler Gaffney,RB,NE,W (10/23)
-3122473,Tyler Goodson,RB,IND,W (10/23)
-1691256,Tyler Harrell,WR,NYJ,W (10/23)
-1853103,Tyler Higbee,TE,LAR,W (10/23)
-2866762,Tyler Hoosman,RB,LAC,W (10/23)
-3122893,Tyler Hudson,WR,LAR,W (10/23)
-3159137,Tyler Huntley,QB,BAL,W (10/23)
-1620002,Tyler Johnson,WR,NYJ,W (10/23)
-29729510,Tyler Kahmann,WR,IND,W (10/23)
-1824200,Tyler Kroft,TE,MIA,W (10/23)
-1860834,Tyler Lockett,WR,TEN,W (10/23)
-3159198,Tyler Mabry,TE,CAR,W (10/23)
-3164475,Tyler Neville,TE,DAL,W (10/23)
-3163215,Tyler Scott,WR,SEA,W (10/23)
+3122488,Trey Knox,TE,MIN,W 
+2969444,Trey Lance,QB,LAC,W 
+2963385,Trey McBride,TE,ARI,W 
+3122273,Trey Palmer,WR,NO,W 
+2804142,Trey Sermon,RB,PIT,W 
+3122944,Treylon Burks,WR,WAS,W 
+3123913,Treyton Welch,TE,NO,W 
+28927179,Treyvhon Saunders,WR,HOU,W 
+2253371,Trishton Jackson,WR,ARI,W 
+26693436,Troy Franklin,WR,DEN,W 
+2880293,Troy Hairston,RB,CLE,W 
+26710155,Tru Edwards,WR,LAR,W 
+2741209,Tua Tagovailoa,QB,ATL,FRR
+2866766,Tucker Fisk,TE,LAC,W 
+3133332,Tucker Kraft,TE,GB,GF
+2965372,Tutu Atwell,WR,MIA,W 
+2867472,Ty Chandler,RB,NO,W 
+2866135,Ty Fryfogle,WR,KC,W 
+3135294,Ty James,WR,MIN,W 
+2179323,Ty Johnson,RB,BUF,W 
+28925533,Ty Pezza,TE,BAL,W 
+2960933,Ty Scott,WR,SEA,W 
+28878532,Ty Simpson,QB,LAR,FRR
+3122588,Tyjae Spears,RB,TEN,W 
+2804338,Tyjon Lindsey,WR,SEA,W 
+2866424,Tylan Wallace,WR,CLE,W 
+2820164,Tyler Adams,WR,IND,W 
+2975590,Tyler Allgeier,RB,ARI,NN
+2964494,Tyler Badie,RB,DEN,W 
+2071582,Tyler Boyd,WR,TEN,W 
+2165249,Tyler Conklin,TE,DET,W 
+2182811,Tyler Davis,TE,NE,W 
+2219915,Tyler Davis,WR,MIA,W 
+2061073,Tyler Gaffney,RB,NE,W 
+3122473,Tyler Goodson,RB,ATL,W 
+1691256,Tyler Harrell,WR,NYJ,W 
+1853103,Tyler Higbee,TE,LAR,W 
+2866762,Tyler Hoosman,RB,LAC,W 
+3122893,Tyler Hudson,WR,LAR,W 
+3159137,Tyler Huntley,QB,BAL,W 
+1620002,Tyler Johnson,WR,DAL,W 
+29729510,Tyler Kahmann,WR,IND,W 
+1860834,Tyler Lockett,WR,LV,W 
+3159198,Tyler Mabry,TE,CAR,W 
+3164475,Tyler Neville,TE,DAL,W 
+3163215,Tyler Scott,WR,LAR,W 
 2964064,Tyler Shough,QB,NO,NN
-3159178,Tyler Simmons,WR,PIT,W (10/23)
-2983342,Tyler Snead,WR,PIT,W (10/23)
-2242770,Tyler Vaughns,WR,PIT,W (10/23)
+3159178,Tyler Simmons,WR,PIT,W 
+2983342,Tyler Snead,WR,PIT,W 
+2242770,Tyler Vaughns,WR,PIT,W 
 3168800,Tyler Warren,TE,IND,ELP
-2965066,Tyquan Thornton,WR,KC,MCM
-2184377,Tyree Jackson,TE,WAS,W (10/23)
-2131163,Tyreek Hill,WR,MIA,VD
-28867646,Tyreik McAllister,RB,LV,W (10/23)
-2741208,Tyrell Shavers,WR,BUF,W (10/23)
-2248604,Tyrie Cleveland,WR,IND,W (10/23)
-3123979,Tyrion Davis-Price,RB,GB,W (10/23)
-1243338,Tyrod Taylor,QB,NYJ,W (10/23)
-2180626,Tyron Johnson,WR,DAL,W (10/23)
-3133378,Tyrone Broden,WR,SEA,W (10/23)
-2963637,Tyrone Tracy,RB,NYG,ELP
-2876686,Tyshaun James,WR,ATL,W (10/23)
-29081346,Tyson Bagent,QB,CHI,W (10/23)
-3125140,Ulysses Bentley IV,RB,IND,W (10/23)
-3114048,Valentine Holmes,RB,NYJ,W (10/23)
-2186342,Van Jefferson,WR,TEN,W (10/23)
-2242764,Velus Jones,WR,NO,W (10/23)
-1916,Vikings,DST,MIN,W (10/23)
-3124107,Wan'Dale Robinson,WR,NYG,GF
-2803784,Warren Jackson,WR,LAR,W (10/23)
-2960832,Wayne Taulapapa,RB,SEA,W (10/23)
-2867503,Whop Philyor,WR,MIN,W (10/23)
-2139628,Will Dissly,TE,LAC,W (10/23)
-2131571,Will Grier,QB,DAL,W (10/23)
+2965066,Tyquan Thornton,WR,KC,W 
+2184377,Tyree Jackson,TE,WAS,W 
+2131163,Tyreek Hill,WR,MIA,W 
+28867646,Tyreik McAllister,RB,LV,W 
+2741208,Tyrell Shavers,WR,BUF,W 
+28935910,Tyren Montgomery,WR,TEN,W 
+3123979,Tyrion Davis-Price,RB,GB,W 
+1243338,Tyrod Taylor,QB,GB,W 
+3133378,Tyrone Broden,WR,SEA,W 
+2963637,Tyrone Tracy,RB,NYG,W 
+2876686,Tyshaun James,WR,ATL,W 
+29081346,Tyson Bagent,QB,CHI,W 
+3125140,Ulysses Bentley IV,RB,IND,W 
+3114048,Valentine Holmes,RB,NYJ,W 
+2186342,Van Jefferson,WR,WAS,W 
+2242764,Velus Jones,RB,SEA,W 
+1916,Vikings,DST,MIN,NN
+28921356,Vinny Anthony,WR,ATL,W 
+3124107,Wan'Dale Robinson,WR,TEN,GF
+2803784,Warren Jackson,WR,LAR,W 
+2960832,Wayne Taulapapa,RB,SEA,W 
+28883053,Wesley Grimes,WR,SF,W 
+2867503,Whop Philyor,WR,MIN,W 
+2139628,Will Dissly,TE,LAC,W 
+2131571,Will Grier,QB,CAR,W 
 3162310,Will Howard,QB,PIT,MAM
-2964377,Will Levis,QB,TEN,W (10/23)
-2962073,Will Mallory,TE,IND,W (10/23)
-3161602,Will Sheppard,WR,GB,W (10/23)
-26699119,Will Shipley,RB,PHI,GF
-2263021,Willie Johnson,WR,JAC,W (10/23)
-2130155,Willie Snead,WR,MIA,W (10/23)
-3123346,Winston Wright,WR,CLE,W (10/23)
-3171045,Woody Marks,RB,HOU,FRR
-3127427,Xavier Gipson,WR,PHI,W (10/23)
-3161932,Xavier Guillory,WR,BAL,W (10/23)
-3161943,Xavier Hutchinson,WR,HOU,W (10/23)
-2984078,Xavier Johnson,WR,HOU,W (10/23)
-3131575,Xavier Legette,WR,CAR,W (10/23)
-29128526,Xavier Malone,WR,ATL,W (10/23)
-3163221,Xavier Restrepo,WR,TEN,W (10/23)
-2986749,Xavier Smith,WR,LAR,W (10/23)
-3117016,Xavier Turner,RB,SEA,W (10/23)
-3131562,Xavier Weaver,WR,ARI,W (10/23)
-3127688,Xavier White,WR,IND,W (10/23)
+26717403,Will Kacmarek,TE,MIA,W 
+2964377,Will Levis,QB,TEN,W 
+2962073,Will Mallory,TE,IND,W 
+26697818,Will Pauling,WR,SF,W 
+3161602,Will Sheppard,WR,GB,W 
+26699119,Will Shipley,RB,PHI,W 
+2263021,Willie Johnson,WR,JAC,W 
+3123346,Winston Wright,WR,CLE,W 
+3171045,Woody Marks,RB,HOU,ELP
+3127427,Xavier Gipson,WR,NYG,W 
+3161932,Xavier Guillory,WR,BAL,W 
+3161943,Xavier Hutchinson,WR,HOU,W 
+2984078,Xavier Johnson,WR,CIN,W 
+3131575,Xavier Legette,WR,CAR,W 
+26695352,Xavier Loyd,WR,KC,W 
+29128526,Xavier Malone,WR,ATL,W 
+3163221,Xavier Restrepo,WR,TEN,W 
+2986749,Xavier Smith,WR,LAR,W 
+3117016,Xavier Turner,RB,SEA,W 
+3131562,Xavier Weaver,WR,ARI,W 
+3127688,Xavier White,WR,IND,W 
 26730787,Xavier Worthy,WR,KC,NN
-2867484,Xazavian Valladay,RB,MIN,W (10/23)
-2864584,ZaQuandre White,RB,MIA,W (10/23)
-3123810,Zach Charbonnet,RB,SEA,NN
-2175721,Zach D'Orazio,WR,NE,W (10/23)
-26653246,Zach Davidson,TE,BUF,W (10/23)
-1685963,Zach Ertz,TE,WAS,CC
-3162483,Zach Evans,RB,NYJ,W (10/23)
-2185708,Zach Gentry,TE,LV,W (10/23)
-2976450,Zach Heins,TE,LAC,W (10/23)
-26698603,Zach Horton,TE,DET,W (10/23)
-29118586,Zach Ojile,RB,MIN,W (10/23)
-1989197,Zach Pascal,WR,NYG,W (10/23)
-2960892,Zach Wilson,QB,MIA,W (10/23)
-2961799,Zack Annexstad,QB,TB,W (10/23)
-2963243,Zack Kuntz,TE,NYJ,W (10/23)
-2240516,Zack Moss,RB,CIN,W (10/23)
-26695325,Zaire Mitchell-Paden,TE,BAL,W (10/23)
-3127917,Zakhari Franklin,WR,LV,W (10/23)
-2963641,Zamir White,RB,LV,W (10/23)
-2871345,Zander Horvath,RB,MIA,W (10/23)
-2869402,Zavier Scott,RB,MIN,W (10/23)
-3127049,Zay Flowers,WR,BAL,AFL
-2080270,Zay Jones,WR,ARI,W (10/23)
-3168734,Zion Bowens,WR,WAS,W (10/23)
-3121860,Zonovan Knight,RB,ARI,ELP
+2867484,Xazavian Valladay,RB,MIN,W 
+2864584,ZaQuandre White,RB,MIA,W 
+3123810,Zach Charbonnet,RB,SEA,W 
+2175721,Zach D'Orazio,WR,NE,W 
+26653246,Zach Davidson,TE,NYG,W 
+1685963,Zach Ertz,TE,WAS,W 
+2976450,Zach Heins,TE,LAC,W 
+26698603,Zach Horton,TE,DET,W 
+29118586,Zach Ojile,RB,MIN,W 
+1989197,Zach Pascal,WR,NYG,W 
+2960892,Zach Wilson,QB,NO,W 
+29123979,Zachariah Branch,WR,ATL,CC
+2961799,Zack Annexstad,QB,TB,W 
+2963243,Zack Kuntz,TE,DAL,W 
+2240516,Zack Moss,RB,CIN,W 
+26695325,Zaire Mitchell-Paden,TE,NO,W 
+3127917,Zakhari Franklin,WR,LV,W 
+2963641,Zamir White,RB,LV,W 
+2869402,Zavier Scott,RB,MIN,W 
+28909795,Zavion Thomas,WR,CHI,W 
+3127049,Zay Flowers,WR,BAL,W 
+2080270,Zay Jones,WR,ARI,W 
+3168734,Zion Bowens,WR,WAS,W 
+3121860,Zonovan Knight,RB,ARI,W 

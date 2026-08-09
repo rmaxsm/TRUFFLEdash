@@ -1,0 +1,52 @@
+name: IDs scrape
+
+on:
+  schedule:
+    # Daily at 13:00 UTC (~9am ET) - evergreen crosswalk, no season/week concept.
+    - cron: "0 13 * * *"
+  workflow_dispatch:
+    inputs:
+      database:
+        description: "MotherDuck DB to write to"
+        required: true
+        default: "td_backup_2025"
+      dry_run:
+        description: "Dry Run (Report Diff, No Overwrite)"
+        type: boolean
+        required: true
+        default: true
+
+jobs:
+  scrape-ids:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Scrape player IDs
+        env:
+          CBS_TRUFFLE_COOKIES_JSON: ${{ secrets.CBS_TRUFFLE_COOKIES_JSON }}
+          CBS_TRUFFLE_HEADERS_JSON: ${{ secrets.CBS_TRUFFLE_HEADERS_JSON }}
+        run: python scrape/playerIDs.py
+
+      - name: Replace ids table in MotherDuck
+        env:
+          MOTHERDUCK_TOKEN: ${{ secrets.MOTHERDUCK_TOKEN }}
+        run: >
+          python scrape/ids_to_motherduck.py
+          --database "${{ github.event.inputs.database || 'td_backup_2025' }}"
+          ${{ (github.event.inputs.dry_run == 'false') && ' ' || '--dry-run' }}
+
+      - name: Upload scraped CSV as artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playerids-csv-${{ github.run_id }}
+          path: data/playerIDs.csv
+          retention-days: 30
