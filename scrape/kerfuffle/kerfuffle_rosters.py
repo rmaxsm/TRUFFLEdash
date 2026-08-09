@@ -13,12 +13,13 @@ from bs4 import BeautifulSoup
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from cbs_auth import get_session, verify_session
 from cbs_scrape_utils import clean_player_name, get_team_abbreviation, get_team_abbreviation_lookup
+from omni_client import get_teams_df
 
 session = get_session("KERFUFFLE")
 verify_session(session, "KERFUFFLE")
 
 # get information from teams document to refer to for shortcuts ext
-teamsPd = pd.read_csv("data/teams.csv")
+teamsPd = get_teams_df()
 team_lookup = get_team_abbreviation_lookup(teamsPd, "KERFUFFLE")
 
 

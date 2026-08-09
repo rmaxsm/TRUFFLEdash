@@ -34,12 +34,14 @@ jobs:
         env:
           CBS_TRUFFLE_COOKIES_JSON: ${{ secrets.CBS_TRUFFLE_COOKIES_JSON }}
           CBS_TRUFFLE_HEADERS_JSON: ${{ secrets.CBS_TRUFFLE_HEADERS_JSON }}
+          OMNI_API_KEY: ${{ secrets.OMNI_API_KEY }}
         run: python scrape/rosters.py
 
       - name: Scrape KERFUFFLE rosters
         env:
           CBS_KERFUFFLE_COOKIES_JSON: ${{ secrets.CBS_KERFUFFLE_COOKIES_JSON }}
           CBS_KERFUFFLE_HEADERS_JSON: ${{ secrets.CBS_KERFUFFLE_HEADERS_JSON }}
+          OMNI_API_KEY: ${{ secrets.OMNI_API_KEY }}
         run: python scrape/kerfuffle/kerfuffle_rosters.py
 
       - name: Write current season to MotherDuck
