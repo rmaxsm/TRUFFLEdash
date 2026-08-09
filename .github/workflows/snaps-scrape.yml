@@ -1,0 +1,72 @@
+name: Snaps scrape
+
+on:
+  schedule:
+    # Monday 13:00 UTC (9am ET) - catches that week's Thursday + Sunday games
+    # a day early (Monday Night Football hasn't happened yet, so this run is
+    # intentionally incomplete for the week - Tuesday's run fills the gap).
+    - cron: "0 13 * * 1"
+    # Tuesday 13:00 UTC (9am ET) - primary weekly scrape: by Tuesday morning,
+    # that week's Thursday/Sunday/Monday games are all complete and FantasyPros'
+    # official stats have had overnight to finalize.
+    - cron: "0 13 * * 2"
+    # Friday 13:00 UTC (9am ET) - secondary scrape: catches that week's
+    # Thursday Night Football game early, and re-confirms/catches any late
+    # corrections FantasyPros made to the prior week's numbers.
+    - cron: "0 13 * * 5"
+  workflow_dispatch:
+    inputs:
+      season:
+        description: "Season to scrape (blank = auto-detect from today's date)"
+        required: false
+        default: ""
+      database:
+        description: "MotherDuck DB to write to"
+        required: true
+        default: "td_backup_2025"
+      dry_run:
+        description: "Dry Run (Report Diff, No Overwrite)"
+        type: boolean
+        required: true
+        default: true
+
+jobs:
+  scrape-snaps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install Playwright browser
+        run: python -m playwright install --with-deps chromium
+
+      - name: Scrape snap counts
+        env:
+          FANTASYPROS_COOKIES_JSON: ${{ secrets.FANTASYPROS_COOKIES_JSON }}
+          FANTASYPROS_HEADERS_JSON: ${{ secrets.FANTASYPROS_HEADERS_JSON }}
+        run: >
+          python scrape/snaps.py
+          ${{ github.event.inputs.season != '' && format('--season {0}', github.event.inputs.season) || '' }}
+
+      - name: Upsert season into MotherDuck
+        env:
+          MOTHERDUCK_TOKEN: ${{ secrets.MOTHERDUCK_TOKEN }}
+        run: >
+          python scrape/snaps_to_motherduck.py
+          ${{ github.event.inputs.season != '' && format('--season {0}', github.event.inputs.season) || '' }}
+          --database "${{ github.event.inputs.database || 'td_backup_2025' }}"
+          ${{ (github.event.inputs.dry_run == 'false') && ' ' || '--dry-run' }}
+
+      - name: Upload scraped CSV as artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: snapper-csv-${{ github.run_id }}
+          path: data/snapPer.csv
+          retention-days: 30

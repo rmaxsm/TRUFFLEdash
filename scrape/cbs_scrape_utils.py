@@ -21,7 +21,12 @@ def clean_player_name(names: pd.Series) -> pd.Series:
     names = names.str.replace(r" Jr", "", regex=True)
     names = names.str.replace(r" Sr", "", regex=True)
     names = names.str.replace(r" III", "", regex=True)
+    names = names.str.replace(r" IV", "", regex=True)
     names = names.str.replace(r" II", "", regex=True)
+    # " V" only strips as a trailing generational suffix (end-of-string
+    # anchored) - without the $ anchor this would also mangle any last name
+    # that happens to start with "V" (Vasquez, Van Noy, etc.)
+    names = names.str.replace(r" V$", "", regex=True)
     return names
 
 
