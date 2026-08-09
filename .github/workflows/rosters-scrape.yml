@@ -31,25 +31,22 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Scrape TRUFFLE rosters
-        working-directory: scrape
         env:
           CBS_TRUFFLE_COOKIES_JSON: ${{ secrets.CBS_TRUFFLE_COOKIES_JSON }}
           CBS_TRUFFLE_HEADERS_JSON: ${{ secrets.CBS_TRUFFLE_HEADERS_JSON }}
-        run: python rosters.py
+        run: python scrape/rosters.py
 
       - name: Scrape KERFUFFLE rosters
-        working-directory: scrape
         env:
           CBS_KERFUFFLE_COOKIES_JSON: ${{ secrets.CBS_KERFUFFLE_COOKIES_JSON }}
           CBS_KERFUFFLE_HEADERS_JSON: ${{ secrets.CBS_KERFUFFLE_HEADERS_JSON }}
-        run: python kerfuffle/kerfuffle_rosters.py
+        run: python scrape/kerfuffle/kerfuffle_rosters.py
 
       - name: Write current season to MotherDuck
-        working-directory: scrape
         env:
           MOTHERDUCK_TOKEN: ${{ secrets.MOTHERDUCK_TOKEN }}
         run: >
-          python rosters_to_motherduck.py
+          python scrape/rosters_to_motherduck.py
           --database "${{ github.event.inputs.database || 'td_backup_2025' }}"
           ${{ (github.event.inputs.dry_run == 'false') && ' ' || '--dry-run' }}
 
