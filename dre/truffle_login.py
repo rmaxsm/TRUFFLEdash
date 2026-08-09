@@ -72,7 +72,7 @@ headers = {
 }
 
 # Save dictionary to a JSON file
-with open('dre/truffle_cookies.json', 'w') as file:
+with open('cookies/truffle_cookies.json', 'w') as file:
     json.dump(cookies, file)
-with open('dre/truffle_headers.json', 'w') as file:
+with open('cookies/truffle_headers.json', 'w') as file:
     json.dump(headers, file)

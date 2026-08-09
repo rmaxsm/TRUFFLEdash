@@ -58,7 +58,7 @@ headers = {
 }
 
 # Save dictionary to a JSON file
-with open('dre/kerfuffle_cookies.json', 'w') as file:
+with open('cookies/kerfuffle_cookies.json', 'w') as file:
     json.dump(cookies, file)
-with open('dre/kerfuffle_headers.json', 'w') as file:
+with open('cookies/kerfuffle_headers.json', 'w') as file:
     json.dump(headers, file)

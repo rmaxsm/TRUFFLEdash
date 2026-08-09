@@ -12,7 +12,7 @@ refreshed manually on a periodic cadence.
 Cookies/headers for each league are loaded from (in priority order):
   1. Environment variables CBS_<LEAGUE>_COOKIES_JSON / CBS_<LEAGUE>_HEADERS_JSON
      (JSON-encoded strings) - this is how GitHub Actions secrets get in.
-  2. Local JSON files dre/<league>_cookies.json / dre/<league>_headers.json -
+  2. Local JSON files cookies/<league>_cookies.json / cookies/<league>_headers.json -
      for local development, refreshed by hand from a browser session.
 """
 
@@ -51,10 +51,10 @@ def get_session(league: str) -> requests.Session:
 
     league_lower = league.lower()
     cookies = _load_json_blob(
-        f"CBS_{league}_COOKIES_JSON", f"dre/{league_lower}_cookies.json"
+        f"CBS_{league}_COOKIES_JSON", f"cookies/{league_lower}_cookies.json"
     )
     headers = _load_json_blob(
-        f"CBS_{league}_HEADERS_JSON", f"dre/{league_lower}_headers.json"
+        f"CBS_{league}_HEADERS_JSON", f"cookies/{league_lower}_headers.json"
     )
 
     session = requests.Session()

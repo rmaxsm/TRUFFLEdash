@@ -5,10 +5,10 @@ import re
 import json
 
 cookies = {}
-with open('dre/kerfuffle_cookies.json', 'r') as file:
+with open('cookies/kerfuffle_cookies.json', 'r') as file:
     cookies = json.load(file)
 headers = {}
-with open('dre/kerfuffle_headers.json', 'r') as file:
+with open('cookies/kerfuffle_headers.json', 'r') as file:
     headers = json.load(file)
 
 #this is the main pandas frame that will be added to throughout

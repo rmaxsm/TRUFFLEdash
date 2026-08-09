@@ -12,10 +12,10 @@ from bs4 import BeautifulSoup
 import json
 
 cookies = {}
-with open('dre/truffle_cookies.json', 'r') as file:
+with open('cookies/truffle_cookies.json', 'r') as file:
     cookies = json.load(file)
 headers = {}
-with open('dre/truffle_headers.json', 'r') as file:
+with open('cookies/truffle_headers.json', 'r') as file:
     headers = json.load(file)
 
 

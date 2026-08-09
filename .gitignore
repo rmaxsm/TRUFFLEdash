@@ -10,7 +10,6 @@ __pycache__/
 
 # CBS auth secrets - never commit live session cookies/headers
 credentials/
-dre/*_cookies.json
-dre/*_headers.json
+cookies/
 *.env
 .env.*
