@@ -1,0 +1,81 @@
+name: ESPN scrape
+
+on:
+  schedule:
+    # Wednesday 19:00 UTC (2pm EST) - ESPN typically posts updated leaderboard
+    # numbers Wednesday mornings.
+    - cron: "0 19 * * 3"
+  workflow_dispatch:
+    inputs:
+      qb_url:
+        description: "ESPN QB xFP leaderboard URL (leave blank to use the checked-in default)"
+        required: false
+        default: ""
+      rb_url:
+        description: "ESPN RB xFP leaderboard URL (leave blank to use the checked-in default)"
+        required: false
+        default: ""
+      wr_url:
+        description: "ESPN WR xFP leaderboard URL (leave blank to use the checked-in default)"
+        required: false
+        default: ""
+      te_url:
+        description: "ESPN TE xFP leaderboard URL (leave blank to use the checked-in default)"
+        required: false
+        default: ""
+      xtd_url:
+        description: "ESPN xTD leaderboard URL (leave blank to use the checked-in default)"
+        required: false
+        default: ""
+      database:
+        description: "MotherDuck DB to write to"
+        required: true
+        default: "td_backup_2025"
+      dry_run:
+        description: "Dry Run (Report Diff, No Overwrite)"
+        type: boolean
+        required: true
+        default: true
+
+jobs:
+  scrape-espn:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Scrape ESPN xFP/xTD leaderboards
+        env:
+          ESPN_QB_XFP_URL: ${{ github.event.inputs.qb_url }}
+          ESPN_RB_XFP_URL: ${{ github.event.inputs.rb_url }}
+          ESPN_WR_XFP_URL: ${{ github.event.inputs.wr_url }}
+          ESPN_TE_XFP_URL: ${{ github.event.inputs.te_url }}
+          ESPN_XTD_URL: ${{ github.event.inputs.xtd_url }}
+        run: python scrape/espn.py
+
+      - name: Upsert season into MotherDuck
+        env:
+          MOTHERDUCK_TOKEN: ${{ secrets.MOTHERDUCK_TOKEN }}
+          ESPN_QB_XFP_URL: ${{ github.event.inputs.qb_url }}
+          ESPN_RB_XFP_URL: ${{ github.event.inputs.rb_url }}
+          ESPN_WR_XFP_URL: ${{ github.event.inputs.wr_url }}
+          ESPN_TE_XFP_URL: ${{ github.event.inputs.te_url }}
+          ESPN_XTD_URL: ${{ github.event.inputs.xtd_url }}
+        run: >
+          python scrape/espn_to_motherduck.py
+          --database "${{ github.event.inputs.database || 'td_backup_2025' }}"
+          ${{ (github.event.inputs.dry_run == 'false') && ' ' || '--dry-run' }}
+
+      - name: Upload scraped CSV as artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: espnstats-csv-${{ github.run_id }}
+          path: data/espnStats.csv
+          retention-days: 30
