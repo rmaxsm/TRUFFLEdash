@@ -64,6 +64,72 @@ def get_current_season_week(as_of: datetime.date = None,
     return int(row["Season"]), int(row["Week"])
 
 
+def get_calendar_week(as_of: datetime.date = None, which: str = "current",
+                       calendar_csv: str = "TRUFFLEdashOmni/data/espn_api_nfl_calendar.csv") -> tuple:
+    """Active (season, week) for a given date, looked up from ESPN's regular-
+    season calendar (Wednesday-to-Wednesday week windows, in
+    TRUFFLEdashOmni/data/espn_api_nfl_calendar.csv) rather than sundates.csv's
+    Sunday-only reference.
+
+    This is a THIRD season/week concept, distinct from both get_current_season()
+    (June-rollover roster labeling) and get_current_season_week() (most recently
+    completed Sunday) - don't conflate them. get_current_season_week() can only
+    ever tell you about a week whose Sunday has already happened, so it's wrong
+    for weekly.py's Thursday/Friday runs (which need the week that's *currently*
+    in progress, before its Sunday game). This function resolves that instead,
+    using ESPN's own Wed-Wed week boundaries (which already account for the
+    occasional Wed/Fri/Sat-shifted week - see espn_api_nfl_calendar.csv's source
+    JSON for how those were captured).
+
+    which="current": the week whose [WeekStartUTC, WeekEndUTC] window contains as_of.
+    which="previous": one week before that.
+
+    as_of is a bare date (midnight, no time-of-day) compared against the
+    calendar's UTC timestamps - which turns out to matter for the Wednesday
+    correction run specifically: ESPN's week boundary rolls over a few hours
+    *after* midnight (~3am ET / 07-08 UTC), so midnight on the rollover day
+    itself still falls inside the OLD week's window. Concretely,
+    which="current" on any Wednesday already resolves to the week that just
+    finished (verified against the 2026 calendar), which is exactly what the
+    correction run wants - no special-casing needed. which="previous" is
+    therefore NOT part of the normal daily cadence; it's a manual escape
+    hatch for going one week further back than "current" would resolve to.
+
+    Raises if as_of falls outside every window in the file (pre-season,
+    post-season, or the file needs extending for a new year) or if
+    which="previous" is requested for the file's very first tracked week.
+    """
+    if which not in ("current", "previous"):
+        raise ValueError(f"which must be 'current' or 'previous', got {which!r}")
+
+    as_of = as_of or datetime.date.today()
+    as_of_ts = pd.Timestamp(as_of)
+
+    cal = pd.read_csv(calendar_csv)
+    cal["WeekStartUTC"] = pd.to_datetime(cal["WeekStartUTC"]).dt.tz_localize(None)
+    cal["WeekEndUTC"] = pd.to_datetime(cal["WeekEndUTC"]).dt.tz_localize(None)
+    cal = cal.sort_values(["Season", "Week"]).reset_index(drop=True)
+
+    matches = cal[(cal["WeekStartUTC"] <= as_of_ts) & (as_of_ts <= cal["WeekEndUTC"])]
+    if matches.empty:
+        raise ValueError(
+            f"No regular-season calendar week contains {as_of} in {calendar_csv} - either the "
+            f"season hasn't started/has already ended, or the file needs extending for a new season"
+        )
+    idx = matches.index[0]
+
+    if which == "previous":
+        if idx == 0:
+            raise ValueError(
+                f"{as_of} falls in {calendar_csv}'s first tracked week - there is no previous "
+                f"week to fall back to"
+            )
+        idx -= 1
+
+    row = cal.iloc[idx]
+    return int(row["Season"]), int(row["Week"])
+
+
 _WAIVED_PREFIX = re.compile(r"^W ")
 
 
