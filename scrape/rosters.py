@@ -81,11 +81,14 @@ def scrape_league_rosters(league: str, team_lookup: dict) -> pd.DataFrame:
         teamName = ' '.join(nameSplit)
       elif row.has_attr('class') and row['class'][0] == "label" and len(row['class']) == 1:
         cols = separateColumns(row)
-      elif row.has_attr('class') and row['class'][0] == "playerRow" and len(row['class']) == 2:
-        players.append(separatePlayers(row))
-      elif row.has_attr('class') and row['class'][0] == "playerRow" and len(row['class']) == 3:
-        playerName = row.find('a').getText()
-        if playerName.split(" ")[-1] == "Cap":
+      elif row.has_attr('class') and row['class'][0] == "playerRow":
+        # Dead-cap rows don't reliably carry a distinguishing CSS class (some
+        # render with the same 2 classes as a normal starter row) - matching
+        # on the player name itself, independent of class count, is what
+        # actually identifies them.
+        anchor = row.find('a')
+        playerName = anchor.getText() if anchor else ""
+        if "Dead Cap" in playerName:
           players.append(separatePlayersDeadCap(row))
         else:
           players.append(separatePlayers(row))
