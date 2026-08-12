@@ -2,8 +2,8 @@ name: IDs scrape
 
 on:
   schedule:
-    # Daily at 13:00 UTC (~9am ET) - evergreen crosswalk, no season/week concept.
-    - cron: "0 13 * * *"
+    # Daily at 12:00 UTC (~8am ET) - evergreen crosswalk, no season/week concept.
+    - cron: "0 12 * * *"
   workflow_dispatch:
     inputs:
       database:

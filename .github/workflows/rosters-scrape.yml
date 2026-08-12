@@ -2,9 +2,9 @@ name: Rosters scrape
 
 on:
   schedule:
-    # Daily at 13:00 UTC (~9am ET) - rosters can change any day (waivers/trades),
+    # Daily at 12:00 UTC (~8am ET) - rosters can change any day (waivers/trades),
     # unlike week-scoped data.
-    - cron: "0 13 * * *"
+    - cron: "0 12 * * *"
   workflow_dispatch:
     inputs:
       database:

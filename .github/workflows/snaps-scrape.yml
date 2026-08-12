@@ -2,18 +2,18 @@ name: Snaps scrape
 
 on:
   schedule:
-    # Monday 13:00 UTC (9am ET) - catches that week's Thursday + Sunday games
+    # Monday 12:00 UTC (8am ET) - catches that week's Thursday + Sunday games
     # a day early (Monday Night Football hasn't happened yet, so this run is
     # intentionally incomplete for the week - Tuesday's run fills the gap).
-    - cron: "0 13 * * 1"
-    # Tuesday 13:00 UTC (9am ET) - primary weekly scrape: by Tuesday morning,
+    - cron: "0 12 * * 1"
+    # Tuesday 12:00 UTC (8am ET) - primary weekly scrape: by Tuesday morning,
     # that week's Thursday/Sunday/Monday games are all complete and FantasyPros'
     # official stats have had overnight to finalize.
-    - cron: "0 13 * * 2"
-    # Friday 13:00 UTC (9am ET) - secondary scrape: catches that week's
+    - cron: "0 12 * * 2"
+    # Friday 12:00 UTC (8am ET) - secondary scrape: catches that week's
     # Thursday Night Football game early, and re-confirms/catches any late
     # corrections FantasyPros made to the prior week's numbers.
-    - cron: "0 13 * * 5"
+    - cron: "0 12 * * 5"
   workflow_dispatch:
     inputs:
       season:

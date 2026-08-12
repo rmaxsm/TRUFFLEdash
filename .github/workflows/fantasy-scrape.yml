@@ -1,22 +1,13 @@
-name: Weekly scrape
+name: Fantasy scrape
 
 on:
   schedule:
-    # Daily at 12:00 UTC (~8am ET) during the NFL season - covers every
-    # possible game day (Wed/Thu/Fri/Sat/Sun/Mon) without needing to guess
-    # which weeks have an atypical schedule. weekly_to_motherduck.py upserts
-    # scoped strictly to (Season, Week), so a day with no new games just
-    # harmlessly re-writes that week's existing numbers - idempotent by
-    # design, not something this schedule needs to work around.
-    #
-    # get_calendar_week()'s which="current" (the default) is correct for
-    # every day of this cadence, including the Wednesday
-    # just-finished-week-corrections run - see its docstring in
-    # cbs_scrape_utils.py for why. No day-of-week branching needed here.
-    #
-    # "Check NFL season is active" below no-ops this on the ~7 off-season
-    # months rather than failing daily.
-    - cron: "0 12 * * *"
+    # Daily at 12:00 UTC (~8am ET) during the NFL season, except Wednesdays -
+    # lineups are locked well before that week's games start, so re-scraping
+    # the just-finished week on Wednesday (weekly-scrape.yml's correction-run
+    # day) has nothing new to catch, and the next week's lineups aren't set
+    # that early either. Day-of-week 3 = Wednesday.
+    - cron: "0 12 * * 0,1,2,4,5,6"
   workflow_dispatch:
     inputs:
       season:
@@ -43,14 +34,9 @@ on:
         type: boolean
         required: true
         default: true
-      allow_preseason_placeholder:
-        description: "Write synthetic placeholder data if every scraped row is Avg='-' (pipeline testing only - refused if database is 'td')"
-        type: boolean
-        required: true
-        default: false
 
 jobs:
-  scrape-weekly:
+  scrape-fantasy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -83,27 +69,23 @@ jobs:
         env:
           CBS_TRUFFLE_COOKIES_JSON: ${{ secrets.CBS_TRUFFLE_COOKIES_JSON }}
           CBS_TRUFFLE_HEADERS_JSON: ${{ secrets.CBS_TRUFFLE_HEADERS_JSON }}
+          CBS_KERFUFFLE_COOKIES_JSON: ${{ secrets.CBS_KERFUFFLE_COOKIES_JSON }}
+          CBS_KERFUFFLE_HEADERS_JSON: ${{ secrets.CBS_KERFUFFLE_HEADERS_JSON }}
+          OMNI_API_KEY: ${{ secrets.OMNI_API_KEY }}
           MOTHERDUCK_TOKEN: ${{ secrets.MOTHERDUCK_TOKEN }}
         run: >
-          python scrape/weekly_to_motherduck.py
+          python scrape/fantasy_to_motherduck.py
           ${{ github.event.inputs.season != '' && format('--season {0}', github.event.inputs.season) || '' }}
           ${{ github.event.inputs.week != '' && format('--week {0}', github.event.inputs.week) || '' }}
           --which "${{ github.event.inputs.which || 'current' }}"
           --database "${{ github.event.inputs.database || 'td_backup_2025' }}"
           ${{ (github.event.inputs.dry_run == 'false') && ' ' || '--dry-run' }}
-          ${{ (github.event.inputs.allow_preseason_placeholder == 'true') && '--allow-preseason-placeholder' || '' }}
 
       - name: Upload scraped CSV as artifact
         if: always() && (github.event_name != 'schedule' || steps.check_season.outputs.in_season == 'true')
         uses: actions/upload-artifact@v7
         with:
-          name: weekly-csv-${{ github.run_id }}
-          # weekly_to_motherduck.py calls scrape_weekly()/scrape_extra_dash()
-          # as library functions directly (no CSV hand-off between steps,
-          # per the established weekly/fantasy/optlineups convention) - this
-          # is the one debug CSV it writes as a side effect, not the two
-          # per-script ones that only exist when weekly.py/extra_dash.py are
-          # run standalone.
-          path: data/weekly_merged_scraperesult.csv
+          name: fantasy-csv-${{ github.run_id }}
+          path: data/fantasy_scraperesult.csv
           retention-days: 30
           if-no-files-found: warn

@@ -34,6 +34,7 @@ TEAMS_FIELDS = {
     "teamscsv.division_abbrev": ("Division Abbreviation", "DivisionAbbrev"),
     "teamscsv.riv_name": ("Rivalry Name", "RivName"),
     "teamscsv.riv_abbrev": ("Rivalry Abbreviation", "RivAbbrev"),
+    "teamscsv.team_num": ("TeamNum", "TeamNum"),
 }
 
 
