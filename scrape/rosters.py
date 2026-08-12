@@ -82,12 +82,18 @@ def scrape_league_rosters(league: str, team_lookup: dict) -> pd.DataFrame:
       elif row.has_attr('class') and row['class'][0] == "label" and len(row['class']) == 1:
         cols = separateColumns(row)
       elif row.has_attr('class') and row['class'][0] == "playerRow":
+        # Section-divider rows ("Reserves", "Injured", "Practice") also carry
+        # the "playerRow" class but are a single bare cell with no player
+        # link - skip them, or pandas pads the missing cells with NaN and
+        # crashes the Player-column string parsing below.
+        anchor = row.find('a')
+        if anchor is None:
+          continue
         # Dead-cap rows don't reliably carry a distinguishing CSS class (some
         # render with the same 2 classes as a normal starter row) - matching
         # on the player name itself, independent of class count, is what
         # actually identifies them.
-        anchor = row.find('a')
-        playerName = anchor.getText() if anchor else ""
+        playerName = anchor.getText()
         if "Dead Cap" in playerName:
           players.append(separatePlayersDeadCap(row))
         else:
