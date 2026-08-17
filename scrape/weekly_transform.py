@@ -13,6 +13,8 @@ before this transform ran - weekly.py now scrapes every DST directly, so
 that union step is gone entirely here.
 """
 
+import datetime
+
 import pandas as pd
 
 SUNDATES_CSV = "TRUFFLEdashOmni/data/sundates.csv"
@@ -29,12 +31,16 @@ TARGET_COLUMNS = [
 ]
 
 
-def _get_sun_date(season: int, week: int, sundates_csv: str) -> str:
+def _get_sun_date(season: int, week: int, sundates_csv: str) -> datetime.date:
+    """Returns a real date object, not the raw "M/D/YY" string - td.main.weekly's
+    sunDate column is DATE-typed (fixed 2026-08-11 after it was discovered to have
+    been stored as VARCHAR since the table was first created back in the R
+    pipeline, which never cast it either). Keep it that way going forward."""
     dates = pd.read_csv(sundates_csv)
     match = dates[(dates["Season"] == season) & (dates["Week"] == week)]
     if match.empty:
         raise ValueError(f"No sunDate found for Season={season} Week={week} in {sundates_csv}")
-    return match.iloc[0]["sunDate"]
+    return datetime.datetime.strptime(match.iloc[0]["sunDate"], "%m/%d/%y").date()
 
 
 def _composite_keys(df: pd.DataFrame) -> tuple:
