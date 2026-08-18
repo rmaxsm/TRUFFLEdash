@@ -114,7 +114,6 @@ def scrape_league_rosters(league: str, team_lookup: dict) -> pd.DataFrame:
     dfTeam.insert(3, "NFL", nfl)
 
     dfTeam['Player'] = clean_player_name(dfTeam['Player'])
-    dfTeam['Player'] = dfTeam['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
 
     if counter == 0:
       dfGlobal = dfTeam

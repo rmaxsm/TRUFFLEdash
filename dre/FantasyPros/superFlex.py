@@ -55,7 +55,7 @@ def runSuperFlex():
   # df['Player'] = df['Player'].str.replace(r' Sr', '', regex=True)
   # df['Player'] = df['Player'].str.replace(r' III', '', regex=True)
   # df['Player'] = df['Player'].str.replace(r' II', '', regex=True)
-  # df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
+  # df['Player'] = df['Player'].str.replace(r' V$', '', regex=True)
   # # print(df)
   # df.to_csv("dre/FantasyPros/snapPer.csv", index=False)
   # print("\nSNAP PER FILE SAVED TO dre/FantasyPros/snapPer.csv")

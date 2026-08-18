@@ -17,15 +17,23 @@ import pandas as pd
 # escape the period (matching R's `str_replace_all(file$Player, "\\.", "")`),
 # while keeping the exact same suffix-stripping steps in the same order.
 def clean_player_name(names: pd.Series) -> pd.Series:
+    # Leading/trailing whitespace from a raw scrape would silently defeat
+    # every $-anchored suffix below (" V " doesn't match r" V$"), so strip
+    # before anything else.
+    names = names.str.strip()
     names = names.str.replace(r"\.", "", regex=True)
-    names = names.str.replace(r" Jr", "", regex=True)
-    names = names.str.replace(r" Sr", "", regex=True)
-    names = names.str.replace(r" III", "", regex=True)
-    names = names.str.replace(r" IV", "", regex=True)
-    names = names.str.replace(r" II", "", regex=True)
-    # " V" only strips as a trailing generational suffix (end-of-string
-    # anchored) - without the $ anchor this would also mangle any last name
-    # that happens to start with "V" (Vasquez, Van Noy, etc.)
+    # Every generational suffix is end-of-string ($) anchored so it only
+    # strips as a trailing suffix - without the anchor these would also
+    # mangle any last name that happens to contain the same letters
+    # (e.g. "II" is a substring of "III", "V" starts "Vasquez"/"Van Noy").
+    # Longest-suffix-first order matters too: "III"/"IV" must be checked
+    # before "II" so a real "III"/"IV" name doesn't get half-stripped to
+    # "I" or "V" by the shorter pattern matching first.
+    names = names.str.replace(r" Jr$", "", regex=True)
+    names = names.str.replace(r" Sr$", "", regex=True)
+    names = names.str.replace(r" III$", "", regex=True)
+    names = names.str.replace(r" IV$", "", regex=True)
+    names = names.str.replace(r" II$", "", regex=True)
     names = names.str.replace(r" V$", "", regex=True)
     return names
 

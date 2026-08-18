@@ -91,7 +91,6 @@ def scrape_fantasy(season: int, week: int) -> pd.DataFrame:
     )
 
     df["Player"] = clean_player_name(df["Player"])
-    df["Player"] = df["Player"].str.replace("Will Fuller V", "Will Fuller", regex=False)
     return df
 
 

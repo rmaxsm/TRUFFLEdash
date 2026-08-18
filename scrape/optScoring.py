@@ -11,6 +11,8 @@ import re
 import json
 from bs4 import BeautifulSoup
 
+from cbs_scrape_utils import clean_player_name
+
 
 #below are 'keys' of some sort from copy and pasting - unclear how they fit in left for reference
 
@@ -185,12 +187,7 @@ masterDf.to_csv(filepath, index=False)
 dfGlobal.columns = masterDf.columns
 
 #player name replacements
-dfGlobal['Player'] = dfGlobal['Player'].str.replace(r'.', '', regex=True)
-dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' Jr', '', regex=True)
-dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' Sr', '', regex=True)
-dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' III', '', regex=True)
-dfGlobal['Player'] = dfGlobal['Player'].str.replace(r' II', '', regex=True)
-dfGlobal['Player'] = dfGlobal['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
+dfGlobal['Player'] = clean_player_name(dfGlobal['Player'])
 
 #create weekyear column to conditionally remove existing data from week being scraped
 masterDf["WeekYear"] = masterDf["Week"].astype(str) + masterDf["Season"].astype(str)

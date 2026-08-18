@@ -66,7 +66,7 @@ def main(season):
   noDupe['Player'] = noDupe['Player'].str.replace(r' Sr', '', regex=True)
   noDupe['Player'] = noDupe['Player'].str.replace(r' III', '', regex=True)
   noDupe['Player'] = noDupe['Player'].str.replace(r' II', '', regex=True)
-  noDupe['Player'] = noDupe['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
+  noDupe['Player'] = noDupe['Player'].str.replace(r' V$', '', regex=True)
   noDupe['Player'] = noDupe['Player'].str.replace(r'Raleigh Webb X', 'Raleigh Webb', regex=True)
 
   noDupe = noDupe.fillna('-')

@@ -205,7 +205,7 @@ def getExtraDash(week, season):
   df['Player'] = df['Player'].str.replace(r' Sr', '', regex=True)
   df['Player'] = df['Player'].str.replace(r' III', '', regex=True)
   df['Player'] = df['Player'].str.replace(r' II', '', regex=True)
-  df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
+  df['Player'] = df['Player'].str.replace(r' V$', '', regex=True)
   
   df['Avail'] = df.apply(lambda x: getTeamAbbreviation(x['Avail']), axis=1)
   

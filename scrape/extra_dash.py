@@ -106,7 +106,6 @@ def scrape_extra_dash(season: int, week: int, allow_preseason_placeholder: bool 
     df[NUMERIC_COLUMNS] = df[NUMERIC_COLUMNS].apply(pd.to_numeric, errors="coerce")
 
     df["Player"] = clean_player_name(df["Player"])
-    df["Player"] = df["Player"].str.replace("Will Fuller V", "Will Fuller", regex=False)
 
     df = _apply_preseason_placeholder(df, season, week, allow_preseason_placeholder)
 

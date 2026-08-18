@@ -115,7 +115,6 @@ df["Pos"] = position[0]
 df["NFL"] = nfl
 
 df['Player'] = clean_player_name(df['Player'])
-df['Player'] = df['Player'].str.replace(r'Will Fuller V', 'Will Fuller', regex=True)
 
 playerDb = df[["Action", "Player", "Pos", "NFL"]]
 playerDb = playerDb.rename(columns={"Action": "playerID"})
