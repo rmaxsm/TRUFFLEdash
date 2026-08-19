@@ -3,7 +3,7 @@ big-play/target-share report into td.main.weekly's full 41-column schema.
 
 Ports TRUFFLEdashOmni.R's `omni_weekly` transform (lines 24-70) plus
 global.R's cleanWeekly()'s PosRk logic - see
-truffledash.com/R to Python Scripts/ for context on other tables' equivalent
+legacy/R files/R to Python Scripts/ for context on other tables' equivalent
 docs (no such doc exists yet for weekly, hence porting directly from the R).
 
 One (Season, Week) batch at a time, matching how weekly_to_motherduck.py

@@ -2,7 +2,7 @@
 MotherDuck's `rosters` table.
 
 Ports the logic from global.R's rosters.csv/oldrosters.csv merge (see
-truffledash.com/R to Python Scripts/rosters.R) with one key change: rather than
+legacy/R files/R to Python Scripts/rosters.R) with one key change: rather than
 re-reading and re-appending the full oldrosters.csv archive on every run (and
 tagging it with a hardcoded season), this only touches the current season's
 rows in MotherDuck directly - computed dynamically, not hardcoded - and leaves
