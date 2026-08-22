@@ -39,15 +39,21 @@ def clean_player_name(names: pd.Series) -> pd.Series:
 
 
 def get_current_season(as_of: datetime.date = None) -> int:
-    """Active roster/contract season for a given date, rolling over each June.
+    """Active roster/contract season for a given date, rolling over each May 1.
 
-    Rosters and contracts turn over well before games start (draft, free
-    agency, cuts all happen in the offseason), so the season label advances in
-    June rather than at kickoff in September - e.g. June 2026 through May 2027
-    is all "Season 2026".
+    Rosters and contracts turn over well before games start (rookie draft,
+    free agency, cuts all happen in the offseason), so the season label
+    advances in May rather than at kickoff in September - e.g. May 2026
+    through April 2027 is all "Season 2026". Confirmed against CBS's own
+    transactions pages while building scrape/transactions.py: a "Round 2,
+    (Overall Pick 23)" rookie-draft-pick trade dated 5/12/25 (with no
+    explicit draft year in its text, meaning "this season's draft") lives on
+    the transactions/.../2025 page - i.e. CBS itself already treats
+    early-May dates as the new season, one month earlier than this function
+    previously assumed (used to roll over in June).
     """
     as_of = as_of or datetime.date.today()
-    return as_of.year if as_of.month >= 6 else as_of.year - 1
+    return as_of.year if as_of.month >= 5 else as_of.year - 1
 
 
 def get_current_season_week(as_of: datetime.date = None,
@@ -161,3 +167,33 @@ def get_team_abbreviation(team_name: str, lookup: dict) -> str:
     except KeyError:
         print(f"An error occurred while trying to get the team abbreviation for {team_name}")
         return "err"
+
+
+def get_team_by_teamnum_lookup(teams_df: pd.DataFrame, league: str) -> dict:
+    """CBS numeric team id (int, from a /teams/{N} href) -> Abbrev, for a given league.
+
+    Unlike get_team_abbreviation_lookup() (which matches on the team's
+    *displayed name text*), this resolves on CBS's permanent per-franchise
+    numeric id instead - the only reliable way to identify a team on a page
+    that shows historical data, since a franchise's displayed name can
+    change over time even though its underlying CBS team id never does. E.g.
+    TRUFFLE's team id 12 was displayed as "Windy City Big Apples" in the CBS
+    2020 transactions page and is "Madison Muskellunge"/"MAM" today - joining
+    on the numeric id resolves straight to the current identity with no
+    special-casing, matching how every other td.main.* table already treats
+    that franchise's full history as "MAM" throughout.
+    """
+    league_teams = teams_df[teams_df["League"] == league.upper()]
+    lookup = {}
+    for team_num, abbrev in zip(league_teams["TeamNum"], league_teams["Abbrev"]):
+        try:
+            lookup[int(team_num)] = abbrev
+        except (ValueError, TypeError):
+            # teamscsv has at least one row (KERFUFFLE's NBB, as of 2026-08)
+            # with a non-numeric TeamNum placeholder - skip it rather than
+            # fail the whole lookup; a team that genuinely needs this
+            # resolved will surface as a clear "no TeamNum match" error at
+            # the call site instead of a silent wrong mapping.
+            print(f"WARNING: {league.upper()} team {abbrev!r} has a non-numeric TeamNum ({team_num!r}) "
+                  f"in teamscsv - excluded from the TeamNum lookup")
+    return lookup

@@ -1,0 +1,94 @@
+name: Transactions scrape
+
+on:
+  schedule:
+    # Daily at 12:00 UTC (~8am ET) - same cadence as weekly-scrape.yml.
+    # Unlike fantasy/opt-lineups (which skip Wednesdays since lineups lock
+    # before kickoff), transactions - waiver adds/drops/trades - can happen
+    # any day of the week, so there's no day to skip here.
+    #
+    # transactions.py's upsert is scoped strictly to (League, Season), full
+    # delete+insert of that season's whole history each run - a day with no
+    # new transactions just harmlessly re-writes the same rows, idempotent
+    # by design.
+    #
+    # "Check NFL season is active" below no-ops this on the ~4 off-season
+    # months (get_current_season()'s May 1 rollover) rather than failing
+    # daily - unlike weekly/fantasy this isn't gated on get_calendar_week()
+    # (a real-game-week concept), since transactions happen year-round
+    # within a season (free agency, rookie draft, etc.), not just on game
+    # weeks.
+    - cron: "0 12 * * *"
+  workflow_dispatch:
+    inputs:
+      season:
+        description: "Season to scrape (blank = auto-detect current season)"
+        required: false
+        default: ""
+      league:
+        description: "Restrict to one league (blank = both)"
+        type: choice
+        options:
+          - ""
+          - TRUFFLE
+          - KERFUFFLE
+        default: ""
+      database:
+        description: "MotherDuck DB to write to"
+        required: true
+        default: "td"
+      dry_run:
+        description: "Dry Run (Report Diff, No Overwrite)"
+        type: boolean
+        required: true
+        default: true
+
+jobs:
+  scrape-transactions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Scrape + upsert current season
+        env:
+          CBS_TRUFFLE_COOKIES_JSON: ${{ secrets.CBS_TRUFFLE_COOKIES_JSON }}
+          CBS_TRUFFLE_HEADERS_JSON: ${{ secrets.CBS_TRUFFLE_HEADERS_JSON }}
+          CBS_KERFUFFLE_COOKIES_JSON: ${{ secrets.CBS_KERFUFFLE_COOKIES_JSON }}
+          CBS_KERFUFFLE_HEADERS_JSON: ${{ secrets.CBS_KERFUFFLE_HEADERS_JSON }}
+          OMNI_API_KEY: ${{ secrets.OMNI_API_KEY }}
+          MOTHERDUCK_TOKEN: ${{ secrets.MOTHERDUCK_TOKEN }}
+        # Full daily production runs go straight to td (the database input's
+        # own default is now "td" to match) - the pipeline's validated and
+        # this table's upsert is scoped strictly to (League, Season), so a
+        # day with no new transactions just harmlessly re-writes that
+        # season's existing rows. github.event.inputs.* is only ever
+        # populated for a workflow_dispatch trigger though - on the real
+        # `schedule` trigger it's always null, so github.event.inputs.dry_run
+        # == 'false' would always be false there too, appending --dry-run on
+        # every scheduled run (i.e. the schedule would never really write
+        # anything). Branching explicitly on github.event_name for dry_run
+        # so the schedule always writes for real, while a manual
+        # workflow_dispatch left at its own default (dry_run: true) still
+        # gets a safe dry-run.
+        run: >
+          python scrape/transactions.py
+          ${{ github.event.inputs.season != '' && format('--season {0}', github.event.inputs.season) || '' }}
+          ${{ github.event.inputs.league != '' && format('--league {0}', github.event.inputs.league) || '' }}
+          --database "${{ github.event.inputs.database || 'td' }}"
+          ${{ (github.event.inputs.dry_run == 'false' || github.event_name == 'schedule') && ' ' || '--dry-run' }}
+
+      - name: Upload scraped CSV as artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: transactions-csv-${{ github.run_id }}
+          path: data/transactions_scraperesult.csv
+          retention-days: 30
+          if-no-files-found: warn
