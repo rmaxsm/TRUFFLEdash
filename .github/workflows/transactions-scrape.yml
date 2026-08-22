@@ -41,7 +41,7 @@ on:
         description: "Dry Run (Report Diff, No Overwrite)"
         type: boolean
         required: true
-        default: true
+        default: false
 
 jobs:
   scrape-transactions:
