@@ -1,0 +1,79 @@
+name: Auctions scrape
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "CBS draft-results URL, e.g. .../draft/results/2025:2:Free Agency/nomination"
+        required: true
+      league:
+        description: "Override league inferred from the URL's host (blank = infer)"
+        type: choice
+        options:
+          - ""
+          - TRUFFLE
+          - KERFUFFLE
+        default: ""
+      season:
+        description: "Season this auction belongs to"
+        required: true
+      auction_date:
+        description: "Auction date, YYYY-MM-DD (Eastern Time)"
+        required: true
+      auction_time:
+        description: "Auction time, HH:MM 24hr (Eastern Time)"
+        required: true
+      nomination_offset:
+        description: "Added to every scraped NominationOrder - only needed when one auction was split across multiple CBS links (e.g. KERFUFFLE 2025's restarted auction)"
+        required: false
+        default: "0"
+      database:
+        description: "MotherDuck DB to write to"
+        required: true
+        default: "td_backup_2025"
+      dry_run:
+        description: "Dry Run (Report Diff, No Overwrite)"
+        type: boolean
+        required: true
+        default: true
+
+jobs:
+  scrape-auction:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Scrape auction + upsert
+        env:
+          CBS_TRUFFLE_COOKIES_JSON: ${{ secrets.CBS_TRUFFLE_COOKIES_JSON }}
+          CBS_TRUFFLE_HEADERS_JSON: ${{ secrets.CBS_TRUFFLE_HEADERS_JSON }}
+          CBS_KERFUFFLE_COOKIES_JSON: ${{ secrets.CBS_KERFUFFLE_COOKIES_JSON }}
+          CBS_KERFUFFLE_HEADERS_JSON: ${{ secrets.CBS_KERFUFFLE_HEADERS_JSON }}
+          OMNI_API_KEY: ${{ secrets.OMNI_API_KEY }}
+          MOTHERDUCK_TOKEN: ${{ secrets.MOTHERDUCK_TOKEN }}
+        run: >
+          python scrape/auctions.py
+          --url "${{ github.event.inputs.url }}"
+          ${{ github.event.inputs.league != '' && format('--league {0}', github.event.inputs.league) || '' }}
+          --season "${{ github.event.inputs.season }}"
+          --auction-date "${{ github.event.inputs.auction_date }}"
+          --auction-time "${{ github.event.inputs.auction_time }}"
+          --nomination-offset "${{ github.event.inputs.nomination_offset || '0' }}"
+          --database "${{ github.event.inputs.database || 'td_backup_2025' }}"
+          ${{ (github.event.inputs.dry_run == 'false') && ' ' || '--dry-run' }}
+
+      - name: Upload scraped CSV as artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: auctions-csv-${{ github.run_id }}
+          path: data/auctions_scraperesult.csv
+          retention-days: 30
+          if-no-files-found: warn
