@@ -33,7 +33,7 @@ playerID,Player,Pos,NFL
 2183930,Alec Ingold,RB,LAC
 2965664,Alec Pierce,WR,IND
 3159106,Aleva Hifo,WR,ARI
-2186388,Alex Bachman,WR,LV
+2186388,Alex Bachman,WR,LAR
 2828649,Alex Gray,TE,ATL
 2132602,Alex McGough,QB,GB
 2142830,Alex Wesley,WR,CHI
@@ -63,7 +63,7 @@ playerID,Player,Pos,NFL
 2818971,Anthony Firkser,TE,DET
 2251387,Anthony Gordon,QB,KC
 3122031,Anthony Gould,WR,IND
-28900555,Anthony Hankerson,RB,MIA
+28900555,Anthony Hankerson,RB,SEA
 2258536,Anthony Johnson,WR,PIT
 2082810,Anthony Miller,WR,BAL
 1906458,Anthony Norris,TE,DEN
@@ -98,7 +98,7 @@ playerID,Player,Pos,NFL
 3121977,Austin Jones,RB,WAS
 2130950,Austin Proehl,WR,NYG
 2926510,Austin Ramesh,RB,ARI
-2967693,Austin Reed,QB,CHI
+2967693,Austin Reed,QB,BAL
 3121976,Austin Stogner,TE,ATL
 2838491,Austin Trammell,WR,JAC
 2961443,Austin Watkins,WR,PHI
@@ -112,17 +112,18 @@ playerID,Player,Pos,NFL
 2184609,Bailey Gaither,WR,BAL
 2866483,Bailey Zappe,QB,NYJ
 2080032,Baker Mayfield,QB,TB
+26726059,Barika Kpeenu,RB,TB
 28900204,Barion Brown,WR,NO
 26730919,Bauer Sharp,TE,TB
-3122788,Baylor Cupp,TE,BAL
+3122788,Baylor Cupp,TE,ARI
 1906,Bears,DST,CHI
-26694592,Beaux Collins,WR,NYG
+26694592,Beaux Collins,WR,ATL
 26696177,Behren Morton,QB,NE
 28866830,Ben Beise,TE,TB
 2961091,Ben Bryant,QB,NYJ
 2179411,Ben DiNucci,QB,DEN
 395994,Ben Johnson,TE,LAC
-50048410,Ben Patterson,WR,JAC
+50048410,Ben Patterson,WR,CLE
 2964709,Ben Sims,TE,MIA
 3168647,Ben Sinnott,TE,WAS
 2247046,Ben Skowronek,WR,PIT
@@ -177,7 +178,7 @@ playerID,Player,Pos,NFL
 3169136,Brennan Presley,WR,LAR
 3121696,Brenton Strange,TE,JAC
 3123271,Brett Gabbert,QB,MIA
-2181392,Brett Rypien,QB,MIN
+2181392,Brett Rypien,QB,HOU
 28887494,Brevin Easton,WR,JAC
 2964787,Brevin Jordan,TE,HOU
 2961760,Brevyn Spann-Ford,TE,DAL
@@ -191,7 +192,7 @@ playerID,Player,Pos,NFL
 2961993,British Brooks,RB,HOU
 2249805,Brittain Brown,RB,CHI
 26693971,Brock Bowers,TE,LV
-26701144,Brock Lampe,RB,NE
+26701144,Brock Lampe,RB,SEA
 2961306,Brock Purdy,QB,SF
 26725349,Brock Rechsteiner,WR,NO
 2807423,Brock Wright,TE,DET
@@ -316,7 +317,7 @@ playerID,Player,Pos,NFL
 2260647,Chris Evans,RB,CIN
 2186662,Chris Finke,WR,CHI
 2818150,Chris Godwin,WR,TB
-26700928,Chris Hilton,WR,WAS
+26700928,Chris Hilton,WR,GB
 2167520,Chris Manhertz,TE,NYG
 1871375,Chris Moore,WR,BAL
 3117054,Chris Myarick,TE,LV
@@ -357,7 +358,7 @@ playerID,Player,Pos,NFL
 2257005,Cole McDonald,QB,ARI
 26725861,Cole Payton,QB,PHI
 2961855,Cole Turner,TE,MIA
-3163724,Coleman Bennett,RB,CHI
+3163724,Coleman Bennett,RB,MIA
 3137926,Coleman Owen,WR,IND
 3177592,Colin Granger,TE,CAR
 2240315,Collin Johnson,WR,LV
@@ -370,6 +371,7 @@ playerID,Player,Pos,NFL
 3123601,Connor Bazelak,QB,TB
 3170411,Connor Davis,TE,CLE
 2867599,Connor Heyward,TE,LV
+26756957,Connor Hulstein,TE,NYJ
 2866341,Connor Wedington,WR,SEA
 2006951,Cooper Kupp,WR,SEA
 2000176,Cooper Rush,QB,ATL
@@ -386,14 +388,14 @@ playerID,Player,Pos,NFL
 2218461,Courtland Sutton,WR,DEN
 3123345,Courtney Jackson,WR,TEN
 1908,Cowboys,DST,DAL
-3117134,Craig Reynolds,RB,NE
+3117134,Craig Reynolds,RB,WAS
 2760856,Curtis Hodges,TE,CAR
 2131252,Curtis Samuel,WR,BUF
 28875899,Cyrus Allen,WR,KC
 2242794,Cyrus Holder,WR,CHI
 2871710,D'Andre Swift,RB,CHI
 2247544,D'Eriq King,QB,CAR
-3117165,D'Ernest Johnson,RB,NE
+3117165,D'Ernest Johnson,RB,TEN
 2139847,D'Onta Foreman,RB,CLE
 2252411,D'Wayne Eskridge,WR,MIA
 2131689,DJ Chark,WR,ATL
@@ -413,7 +415,7 @@ playerID,Player,Pos,NFL
 2186347,DaMarkus Lodge,WR,CIN
 1762348,DaRon Brown,WR,FA
 1888751,DaVaris Daniels,WR,NE
-28874125,Dae'Quan Wright,TE,PHI
+28874125,Dae'Quan Wright,TE,CLE
 2867589,Daewood Davis,WR,CAR
 2864965,Dai'Jean Dixon,WR,NO
 3163944,Daijun Edwards,RB,PIT
@@ -464,7 +466,7 @@ playerID,Player,Pos,NFL
 3117071,Darnell Holland,RB,NO
 2240651,Darnell Mooney,WR,NYG
 3163963,Darnell Washington,TE,PIT
-1850793,Darren Waller,TE,MIA
+1850793,Darren Waller,TE,CAR
 3116786,Darrin Hall,RB,PIT
 2240806,Darrynton Evans,RB,BUF
 1893167,Davante Adams,WR,LAR
@@ -536,7 +538,7 @@ playerID,Player,Pos,NFL
 28911101,Desmond Reid,RB,BUF
 2864759,Desmond Ridder,QB,GB
 2925203,Detrich Clark,WR,ATL
-3168666,Deuce Vaughn,RB,DEN
+3168666,Deuce Vaughn,RB,HOU
 1868418,Devante Davis,WR,PHI
 3121113,Devaughn Vele,WR,NO
 2969006,Deven Thompkins,WR,LV
@@ -567,7 +569,7 @@ playerID,Player,Pos,NFL
 1915,Dolphins,DST,MIA
 2967157,Dom Wood-Anderson,TE,SEA
 26696063,Dominic Lovett,WR,DET
-3161882,Dominic Richardson,RB,DAL
+3161882,Dominic Richardson,RB,NYJ
 3172375,Dominique Dafney,TE,CAR
 2183713,Donald Parham,TE,PIT
 26702279,Donaven McCulley,WR,MIA
@@ -590,7 +592,7 @@ playerID,Player,Pos,NFL
 28876938,Drew Allar,QB,PIT
 3117010,Drew Anderson,QB,ARI
 3117011,Drew Belcher,TE,WAS
-26727217,Drew Biber,TE,GB
+26727217,Drew Biber,TE,CLE
 2242283,Drew Estrada,WR,HOU
 2185479,Drew Lock,QB,SEA
 2252376,Drew Plitt,QB,CIN
@@ -656,7 +658,7 @@ playerID,Player,Pos,NFL
 3121555,Erick All,TE,CIN
 2962352,Erik Ezukanma,WR,PHI
 2868233,Erik Krommenhoek,TE,LAC
-29121831,Ethan Conner,TE,JAC
+29121831,Ethan Conner,TE,MIA
 3162542,Ethan Garbers,QB,CAR
 2079887,Evan Engram,TE,DEN
 3124679,Evan Hull,RB,ARI
@@ -703,6 +705,7 @@ playerID,Player,Pos,NFL
 3122664,Graham Mertz,QB,HOU
 2804129,Grant Calcaterra,TE,PHI
 26720345,Grant DuBose,WR,BUF
+50063058,Grant Finley,RB,NYG
 2247058,Grayson Gunter,TE,JAC
 3137978,Greg Bell,RB,PIT
 26697079,Greg Desrosiers,RB,LAC
@@ -723,7 +726,7 @@ playerID,Player,Pos,NFL
 26698495,Harrison Wallace,WR,ARI
 2252503,Harvey Binford,WR,IND
 2960978,Hassan Hall,RB,ARI
-2968506,Hassan Haskins,RB,LAC
+2968506,Hassan Haskins,RB,NE
 3125550,Hayden Hatten,WR,SEA
 2185053,Hayden Hurst,TE,LAC
 29122200,Hayden Large,TE,CHI
@@ -761,7 +764,7 @@ playerID,Player,Pos,NFL
 2256694,Isaiah Washington,WR,BAL
 2247180,Isaiah Weston,WR,CLE
 3126581,Isaiah Williams,WR,NYJ
-2835033,Isaiah Winstead,WR,NYJ
+2835033,Isaiah Winstead,WR,PIT
 3139308,Isaiah Wooden,WR,CLE
 1679913,Isi Sofele,RB,FA
 2966551,Isiah Pacheco,RB,DET
@@ -770,7 +773,7 @@ playerID,Player,Pos,NFL
 26723673,J Michael Sturdivant,WR,GB
 26726239,J'Mari Taylor,RB,JAC
 1752358,JC Copeland,RB,NYJ
-26719274,JJ Galbreath,TE,PIT
+26719274,JJ Galbreath,TE,IND
 2864966,JJ Howland,TE,TB
 26701622,JJ Jones,WR,JAC
 29379354,JJ Laap,WR,LAR
@@ -784,10 +787,10 @@ playerID,Player,Pos,NFL
 3162664,Ja'Lynn Polk,WR,NO
 2966320,Ja'Marr Chase,WR,CIN
 3162257,Ja'Mori Maclin,WR,BUF
-3168195,Ja'Quinden Jackson,RB,JAC
+3168195,Ja'Quinden Jackson,RB,PHI
 26731381,Ja'Tavion Sanders,TE,CAR
 26717711,Ja'seem Reed,WR,CAR
-2189504,JaMycal Hasty,RB,MIA
+2189504,JaMycal Hasty,RB,NE
 29166460,JaQuae Jackson,WR,LAC
 3126147,JaVonta Payton,WR,ARI
 3128825,Jaaron Hayek,WR,KC
@@ -843,7 +846,7 @@ playerID,Player,Pos,NFL
 3117019,Jake Dolegala,QB,MIA
 2867159,Jake Ferguson,TE,DAL
 2803326,Jake Fromm,QB,DET
-2815170,Jake Haener,QB,KC
+2815170,Jake Haener,QB,NYG
 2260981,Jake Hausmann,TE,WAS
 2252298,Jake Herslow,WR,SEA
 2253478,Jake Phillips,TE,PIT
@@ -910,12 +913,12 @@ playerID,Player,Pos,NFL
 2975722,Jaren Hall,QB,SEA
 28875704,Jaren Kanak,TE,TEN
 2964701,Jaret Patterson,RB,LAC
-26700820,Jarquez Hunter,RB,LAR
+26700820,Jarquez Hunter,RB,MIA
 2247508,Jarrett Guarantano,QB,DEN
 2180697,Jarrett Stidham,QB,DEN
 2965481,Jarveon Howard,RB,BUF
 3162688,Jase McClellan,RB,TB
-2965967,Jashaun Corbin,RB,NE
+2965967,Jashaun Corbin,RB,DAL
 2962302,Jason Bean,QB,IND
 3170352,Jason Brownlee,WR,KC
 2180514,Jauan Jennings,WR,MIN
@@ -965,8 +968,8 @@ playerID,Player,Pos,NFL
 2176561,Jeret Smith,WR,KC
 3125586,Jerjuan Newton,WR,DEN
 3163951,Jermaine Burton,WR,CIN
-26700676,Jermaine Terry,TE,NYG
-2964472,Jermar Jefferson,RB,SF
+26700676,Jermaine Terry,TE,CLE
+2964472,Jermar Jefferson,RB,MIN
 2966543,Jerome Ford,RB,WAS
 29118901,Jerome Kapp,WR,NYJ
 2179406,Jerome Washington,TE,ARI
@@ -976,7 +979,7 @@ playerID,Player,Pos,NFL
 2961918,Jeshaun Jones,WR,MIN
 2976870,Jesse Matthews,WR,ATL
 1919,Jets,DST,NYJ
-3122336,Jha'Quan Jackson,WR,HOU
+3122336,Jha'Quan Jackson,WR,TB
 2758267,Jhamon Ausbon,WR,PHI
 2202419,Jibri Blount,TE,MIA
 1760229,Jimmy Garoppolo,QB,LAR
@@ -1030,7 +1033,7 @@ playerID,Player,Pos,NFL
 3159088,Jonathan Ward,RB,BAL
 26730706,Jonathon Brooks,RB,CAR
 2175993,Jonathon Rumph,WR,NYJ
-2081506,Jonnu Smith,TE,PIT
+2081506,Jonnu Smith,TE,GB
 2804559,Jontre Kirklin,WR,SF
 3162290,Jordan Addison,WR,MIN
 2142712,Jordan Akins,TE,JAC
@@ -1042,7 +1045,7 @@ playerID,Player,Pos,NFL
 2239997,Jordan Love,QB,GB
 2967536,Jordan Mason,RB,MIN
 1759816,Jordan Matthews,WR,CAR
-2804786,Jordan Mims,RB,MIN
+2804786,Jordan Mims,RB,PHI
 26698828,Jordan Moore,WR,CIN
 2963239,Jordan Murray,TE,CHI
 29711196,Jordan Petaia,TE,LAC
@@ -1053,7 +1056,7 @@ playerID,Player,Pos,NFL
 2237119,Jordan Williams-Lambert,WR,CHI
 28900885,Jordyn Tyson,WR,NO
 2963601,Jose Barbon,WR,DAL
-26720249,Joseph Manjack IV,WR,DEN
+26720249,Joseph Manjack,WR,DEN
 3122907,Joseph Ngata,WR,PHI
 28873479,Joseph Scates,WR,JAC
 2181054,Josh Allen,QB,BUF
@@ -1082,15 +1085,15 @@ playerID,Player,Pos,NFL
 3121241,Josh Williams,RB,TB
 1893731,Josh Woodrum,QB,WAS
 3127909,Joshua Cephus,WR,JAC
-2071844,Joshua Dobbs,QB,NE
+2071844,Joshua Dobbs,QB,DET
 2183195,Joshua Kelley,RB,TEN
 3123950,Joshua Simon,TE,ATL
-2181108,Josiah Deguara,TE,SF
+2181108,Josiah Deguara,TE,NYG
 2139620,JuJu Smith-Schuster,WR,NYG
-2866554,Julian Hicks,WR,GB
+2866554,Julian Hicks,WR,SEA
 2961743,Julian Hill,TE,NE
 2967664,Julius Chestnut,RB,TEN
-26731678,Junior Bergen,WR,SF
+26731678,Junior Bergen,WR,NYJ
 2250388,Justice Hill,RB,BAL
 1273205,Justin Fields,QB,KC
 2865819,Justin Hall,WR,MIN
@@ -1098,6 +1101,7 @@ playerID,Player,Pos,NFL
 2871343,Justin Jefferson,WR,MIN
 3117392,Justin Johnson,TE,ARI
 28927892,Justin Joly,TE,DEN
+3172156,Justin Jones,RB,SEA
 3125802,Justin Lockhart,WR,KC
 2866624,Justin Marshall,WR,SEA
 2245145,Justin Rigg,TE,TEN
@@ -1134,7 +1138,7 @@ playerID,Player,Pos,NFL
 2079567,Kareem Hunt,RB,KC
 2264866,Kawaan Baker,WR,GB
 3127817,Kay'ron Lynch-Adams,RB,CAR
-3163170,Kayshon Boutte,WR,NE
+3163170,Kayshon Boutte,WR,HOU
 28875485,Kaytron Allen,RB,WAS
 2962093,Kazmeir Allen,WR,WAS
 2179704,Ke'Shawn Vaughn,RB,SF
@@ -1145,7 +1149,7 @@ playerID,Player,Pos,NFL
 3164710,Keaton Mitchell,RB,LAC
 3123467,Kedon Slovis,QB,ARI
 3162048,Keelan Marion,WR,ATL
-1737096,Keenan Allen,WR,LAC
+1737096,Keenan Allen,WR,IND
 2139241,Keenen Brown,TE,HOU
 28867199,Kehinde Oginni,TE,ATL
 29119117,Keilahn Harris,WR,PIT
@@ -1204,7 +1208,7 @@ playerID,Player,Pos,NFL
 2239763,Ko Kieft,TE,TB
 3161851,Kobe Hudson,WR,CAR
 2962483,Kobe Lewis,RB,SEA
-28909320,Kobe Prentice,WR,NE
+28909320,Kobe Prentice,WR,NYG
 2867551,Kody Case,WR,IND
 29423982,Kolbe Katsis,WR,DEN
 3163049,Kole Taylor,TE,CIN
@@ -1225,11 +1229,11 @@ playerID,Player,Pos,NFL
 29379128,Kyle Sheets,WR,KC
 2180561,Kyle Shurmur,QB,WAS
 2820013,Kyle Sloter,QB,JAC
-2221839,Kyle Trask,QB,ATL
+2221839,Kyle Trask,QB,CAR
 3167684,Kyle Williams,WR,NE
 2247146,Kylen Granson,TE,TEN
 2180829,Kyler Murray,QB,MIN
-26699047,Kyre Duplessis,WR,SEA
+26699047,Kyre Duplessis,WR,DEN
 3121836,Kyren Williams,RB,LAR
 3131544,Kyrese Rowan,WR,DEN
 26698149,Kyron Drones,QB,GB
@@ -1264,7 +1268,7 @@ playerID,Player,Pos,NFL
 3164057,Levi Wentz,WR,PIT
 3121706,Lew Nichols,RB,PIT
 26695655,Lewis Bond,WR,HOU
-26695271,Liam Clifford,WR,IND
+26695271,Liam Clifford,WR,LAC
 3171022,Lideatrick Griffin,WR,GB
 2246852,Lil'Jordan Humphrey,WR,DEN
 3162885,Lincoln Pare,RB,IND
@@ -1359,6 +1363,7 @@ playerID,Player,Pos,NFL
 2961962,Matt Corral,QB,MIN
 1851039,Matt Johnson,QB,CIN
 2871748,Matt Landers,WR,TEN
+26725448,Matt Lauter,TE,MIN
 2184386,Matt Seybert,TE,LAC
 2131215,Matt Sokol,TE,PIT
 26724746,Matthew Caldwell,QB,LAR
@@ -1419,7 +1424,7 @@ playerID,Player,Pos,NFL
 2175046,Milton Williams,WR,LV
 3131611,Milton Wright,WR,LAC
 2060476,Mitch Trubisky,QB,TEN
-29738519,Mitch Van Vooren,TE,NE
+29738519,Mitch Van Vooren,TE,DAL
 26693662,Mitchell Evans,TE,CAR
 3162481,Mitchell Tinsley,WR,CIN
 2815925,Mo Alie-Cox,TE,IND
@@ -1438,7 +1443,7 @@ playerID,Player,Pos,NFL
 26703126,Myles Montgomery,RB,NE
 3168525,Myles Price,WR,MIN
 2221807,N'Keal Harry,TE,SEA
-2741200,Najee Harris,RB,LAC
+2741200,Najee Harris,RB,NYG
 2977285,Nate Adkins,TE,DEN
 3162867,Nate Boerkircher,TE,JAC
 3163182,Nate Carter,RB,ATL
@@ -1464,7 +1469,7 @@ playerID,Player,Pos,NFL
 26661732,Nick Guggemos,TE,BUF
 3123192,Nick Kallerup,TE,SEA
 2819104,Nick Mullens,QB,JAC
-2818056,Nick Muse,TE,DET
+2818056,Nick Muse,TE,ATL
 3123884,Nick Nash,WR,WAS
 2925439,Nick Sharga,RB,LV
 2927394,Nick Stevens,QB,DEN
@@ -1475,7 +1480,7 @@ playerID,Player,Pos,NFL
 2131958,Nico Evans,RB,PHI
 2964863,Nikko Remigio,WR,KC
 28867671,Nikola Kalinic,TE,CHI
-2139270,Noah Brown,WR,WAS
+2139270,Noah Brown,WR,LV
 3122713,Noah Cain,RB,CIN
 2251095,Noah Fant,TE,NO
 2869790,Noah Gindorff,TE,PIT
@@ -1503,7 +1508,7 @@ playerID,Player,Pos,NFL
 28873644,Oscar Delp,TE,NO
 2249164,Osirus Mitchell,WR,GB
 2804600,Otis Anderson,RB,LAR
-2818062,Owen Wright,RB,TB
+2818062,Owen Wright,RB,HOU
 1911,Packers,DST,GB
 1905,Panthers,DST,CAR
 2139547,Papi White,WR,TEN
@@ -1573,7 +1578,7 @@ playerID,Player,Pos,NFL
 2237133,Rashon Ceaser,WR,TEN
 1903,Ravens,DST,BAL
 3123108,Ray Davis,RB,BUF
-2179226,Ray-Ray McCloud,WR,NYG
+2179226,Ray-Ray McCloud,WR,CHI
 26698282,Raylen Sharpe,WR,IND
 2239232,Reece Horn,WR,CIN
 2961395,Reggie Brown,WR,KC
@@ -1619,7 +1624,7 @@ playerID,Player,Pos,NFL
 3121395,Roschon Johnson,RB,CHI
 2924888,Ross Dwelley,TE,CAR
 2139588,Royce Freeman,RB,LAC
-3162757,Roydell Williams,RB,IND
+3162757,Roydell Williams,RB,DET
 26693659,Rushawn Baker,RB,NE
 2131694,Russell Gage,WR,SF
 1272242,Russell Wilson,QB,NYG
@@ -1627,7 +1632,7 @@ playerID,Player,Pos,NFL
 3159083,Ryan Becker,TE,ATL
 28891456,Ryan Flournoy,WR,DAL
 2879694,Ryan McDaniel,WR,JAC
-2964726,Ryan Miller,WR,NYG
+2964726,Ryan Miller,WR,MIA
 2219913,Ryan Williams,QB,GB
 2179571,Ryan Willis,QB,CHI
 3159167,Rysen John,TE,CHI
@@ -1679,7 +1684,7 @@ playerID,Player,Pos,NFL
 2926785,Shaq Roland,WR,CHI
 3137942,Shaquan Davis,WR,PIT
 2251090,Shaun Beyer,TE,GB
-2962851,Shawn Bowman,TE,JAC
+2962851,Shawn Bowman,TE,ARI
 3116832,Shawn Poindexter,WR,SF
 26710004,Shedeur Sanders,QB,CLE
 2962459,Shedrick Jackson,WR,LV
@@ -1705,7 +1710,7 @@ playerID,Player,Pos,NFL
 3162073,Stephen Gosnell,WR,BUF
 2961462,Stephen Guidry,WR,DAL
 2961667,Stephon Robinson,WR,ARI
-1996786,Sterling Shepard,WR,TB
+1996786,Sterling Shepard,WR,HOU
 2871628,Stetson Bennett,QB,LAR
 2925153,Steve Ishmael,WR,IND
 2185536,Steven Montez,QB,DET
@@ -1725,7 +1730,7 @@ playerID,Player,Pos,NFL
 2252275,TJ Vasher,WR,DAL
 2961275,TaMerik Williams,RB,SEA
 3168518,Tahj Brooks,RB,CIN
-3122529,Tahj Washington,WR,MIA
+3122529,Tahj Washington,WR,PHI
 26702969,Tai Felton,WR,MIN
 1679885,Taimi Tutogi,RB,FA
 3117391,Taj McGowan,RB,JAC
@@ -1755,7 +1760,7 @@ playerID,Player,Pos,NFL
 3127330,Taylor Morin,WR,PHI
 2804284,Tayon Fleet-Davis,RB,KC
 2253350,Taysir Mack,WR,SF
-2818935,Taysom Hill,"QB,TE",NO
+2818935,Taysom Hill,TE,NO
 3126630,Tayvion Robinson,WR,CAR
 2965963,Teagan Quitoriano,TE,ARI
 29421796,Ted Hurst,WR,TB
@@ -1817,18 +1822,18 @@ playerID,Player,Pos,NFL
 3127726,Travis Koontz,TE,LV
 2261149,Travis Toivonen,WR,MIN
 2870478,Travis Vokolek,TE,ARI
-2222046,Trayveon Williams,RB,CLE
+2222046,Trayveon Williams,RB,DET
 3167411,Trayvon Rudolph,WR,MIN
 2239576,Tre Harbison,RB,CLE
 3162525,Tre Harris,WR,LAC
 3121001,Tre Mosley,WR,CIN
 2260187,Tre Nixon,WR,NE
-29426636,Tre Stewart,RB,MIN
+29426636,Tre Stewart,RB,ARI
 3121848,Tre Tucker,WR,LV
 2966451,Tre Turner,WR,LV
 2864807,Tre Walker,WR,BUF
 26699319,Tre Watson,TE,KC
-2804040,Tre' McKitty,TE,HOU
+2804040,Tre' McKitty,TE,WAS
 2963056,Tre'Shaun Harrison,WR,TEN
 26699547,TreVeyon Henderson,RB,NE
 3168420,Trebor Pena,WR,JAC
@@ -1848,7 +1853,7 @@ playerID,Player,Pos,NFL
 2969444,Trey Lance,QB,LAC
 2963385,Trey McBride,TE,ARI
 3122273,Trey Palmer,WR,NO
-2804142,Trey Sermon,RB,PIT
+2804142,Trey Sermon,RB,ATL
 3122944,Treylon Burks,WR,WAS
 3123913,Treyton Welch,TE,NO
 28927179,Treyvhon Saunders,WR,HOU
@@ -1859,7 +1864,7 @@ playerID,Player,Pos,NFL
 2741209,Tua Tagovailoa,QB,ATL
 2866766,Tucker Fisk,TE,LAC
 3133332,Tucker Kraft,TE,GB
-2965372,Tutu Atwell,WR,MIA
+2965372,Tutu Atwell,WR,LAR
 2867472,Ty Chandler,RB,NO
 2866135,Ty Fryfogle,WR,KC
 3135294,Ty James,WR,MIN
@@ -1888,6 +1893,7 @@ playerID,Player,Pos,NFL
 29729510,Tyler Kahmann,WR,IND
 1860834,Tyler Lockett,WR,LV
 3159198,Tyler Mabry,TE,CAR
+26695106,Tyler Moore,TE,IND
 3164475,Tyler Neville,TE,DAL
 3163215,Tyler Scott,WR,LAR
 2964064,Tyler Shough,QB,NO
@@ -1907,7 +1913,7 @@ playerID,Player,Pos,NFL
 2963637,Tyrone Tracy,RB,NYG
 2876686,Tyshaun James,WR,ATL
 29081346,Tyson Bagent,QB,CHI
-3125140,Ulysses Bentley IV,RB,IND
+3125140,Ulysses Bentley,RB,IND
 3114048,Valentine Holmes,RB,NYJ
 2186342,Van Jefferson,WR,WAS
 2242764,Velus Jones,RB,SEA
@@ -1960,10 +1966,10 @@ playerID,Player,Pos,NFL
 2240516,Zack Moss,RB,CIN
 26695325,Zaire Mitchell-Paden,TE,NO
 3127917,Zakhari Franklin,WR,LV
-2963641,Zamir White,RB,LV
+2963641,Zamir White,RB,NO
 2869402,Zavier Scott,RB,MIN
 28909795,Zavion Thomas,WR,CHI
 3127049,Zay Flowers,WR,BAL
-2080270,Zay Jones,WR,ARI
+2080270,Zay Jones,WR,HOU
 3168734,Zion Bowens,WR,WAS
 3121860,Zonovan Knight,RB,ARI
