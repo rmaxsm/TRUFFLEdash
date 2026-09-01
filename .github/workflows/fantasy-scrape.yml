@@ -73,13 +73,21 @@ jobs:
           CBS_KERFUFFLE_HEADERS_JSON: ${{ secrets.CBS_KERFUFFLE_HEADERS_JSON }}
           OMNI_API_KEY: ${{ secrets.OMNI_API_KEY }}
           MOTHERDUCK_TOKEN: ${{ secrets.MOTHERDUCK_TOKEN }}
+        # github.event.inputs.* is only ever populated for a workflow_dispatch
+        # trigger - on the real `schedule` trigger it's always null, so
+        # github.event.inputs.dry_run == 'false' would always be false there
+        # too, appending --dry-run on every scheduled run (i.e. the schedule
+        # would never really write anything). Branching explicitly on
+        # github.event_name so the schedule always writes for real to td,
+        # while a manual workflow_dispatch left at its own default (database:
+        # td_backup_2025, dry_run: true) still does the safe test-first thing.
         run: >
           python scrape/fantasy_to_motherduck.py
           ${{ github.event.inputs.season != '' && format('--season {0}', github.event.inputs.season) || '' }}
           ${{ github.event.inputs.week != '' && format('--week {0}', github.event.inputs.week) || '' }}
           --which "${{ github.event.inputs.which || 'current' }}"
-          --database "${{ github.event.inputs.database || 'td_backup_2025' }}"
-          ${{ (github.event.inputs.dry_run == 'false') && ' ' || '--dry-run' }}
+          --database "${{ github.event.inputs.database || 'td' }}"
+          ${{ (github.event.inputs.dry_run == 'false' || github.event_name == 'schedule') && ' ' || '--dry-run' }}
 
       - name: Upload scraped CSV as artifact
         if: always() && (github.event_name != 'schedule' || steps.check_season.outputs.in_season == 'true')
