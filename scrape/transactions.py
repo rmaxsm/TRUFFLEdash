@@ -130,7 +130,7 @@ TARGET_COLUMNS = [
     "Player", "PlayerID", "Pos", "NFL", "Amount",
     "CounterpartyTeam",
     "DraftPickSeason", "DraftPickRound", "DraftPickOriginalOwner", "DraftPickOverall",
-    "AssetList",
+    "AssetList", "TeamPlayerList", "TeamPlayerListMarkdown",
 ]
 
 
@@ -295,8 +295,16 @@ def _try_parse_dead_cap_segment(segment, link, season: int, ids_lookup: dict, sa
         verb = m.group("verb")
         pos, nfl = ids_lookup.get(real_name, (None, None))
         if pos is None:
+            # td.main.ids is a live, continuously-refreshed reference table,
+            # not a stable historical archive - a player obscure enough to
+            # only ever show up as an old Dead Cap entry can drop out of it
+            # entirely over time (confirmed: "Eno Benjamin" resolved fine
+            # earlier, then stopped resolving without any code change).
+            # Degrade to a blank Pos/NFL rather than leaving None, which
+            # would crash the later PlPos/AssetList string joins.
             print(f"WARNING: no td.main.ids match for Dead Cap player {real_name!r} - "
-                  f"Pos/PlPos will be unresolved for this row")
+                  f"Pos/NFL left blank for this row")
+            pos, nfl = "", ""
 
     display_name = f"{real_name} Dead Cap"
     return {
@@ -459,6 +467,17 @@ def _build_table(df: pd.DataFrame, season: int) -> pd.DataFrame:
     asset_lists = df.groupby("TransactionID")["PlPos"].apply(lambda s: ",".join(dict.fromkeys(s)))
     df["AssetList"] = df["TransactionID"].map(asset_lists)
 
+    # Pre-computed per-(TransactionID, TrfTm) team-leg player list - lets a
+    # dashboard filter a real Player dimension with a plain "is" match and
+    # still show every teammate on that same trade leg, since the full list
+    # is already baked onto each row rather than needing a live cross-view
+    # aggregate that a row-level filter would collapse before it runs.
+    team_groups = df.groupby(["TransactionID", "TrfTm"])["Player"]
+    df["TeamPlayerList"] = team_groups.transform(lambda s: ", ".join(dict.fromkeys(s)))
+    df["TeamPlayerListMarkdown"] = team_groups.transform(
+        lambda s: "\n".join("- " + name for name in dict.fromkeys(s))
+    )
+
     df["Season"] = float(season)
     df["EffectiveWeek"] = df["EffectiveWeek"].astype(float)
     df["DraftPickSeason"] = df["DraftPickSeason"].astype(float)
@@ -509,10 +528,19 @@ def upsert_transactions(df: pd.DataFrame, database: str, seasons_by_league: dict
 
     pairs = [(league, season) for league, seasons in seasons_by_league.items() for season in seasons]
 
+    # This script never scrapes AUCTION rows (auctions.py owns those, via its
+    # own precisely-scoped-by-TransactionID upsert) - excluding TxnType =
+    # 'AUCTION' here is NOT optional. Without it, this delete+insert (which
+    # runs daily in production for the current season) silently wipes out
+    # every auction already backfilled for that same (League, Season) the
+    # moment it next runs. Confirmed this actually happened in production:
+    # TRUFFLE/KERFUFFLE 2026's auction rows were deleted by the daily cron
+    # sometime after being added, since nothing here protected them.
     def _count(pairs):
         return sum(
             con.execute(
-                "SELECT count(*) FROM main.transactions WHERE TrfLg = ? AND Season = ?", [league, float(season)]
+                "SELECT count(*) FROM main.transactions WHERE TrfLg = ? AND Season = ? AND TxnType != 'AUCTION'",
+                [league, float(season)],
             ).fetchone()[0]
             for league, season in pairs
         )
@@ -527,7 +555,10 @@ def upsert_transactions(df: pd.DataFrame, database: str, seasons_by_league: dict
 
     con.execute("BEGIN TRANSACTION")
     for league, season in pairs:
-        con.execute("DELETE FROM main.transactions WHERE TrfLg = ? AND Season = ?", [league, float(season)])
+        con.execute(
+            "DELETE FROM main.transactions WHERE TrfLg = ? AND Season = ? AND TxnType != 'AUCTION'",
+            [league, float(season)],
+        )
     con.register("new_transactions", df)
     con.execute("INSERT INTO main.transactions SELECT * FROM new_transactions")
     con.execute("COMMIT")

@@ -231,6 +231,10 @@ def build_auction_transactions(auctions_df: pd.DataFrame, auction_dt: datetime.d
     df["DraftPickOriginalOwner"] = None
     df["DraftPickOverall"] = None
     df["AssetList"] = df["PlPos"]
+    # Every auction pick is its own standalone TransactionID+TrfTm group (no
+    # teammates share it), so the team-leg list is trivially just itself.
+    df["TeamPlayerList"] = df["Player"]
+    df["TeamPlayerListMarkdown"] = "- " + df["Player"]
 
     return df[TRANSACTIONS_COLUMNS]
 
