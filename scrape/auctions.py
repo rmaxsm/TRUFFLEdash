@@ -235,6 +235,9 @@ def build_auction_transactions(auctions_df: pd.DataFrame, auction_dt: datetime.d
     # teammates share it), so the team-leg list is trivially just itself.
     df["TeamPlayerList"] = df["Player"]
     df["TeamPlayerListMarkdown"] = "- " + df["Player"]
+    # No counterparty on an auction pick - nothing to look up.
+    df["CounterpartyPlayerList"] = None
+    df["CounterpartyPlayerListMarkdown"] = None
 
     return df[TRANSACTIONS_COLUMNS]
 

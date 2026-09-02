@@ -131,6 +131,7 @@ TARGET_COLUMNS = [
     "CounterpartyTeam",
     "DraftPickSeason", "DraftPickRound", "DraftPickOriginalOwner", "DraftPickOverall",
     "AssetList", "TeamPlayerList", "TeamPlayerListMarkdown",
+    "CounterpartyPlayerList", "CounterpartyPlayerListMarkdown",
 ]
 
 
@@ -477,6 +478,24 @@ def _build_table(df: pd.DataFrame, season: int) -> pd.DataFrame:
     df["TeamPlayerListMarkdown"] = team_groups.transform(
         lambda s: "\n".join("- " + name for name in dict.fromkeys(s))
     )
+
+    # The OTHER side of the same trade, looked up via CounterpartyTeam - a
+    # self-join against every (TransactionID, TrfTm) leg's own just-computed
+    # TeamPlayerList, keyed by that leg's TrfTm matching THIS row's
+    # CounterpartyTeam. Null for any row with no CounterpartyTeam (every
+    # non-trade TxnType) since there's nothing to look up. Set per asset
+    # movement, not per whole transaction, so a genuine 3+-team trade still
+    # resolves correctly - a team receiving assets from two different
+    # counterparties in one transaction gets each row's own matching return
+    # haul, not one blended answer.
+    leg_summary = df.drop_duplicates(["TransactionID", "TrfTm"])[
+        ["TransactionID", "TrfTm", "TeamPlayerList", "TeamPlayerListMarkdown"]
+    ].rename(columns={
+        "TrfTm": "CounterpartyTeam",
+        "TeamPlayerList": "CounterpartyPlayerList",
+        "TeamPlayerListMarkdown": "CounterpartyPlayerListMarkdown",
+    })
+    df = df.merge(leg_summary, on=["TransactionID", "CounterpartyTeam"], how="left")
 
     df["Season"] = float(season)
     df["EffectiveWeek"] = df["EffectiveWeek"].astype(float)
