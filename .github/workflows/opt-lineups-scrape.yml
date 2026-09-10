@@ -2,11 +2,14 @@ name: Opt lineups scrape
 
 on:
   schedule:
-    # Same cadence as fantasy-scrape.yml (daily at 12:00 UTC / ~8am ET,
+    # Same cadence as fantasy-scrape.yml (daily at 12:22 UTC / ~5:22am PDT,
     # except Wednesdays) - optimal lineups are derived from the same weekly
     # roster cycle as starting lineups, so there's nothing new to catch on
     # the day after a week ends either. Day-of-week 3 = Wednesday.
-    - cron: "0 12 * * 0,1,2,4,5,6"
+    #
+    # Sixth in the staggered morning chain (see ids-scrape.yml's comment for
+    # why it's off the hour and 3min-spaced).
+    - cron: "22 12 * * 0,1,2,4,5,6"
   workflow_dispatch:
     inputs:
       season:

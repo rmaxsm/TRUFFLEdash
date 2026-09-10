@@ -2,12 +2,15 @@ name: Fantasy scrape
 
 on:
   schedule:
-    # Daily at 12:00 UTC (~8am ET) during the NFL season, except Wednesdays -
+    # Daily at 12:19 UTC (~5:19am PDT) during the NFL season, except Wednesdays -
     # lineups are locked well before that week's games start, so re-scraping
     # the just-finished week on Wednesday (weekly-scrape.yml's correction-run
     # day) has nothing new to catch, and the next week's lineups aren't set
     # that early either. Day-of-week 3 = Wednesday.
-    - cron: "0 12 * * 0,1,2,4,5,6"
+    #
+    # Fifth in the staggered morning chain (see ids-scrape.yml's comment for
+    # why it's off the hour and 3min-spaced).
+    - cron: "19 12 * * 0,1,2,4,5,6"
   workflow_dispatch:
     inputs:
       season:

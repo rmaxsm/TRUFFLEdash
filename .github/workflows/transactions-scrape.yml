@@ -2,7 +2,7 @@ name: Transactions scrape
 
 on:
   schedule:
-    # Daily at 12:00 UTC (~8am ET) - same cadence as weekly-scrape.yml.
+    # Daily at 12:16 UTC (~5:16am PDT) - same cadence as weekly-scrape.yml.
     # Unlike fantasy/opt-lineups (which skip Wednesdays since lineups lock
     # before kickoff), transactions - waiver adds/drops/trades - can happen
     # any day of the week, so there's no day to skip here.
@@ -18,7 +18,10 @@ on:
     # (a real-game-week concept), since transactions happen year-round
     # within a season (free agency, rookie draft, etc.), not just on game
     # weeks.
-    - cron: "0 12 * * *"
+    #
+    # Fourth in the staggered morning chain (see ids-scrape.yml's comment for
+    # why it's off the hour and 3min-spaced).
+    - cron: "16 12 * * *"
   workflow_dispatch:
     inputs:
       season:

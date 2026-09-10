@@ -2,7 +2,7 @@ name: Weekly scrape
 
 on:
   schedule:
-    # Daily at 12:00 UTC (~8am ET) during the NFL season - covers every
+    # Daily at 12:13 UTC (~5:13am PDT) during the NFL season - covers every
     # possible game day (Wed/Thu/Fri/Sat/Sun/Mon) without needing to guess
     # which weeks have an atypical schedule. weekly_to_motherduck.py upserts
     # scoped strictly to (Season, Week), so a day with no new games just
@@ -16,7 +16,10 @@ on:
     #
     # "Check NFL season is active" below no-ops this on the ~7 off-season
     # months rather than failing daily.
-    - cron: "0 12 * * *"
+    #
+    # Third in the staggered morning chain (see ids-scrape.yml's comment for
+    # why it's off the hour and 3min-spaced).
+    - cron: "13 12 * * *"
   workflow_dispatch:
     inputs:
       season:

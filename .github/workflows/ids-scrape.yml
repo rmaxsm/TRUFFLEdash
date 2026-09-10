@@ -2,8 +2,14 @@ name: IDs scrape
 
 on:
   schedule:
-    # Daily at 12:00 UTC (~8am ET) - evergreen crosswalk, no season/week concept.
-    - cron: "0 12 * * *"
+    # Daily at 12:07 UTC (~5:07am PDT) - evergreen crosswalk, no season/week
+    # concept. First in the staggered morning chain (see rosters/weekly/
+    # transactions/fantasy/opt-lineups/snaps) - offset from the top of the
+    # hour and spread 3min apart from the others to avoid GitHub Actions'
+    # exact-on-the-hour queue congestion, which was previously delaying
+    # these runs by 3-5 hours. Tuned for PDT; will drift ~1hr earlier once
+    # PST resumes in November.
+    - cron: "7 12 * * *"
   workflow_dispatch:
     inputs:
       database:
