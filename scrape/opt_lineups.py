@@ -49,6 +49,8 @@ from omni_client import get_teams_df
 
 ROW_REGEX = re.compile(r"row\d")
 
+RAW_ROSTER_COLUMNS = ["Season", "Week", "League", "TrfTm", "Pos", "Player", "NFL", "FPts"]
+
 # Ports global.R's lp() constraints (~line 320-341): QB gets its own min/max,
 # same for RB/WR/TE, DST is fixed at exactly 1. A position not listed here
 # (there aren't any today, but global.R hit this with a stray "QB,TE" Pos
@@ -111,9 +113,7 @@ def scrape_team_roster(league: str, session: requests.Session, team_num: int,
                 "FPts": pd.to_numeric(cells[-1].getText(), errors="coerce"),
             })
 
-    return pd.DataFrame(
-        records, columns=["Season", "Week", "League", "TrfTm", "Pos", "Player", "NFL", "FPts"]
-    )
+    return pd.DataFrame(records, columns=RAW_ROSTER_COLUMNS)
 
 
 def scrape_league_rosters(league: str, teams_df: pd.DataFrame, season: int, week: int) -> pd.DataFrame:
@@ -121,12 +121,23 @@ def scrape_league_rosters(league: str, teams_df: pd.DataFrame, season: int, week
     session = get_session(league)
     verify_session(session, league)
 
-    league_teams = teams_df[teams_df["League"] == league.upper()]
+    league_teams = teams_df[teams_df["League"] == league.upper()].copy()
+
+    # A retired team with no roster this season comes back from Omni with
+    # TeamNum = "NA" (a string, not a real null) rather than being absent
+    # from teamscsv entirely - int() on that blows up before any scraping
+    # starts. There's no per-team CBS page to hit for a team that no longer
+    # fields a roster, so skip it the same way fantasy.py does.
+    team_nums = pd.to_numeric(league_teams["TeamNum"], errors="coerce")
+    for _, row in league_teams[team_nums.isna()].iterrows():
+        print(f"Skipping {league.upper()}/{row['Abbrev']} - no TeamNum in Omni (retired team)")
+    league_teams = league_teams[team_nums.notna()]
+
     frames = [
         scrape_team_roster(league, session, int(row["TeamNum"]), row["Abbrev"], season, week)
         for _, row in league_teams.iterrows()
     ]
-    return pd.concat(frames, ignore_index=True)
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame(columns=RAW_ROSTER_COLUMNS)
 
 
 def scrape_rosters(season: int, week: int) -> pd.DataFrame:
