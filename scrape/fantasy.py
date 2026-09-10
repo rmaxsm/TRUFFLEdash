@@ -30,6 +30,8 @@ from omni_client import get_teams_df
 
 ROW_REGEX = re.compile(r"row\d")
 
+FANTASY_COLUMNS = ["Season", "Week", "League", "TrfTm", "Pos", "Player", "NFL"]
+
 
 def _parse_player_cell(text: str):
     """'Kyle Pitts TE • ATL' -> ('Kyle Pitts', 'TE', 'ATL'); same shape for a
@@ -63,7 +65,7 @@ def scrape_team_lineup(league: str, session: requests.Session, team_num: int,
                 "TrfTm": team_abbrev, "Pos": pos, "Player": player, "NFL": nfl,
             })
 
-    return pd.DataFrame(records, columns=["Season", "Week", "League", "TrfTm", "Pos", "Player", "NFL"])
+    return pd.DataFrame(records, columns=FANTASY_COLUMNS)
 
 
 def scrape_league_fantasy(league: str, teams_df: pd.DataFrame, season: int, week: int) -> pd.DataFrame:
@@ -71,12 +73,24 @@ def scrape_league_fantasy(league: str, teams_df: pd.DataFrame, season: int, week
     session = get_session(league)
     verify_session(session, league)
 
-    league_teams = teams_df[teams_df["League"] == league.upper()]
+    league_teams = teams_df[teams_df["League"] == league.upper()].copy()
+
+    # A retired team with no roster this season comes back from Omni with
+    # TeamNum = "NA" (a string, not a real null) rather than being absent
+    # from teamscsv entirely - int() on that blows up before any scraping
+    # starts. There's no per-team CBS page to hit for a team that no longer
+    # fields a roster, so skip it the same way scrape_team_lineup already
+    # tolerates a team with an empty lineup.
+    team_nums = pd.to_numeric(league_teams["TeamNum"], errors="coerce")
+    for _, row in league_teams[team_nums.isna()].iterrows():
+        print(f"Skipping {league.upper()}/{row['Abbrev']} - no TeamNum in Omni (retired team)")
+    league_teams = league_teams[team_nums.notna()]
+
     frames = [
         scrape_team_lineup(league, session, int(row["TeamNum"]), row["Abbrev"], season, week)
         for _, row in league_teams.iterrows()
     ]
-    return pd.concat(frames, ignore_index=True)
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame(columns=FANTASY_COLUMNS)
 
 
 def scrape_fantasy(season: int, week: int) -> pd.DataFrame:
