@@ -37,12 +37,12 @@ on:
       database:
         description: "MotherDuck DB to write to"
         required: true
-        default: "td_backup_2025"
+        default: "td"
       dry_run:
         description: "Dry Run (Report Diff, No Overwrite)"
         type: boolean
         required: true
-        default: true
+        default: false
       allow_preseason_placeholder:
         description: "Write synthetic placeholder data if every scraped row is Avg='-' (pipeline testing only - refused if database is 'td')"
         type: boolean
