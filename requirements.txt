@@ -3,4 +3,4 @@ beautifulsoup4
 pandas
 duckdb<=1.5.5
 playwright
-pulp
+pulp<4
