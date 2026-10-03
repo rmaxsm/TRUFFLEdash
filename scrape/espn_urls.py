@@ -18,11 +18,11 @@ import os
 import re
 
 DEFAULT_URLS = {
-    "QB": "https://www.espn.com/fantasy/football/story/_/id/46168860/2025-fantasy-football-expected-fantasy-points-xfp-qb",
-    "RB": "https://www.espn.com/fantasy/football/story/_/id/46168913/2025-fantasy-football-expected-fantasy-points-xfp-rb",
-    "WR": "https://www.espn.com/fantasy/football/story/_/id/46168948/fantasy-football-2025-expected-fantasy-points-xfp-wr",
-    "TE": "https://www.espn.com/fantasy/football/story/_/id/46169084/2025-fantasy-football-expected-fantasy-points-xfp-te",
-    "XTD": "https://www.espn.com/fantasy/football/story/_/id/46168468/2025-fantasy-football-rankings-nfl-expected-td-opportunity-xtd",
+    "QB": "https://www.espn.com/fantasy/football/story/_/id/49869566/2026-fantasy-football-expected-fantasy-points-xfp-qb",
+    "RB": "https://www.espn.com/fantasy/football/story/_/id/49869631/2026-fantasy-football-expected-fantasy-points-xfp-rb",
+    "WR": "https://www.espn.com/fantasy/football/story/_/id/49869659/fantasy-football-2026-expected-fantasy-points-xfp-wr",
+    "TE": "https://www.espn.com/fantasy/football/story/_/id/49869668/2026-fantasy-football-expected-fantasy-points-xfp-te",
+    "XTD": "https://www.espn.com/fantasy/football/story/_/id/49869194/2026-fantasy-football-rankings-nfl-expected-td-opportunity-xtd",
 }
 
 ENV_VAR_NAMES = {
