@@ -1,10 +1,13 @@
 name: ESPN scrape
 
+# No `schedule` trigger: ESPN's bot protection blocks GitHub-hosted runners'
+# published IP ranges outright (confirmed - every scheduled/dispatched run
+# failed identically since this workflow's first run on 2026-08-12, while the
+# same code succeeds from any non-GitHub-Actions IP), so an automated run
+# here would just fail every time. Run scrape/espn.py + espn_to_motherduck.py
+# locally instead; workflow_dispatch is kept only in case ESPN's block ever
+# lifts and this becomes worth re-automating.
 on:
-  schedule:
-    # Wednesday 19:00 UTC (2pm EST) - ESPN typically posts updated leaderboard
-    # numbers Wednesday mornings.
-    - cron: "0 19 * * 3"
   workflow_dispatch:
     inputs:
       qb_url:
@@ -67,18 +70,12 @@ jobs:
           ESPN_WR_XFP_URL: ${{ github.event.inputs.wr_url }}
           ESPN_TE_XFP_URL: ${{ github.event.inputs.te_url }}
           ESPN_XTD_URL: ${{ github.event.inputs.xtd_url }}
-        # github.event.inputs.* is only ever populated for a workflow_dispatch
-        # trigger - on the real `schedule` trigger it's always null, so
-        # github.event.inputs.dry_run == 'false' would always be false there
-        # too, appending --dry-run on every scheduled run (i.e. the schedule
-        # would never really write anything). Branching explicitly on
-        # github.event_name so the schedule always writes for real to td,
-        # while a manual workflow_dispatch left at its own default (database:
-        # td_backup_2025, dry_run: true) still does the safe test-first thing.
+        # workflow_dispatch is the only trigger now, so github.event.inputs.*
+        # is always populated - no schedule-vs-dispatch branching needed.
         run: >
           python scrape/espn_to_motherduck.py
-          --database "${{ github.event.inputs.database || 'td' }}"
-          ${{ (github.event.inputs.dry_run == 'false' || github.event_name == 'schedule') && ' ' || '--dry-run' }}
+          --database "${{ github.event.inputs.database }}"
+          ${{ github.event.inputs.dry_run == 'false' && ' ' || '--dry-run' }}
 
       - name: Upload scraped CSV as artifact
         if: always()
